@@ -3,6 +3,7 @@
 ```c++
 <typename> int
 <point>=new <typename>
+delete <point>
 ```
 
 # Annotation
