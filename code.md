@@ -12,3 +12,11 @@ delete <point>
 /// @brief
 ```
 
+# Pointer
+
+```
+<typename>* <pointname> = new <typename>
+<typename>* <pointname> = new <typename>[<length>]
+str[i]<=>*(str+i);
+```
+
