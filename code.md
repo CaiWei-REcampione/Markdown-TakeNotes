@@ -1,4 +1,4 @@
-# The statement parameters
+# 参数声明
 
 ```c++
 <typename> int
@@ -6,13 +6,17 @@
 delete <point>
 ```
 
-# Annotation
+# 注释
 
 ```c++
 /// @brief
+
+//
+
+/* --- */
 ```
 
-# Pointer
+# 指针
 
 ```c++
 <typename>* <pointname> = new <typename>
@@ -20,9 +24,9 @@ delete <point>
 str[i]<=>*(str+i);
 ```
 
-# Class
+# class 类
 
-
+acess
 
 ​	public
 
@@ -30,11 +34,45 @@ str[i]<=>*(str+i);
 
 ​	private
 
-operation
+特殊成员函数
 
-​	constructor
+​	默认构造函数
 
-​	destructor
+```c++
+//带参数的构造函数可以是默认构造函数,只要所有参数都有默认值
+<class name>(typename parameter=<default value>){};
+```
 
-type of acess
+​	默认析构函数
+
+​	复制构造函数
+
+​	赋值运算符
+
+​	地址运算符
+
+# operator 重载运算符
+
+```c++
+operator typename();//类型转换
+iostream& operator<<(iostream& _out,<object>& _name);//重载cout
+fstream& operator<<(fstream& _out,<object>& _name);//重载ofstream
+```
+
+# 循环
+
+```c++
+//---
+for(  ;  ;  ){
+
+}
+//---
+do{
+
+}while();
+//---
+while(){
+
+}
+```
 
