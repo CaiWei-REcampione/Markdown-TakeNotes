@@ -22,6 +22,12 @@ delete <point>
 <typename>* <pointname> = new <typename>
 <typename>* <pointname> = new <typename>[<length>]
 str[i]<=>*(str+i);
+String*glamour;//声明指向类对象的指针
+String*first=&sayings[0];//将指针初始化为已有对象
+String*gleep=new String;//使用new和默认的类构造函数对指针进行初始化
+String*favorite=new String(sayings[choice]);//使用new和String(const string&)类构造函数对指针进行初始化
+if(sayings[i].length()<shortest->length());//使用->操作符通过指针访问类方法
+if(sayingts[i]<*first)//使用*解除引用操作符获得对象
 ```
 
 # class 类
@@ -41,6 +47,17 @@ acess
 ```c++
 //带参数的构造函数可以是默认构造函数,只要所有参数都有默认值
 <class name>(typename parameter=<default value>){};
+//使用new[]来初始化c_pointer
+c_name&c_name::operator=(const c_name&cn){
+    if(this==&cn){
+        return *this;
+    }
+    delete[]c_pointer;
+    //set size number of type_name units to be copied 
+    c_pointer=new type_name[size];
+    //the copy data pointed to by cn.c_pointer to location pointed to by c_pointer
+    return *this;
+}
 ```
 
 ​	默认析构函数
@@ -59,8 +76,8 @@ acess
 
 ```c++
 operator typename();//类型转换
-iostream& operator<<(iostream& _out,<object>& _name);//重载cout
-fstream& operator<<(fstream& _out,<object>& _name);//重载ofstream
+ostream& operator<<(ostream& _out,<object>& _name);//重载cout
+ofstream& operator<<(ofstream& _out,<object>& _name);//重载ofstream
 ```
 
 # 循环
