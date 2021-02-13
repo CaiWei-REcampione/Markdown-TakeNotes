@@ -438,3 +438,15 @@ class Crab
 
 *    template<typename T>class是类型，Thing是参数
 
+## 模板类和友元
+
+### 非模板友元
+
+```c++
+template<class T>
+class HsaFriend{
+    public:
+    friend void counts();//friend to all HasFriend instantiations
+}
+```
+
