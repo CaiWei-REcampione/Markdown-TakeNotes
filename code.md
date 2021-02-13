@@ -376,11 +376,56 @@ min()//返回最小的元素
 
 模板提供参数化类型，能够将类型名作为参数传递给接收方来建立类或函数
 
-定义类模板
+## 定义类模板
 
 ```c++
 template<typename T>
 //function
 ```
 
-由于模板不是函数，不能单独编译。**模板必须与特定的模板实例化请求一起使用**
+**不能将模板成员函数放在独立的实现文件中** 
+
+由于模板不是函数，不能单独编译。模板类必须与特定的模板实例化请求一起使用
+
+## 递归使用模板
+
+```c++
+ArrayTP<ArrayTP<int,5>,10>twodee;
+```
+
+## 默认类型模板参数
+
+```c++
+template<typename T1,typename T2=int>
+class classname{
+public:
+private:
+}
+```
+
+显式实例化
+
+*    当使用键字template并指出所需类型来声明类时，编译器将生成类声明的显式实例化
+
+```c++
+template class ArrayTP<string,100>;
+```
+
+显式具体化
+
+*    显式具体化是特定类型的定义
+
+```c++
+template<typename T>
+class SortedArray{
+    //details omitted
+}
+```
+
+部分具体化
+
+```c++
+template<class T1,class T2>class Pair{...}
+template<class T1>class Pair<T1,int>{...}
+```
+
