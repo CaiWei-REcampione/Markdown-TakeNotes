@@ -403,7 +403,7 @@ private:
 }
 ```
 
-显式实例化
+## 显式实例化
 
 *    当使用键字template并指出所需类型来声明类时，编译器将生成类声明的显式实例化
 
@@ -411,7 +411,7 @@ private:
 template class ArrayTP<string,100>;
 ```
 
-显式具体化
+## 显式具体化
 
 *    显式具体化是特定类型的定义
 
@@ -422,10 +422,19 @@ class SortedArray{
 }
 ```
 
-部分具体化
+## 部分具体化
 
 ```c++
 template<class T1,class T2>class Pair{...}
 template<class T1>class Pair<T1,int>{...}
 ```
+
+## 将模板用作参数
+
+```
+template<template<typename T>class Thing>
+class Crab
+```
+
+*    template<typename T>class是类型，Thing是参数
 
