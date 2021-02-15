@@ -648,6 +648,8 @@ C++ 标准规定，type_info 类至少要有如下所示的 4 个 public 属性�
 
 >    string实际上是模板具体化basic_string<char>的一个typedef，同时省略了与内存管理相关的参数
 
+## 构造函数
+
 |                           构造函数                           |                             描述                             |
 | :----------------------------------------------------------: | :----------------------------------------------------------: |
 |                     string(const char*s)                     |               将string对象初始化Wies指向的NBTS               |
@@ -660,3 +662,28 @@ C++ 标准规定，type_info 类至少要有如下所示的 4 个 public 属性�
 |                string(string && str)noexcept                 | C++11新增，将一个string对象初始化为string对象str，并可能修改str |
 |              string(initializer_list<char> il)               |   c++11新增，将一个string对象初始化为初始化列表il中的字符    |
 
+## string类输入
+
+### c风格字符串-数组
+
+```c++
+char info[100];
+cin>>info;//read a word
+cin.getline(info,100);//read a line, discard
+cin.get(info,100);//read a line, leave
+```
+
+### string对象
+
+```c++
+string stuff;
+cin>>stuff;//read a word
+getline(cin,stuff);//read a line, discard
+```
+
+### getline版本
+
+```c++
+cin.getline(info,100,':');//read up to :, discard :
+getline(stuff,':');//read up to :, discard :
+```
