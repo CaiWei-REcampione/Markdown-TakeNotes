@@ -687,3 +687,30 @@ getline(cin,stuff);//read a line, discard
 cin.getline(info,100,':');//read up to :, discard :
 getline(stuff,':');//read up to :, discard :
 ```
+
+## 使用字符串
+
+### 比较字符串
+
+string类对全部6个关系运算符都进行重载。如果在机器排列序列中，一个对象位与另一个对象的前面，则前者被视为小于后者。如果机器排列序列为ASCII码，则数字将小于大写字符，而大写字符小于小写字符。
+
+### 字符串的长度
+
+*    size()和length()成员函数都返回字符串中的字符数
+
+### 搜索给定子字符或字符
+
+| 方法原型                                                     | 描述                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| size_type find(const string & str, size_type pos = 0)const   | 从字符串的pos位置开始，查找子字符串str。如果找到，则返回该子字符串首次出现时其首字符的索引；否则，返回string::npos |
+| size_type find(const char *s, size_type pos = 0)const        | 从字符串的pos位置开始，查找子字符串s。如果找到，则返回该子字符串首次出现时首字符的索引；否则，返回string::npos |
+| size_type find(const char * s, size_type pos = 0, size_type n) | 从字符串的pos位置开始，查找s的前n个字符组成的子字符串。如果找到，则返回该子字符串首次出现时其首字符的索引；否则，返回string::npos |
+| size_type find(char ch,size_type pos = 0)const               | 从字符串的pos位置开始，查找字符ch。如果找到，则返回该字符首次出现的位置；否则，返回string::npos |
+
+由于关系运算符被重载，因此可以像对待数值变量那样对待字符串
+
+```c++
+while(guesses>0&&attempt!=target)
+```
+
+>    npos变量是string类的静态成员，它的值是string对象能存储的最大字符数。由于索引从0开始，所以它比最大的索引值大1，因此可以使用它来表示没有查找到字符或字符串。
