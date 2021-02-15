@@ -269,7 +269,7 @@ baseDMA&baseDMA::operator=(const baseDMA&rs){//赋值运算符
 
 如果使用指向对象的引用或指针来调用虚方法，程序将使用为对象类型定义的方法，而不使用为引用或指针类型定义的方法，称之为**动态联编**
 
-**构造函数不能是虚函数，析构函数应当是虚函数**，除非类不用做基类
+>    **构造函数不能是虚函数，析构函数应当是虚函数**，除非类不用做基类
 
 友元不能是虚函数，友元不是类成员，而只用成员才能是虚函数
 
@@ -383,7 +383,7 @@ template<typename T>
 //function
 ```
 
-**不能将模板成员函数放在独立的实现文件中** 
+>    **不能将模板成员函数放在独立的实现文件中** 
 
 由于模板不是函数，不能单独编译。模板类必须与特定的模板实例化请求一起使用
 
@@ -481,3 +481,182 @@ template <typename T>void report(T& hf){...}
 ## 模板类的非约束模板友元函数
 
 通过在类中声明模板，可以创建非约束友元函数
+
+# 异常
+
+## 调用abort()
+
+受控方式运行代码
+
+abort()函数位与头文件**cstdlib**中，典型实现是向标准错误流发送消息abnormal program termination，然后终止程序
+**abort()是否刷新文件缓冲区取决于实现**，如果愿意，也可以用exit()，该函数刷新文件缓冲区，但不显示消息
+
+## 异常机制
+
+>    对异常的处理包含3个组成部分
+>
+>    *    引发异常
+>    *    使用处理程序捕获异常
+>    *    使用try块
+
+throw关键字表示引发异常，紧随其后的值指出了异常的特征
+
+程序使用异常处理程序来捕获异常，异常处理程序位与要处理问题的程序中
+
+catch关键字表示捕获异常，以关键字catch开头，随后是位与括号中的类型声明，指出了异常处理程序要相应的异常类型；然后是一个用花括号括起的代码块，指出要采取的措施。catch关键字和异常类型用作标签，指出当异常被引发时，程序应跳到这个位置执行
+
+try块表示其中特定的异常可能被激活的代码块，后面跟一个或多个catch块。try块是由关键字try指示的，关键字try的后面是一个由花括号括起的代码块，表明需要注意这些代码引发的异常
+
+```c++
+try{
+
+}
+catch{
+
+}
+```
+
+## 栈解退
+
+c++通常通过将信息放在栈中来处理函数调用
+
+程序将调用函数的指令的地址放在栈中。当被调函数执行完毕后，程序将使用该地址来确定从哪里开始继续执行。
+
+函数调用将函数参数放在栈中。在栈中，这些函数参数被视为自动变量。如果被调用的函数创建了新的自动变量，则这些变量也将被添加到栈中。如果被调用的函数调用了另一个函数，则后者的信息将被调用时存储的地址处，同时栈顶的元素被释放。
+
+>    假设函数由于出现异常而终止，则程序也将释放栈中的内存，但不会再释放栈的第一个返回地址后停止，而是继续释放栈，直到找到一个位于try块的返回地址。随后，控制权交啊ing转到块尾的异常处理程序，而不是函数调用后面的第一条语句。
+
+函数返回仅仅处理该函数放在栈中的对象，而throw语句则处理try块和throw之间整个函数调用序列放在栈中的对象。
+
+## stdexcept异常类
+
+头文件**stdexcept**定义了其他几个异常类。首先，该文件定义了logic_error和runtime_error类，它们都是以公有方式从exceptin派生而来的:
+
+```c++
+class logic_error:public exception{
+public:
+explicit logic_error(const string& what_arg);
+    ...
+}
+
+class domain_error:public logic_error{
+public:
+explicit domain_error(const string& what_arg);
+    ...
+}
+```
+
+每个类的名称指出了它用于报告的错误类型
+
+|     错误类型     |              解释              |
+| :--------------: | :----------------------------: |
+|   domain_error   |          定义域和值域          |
+| invalid_argument |    给函数传递了一个意外的值    |
+|   length_error   | 没有足够的空间来执行所需的操作 |
+|  out_of_bounds   |            索引错误            |
+
+每个类独有一个类似于logic_error的构造函数，能够提供一个供方法what()返回的字符串
+
+接下来，**runtime_error**异常系列描述了可能在运行期间发生但难以预计和防范的错误
+
+|    错误类型     |                            解释                            |
+| :-------------: | :--------------------------------------------------------: |
+|   range_error   | 计算结果可能不再函数允许的范围之内，但没有发生上溢下溢错误 |
+| overflow_error  |                          上溢错误                          |
+| underflow_error |                          下溢错误                          |
+
+## bad_alloc异常和new
+
+对于使用new导致的内存分配问题，让new引发bad_alloc异常
+
+头文件new包含bad_alloc类的声明，是从exception类公有派生而来的
+
+# RTTI
+
+## RTTI用途
+
+### dynamic_cast
+
+判断是否可以将对象的地址赋给特定类型的指针
+
+```c++
+dynamic_cast <type-id> (expression)
+```
+
+>    该运算符把expression转换成type-id类型的对象。Type-id 必须是类的指针、类的引用或者void*
+>
+>    dynamic_cast运算符用于将派生类指针转换为基类指针，其主要用途是确保可以安全地调用虚函数。
+>
+
+如果可以，运算符将返回对象的地址，否则返回一个空指针
+
+即便编译器支持RTTI，在默认情况下，它也可能关闭该特性，程序可能仍然能通过编译。
+
+应尽可能使用虚函数，而在必要时使用RTTI。
+
+### typeid
+
+typeid运算符使能够确定两个对象是否为同种类型，与sizeof有些相像，可以接收两种参数
+
+>    typeid运算符返回一个type_info对象。可以对两个typeid的返回值进行比较，以确定对象是否为特定的类型，而返回的type_info对象可用于获得关于对象的信息。
+
+|        参数        |      使用方法      |
+| :----------------: | :----------------: |
+|        类名        |  typeid(dataType)  |
+| 结果为对象的表达式 | typeid(expression) |
+
+### type_info
+
+```
+class type_info {
+public:
+    virtual ~type_info();
+    int operator==(const type_info& rhs) const;
+    int operator!=(const type_info& rhs) const;
+    int before(const type_info& rhs) const;
+    const char* name() const;
+    const char* raw_name() const;
+private:
+    void *_m_data;
+    char _m_d_name[1];
+    type_info(const type_info& rhs);
+    type_info& operator=(const type_info& rhs);
+};
+```
+
+C++ 标准规定，type_info 类至少要有如下所示的 4 个 public 属性的成员函数，其他的扩展函数编译器开发者可以自由发挥，不做限制。
+
+|                     原型                     |                             用法                             |
+| :------------------------------------------: | :----------------------------------------------------------: |
+|           const char* name() const           | 返回一个能表示类型名称的字符串。但是C++标准并没有规定这个字符串是什么形式的，例如对于上面的`objInfo.name()`语句，VC/VS 下返回“class Base”，但 GCC 下返回“4Base”。 |
+|   bool before (const type_info& rhs) const   | 判断一个类型是否位于另一个类型的前面，rhs 参数是一个 type_info 对象的引用。但是C++标准并没有规定类型的排列顺序，不同的编译器有不同的排列规则，程序员也可以自定义。要特别注意的是，这个排列顺序和继承顺序没有关系，基类并不一定位于派生类的前面。 |
+| bool operator== (const type_info& rhs) const | 重载运算符“==”，判断两个类型是否相同，rhs 参数是一个 type_info 对象的引用。 |
+| bool operator!= (const type_info& rhs) const | 重载运算符“!=”，判断两个类型是否不同，rhs 参数是一个 type_info 对象的引用。 |
+
+## 类型转换运算符
+
+更严格限制允许的类型转换，并添加4个类型转换运算符，使转换过程更规范
+
+|      运算符      | 用法                                    |                             作用                             |
+| :--------------: | --------------------------------------- | :----------------------------------------------------------: |
+|   dynamic_cast   | dynamic_cast<type-name>(expression)     |      使能够在类层次结构中进行向上转换，而不允许其他转换      |
+|    const_cast    | const_cast<type-name>(expression)       | 除了const或volatile特征可以不同之外，type_name和expression的类型必须相同 |
+|   static_cast    | static_cast<type-name>(expression)      | 仅当type_name可被隐式转换为expession所属的类型或expresion可被隐式转换为type_name所属的类型时，上述转换才是合法的 |
+| reinterpret_cast | reinterpret_cast<type-name>(expression) | reinterprete_cast运算符并不支持所有的类型转换，不能将函数指针转换为数据指针，反之亦然 |
+
+# string class
+
+>    string实际上是模板具体化basic_string<char>的一个typedef，同时省略了与内存管理相关的参数
+
+|                           构造函数                           |                             描述                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                     string(const char*s)                     |               将string对象初始化Wies指向的NBTS               |
+|                 string(size_type n, char c)                  | 创建一个包含n个元素的string对象，其中每个元素都被初始化为字符c |
+|                  string(const string& str)                   |            将一个string对象初始化为string对象str             |
+|                           string()                           |              创建一个默认的string对象，长度为0               |
+|              string(const char* s, size_type n)              | 将string对象初始化为s指向的NBTS的前n的字符，即使超过了NBTS结尾 |
+|       template<class Iter>string(Iter begin, Iter end)       | 将string对象初始化为区间[begin, end]内的字符，其中begin和end的行为就像指针，用于指定位置，范围包括begin在内，但不包括end |
+| string(const string& str,string size_type pos = 0,size_type n = npos) | 将一个string对象初始化为对象str中从位置pos开始到结尾的字符，或从位置pos开始的n个字符 |
+|                string(string && str)noexcept                 | C++11新增，将一个string对象初始化为string对象str，并可能修改str |
+|              string(initializer_list<char> il)               |   c++11新增，将一个string对象初始化为初始化列表il中的字符    |
+
