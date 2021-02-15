@@ -1,9 +1,8 @@
 # 参数声明
 
 ```c++
-<typename> int
-<point>=new <typename>
-delete <point>
+<typename> int;
+typename* name=new <typename>;
 ```
 
 # 注释
@@ -32,13 +31,11 @@ if(sayingts[i]<*first)//使用*解除引用操作符获得对象
 
 # class 类
 
-## 权限
-
-​	public
-
-​	protected
-
-​	private
+|   权限    |      |
+| :-------: | :--: |
+|  public   | 公有 |
+| protected | 保护 |
+|  private  | 私有 |
 
 ## 特殊成员函数
 
@@ -262,6 +259,8 @@ baseDMA&baseDMA::operator=(const baseDMA&rs){//赋值运算符
 
 
 ### 虚方法（virtual method）
+
+>    **允许在派生类中重新定义与基类同名的函数,并且可以通过基类指针或引用来访问基类和派生类中的同名函数。**
 
 如果方法是通过引用或指针而不是对象调用的，它将确定使用哪一种方法。如果没有使用关键字virtual，程序将根据引用类型或指针类型选择方法；如果使用了virtual，程序将根据引用或指针指向的对象的类型来选择方法
 
@@ -583,10 +582,9 @@ explicit domain_error(const string& what_arg);
 dynamic_cast <type-id> (expression)
 ```
 
->    该运算符把expression转换成type-id类型的对象。Type-id 必须是类的指针、类的引用或者void*
+>    **该运算符把expression转换成type-id类型的对象。Type-id 必须是类的指针、类的引用或者void***
 >
->    dynamic_cast运算符用于将派生类指针转换为基类指针，其主要用途是确保可以安全地调用虚函数。
->
+>    **dynamic_cast运算符用于将派生类指针转换为基类指针，其主要用途是确保可以安全地调用虚函数。**
 
 如果可以，运算符将返回对象的地址，否则返回一个空指针
 
@@ -598,7 +596,7 @@ dynamic_cast <type-id> (expression)
 
 typeid运算符使能够确定两个对象是否为同种类型，与sizeof有些相像，可以接收两种参数
 
->    typeid运算符返回一个type_info对象。可以对两个typeid的返回值进行比较，以确定对象是否为特定的类型，而返回的type_info对象可用于获得关于对象的信息。
+>    **typeid运算符返回一个type_info对象。可以对两个typeid的返回值进行比较，以确定对象是否为特定的类型，而返回的type_info对象可用于获得关于对象的信息。**
 
 |        参数        |      使用方法      |
 | :----------------: | :----------------: |
@@ -646,7 +644,7 @@ C++ 标准规定，type_info 类至少要有如下所示的 4 个 public 属性�
 
 # string class
 
->    string实际上是模板具体化basic_string<char>的一个typedef，同时省略了与内存管理相关的参数
+>    **string实际上是模板具体化basic_string<char>的一个typedef，同时省略了与内存管理相关的参数**
 
 ## 构造函数
 
@@ -714,3 +712,92 @@ while(guesses>0&&attempt!=target)
 ```
 
 >    npos变量是string类的静态成员，它的值是string对象能存储的最大字符数。由于索引从0开始，所以它比最大的索引值大1，因此可以使用它来表示没有查找到字符或字符串。
+
+### 自动调整大小
+
+|    方法    |               解释               |
+| :--------: | :------------------------------: |
+| capacity() | 返回当前分配给字符串的内存块大小 |
+| reserve()  |       请求内存块的最小长度       |
+
+很多C++实现分配一个比实际字符串大的内存块，为字符串提供了增大空间。然而，如果字符串不断增大，超过了内存块的大小，程序将分配一个大小为原来两倍的新内存块，以提供足够的增大空间，避免不断地分配新的内存块。
+
+# 智能指针
+
+```c++
+void remodel(string & str){
+    string * ps=new string(str);
+    ...
+        str = ps;
+    return;
+}
+```
+
+每当调用时，该函数都分配堆中的内存，但从不收回，从而导致内存泄露
+
+在return语句前添加下面的语句，以释放分配的内存
+
+```c++
+delete ps;
+```
+
+## 选择智能指针
+
+要创建智能指针对象，必须包含头文件memory，该文件模板定义。然后使用通常的模板来实例化所需要类型的指针。
+
+|  智能指针  |                   用法                   |
+| :--------: | :--------------------------------------: |
+|  auto_ptr  |  auto_ptr<type-name>name(new type-name)  |
+| unique_ptr | unique_ptr<type-name>name(new type-name) |
+| shared_ptr | shared_ptr<type-name>name(new type-name) |
+|  weak_ptr  |  weak_ptr<type-name>name(new type-name)  |
+
+
+
+```c++
+#include <memory>
+auto_ptr<double>pd(new double);
+auto_ptr<std::string>ps(new std::stirng);
+```
+
+```c++
+unique_ptr<double>pdu(new double);
+shared_ptr<std::string>pss(new std::string);
+```
+
+auto_ptr被c++11摒弃，**避免潜在的内存泄漏问题**
+
+>    你在一个函数中使用智能指针，在用的时候会有引用计数增加，这个时候指针指向的内存是有值的。
+>
+>    接着你将**一个正常指针指向这块内存区域，都能正常访问，但是他没有通知智能指针增加引用计数**，这就埋下伏笔！
+>
+>    然后，你的**智能指针不再被使用，（出了作用域等）引用计数减完，然后C++会自动删除指针所指向的内存区域，并释放！**
+>
+>    这时，正常指针并不知道自己所指向的区域已经被删除了，就变成了野指针，接下就是崩溃啦~~~~
+
+### 指针类型
+
+如果程序要使用多个指向同一个对象的指针，应选用`shared_ptr`。这样的情况包括：
+
+-    有一个指针数组，并使用一些辅助指针来标示特定的元素，如最大的元素和最小的元素；
+-    连个对象包含指向第三个对象的指针；
+-    STL容器包含指针。很多STL算法都支持复制和赋值操作，这些操作可用于shared_ptr，但不能用于unique_ptr（编译器发出warning）和auto_ptr（行为不确定）。如果你的编译器没有提供shared_ptr，可使用Boost库提供的shared_ptr。
+
+如果程序不需要多个指向同一个对象的指针，则可使用unique_ptr。如果函数使用new分配内存，并返还指向该内存的指针，将其返回类型声明为unique_ptr是不错的选择。这样，所有权转让给接受返回值的unique_ptr，而该智能指针将负责调用delete。可将unique_ptr储存到STL容器中，只要不调用将unique_ptr**复制或赋值**给另一个算法（如sort())。例如，可在程序中使用类似于下面的代码段：
+
+设计weak_ptr的原因：**解决使用shared_ptr因循环引用而不能释放资源的问题。**
+
+*    weak_ptr不控制对象的生命期，但是它知道对象是否还活着，如果对象还活着，那么它可以提升为有效的shared_ptr（提升操作通过lock()函数获取所管理对象的强引用指针）；如果对象已经死了，提升会失败，返回一个空的shared_ptr。
+
+# 标准模板库STL
+
+STL不是面向对象编程，而是泛型编程
+
+## 模板类vector
+
+```c++
+vector<type-name>name(length);
+```
+
+vector使用动态内存分配，可以用初始化参数来指出需要多少矢量
+
