@@ -1,3 +1,5 @@
+# 目录
+
 [toc]
 
 # 参数声明
@@ -997,12 +999,93 @@ showpoint是ios_base类声明中定义的类级静态常量。必须加上作用
 
 ## setf()
 
+|                原型                |
+| :--------------------------------: |
+|      fmtflags setf(fmtflags);      |
+| fmtflags setf(fmtflags, fmtflags); |
+
+### fmtflags setf(fmtflags);
+
+| 常量                | 含义                                  |
+| ------------------- | ------------------------------------- |
+| ios_base::boolalpha | 输入和输出bool值，可以为true或false   |
+| ios_base::showbase  | 对于输出，使用c++基数前缀(0,0x)       |
+| ios_base::showpoint | 显示末尾的小数点                      |
+| ios_base::uppercase | 对于16进制输出，使用大写字母，E表示法 |
+| ios_base::showpos   | 在正数前面加上+                       |
+
+### fmtflags setf(fmtflags, fmtflags);
+
+|      第一个参数      |      第二个参数       |              含义              |
+| :------------------: | :-------------------: | :----------------------------: |
+|    ios_base::dec     |  ios_base::basefield  |           使用基数10           |
+|    ios_base::oct     |  ios_base::basefield  |           使用基数8            |
+|    ios_base::hex     |  ios_base::basefield  |           使用基数16           |
+|   ios_base::fixed    | ios_base::floatfield  |         使用定点计数法         |
+| ios_base::scientific | ios_base::floatfield  |         使用科学计数法         |
+|    ios_base::left    | ios_base::adjustfield |           使用左对齐           |
+|   ios_base::right    | ios_base::adjustfield |           使用右对齐           |
+|  ios_base::internal  | ios_base::adjustfield | 符号或基数前缀左对齐，值右对齐 |
+
+在c++标准中，定点表示法和科学表示法都有下面两个特征
+
+*    精度指的是小数位数，而不是总位数
+*    显示末尾的0
+
+setf()函数是ios_base类的一个成员函数。由于这个类是ostream类的基类，因此可以使用cout对象来调用该函数
+
 ```c++
-fmtflags setf(fmtflags);
+ios_base::fmtflags old = cout.setf(,ios::adjustfield);
 ```
 
+要恢复以前的设置，可以这样做
 
+```c++
+cout.setf(old,ios::adjustfield);
+```
+
+调用setf()的效果可以通过unsetf()消除，原型如下：
+
+```c++
+void unsetf(fmtflags mask);
+```
+
+mask是位模式，mask中所有的位都设置为1，将使得对应的位被复位。
+
+>    setf()将位设置为1，unsetf()将位恢复为0
+
+## 标准控制符
+
+|   控制符    |                      调用                      |
+| :---------: | :--------------------------------------------: |
+|  boolalpha  |           setf(ios_base::boolalpha)            |
+| noboolalpha |         unsetf(ios_base::noboolalpha)          |
+|  showbase   |            setf(ios_base::showbase)            |
+| noshowbase  |          unsetf(ios_base::noshowbase)          |
+|  showpoint  |           setf(ios_base::showpoint)            |
+| noshowpoint |         unsetf(ios_base::noshowpoint)          |
+|   showpos   |            setf(ios_base::showpos)             |
+|  noshowpos  |          unsetf(ios_base::noshowpos)           |
+|  uppercase  |           setf(ios_base::uppercase)            |
+| nouppercase |         unsetf(ios_base::nouppercase)          |
+|  internal   | setf(ios_base::internal,ios_base::adjustfield) |
+|    left     |   setf(ios_base::left,ios_base::adjustfield)   |
+|    right    |  setf(ios_base::right,ios_base::adjustfield)   |
+|     dec     |    setf(ios_base::dec,ios_base::basefield)     |
+|     hex     |    setf(ios_base::hex,ios_base::basefield)     |
+|     oct     |    setf(ios_base::oct,ios_base::basefield)     |
+|    fixed    |   setf(ios_base::fixed,ios_base::basefield)    |
+| scientific  | setf(ios_base::scientific,ios_base::basefield) |
+
+## 头文件iomanip
+
+|     控制符     |     含义     |
+| :------------: | :----------: |
+| setprecision() |   设置精度   |
+|   setfill()    |   填充字符   |
+|     setw()     | 设置字段宽度 |
 
 # 参考
 
 *    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书） (C和C++实务精选) . 人民邮电出版社. Kindle 版本. 
+
