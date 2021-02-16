@@ -1195,6 +1195,43 @@ cin>>hex;
 
 在使用char参数或没有参数的情况下, get()方法读取下一个输入字符,即使该字符是空格、制表符或换行符。get (char &ch)版本将输入字符赋给其参数, 而get (void)版本将输入字符转换为整型(通常是int),并将其返回。
 
+*    get(void)
+
+get(void)成员函数读取空白，但使用返回值来输入传递给程序,返回类型为int，因此
+
+```c++
+char c1,c2,c3;
+cin.get().get()>>c3;//not valid
+```
+
+cin.get()将返回一个int值，由于返回值不是类对象，因此不能对它应用成员运算符。会出现语法错误。
+
+```c++
+char c1;
+cin.get(c1).get();//valid
+```
+
+cin.get(c1)返回cin，因此可以放在get()的前面
+
+到达文件尾后，cin.get(void)都将返回EOF值，使得
+
+```c++
+int ch;
+while((ch = cin.get())!=EOF){
+    //process input
+}
+```
+
+##### cin.get(ch)与cin.get()
+
+|           特征           |      cin.get(ch)      |   ch=cin.get()    |
+| :----------------------: | :-------------------: | :---------------: |
+|    传输输入字符的方法    |      赋给参数ch       | 将函数返回赋给ch  |
+|  字符输入时函数的返回值  | 指向istream对象的引用 | 字符编码（int值） |
+| 达到文件尾时函数的返回值 |      转换为false      |        EOF        |
+
+
+
 # 参考
 
 *    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书） (C和C++实务精选) . 人民邮电出版社. Kindle 版本. 
