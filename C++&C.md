@@ -1085,6 +1085,116 @@ mask是位模式，mask中所有的位都设置为1，将使得对应的位被�
 |   setfill()    |   填充字符   |
 |     setw()     | 设置字段宽度 |
 
+## 流状态
+
+| 成员                     | 描述                                                         |
+| ------------------------ | ------------------------------------------------------------ |
+| eofbit                   | 如果到达文件尾，则设置为1                                    |
+| badbit                   | 如果流被破坏，则设置为1                                      |
+| failbit                  | 如果输入操作未能读取预期的字符或输出操作没有写入预期的字符，则设置为1 |
+| goodbit                  | 另一种表示0的方法                                            |
+| good( )                  | 如果流可以使用（所有的位都被清除），则返回true               |
+| eof( )                   | 如果eofbit被设置，则返回true                                 |
+| bad( )                   | 如果badbit被设置，则返回true                                 |
+| fail( )                  | 如果badbit或failbit被设置，则返回true                        |
+| rdstate( )               | 返回流状态                                                   |
+| exceptions( )            | 返回一个位掩码，指出哪些标记导致异常被引发                   |
+| exceptions( isostate ex) | 设置哪些状态将导致clear()引发异常；例如，如果ex是eofbit，则如果eofbit被设置，clear()将引发异常 |
+| clear( iostate s)        | 将流状态设置为s；s的默认值为0（goodbit）；如果(restate()& exceptions())! = 0，则引发异常basic_ ios:: failure |
+| setstate( iostate s)     | 调用clear（ rdstate( )｜ s）。 这将设置与s中设置的位对应的流状态位，其他流状态位保持不变 |
+
+### 设置状态
+
+```c++
+clear();
+```
+
+```c++
+clear(eofbit);
+```
+
+```c++
+setstate(eofbit);
+```
+
+### I/O和异常
+
+exceptions( )方法返回一个位字段,它包含3位,分别对应于eofbit,failbit和badbit。修改流状态涉及clear( )或setstate( ),这都将使用clear( )。
+
+修改流状态后, clear( )方法将当前的流状态与exceptions ( )返回的值进行比较。如果在返回值中某一位被设置,而当前状态中的对应位也被设置,则clear ( )将引发ios_base:: failure异常。如果两个值都设置了badbit,将发生这种情况。如果exceptions ( )返回goodbit,则不会引发任何异常。ios base:: failure异常类是从std::exception类派生而来的,因此包含一个what( )方法。
+
+### 流状态的影响
+
+只有在流状态良好(所有的位都被清除)的情况下,才返回true
+
+设置流状态位有一个非常重要的后果:流将对后面的输入或输出关闭,直到位被清除。
+
+如果希望程序在流状态位被设置后能够读取后面的输入,就必须将流状态重置为良好。这可以通过调用clear( )方法来实现
+
+```c++
+cin.clear();
+```
+
+### istream类方法
+
+#### 使用cin进行输入
+
+```c++
+cin>>value_holder;
+```
+
+基本类型
+
+*    signed char &
+*    unsigned char &
+*    char &
+*    unsigned short &
+*    int &
+*    unsigned int &
+*    long &
+*    unsigned long &
+*    long long &(c++11)
+*    float &
+*    double &
+*    long double &
+
+典型运算符函数原型
+
+```c++
+istream & operator>>(int &);
+```
+
+可以将hex、oct和dec控制符与cin一起使用，来指定将整数输入解释为十六进制、八进制还是十进制格式。
+
+```c++
+cin>>hex;
+```
+
+在单字符模式下, >>运算符将读取该字符,将它放置到指定的位置。在其他模式下, >>运算符将读取一个指定类型的数据。也就是说,它读取从非空白字符开始,到与目标类型不匹配的第一个字符之间的全部内容。
+
+#### cin方法
+
+|          方法          |                             含义                             |
+| :--------------------: | :----------------------------------------------------------: |
+|       cin.get();       |         从输入流中读取一个字符，输入流的数据被取走。         |
+|   cin.ignore(n,ch);    | 将输入流中取出一个一个字符，并且每取出一个字符都会进行比较操作，如果取出字符个数等于n停止操作，如果遇到ch字符也停止操作，这个函数可以用来比如消除上一次输入对下一次输入的影响。 |
+| cin.getline(str,n,ch); | 从输入流从接收n个字符到str变量中，ch是结束字符如果不给出这个参数那就默认为'\0'，就是当遇到ch这个字符的时候停止接收。 |
+|     cin.gcount();      |            获取一个字符变量中包括空白字符的个数。            |
+|      cin.read();       |                      只能读取一行的内容                      |
+|     cin.getlie();      |               不限定行数直到到达结束标志为止。               |
+
+
+
+#### 单字符输入
+
+方法get (char&)和get (void)提供**不跳过空白**的单字符输入功能
+
+函数get (char *, int, char)和getline(char *, int, char)在默认情况下**读取整行**而不是一个单词。
+
+*    get(char &)
+
+在使用char参数或没有参数的情况下, get()方法读取下一个输入字符,即使该字符是空格、制表符或换行符。get (char &ch)版本将输入字符赋给其参数, 而get (void)版本将输入字符转换为整型(通常是int),并将其返回。
+
 # 参考
 
 *    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书） (C和C++实务精选) . 人民邮电出版社. Kindle 版本. 
