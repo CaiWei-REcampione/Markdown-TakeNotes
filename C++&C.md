@@ -858,26 +858,21 @@ iostream文件中包含一些专门设计用来实现、管理流和缓冲区的
 
 ## 重载的<<运算符
 
-头文件<iostream>
+|  头文件  |   使用方法   |            原型            |
+| :------: | :----------: | :------------------------: |
+| iostream | cout<<value; | ostream & operator<<(int); |
 
-```c++
-#include <iostream>
-using namespace std;
-```
+## put
 
-使用方法
+|         原型         |       调用        |
+| :------------------: | :---------------: |
+| ostream & put(char); | cout.put().put(); |
 
-```c++
-cout<<value;
-```
+## write
 
-原型
-
-```c++
-ostream & operator<<(int);
-```
-
-表达式cout<<count将显示count变量的值，并返回cout
+|                             原型                             |
+| :----------------------------------------------------------: |
+| basic_ostream<charT,traits>& write(const char_type* s, streamsize n); |
 
 # 参考
 
