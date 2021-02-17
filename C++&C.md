@@ -1311,7 +1311,84 @@ fout.close();
 if(!fin.isopen()){...};
 ```
 
-## 命令行处理技术
+### 命令行处理技术
+
+文件处理程序通常使用命令行参数来指定文件。
+
+命令行参数是用户在输入命令时,在命令行中输入的参数。
+
+```c++
+int main(int argc, char *argv []){...}
+```
+
+*    很多Windows IDE (集成开发环境)都有一个提供命令行参数的选项。通常,必须选择一系列菜单,才能打开一个可以输入命令行参数的对话框。具体的步骤随厂商和升级版本而异,因此请查看文档。
+*    很多Windows IDE都可以生成可执行文件,这些文件能够在Windows命令提示符模式下运行。
+
+### 文件模式
+
+文件模式常量
+
+| 常量             | 含义                     |
+| ---------------- | ------------------------ |
+| ios_base::in     | 打开文件，以便读取       |
+| ios_base::out    | 打开文件，以便写入       |
+| ios_base::ate    | 打开文件，并移到文件尾   |
+| ios_base::app    | 追加到文件尾             |
+| ios_base::trunc  | 如果文件存在，则截短文件 |
+| ios_base::binary | 二进制文件               |
+
+### 随机存取
+
+随机存取指的是直接移动(不是依次移动)到文件的任何位置。随机存取常被用于数据库文件,程序维护一个独立的索引文件,该文件指出数据在主数据文件中的位置。这样,程序便可以直接跳到这个位置,读取(还可能修改)其中的数据。
+
+如果文件由长度相同的记录组成,这种方法实现起来最简单。每条记录表示一组相关的数据。
+
+```c++
+finout.open(file,ios_base::in|ios_base::out|ios_base::binary);
+```
+
+| 方法    | 原型                         |
+| ------- | ---------------------------- |
+| seekg() | 将输入指针移到指定的文件位置 |
+| tellg() | 检查输入指针的当前位置       |
+| seekp() | 将输出指针移到指定的文件位置 |
+| tellp() | 检查输出指针的当前位置       |
+
+```c++
+basic_istream<charT, traits>& seekg(off_type, ios_base::seekdir);
+basic_istream<charT, traits>& seekg(pos_type);
+
+istream &seekg(streamoff, ios_base::seekdir);
+istream & seekg(streampos);
+```
+
+第一个原型定位到离第二个参数指定的文件位置特定距离(单位为字节)的位置
+
+第二个原型定位到离文件开头特定距离(单位为字节)的位置
+
+-    来看seekg ( )的第一个原型的参数。
+
+streamoff值被用来度量相对于文件特定位置的偏移量(单位为字节)。streamoff参数表示相对于三个位置之一的偏移量为特定值(以字节为单位)的文件位置(类型可定义为整型或类)。
+
+seek_dir参数是ios_base类中定义的另一种整型,有3个可能的值。
+
+常量ios_base : : beg指相对于文件开始处的偏移量。
+
+常量ios_base: : cur指相对于当前位置的偏移量;常量ios base : : end指相对于文件尾的偏移量。下面是一些调用示例,这里假设fin是一个ifstream对象:
+
+-    下面来看第二个原型。
+
+streampos类型的值定位到文件中的一个位置。它可以是类,但如果是这样的话,这个类将包含一个接受streamoff参数的构造函数和一个接受整数参数的构造函数,以便将两种类型转换为streampos值。
+
+streampos值表示文件中的绝对位置(从文件开始处算起)。可以将streampos位置看作是相对于文件开始处的位置(以字节为单位,第一个字节的编号为0)。
+
+## 内核格式化
+
+iostream族(family)支持程序与终端之间的1/0,而fstream族使用相同的接口提供程序和文件之间的1/0. C++库还提供了sstream族,它们使用相同的接口提供程序和string对象之间的1/0.也就是说,可以使用于cout的ostream方法将格式化信息写入到string对象中,并使用istream方法(如getline( ))来读取string对象中的信息。读取string对象中的格式化信息或将格式化信息写入string对象中被称为**内核格式化**(incoreformatting)。下面简要地介绍一下这些工具(string的sstream族支持取代了char数组的strstream.h族支持)。
+
+头文件sstream定义了一个从ostream类派生而来的ostringstream类(还有一个基于wostream的wostringstream类,这个类用于宽字符集)。如果创建了一个ostringstream对象,则可以将信息写入其中,它将存储这些信息。可以将可用于cout的方法用于ostringstream对象。
+
+>    istringstream和ostringstream类使得能够使用istream和ostream类的方法来管理存储在字符串中的字符数据。
 
 # 参考
 
