@@ -620,7 +620,7 @@ ORDER BY vend_name;
 
 <u>RTrim()函数去掉值右边的所有空格。</u>通过使用RTrim(),各,个列都进行了整理。
 
-### 使用别名
+### 使用别名AS
 
 SQL支持列别名。别名(alias)是一个字段或值的替换名。别名用AS关键字赋予。
 
@@ -831,7 +831,7 @@ FROM products;
 
 # 分组数据
 
-## 创建分组
+## 创建分组GROUP BY
 
 分组是在SELECT语句的GROUP BY子句中建立的。
 
@@ -850,4 +850,98 @@ GROUP BY vend_id;
 -    GROUP BY子句中列出的每个列都必须是检索列或有效的表达式(但不能是聚集函数)。如果在SELECT中使用表达式,则必须在GROUP BY子句中指定相同的表达式。不能使用别名。
 -    除聚集计算语句外, SELECT语句中的每个列都必须在GROUP BY子句中给出。
 -    如果分组列中具有NULL值,则NULL将作为一个分组返回。如果列中有多行NULL值,它们将分为一组。
--    GROUP BY子句必须出现在WHERE子句之后, ORDER BY子句之前。
+-    <u>GROUP BY子句必须出现在WHERE子句之后, ORDER BY子句之前。</u>
+
+## 过滤分组HAVING
+
+HAVING非常类似于WHERE,事实上, 目前为止所学过的所有类型的WHERE子句都可以用HAVING来替代。唯一的差别是WHERE过滤行,而HAVING过滤分组。
+
+```mysql
+SELECT COUNT(*) AS orders
+FROM orders
+GROUP BY cust_id
+HAVING COUNT(*) >= 2;
+```
+
+这条SELECT语句的前3行类似于上面的语句。最后一行增加了HAVING子句,它过滤COUNT (*) >=2 (两个以上的订单)的那些分组。
+
+## 分组和排序
+
+| GROUP BY                                                     | ORDER BY                                                     |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| 排序产生的输出任意列都可以使用(甚至非选择的列也可以使用)不一定需要 | 分组行。但输出可能不是分组的顺序只可能使用选择列或表达式列,而且必须使用每个选择列表达式如果与聚集函数一起使用列(或表达式) ,则必须使用 |
+
+## SELECT子句顺序
+
+| 子句     | 说明               | 是否必须使用           |
+| -------- | ------------------ | ---------------------- |
+| SELECT   | 要返回的列或表达式 | 是                     |
+| FROM     | 从中检索数据的表   | 仅在从表选择数据时使用 |
+| WHERE    | 行级过滤           | 否                     |
+| GROUP BY | 分组说明           | 仅在按组计算聚集时使用 |
+| HAVING   | 组级过滤           | 否                     |
+| ORDER BY | 输出排序顺序       | 否                     |
+| LIMIT    | 要检索的行数       | 否                     |
+
+# 使用子查询
+
+## 子查询
+
+SELECT语句是SQL的查询。迄今为止我们所看到的所有SELECT语句都是简单查询,即从单个数据库表中检索数据的单条语句。
+
+## 利用子查询进行过滤
+
+在WHERE子句中使用子查询能够编写出功能很强并且很灵活的SQL语句。对于能嵌套的子查询的数目没有限制,不过在实际使用时由于性能的限制,不能嵌套太多的子查询。
+
+```mysql
+SELECT cust_name, cust_contact
+FROM customers
+WHERE cust_id IN (SELECT cust_id
+                  FROM orders
+                  WHERE order_num IN (SELECT order_num
+                                      FROM orderitems
+                                      WHERE prod_id = 'TNT2');
+```
+
+## 作为计算字段使用子查询
+
+```mysql
+SELECT cust_name cust_state(SELECT COUNT(*)
+                            FROM orders
+                            WHERE cust_id =cust_id) AS orders
+FROM customers 
+ORDER BY cust_name;
+```
+
+# 联结表
+
+<u>SQL最强大的功能之一就是能在数据检索查询的执行中联结(join)表。</u>联结是利用SQL的SELECT能执行的最重要的操作,很好地理解联结及其语法是学习SQL的一个极为重要的组成部分。
+
+在能够有效地使用联结前,必须了解关系表以及关系数据库设计的一些基础知识。
+
+## 创建联结
+
+联结的创建非常简单,规定要联结的所有表以及它们如何关联即可。
+
+```mysql
+SELECT vend_name, prod name, prod price
+FROM vendors, products
+WHERE vendors.vend_id = products.vend_id
+ORDER BY vend name, prod_name:
+```
+
+我们来考察一下此代码.SELECT语句与前面所有语句一样指定要检索的列。这里,最大的差别是所指定的两个列(prod-name和prod price)在一个表中,而另一个列(vend-name )在另一个表中。
+
+>    笛卡儿积(cartesian product)	由没有联结条件的表关系返回的结果为笛卡儿积。检索出的行的数目将是第一个表中的行数乘以第二个表中的行数。
+
+## 内部联结INNER JOIN
+
+目前为止所用的联结称为<u>等值联结</u>(equijoin),它基于两个表之间的"相等测试。这种联结也称为内部联结。其实,对于这种联结可以使用稍微不同的语法来明确指定联结的类型。
+
+```mysql
+SELECT vend_name, prod name, prod_price
+FROM vendors INNER JOIN products
+ON vendors.vend id = products.vend_id;
+```
+
+在使用这种语法时,联结条件用特定的ON子句而不是WHERE子句给出。传递给ON的实际条件与传递给WHERE的相同。
