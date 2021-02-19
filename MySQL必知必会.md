@@ -404,3 +404,330 @@ ORDER BY prod_name;
 
 MySQL支持使用NOT对IN, BETWEEN和EXISTS子句取反,这与多数其他DBMS允许使用NOT对各种条件取反有很大的差别。
 
+# 用通配符进行过滤
+
+>    通配符(wildcard)	用来匹配值的一部分的特殊字符。
+>
+>    搜索模式(search pattern)	由字面值、通配符或两者组合构成的搜索条件。
+
+## 百分号(%)通配符
+
+最常使用的通配符是百分号(%)。在搜索串中,%表示任何字符出现任意次数。例如,为了找出所有以jet起头的产品,可使用以下SELECT语句:
+
+```mysql
+SELECT prod_id, prod_name
+FROM products
+WHERE prod_name LIKE "%anvil%";
+```
+
+搜索模式,%anvil%'表示匹配任何位置包含文本anvil的值,而不论它之前或之后出现什么字符。
+
+## 下划线(_)通配符
+
+另一个有用的通配符是下划线(_)。下划线的用途与%一样,但下划线只匹配单个字符而不是多个字符。
+
+```mysql
+SELECT prod_id, prod_name
+FROM products
+WHERE prod_name LIKE '_ ton anvil';
+```
+
+## 使用通配符的技巧
+
+正如所见, MySQL的通配符很有用。但这种功能是有代价的:通配符搜索的处理一般要比前面讨论的其他搜索所花时间更长。这里给出一些使用通配符要记住的技巧。
+
+*    不要过度使用通配符。如果其他操作符能达到相同的目的,应该使用其他操作符。
+*    在确实需要使用通配符时,除非绝对有必要,否则不要把它们用在搜索模式的开始处。把通配符置于搜索模式的开始处,搜索起来是最慢的。
+*    仔细注意通配符的位置。如果放错地方,可能不会返回想要的数据
+
+# 用正则表达式进行搜索REGEXP
+
+## 基本字符匹配
+
+```mysql
+SELECT prod_name
+FROM products
+WHERE prod_name REGEXP '1000'
+ORDER BY prod_name;
+```
+
+除关键字LIKE被REGEXP替代外,这条语句看上去非常像使用LIKE的语句,它告诉MySQL: REGEXP后所跟的东西作为正则表达式(与文字正文1000匹配的一个正则表达式)处理。
+
+```mysql
+SELECT prod_name
+FROM products
+WHERE prod_name REGEXP '.000'
+ORDER BY prod_name;
+```
+
+## 进行OR匹配
+
+为搜索两个串之一(或者为这个串,或者为另一个串),使用|.
+
+```mysql
+SELECT prod_name
+FROM products
+WHERE prod_name REGEXP '1000|2000'
+ORDER BY prod_name;
+```
+
+
+
+## 匹配几个字符之一
+
+匹配任何单一字符。但是,如果你只想匹配特定的字符，可通过指定一组用[和]括起来的字符来完成,如下所示:
+
+```mysql
+SELECT prod_name
+FROM products
+WHERE prod_name REGEXP '[123] Ton'
+ORDER BY prod_name;
+```
+
+使用了正则表达式[123] Ton, [123]定义一组字符,它的意思是匹配1或2或3,因此, 1 ton和12 ton都匹配且返回(没有3 ton)。
+
+## 匹配范围集合
+
+可用来定义要匹配的一个或多个字符。例如,下面的集合将匹配数字0到9:[0123456789]
+
+为简化这种类型的集合,可使用-来定义一个范围。
+
+```mysql
+SELECT prod_name
+FROM products
+WHERE prod_name REGEXP '[1-5] Ton'
+ORDER BY prod_name;
+```
+
+## 匹配特殊字符
+
+正则表达式语言由具有特定含义的特殊字符构成。我们已经看到.、[]、|和-等,还有其他一些字符。请问,如果你需要匹配这些字符,应该怎么办呢?例如,如果要找出包含.字符的值,怎样搜索?请看下面的例子:
+
+```mysql
+SELECT vend_name
+FROM vendors
+WHERE vend_name REGEXP '.'
+ORDER BY vend_name;
+```
+
+为了匹配特殊字符,必须用\\\\为前导。\\\\-表示查找-, \\\\.表示查找.
+
+```mysql
+SELECT vend_name
+FROM vendors
+WHERE vend_name REGEXP '\\.'
+ORDER BY vend_name;
+```
+
+| 元字符 |   说明   |
+| :----: | :------: |
+| \\\\f  |   换页   |
+| \\\\n  |   换行   |
+| \\\\r  |   回车   |
+| \\\\t  |   制表   |
+| \\\\v  | 纵向制表 |
+
+## 匹配字符类
+
+|     类     |                    说明                    |
+| :--------: | :----------------------------------------: |
+| [:alnum:]  |               任意字母和数字               |
+| [:alpha:]  |                  任意字符                  |
+| [:blank:]  |                 空格和制表                 |
+| [:cntrl:]  |               ASCII控制字符                |
+| [:digit:]  |                  任意数字                  |
+| [:graph:]  |       与[:print:]相同，但不包括空格        |
+| [:lower:]  |                任意小写字母                |
+| [:print:]  |               任意可打印字符               |
+| [:punct:]  | 既不在[:alnum:]又不在[:cntrl:]中的任意字符 |
+| [:space:]  |         包括空格在内的任意空白字符         |
+| [:upper:]  |                任意大写字母                |
+| [:xdigit:] |              任意十六进制数字              |
+
+## 匹配多个实例
+
+目前为止使用的所有正则表达式都试图匹配单次出现。如果存在一个匹配,该行被检索出来,如果不存在,检索不出任何行。但有时需要,对匹配的数目进行更强的控制。例如,你可能需要寻找所有的数,不管数中包含多少数字,或者你可能想寻找一个单词并且还能够适应一个尾随的s (如果存在),等等。
+
+| 元字符 |         说明         |
+| :----: | :------------------: |
+|   *    |    0个或多个匹配     |
+|   +    |    1个或多个匹配     |
+|   ?    |     0个或1个匹配     |
+|  {n}   |    指定数目的匹配    |
+|  {n,}  | 不少于指定数目的匹配 |
+| {n,m}  |    匹配数目的范围    |
+
+```mysql
+SELECT prod_name
+FROM products
+WHERE prod_name REGEXP '[[:digit:]]{4}'
+ORDER BY prod_name;
+```
+
+ [:digit:]匹配任意数字,因而它为数字的一个集合。{4}确切地要求它前面的字符(任意数字)出现4次,所以[[:digit:]]{4}匹配连在一起的任意4位数字。
+
+```mysql
+SELECT prod_name
+FROM products
+WHERE prod_name REGEXP '\\([0-9] sticks?\\)'
+ORDER BY prod_name;
+```
+
+## 定位符
+
+| 元字符  |    说明    |
+| :-----: | :--------: |
+|    ^    | 文本的开始 |
+|   $$    | 文本的结尾 |
+| [[:<:]] |  词的开始  |
+| [[:>:]] |  词的结尾  |
+
+```mysql
+SELECT prod_name
+FROM products
+WHERE prod_name REGEXP '^[0-9\\.]'
+ORDER BY prod_name;
+```
+
+# 创建计算字段
+
+## 拼接(Concat)
+
+将值联结到一起构成单个值。解决办法是把两个列拼接起来。在MySQL的SELECT语句中,可使用<u>Concat ()</u>函数来拼接两个列。
+
+```mysql
+SELECT Concat(vend_name,' (',vend_country,')')
+FROM vendors
+ORDER BY vend_name;
+```
+
+Concat ()拼接串,即把多个串连接起来形成一个较长的串。
+
+Concat()需要一个或多个指定的串,各个串之间用逗号分隔。
+
+上面的SELECT语句连接以下4个元素:
+
+-    存储在vend-name列中的名字;
+-    包含一个空格和一个左圆括号的串;
+-    存储在vend_country列中的国家;
+-    包含一个右圆括号的串。
+
+```mysql
+SELECT Concat(RTrim(vend-name), ' (', RTrim(vend_country), ')')
+FROM vendors
+ORDER BY vend_name;
+```
+
+<u>RTrim()函数去掉值右边的所有空格。</u>通过使用RTrim(),各,个列都进行了整理。
+
+### 使用别名
+
+SQL支持列别名。别名(alias)是一个字段或值的替换名。别名用AS关键字赋予。
+
+```mysql
+SELECT Concat(RTrim(vend_name),' (',RTrim(vend_country),')') AS
+vend_title
+FROM vendors
+ORDER BY vend_name;
+```
+
+## 执行算术计算
+
+| 操作符 | 说明 |
+| ------ | ---- |
+| +      | 加   |
+| -      | 减   |
+| *      | 乘   |
+| /      | 除   |
+
+# 使用数据处理函数
+
+## 函数
+
+### 使用函数
+
+大多数SQL实现支持以下类型的函数。
+
+-    用于处理文本串(如删除或填充值,转换值为大写或小写)的文本函数。
+
+-    用于在数值数据上进行算术操作(如返回绝对值,进行代数运算)的数值函数。
+
+-    用于处理日期和时间值并从这些值中提取特定成分(例如,返回两个日期之差,检查日期有效性等)的日期和时间函数。
+
+-    返回DBMS正使用的特殊信息(如返回用户登录信息,检查版本细节)的系统函数。
+
+### 文本处理函数
+
+```mysql
+SELECT vend_name, Upper(vend_name) AS vend_name_upcase
+FROM vendors
+ORDER BY vend_name;
+```
+
+<u>正如所见, Upper()将文本转换为大写</u>
+
+|    函数    |       说明        |
+| :--------: | :---------------: |
+|   Left()   | 返回串左边的字符  |
+|  Length()  |   返回串的长度    |
+|  Locate()  | 找出串的一个子串  |
+|  Lower()   |  将串转换为小写   |
+|  LTrim()   | 去掉串左边的空格  |
+|  Right()   | 返回串右边的字符  |
+|  RTrim()   | 去掉串右边的空格  |
+| Soundex()  | 返回串的SOUNDEX值 |
+| SubSting() |  返回子串的字符   |
+|  Upper()   |  将串转换为大写   |
+
+SOUNDEX需要做进一步的解释。SOUNDEX是一个将任何文本串转换为描述其语音表示的字母数字模式的算法。SOUNDEX考虑了类似的发音字符和音节,使得能对串进行发音比较而不是字母比较。虽然SOUNDEX不是SQL概念,但MySQL (就像多数DBMS一样)都提供对SOUNDEX的支持。
+
+```mysql
+SELECT cust_name, cust_contact
+FROM cunstomers
+WHERE Soundex(cust_contact) = 'Y. Lie';
+```
+
+## 日期和时间处理函数
+
+| 函数          | 说明                          |
+| ------------- | ----------------------------- |
+| AddDate()     | 增加一个日期(天、周等)        |
+| AddTime()     | 增加一个时间(时、分等)        |
+| CurDate()     | 返回当前日期                  |
+| CurTime()     | 返回当前时间                  |
+| Date()        | 返回日期时间的日期部分        |
+| DateDiff()    | 计算两个日期之差              |
+| Date_Add ()   | 高度灵活的日期运算函数        |
+| Date_Format() | 返回一个格式化的日期或时间串  |
+| Day()         | 返回一个日期的天数部分        |
+| DayofWeek()   | 对于一个日期,返回对应的星期几 |
+| Hour()        | 返回一个时间的小时部分        |
+| Minute()      | 返回一个时间的分钟部分        |
+| Month()       | 返回一个日期的月份部分        |
+| Now()         | 返回当前日期和时间            |
+| Second()      | 返回一个时间的秒部分          |
+| Time()        | 返回一个日期时间的时间部分返  |
+| Year()        | 回一个日期的年份部分函数      |
+
+首先需要注意的是MySQL使用的日期格式。无论你什么时候指定日期,不管是插入或更新表值还是用WHERE子句进行过滤,日期必须为格式yyyy-mm-dd
+
+```mysql
+SELECT cust_id, order_num
+FROM orders
+WHERE Date (order_date) BETWEEN '2005-09-01' AND 2005-09-30';
+```
+
+## 数值处理函数
+
+|  函数  |        说明        |
+| :----: | :----------------: |
+| Abs()  | 返回一个数的绝对值 |
+| Cos()  | 返回一个角度的余弦 |
+| Exp()  | 返回一个数的指数值 |
+| Mod()  |  返回除操作的余数  |
+|  Pi()  |     返回圆周率     |
+| Rand() |   返回一个随机数   |
+| Sin()  | 返回一个角度的正弦 |
+| sqrt() | 返回一个数的平方根 |
+| Tan()  | 返回一个角度的正切 |
+
