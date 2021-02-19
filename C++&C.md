@@ -66,6 +66,69 @@ string string-name;
 /* --- */
 ```
 
+# 函数
+
+| 函数       | 含义                                 |
+| ---------- | ------------------------------------ |
+| swap(a,b)  | swap 包含在命名空间std 里面,交换a和b |
+| swap(a,b,) |                                      |
+
+## string.h、cstring(C)
+
+|                    函数                    |                     含义                     |
+| :----------------------------------------: | :------------------------------------------: |
+|        strcat(char[], const char[])        |                字符串连接函数                |
+|     strncat(char[],const char[],int )      |                字符串连接函数                |
+|        strcpy(char[],const char[])         |                字符串复制函数                |
+|      strncpy(char[],const char[],int)      |                字符串复制函数                |
+|      strcmp(const char[],const char)       |                字符串比较函数                |
+|         strlenstrlen(const char[])         |                字符串长度函数                |
+|         memset(char[], int, int )          |                  初始化函数                  |
+| char *strtok(char srcl, const char *delim) | 字符串分割src为待分解的字符串, delim为分隔符 |
+
+## cstring、string（C++）
+
+|               函数               |     含义     |
+| :------------------------------: | :----------: |
+|   find(stringfind(string ,int)   |   正向查找   |
+|           find(string)           |   逆向查找   |
+| replacereplace(int,int ,string ) | 替换子串函数 |
+
+## math.h、cmath
+
+|             函数              |          含义           |
+| :---------------------------: | :---------------------: |
+|        int abs(int i)         |  返回整型参数i的绝对值  |
+|     double fabs(double x)     | 返回双精度参数x的绝对值 |
+|       long labs(long n)       | 返回长整型参数n的绝对值 |
+|     double exp(double x)      |   返回指数函数e^x的值   |
+| double pow(double x,double y) |       返回x^y的值       |
+|      double pow10(int p)      |      返回10^p的值       |
+|     double log(double x)      |      返回logex的值      |
+|    double log10(double x)     |     返回log10x的值      |
+|     double sqrt(double x)     |       返回√x的值        |
+|      int ceil(double x)       |  返回不小于x的最小整数  |
+|      int floor(double x)      |  返回不大于x的最大整数  |
+
+## stdlib.h、cstdlib
+
+|             函数             |            含义             |
+| :--------------------------: | :-------------------------: |
+|     void exit(int code)      |        终止程序执行         |
+| void * malloc(long NumBytes) |          申请内存           |
+|     void free(void *ptr)     |          释放内存           |
+|     void srand(int seed)     |      随机数生成器种子       |
+|        int rand(void)        | 生成0~32768之间的一个随机数 |
+
+## algorithm
+
+|            函数             | 含义 |
+| :-------------------------: | ---- |
+|  sort(begin, end, less())   | 升序 |
+| sort(begin, end, greater()) | 降序 |
+
+
+
 # 指针
 
 ```c++
