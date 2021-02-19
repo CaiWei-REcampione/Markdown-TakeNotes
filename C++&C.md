@@ -1390,7 +1390,15 @@ iostream族(family)支持程序与终端之间的1/0,而fstream族使用相同�
 
 >    istringstream和ostringstream类使得能够使用istream和ostream类的方法来管理存储在字符串中的字符数据。
 
+# 多线程
+
+## 线程
+
+在传统的操作系统中,每个进程都有自己的地址空间和一个执行线程,该线程通常叫<u>主线程</u>(primary thread).一般而言,运行在同一个进程中的多个线程具有相同的地址空间(即进程的地址空间),在准并行上下文中,这些线程就像是多个单独运行的进程,只不过它们的地址空间相同。
+
+
+
 # 参考
 
-*    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书） (C和C++实务精选) . 人民邮电出版社. Kindle 版本. 
-
+*    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书） (C和C++实务精选) . 人民邮电出版社.  
+*    [黑山共和国]米洛斯·留莫维奇（Milos Ljumovic）. C++多线程编程实战 (Kindle 位置 344-345). 人民邮电出版社.
