@@ -731,3 +731,123 @@ WHERE Date (order_date) BETWEEN '2005-09-01' AND 2005-09-30';
 | sqrt() | 返回一个数的平方根 |
 | Tan()  | 返回一个角度的正切 |
 
+# 汇总数据
+
+### SQL聚集函数
+
+| 函数    | 说明             |
+| ------- | ---------------- |
+| AVG()   | 返回某列的平均值 |
+| COUNT() | 返回某列的行数   |
+| MAX()   | 返回某列的最大值 |
+| MIN()   | 返回某列的最小值 |
+| SUM()   | 返回某列值之和   |
+
+## AVG()
+
+AVG()通过对表中行数计数并计算特定列值之和,求得该列的平均值。AVG()可用来返回所有列的平均值,也可以用来返回特定列或行的平均值。
+
+```mysql
+SELECT AVG(prod_price) AS avg_price 
+FROM products;
+```
+
+此SELECT语句返回值avg_Price,它包含products表中所有产品的平均价格。
+
+## COUNT()
+
+COUNT()函数进行计数。可利用COUNT ()确定表中行的数目或符合特定条件的行的数目。
+
+COUNT ()函数有两种使用方式。
+
+使用COUNT (*)对表中行的数目进行计数,不管表列中包含的是空值(NULL)还是非空值。
+
+使用COUNT (column)对特定列中具有值的行进行计数,忽略NULL值。
+
+```mysql
+SELECT COUNT(*) AS numcust
+FROM customers;
+```
+
+利用COUNT(*)对所有行计数,不管行中各列有什么值。计数值在num_cust中返回。
+
+## MAX()
+
+MAX()返回指定列中的最大值。MAX()要求指定列名
+
+```mysql
+SELECT MAX(prod_price) AS max_price
+FROM products;
+```
+
+MAX()返回products表中最贵的物品的价格。
+
+## MIN()
+
+MIN()的功能正好与MAX ( )功能相反,它返回指定列的最小值。与MAX()一样, MIN ()要求指定列名
+
+```mysql
+SELECT MIN(prod price) As minprice
+FROM products;
+```
+
+MIN()返回products表中最便宜物品的价格。
+
+## SUM()
+
+SUM()用来返回指定列值的和(总计)。
+
+```mysql
+SELECT SUM(quantity) As items_ordered
+FROM orderitems
+WHERE order_num = 20005;
+```
+
+函数SUM (quantity)返回订单中所有物品数量之和, WHERE子句保证只统计某个物品订单中的物品。
+
+## 聚集不同值DISTINCT
+
+-    对所有的行执行计算,指定ALL参数或不给参数(因为ALL是默认行为);
+
+-    只包含不同的值,指定DISTINCT参数。
+
+```mysql
+SELECT AVG(DISTINCT prod_price) AS avg_price 
+FROM products
+WHERE vend_id = 1003;
+```
+
+## 组合聚集函数
+
+目前为止的所有聚集函数例子都只涉及单个函数。但际上SELECT语句可根据需要包含多个聚集函数。
+
+```mysql
+SELECT COUNT() AS numitems 
+	MIN(prod_price) AS price_min,
+	MAX(prod price) AS price_max,
+	AVG(prod price) AS price_avg 
+FROM products;
+```
+
+# 分组数据
+
+## 创建分组
+
+分组是在SELECT语句的GROUP BY子句中建立的。
+
+```mysql
+SELECT vend_id, COUNT(*) AS num_prods
+FROM products
+GROUP BY vend_id;
+```
+
+上面的SELECT语句指定了两个列, vend_id包含产品供应商的ID, num_prods为计算字段(用COUNT (*)函数建立), GROUP BY子句指示MySQL按vend_id排序并分组数据。这导致对每个vendid而不是整个表计算num_prods一次。
+
+在具体使用GROUP BY子句前,需要知道一些重要的规定。
+
+-    GROUP BY子句可以包含任意数目的列。这使得能对分组进行嵌套,为数据分组提供更细致的控制。
+-    如果在GROUP BY子句中嵌套了分组,数据将在最后规定的分组上进行汇总。换句话说,在建立分组时,指定的所有列都一起计算(所以不能从个别的列取回数据)。
+-    GROUP BY子句中列出的每个列都必须是检索列或有效的表达式(但不能是聚集函数)。如果在SELECT中使用表达式,则必须在GROUP BY子句中指定相同的表达式。不能使用别名。
+-    除聚集计算语句外, SELECT语句中的每个列都必须在GROUP BY子句中给出。
+-    如果分组列中具有NULL值,则NULL将作为一个分组返回。如果列中有多行NULL值,它们将分为一组。
+-    GROUP BY子句必须出现在WHERE子句之后, ORDER BY子句之前。
