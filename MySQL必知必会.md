@@ -924,24 +924,24 @@ ORDER BY cust_name;
 联结的创建非常简单,规定要联结的所有表以及它们如何关联即可。
 
 ```mysql
-SELECT vend_name, prod name, prod price
+SELECT vend_name, prod_name, prod_price
 FROM vendors, products
 WHERE vendors.vend_id = products.vend_id
-ORDER BY vend name, prod_name:
+ORDER BY vend_name, prod_name:
 ```
 
 我们来考察一下此代码.SELECT语句与前面所有语句一样指定要检索的列。这里,最大的差别是所指定的两个列(prod-name和prod price)在一个表中,而另一个列(vend-name )在另一个表中。
 
->    笛卡儿积(cartesian product)	由没有联结条件的表关系返回的结果为笛卡儿积。检索出的行的数目将是第一个表中的行数乘以第二个表中的行数。
+>    笛卡儿积(cartesian product)	<u>由没有联结条件的表关系返回的结果为笛卡儿积。</u>检索出的行的数目将是第一个表中的行数乘以第二个表中的行数。
 
 ## 内部联结INNER JOIN
 
 目前为止所用的联结称为<u>等值联结</u>(equijoin),它基于两个表之间的"相等测试。这种联结也称为内部联结。其实,对于这种联结可以使用稍微不同的语法来明确指定联结的类型。
 
 ```mysql
-SELECT vend_name, prod name, prod_price
+SELECT vend_name, prod_name, prod_price
 FROM vendors INNER JOIN products
-ON vendors.vend id = products.vend_id;
+ON vendors.vend_id = products.vend_id;
 ```
 
 在使用这种语法时,联结条件用特定的ON子句而不是WHERE子句给出。传递给ON的实际条件与传递给WHERE的相同。
@@ -951,10 +951,102 @@ ON vendors.vend id = products.vend_id;
 SQL对一条SELECT语句中可以<u>联结的表的数目没有限制</u>。创建联结的基本规则也相同。首先列出所有表,然后定义表之间的关系。
 
 ```mysql
-SELECT prod-name, vend-name, prod-price, quantity
+SELECT prod_name, vend_name, prod_price, quantity
 FROM orderitems, products, vendors
 WHERE products.vend_id = vendors.vend_id
 AND orderitems.prod_id = products.prod_id 
 AND order_num = 20005;
 ```
 
+# 创建高级联结
+
+## 使用表别名AS
+
+别名除了用于列名和计算字段外, SQL还允许给表名起别名。这样做有两个主要理由:
+
+-    缩短SQL语句;
+
+-    允许在单条SELECT语句中多次使用相同的表。
+
+```mysql
+SELECT cust_name, cust_contact
+FROM customers AS c, orders AS o, orderitems AS oi
+WHERE c.cust_id=o.cust_id
+AND oi.order_num = o.order_num
+AND prod_id='TNT2';
+```
+
+## 使用不同类型的联结
+
+### 自联结
+
+使用表别名的主要原因之一是能在单条SELECT语句中不止一次引用相同的表。
+
+```mysql
+SELECT p1.prod_id, p1.prod_name
+FROM products AS p1, products AS p2
+WHERE p1.vend_id =p2.vend_id
+AND p2.prod_id = 'DTNTR';
+```
+
+此查询中需要的两个表实际上是相同的表,因此products表在FROM子句中出现了两次。虽然这是完全合法的,但<u>对products的引用具有二义性</u>,因为MySQL不知道你引用的是products表中的哪个实例。为解决此问题,使用了表别名。products的第一次出现为别名p1,第二次出现为别名p2,现在可以将这些别名用作表名。
+
+### 自然联结
+
+无论何时对表进行联结,应该至少有一个列出现在不止一个表中(被联结的列)。<u>标准的内部联结返回所有数据,甚至相同的列多次出现。<u>自然联结排除多次出现,使每个列只返回一次。</u>
+
+自然联结是这样一种联结,其中你只能选择那些唯一的列。这一般是通过对表使用通配符(SELECT *),对所有其他表的列使用明确的子集来完成的。
+
+```mysql
+SELECT C.*, o.order_num, o.order_date,
+	oi.prod_id, oi.quantity, oi.item_price
+FROM customers AS c, orders AS o, orderitems AS oi
+WHERE c.cust_id = o.cust_id
+AND oi.order_num=o.order_num
+AND prod_id= 'FB';
+```
+
+### 外部联结OUTER JOIN
+
+许多联结将一个表中的行与另一个表中的行相关联。但有时候会需要包含没有关联行的那些行。
+
+外部联结使用了关键字OUTER JOIN来指定联结的类型(而不是在WHERE子句中指定)。但是,与内部联结关联两个表中的行不同的是,外部联结还包括没有关联行的行。在使用OUTER JOIN语法时,必须使用RIGHT或LEFT关键字指定包括其所有行的表(<u>RIGHT指出的是OUTER JOIN右边的表,而LEFT指出的是OUTER JOIN左边的表</u>)。
+
+```mysql
+SELECT customers.cust_id, orders.order_num
+FROM customers LEFT OUTER JOIN orders
+ON customers.cust_id = orders.cust_id;
+```
+
+```mysql
+SELECT customers.cust_id, orders.order_num
+FROM customers RIGHT OUTER JOIN orders
+ON orders.cust_id = customers.cust_id;
+```
+
+## 使用带聚集函数的联结COUNT()
+
+```mysql
+SELECT customers.cust_name, 
+	customers.cust_id,
+	COUNT(orders.order_num) AS num_ord
+FROM customers INNER JOIN orders
+ON customers.cust_id = orders.cust_id
+GROUP BY customers.cust_id;
+```
+
+```mysql
+SELECT customers.cust_name,
+	customers.cust_id,
+	COUNT (orders.order_num) AS num_ord
+FROM customers LEFT OUTER JOIN orders
+ON customers.cust_id = orders.cust_id
+GROUP BY customers.cust_id;
+```
+
+## 使用联结和联结条件
+
+-    注意所使用的联结类型。一般我们使用内部联结,但使用外部联结也是有效的。
+-    保证使用正确的联结条件,否则将返回不正确的数据。
+-    应该总是提供联结条件,否则会得出笛卡儿积。
+-    在一个联结中可以包含多个表,甚至对于每个联结可以采用不同的联结类型。虽然这样做是合法的,一般也很有用,但应该在一起测试它们前,分别测试每个联结。这将使故障排除更为简单。t
