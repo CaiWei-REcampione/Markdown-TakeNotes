@@ -945,3 +945,16 @@ ON vendors.vend id = products.vend_id;
 ```
 
 在使用这种语法时,联结条件用特定的ON子句而不是WHERE子句给出。传递给ON的实际条件与传递给WHERE的相同。
+
+## 联结多个表
+
+SQL对一条SELECT语句中可以<u>联结的表的数目没有限制</u>。创建联结的基本规则也相同。首先列出所有表,然后定义表之间的关系。
+
+```mysql
+SELECT prod-name, vend-name, prod-price, quantity
+FROM orderitems, products, vendors
+WHERE products.vend_id = vendors.vend_id
+AND orderitems.prod_id = products.prod_id 
+AND order_num = 20005;
+```
+
