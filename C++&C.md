@@ -1459,7 +1459,62 @@ iostream族(family)支持程序与终端之间的1/0,而fstream族使用相同�
 
 在传统的操作系统中,每个进程都有自己的地址空间和一个执行线程,该线程通常叫<u>主线程</u>(primary thread).一般而言,运行在同一个进程中的多个线程具有相同的地址空间(即进程的地址空间),在准并行上下文中,这些线程就像是多个单独运行的进程,只不过它们的地址空间相同。
 
+## _tmain() 和 main()
 
+首先，这个_tmain()是为了支持unicode所使用的main一个别名而已。
+
+既然是别名，应该有宏定义过的，在哪里定义的呢？就在那个让你困惑的<stdafx.h>里，有这么两行：
+
+```c++
+#include <stdio.h>
+#include <tchar.h>
+```
+
+我们可以在头文件<tchar.h>里找到_tmain的宏定义   
+
+```c++
+#define  _tmain  main
+```
+
+所以，经过预编译以后， _tmain就变成main了
+
+main()是标准C++的函数入口。标准C++的程序入口点函数,默认字符编码格式ANSI
+
+函数签名为：
+
+```c++
+int main();
+int main(int argc, char* argv[]);
+```
+
+<u>_tmain()是windows提供的对unicode字符集和ANSI字符集进行自动转换用的程序入口点函数</u>
+
+函数签名为:
+
+```c++
+int _tmain(int argc, _TCHAR *argv[])
+```
+
+(1) 当你程序当前的字符集为unicode时，int _tmain(int argc, TCHAR *argv[])会被翻译成
+
+```c++
+int wmain(int argc, wchar_t *argv[])
+```
+
+wmain也是main的另一个别名,是为了支持二个字节的语言环境
+
+(2) 当你程序当前的字符集为ANSI时，int _tmain(int argc, TCHAR *argv[])会被翻译成
+
+```c++
+int main(int argc, char *argv[])
+```
+
+>    我们需要实现一个程序的入口点: main函数。前面提到过, ANSI签名用main.Unicode签名用wmain,编译器根据项目属性页的预处理器定义确定签名用tmain。对于控制台应用程序, main函数有以下4种不同的原型:
+>
+>    -    int tmain(int argc, TCHAR* argv[])
+>    -    void tmain(int argc, TCHAR* argv[])
+>    -    int tmain (void)
+>    -    void tmain (void)
 
 # 参考
 
