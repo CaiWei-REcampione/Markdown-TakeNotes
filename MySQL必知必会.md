@@ -1050,3 +1050,319 @@ GROUP BY customers.cust_id;
 -    保证使用正确的联结条件,否则将返回不正确的数据。
 -    应该总是提供联结条件,否则会得出笛卡儿积。
 -    在一个联结中可以包含多个表,甚至对于每个联结可以采用不同的联结类型。虽然这样做是合法的,一般也很有用,但应该在一起测试它们前,分别测试每个联结。这将使故障排除更为简单。t
+
+# 组合查询
+
+多数SQL查询都只包含从一个或多个表中返回数据的单条SELECT语句。MySQL也允许执行多个查询(多条SELECT语句),并将结果作为单个查询结果集返回。这些组合查询通常称为并(union )或复合查询(compound query)。
+
+有两种基本情况,其中需要使用组合查询:
+
+-    在单个查询中从不同的表返回类似结构的数据
+
+-    对单个表执行多个查询,按单个查询返回数据
+
+## 组合查询UNION
+
+可用<u>UNION</u>操作符来组合数条SQL查询。利用UNION,可给出多条SELECT语句,将它们的结果组合成单个结果集。
+
+```mysql
+SELECT vend_id, prod_id, prod_price
+FROM products
+WHERE prod_price <= 5;
+```
+
+```mysql
+SELECT vend_id, prod_id, prod_price
+FROM products
+WHERE vend id IN (1001, 1002);
+```
+
+为了组合这两条语句,按如下进行:
+
+```mysql
+SELECT vend_id, prod_id, prod_price
+FROM products
+WHERE prod_price <= 5
+UNION
+SELECT vend_id, prod_id, prod_price
+FROM products
+WHERE vend_id IN (1001,1002);
+```
+
+### UNION规则
+
+正如所见,并是非常容易使用的。但在进行并时有几条规则需要注意。
+
+-    UNION必须由两条或两条以上的SELECT语句组成,语句之间用关键字UNION分隔(因此,如果组合4条SELECT语句,将要使用3个UNION关键字)。
+-    <u>UNION中的每个查询必须包含相同的列、表达式或聚集函数(不过各个列不需要以相同的次序列出)。</u>
+-    列数据类型必须兼容:类型不必完全相同,但必须是DBMS可以隐含地转换的类型(例如,不同的数值类型或不同的日期类型)。如果遵守了这些基本规则或限制,则可以将并用于任何数据检索任务。
+
+### 包含或取消重复的行UNION ALL
+
+UNION从查询结果集中自动去除了重复的行(换句话说,它的行为与单条SELECT语句中使用多个WHERE子句条件一样)。
+
+```mysql
+SELECT vend_id, prod_id, prod_price
+FROM products
+WHERE prod price <= 5
+UNION ALL
+SELECT vend_id, prod_id, prod_price
+FROM products
+WHERE vend_id IN (1001,1002);
+```
+
+>    UNION与WHERE	UNION几乎总是完成与多个WHERE条件相同的工作. UNION ALL为UNION的一种形式,它完成WHERE子句完成不了的工作。如果确实需要每个条件的匹配行全部出现(包括重复行),则必须使用UNION ALL而不是WHERE.
+
+### 对组合查询结果排序ORDER BY
+
+SELECT语句的输出用ORDER BY子句排序。<u>在用UNION组合查询时,只能使用一条ORDER BY子句,它必须出现在最后一条SELECT语句之后。</u>对于结果集,不存在用一种方式排序一部分,而又用另一种方式排序另一部分的情况,因此不允许使用多条ORDER BY子句。
+
+```mysql
+SELECT vend_id, prod_id, prod_price
+FROM products
+WHERE prod price <= 5
+UNION
+SELECT vend_id, prod_id, prod_price
+FROM products
+WHERE vend id IN (1001,1002)
+ORDER BY vend_id, prod_price;
+```
+
+# 全文本搜索
+
+## 启用全文本搜索支持
+
+般在创建表时启用全文本搜索。CREATE TABLE语句接受FULLTEXT子句,它给出被索引列的一个逗号分隔的列表。
+
+## 进行全文本搜索Match() Against()
+
+在索引之后,使用两个函数<u>Match ()</u>和<u>Against ()</u>执行全文本搜索,其中
+
+-    Match()指定被搜索的列,
+-    Against()指定要使用的搜索表达式
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE Match(note_text) Against ('rabbit');
+```
+
+此SELECT语句检索单个列note_text。由于WHERE子句,一全文本搜索被执行。Match (note-text)指示MySQL针对指定的列进行搜索, Against ('rabbit')指定词rabbit作为搜索文本。由于有两行包含词rabbit,这两个行被返回。
+
+<u>搜索不区分大小写 除非使用BINARY方式否则全文本搜索不区分大小写。</u>
+
+事实是刚才的搜索可以简单地用LIKE子句完成,如下所示
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE note_text LIKE '%rabbit%';
+```
+
+## 使用查询扩展
+
+查询扩展用来设法<u>放宽所返回的全文本搜索结果的范围</u>。
+
+这也是查询扩展的一项任务。在使用查询扩展时, MySQL对数据和索引进行两遍扫描来完成搜索:
+
+*    首先,进行一个基本的全文本搜索,找出与搜索条件匹配的所有行
+*    其次, MySQL检查这些匹配行并选择所有有用的词(我们将会简要地解释MySQL如何断定什么有用,什么无用)。
+*    再其次, MySQL再次进行全文本搜索,这次不仅使用原来的条件,而且还使用所有有用的词。
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE Match(note-text) Against('anvils' WITH QUERY EXPANSION);
+```
+
+## 布尔文本搜索IN BOOLEAN MODE
+
+MySQL支持全文本搜索的另外一种形式,称为布尔方式(booleanmode)。
+
+*    要匹配的词;
+*    要排斥的词(如果某行包含这个词,则不返回该行,即使它包含其他指定的词也是如此)
+*    排列提示(指定某些词比其他词更重要,更重要的词等级更高)
+*    表达式分组
+*    另外一些内容
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE Match(note_text) Against('heavy -rope*' IN BOOLEAN MODE);
+```
+
+这次只返回一行。这一次仍然匹配词heavy,但-rope* 明确地指示MySQL排除包含rope* (任何以rope开始的词,包括ropes)的行
+
+| 布尔操作符 | 说明                                                         |
+| ---------- | ------------------------------------------------------------ |
+| +          | 包含,词必须存在                                              |
+| -          | 排除,词必须不出现                                            |
+| >          | 包含,而且增加等级值                                          |
+| <          | 包含,且减少等级值                                            |
+| ()         | 把词组成子表达式(允许这些子表达式作为一个组被包含、排除、排列等) |
+| ~          | 取消一个词的排序值                                           |
+| *          | 词尾的通配符                                                 |
+| ""         | 定义一个短语(与单个词的列表不一样,它匹配整个短语以便包含或排除这个短语) |
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE Match(note_text) Against('+rabbit +bait' IN BOOLEAN MODE);
+```
+
+这个搜索匹配包含词rabbit和bait的行。
+
+---
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE Match(notetext) Against ('rabbit bait' IN BOOLEAN MODE);
+```
+
+没有指定操作符,这个搜索匹配包含rabbit和bait中的至少一个词的行。
+
+---
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE Match(note_text) Against('"rabbit bait"' IN BOOLEAN MODE);
+```
+
+这个搜索匹配短语rabbit bait而不是匹配两个词rabbit和bait.
+
+---
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE Match(note_text) Against('>rabbit <carrot' IN BOOLEAN MODE);
+```
+
+匹配rabbit和carrot,增加前者的等级,降低后者的等级。
+
+---
+
+```mysql
+SELECT note_text
+FROM productnotes
+WHERE Match(note_text) Against('+safe +(<combination)' IN BOOLEAN MODE);
+```
+
+这个搜索匹配词safe和combination,降低后者的等级。
+
+# 插入数据
+
+## 数据插入INSERT
+
+顾名思义, INSERT是用来插入(或添加)行到数据库表的。插入可以用几种方式使用:
+
+*    插入完整的行;
+*    插入行的一部分:
+*    插入多行;
+*    插入某些查询的结果。
+
+## 插入完整的行INSERT INTO
+
+把数据插入表中的最简单的方法是使用基本的INSERT语法,它要求指定表名和被插入到新行中的值。
+
+```mysql
+INSERT INTO customers(cust_name,
+                      cust_contact,
+                      cust_emai1,
+                      cust_address,
+                      cust_city,
+                      cust_state,
+                      cust_zip, 
+                      cust_country)
+                      VALUES('Pep E. LaPew',
+                             NULL,
+                             NULL,
+                             '100 Main Street',
+                             'Los Angeles',
+                             'CA",
+                             '90046',
+                             'USA');
+```
+
+## 插入多个行
+
+```mysql
+INSERT INTO customers(cust_name,
+                      cust_address,
+                      cust_city,
+                      cust_state,
+                      cust_zip,
+                      cust_country)
+                      VALUES('Pep E. LaPew',
+                             '100 Main Street',
+                             'Los Angeles',
+                             'CA',
+                             '90046',
+                             'USA'
+                            ),
+                            ('M. Martian',
+                             '42 Galaxy way',
+                             'New York',
+                             'NY',
+                             '11213',
+                             'USA'
+                            ):
+```
+
+## 插入检索出的数据INSERT SELECT
+
+```mysql
+INSERT INTO customers(cust_id,
+                      cust_contact,
+                      cust_email,
+                      cust_name,
+                      cust_address,
+                      cust_city,
+                      cust_state,
+                      cust_zip,
+                      cust_country)
+                      SELECT cust_id,
+                     cust_contact,
+                     cust_email,
+                     cust_name,
+                     cust_address,
+                     cust_city,
+                     cust_state,
+                     cust_zip, 
+                     cust_country 
+                FROM custnew;
+```
+
+这个例子使用INSERT SELECT从custnew中将所有数据导入customers. SELECT语句从custnew检索出要插入的值,而不是列出它们。SELECT中列出的每个列对应于customers表名后所跟的列表中的每个列。这条语句将插入多少行有赖于custnew表中有多少行。如果这个表为空,则没有行被插入(也不产生错误,因为操作仍然是合法的)。如果这个表确实含有数据,则所有数据将被插入到customers。
+
+# 更新和删除数据
+
+## 更新数据UPDATE SET
+
+为了更新(修改)表中的数据,可使用UPDATE语句。可采用两种方式使用UPDATE:
+
+-    更新表中特定行
+-    更新表中所有行
+
+基本的UPDATE语句由3部分组成,分别是:
+
+*    要更新的表;
+*    列名和它们的新值
+*    确定要更新行的过滤条件
+
+```mysql
+UPDATE customers
+SET cust_email = 'elmer@fudd.com'
+WHERE cust_id =10005;
+```
+
+```mysql
+UPDATE customers
+SET cust_name = 'The Fudds',
+cust_email = 'elmer@fudd. com'
+WHERE cust_id = 10005;
+```
+
+在更新多个列时,只需要使用单个SET命令,每个“列-值”对之间用逗号分隔(最后一列之后不用逗号)。
