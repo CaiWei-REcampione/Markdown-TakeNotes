@@ -54,7 +54,42 @@ using namespace std;
 string string-name;
 ```
 
+### substr函数
 
+原型：string substr ( size_t pos = 0, size_t n = npos ) const;
+功能：获得子字符串。
+参数说明：pos为起始位置（默认为0），n为结束位置（默认为npos）
+返回值：子字符串
+
+### to_string函数
+
+c++11标准增加了全局函数std::to_string:
+
+原型：
+
+string to_string (int val);
+
+string to_string (long val);
+
+string to_string (long long val);
+
+string to_string (unsigned val);
+
+string to_string (unsigned long val);
+
+string to_string (unsigned long long val);
+
+string to_string (float val);
+
+string to_string (double val);
+
+string to_string (long double val);
+
+功能：int转换成string
+
+### atoi/atof/atol
+
+采用标准库中atoi函数,对于其他类型也都有相应的标准库函数，比如浮点型atof(),long型atol()等等
 
 # 注释
 
@@ -75,22 +110,23 @@ string string-name;
 
 ## string.h、cstring(C)
 
-|                    函数                    |                     含义                     |
-| :----------------------------------------: | :------------------------------------------: |
-|        strcat(char[], const char[])        |                字符串连接函数                |
-|     strncat(char[],const char[],int )      |                字符串连接函数                |
-|        strcpy(char[],const char[])         |                字符串复制函数                |
-|      strncpy(char[],const char[],int)      |                字符串复制函数                |
-|      strcmp(const char[],const char)       |                字符串比较函数                |
-|         strlenstrlen(const char[])         |                字符串长度函数                |
-|         memset(char[], int, int )          |                  初始化函数                  |
-| char *strtok(char srcl, const char *delim) | 字符串分割src为待分解的字符串, delim为分隔符 |
+|                    函数                    |                             含义                             |
+| :----------------------------------------: | :----------------------------------------------------------: |
+|        strcat(char[], const char[])        |                        字符串连接函数                        |
+|     strncat(char[],const char[],int )      |                        字符串连接函数                        |
+|        strcpy(char[],const char[])         |                        字符串复制函数                        |
+|      strncpy(char[],const char[],int)      |                        字符串复制函数                        |
+|      strcmp(const char[],const char)       |                        字符串比较函数                        |
+|         strlenstrlen(const char[])         |                        字符串长度函数                        |
+|         memset(char[], int, int )          |                          初始化函数                          |
+| char *strtok(char srcl, const char *delim) |         字符串分割src为待分解的字符串, delim为分隔符         |
+|   char *strstr(char *str1, char *str2);    | 找出str2字符串在str1字符串中第一次出现的位置（不包括str2的串dao结束符） |
 
 ## cstring、string（C++）
 
 |               函数               |     含义     |
 | :------------------------------: | :----------: |
-|   find(stringfind(string ,int)   |   正向查找   |
+|           find(string)           |   正向查找   |
 |           find(string)           |   逆向查找   |
 | replacereplace(int,int ,string ) | 替换子串函数 |
 
@@ -126,6 +162,15 @@ string string-name;
 | :-------------------------: | ---- |
 |  sort(begin, end, less())   | 升序 |
 | sort(begin, end, greater()) | 降序 |
+
+
+
+## for(:)语句
+
+```c++
+for(auto n:str){...};//不需要修改数组时
+for(auto &n:str){...};//要修改数组时
+```
 
 
 
@@ -914,6 +959,17 @@ vector<type-name>name(length);
 ```
 
 vector使用动态内存分配，可以用初始化参数来指出需要多少矢量
+
+### 合并两个vector
+
+```c++
+#include <vector>
+using namespace std;
+
+vector<type_name> name_one(size);
+vector<type_name> name_two(size);
+name_one.insert(name_one.end(),name_two.begin(),name_two.end());
+```
 
 # c++输入和输出
 
