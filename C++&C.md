@@ -955,6 +955,12 @@ STL不是面向对象编程，而是泛型编程
 ## 模板类vector
 
 ```c++
+#include <vector>
+```
+
+
+
+```c++
 vector<type-name>name(length);
 ```
 
@@ -970,6 +976,24 @@ vector<type_name> name_one(size);
 vector<type_name> name_two(size);
 name_one.insert(name_one.end(),name_two.begin(),name_two.end());
 ```
+
+## stack
+
+```c++
+#include <stack>
+```
+
+-    empty：判断堆栈元素是否为空，true表示栈元素为空；
+-    pop：移除栈顶元素；
+-    push：栈顶添加元素；
+-    top：返回栈顶元素；
+-    size：返回栈中元素数目；
+
+```c++
+stack<typename> name;
+```
+
+
 
 # c++输入和输出
 
@@ -1572,7 +1596,10 @@ int main(int argc, char *argv[])
 >    -    int tmain (void)
 >    -    void tmain (void)
 
+
+
 # 参考
 
 *    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书） (C和C++实务精选) . 人民邮电出版社.  
 *    [黑山共和国]米洛斯·留莫维奇（Milos Ljumovic）. C++多线程编程实战 (Kindle 位置 344-345). 人民邮电出版社.
+
