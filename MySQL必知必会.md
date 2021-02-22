@@ -1366,3 +1366,354 @@ WHERE cust_id = 10005;
 ```
 
 在更新多个列时,只需要使用单个SET命令,每个“列-值”对之间用逗号分隔(最后一列之后不用逗号)。
+
+## 删除数据DELETE
+
+为了从一个表中删除(去掉)数据,使用DELETE语句。可以两种方式使用DELETE:
+
+*    从表中删除特定的行;
+*    从表中删除所有行。
+
+```mysql
+DELETE FROM customers 
+WHERE cust_id =10006;
+```
+
+## 更新和删除的指导原则
+
+下面是许多SQL程序员使用UPDATE或DELETE时所遵循的习惯。
+
+*    除非确实打算更新和删除每一行,否则绝对不要使用不带WHERE子句的UPDATE或DELETE语句。
+*    保证每个表都有主键,尽可能像WHERE子句那样使用它(可以指定各主键、多个值或值的范围)。
+*    UPDATE或DELETE使用WHERE子句前,应该先用SELECT进行测试,保证它过滤的是正确的记录,以防编写的WHERE子句不正确。
+*    使用强制实施引用完整性的数据库,这样MysQL将不允许删除具有与其他表相关联的数据的行。
+
+# 创建和操纵表
+
+## 创建表CREATE TABLE
+
+MySQL不仅用于表数据操纵,而且还可以用来执行数据库和表的所有操作,包括表本身的创建和处理。
+
+一般有两种创建表的方法:
+
+-    使用具有交互式创建和管理表的工具;
+-    表也可以直接用MySQL语句操纵。
+
+为了用程序创建表,可使用SQL的CREATE TABLE语句。
+
+```mysql
+CREATE TABLE customers 
+(
+    cust_id int NOT NULL AUTO_INCREMENT,
+    cust_name char (50) NOT NULL, 
+    cust_address char(50) NULL, 
+    cust-city char(50) NULL, 
+    cust_state char(5) NULL, 
+    cust_zipchar(10) NULL,
+    cust_country char(50) NULL, 
+    cust_contact char(50) NULL, 
+    cust_email char(255) NULL,
+    PRIMARY KEY (cust_id)
+) ENGINE-InnoDB;
+```
+
+## 使用NULL值
+
+NULL值就是没有值或缺值。允许NULL值的列也允许在插入行时不给出该列的值。不允许NULL值的列不接受该列没有值的行,换句话说,在插入或更新行时,该列必须有值。每个表列或者是NULL列,或者是NOT NULL列,这种状态在创建时由表的定义规定。
+
+```mysql
+CREATE TABLE orders 
+(
+    order_num int NOT NULL AUTO_INCREMENT,
+    order_date datetime NOT NULL, 
+    custid int NOT NULL,
+    PRIMARY KEY (order_num)
+)ENGINE=InnoDB;
+```
+
+```mysql
+CREATE TABLE vendors
+(
+    vend_id int NOT NULL AUTO_INCREMENT, 
+    vend_name char(50) NOT NULL,
+    vend_address char(50) NULL,
+    vend_city char(50) NULL,
+    vend_state char(5) NULL,
+    vend_zip char(10) NULL,
+    vend_country char(50) NULL,
+    PRIMARY KEY (vend_id)
+) ENGINE=InnoDB;
+```
+
+NOT NULL将阻止插入没有值的列。如果试图插入没有值的列,将返回错误,且插入失败。
+
+## 主键PRIMARY KEY
+
+再介绍正如所述,主键值必须唯一。即,表中的每个行必须具有唯一的主键值。如果主键使用单个列,则它的值必须唯一。
+
+如果使用多个列,则这些列的组合值必须唯一。
+
+迄今为止我们看到的CREATE TABLE例子都是用单个列作为主键。其中主键用以下的类似的语句定义:
+
+```mysql
+PRIMARY KEY (vend_id)
+```
+
+为创建由多个列组成的主键,应该以逗号分隔的列表给出各列名
+
+```mysql
+CREATE TABLE orderitems
+(
+    order_num intNOT NULL,
+    order_item int NOT NULL,
+    prod_id char(10) NOT NULL, 
+    quantity intNOT NULL,
+    item_price decimal (8,2) NOT NULL, 
+    PRIMARY KEY (order_num, order_item)
+) ENGINE=InnoDB;
+```
+
+## 使用AUTO_INCREMENT
+
+```mysql
+cust_id int NOT NULL AUTO_INCREMENT,
+```
+
+AUTO-INCREMENT告诉MySQL,本列每当增加一行时自动增量。每次执行一个INSERT操作时, MySQL自动对该列增量(从而才有这个关键字AUTO_INCREMENT),给该列赋予下一个可用的值。这样给每个行分配一个唯一的cust_id,从而可以用作主键值。
+
+## 指定默认值DEFAULT
+
+```mysql
+CREATE TABLE orderitems
+(
+    order_num int NOT NULL,
+    order_item int NOT NULL，
+    prod-id char(10) NOT NULL，
+    quantity int NOT NULL DEFAULT 1,
+    item_price decimal(8,2) NOT NULL，
+    PRIMARY KEY (order_num, order_item)
+)ENGINE=InnoDB;
+```
+
+## 引擎类型
+
+迄今为止使用的CREATE TABLE语句全都以ENGINE=InnoDB语句结束。
+
+与其他DBMS一样, MysQL有一个具体管理和处理数据的内部引擎。在你使用CREATE TABLE语句时,该引擎具体创建表,而在你使用SELECT语句或进行其他数据库处理时,该引擎在内部处理你的请求。
+
+多数时候,此引擎都隐藏在DBMS内,不需要过多关注它。但MySQL与其他DBMS不一样,它具有多种引擎。它打包多个引擎,这些引擎都隐藏在MySQL,执行CREATE TABLE和SELECT等命令。多种引擎具有各自不同的功能和特性,为不同的任务选择正确的引擎能获得良好的功能和灵活性。
+
+-    InnoDB是一个可靠的事务处理引擎,它不支持全文本搜索;
+-    MEMORY在功能等同于MyISAM,但由于数据存储在内存(不是磁盘)中,速度很快(特别适合于临时表)
+-    MyISAM是一个性能极高的引擎,它支持全文本搜索,但不支持事务处理。
+
+>    外键不能跨引擎混用引擎类型有一个大缺陷。外键不能跨引擎,即使用一个引擎的表不能引用具有使用不同引擎的表的外键。
+
+## 更新表ALTER TABLE
+
+为了使用ALTER TABLE更改表结构,必须给出下面的信息:
+
+在ALTER TABLE之后给出要更改的表名(该表必须存在,否则将出错);
+
+给表添加一个列
+
+```mysql
+ALTER TABLE vendors 
+ADD vend_phone CHAR(20);'
+```
+
+删除刚刚添加的列
+
+```mysql
+ALTER TABLE Vendors 
+DROP COLUMN vend_phone;
+```
+
+## 删除表DROP TABLE
+
+```mysql
+DROP TABLE customers2;
+```
+
+## 重命名表RENAMA TABLE
+
+```mysql
+RENAME TABLE customers2 TO customers;
+```
+
+# 使用视图
+
+视图是虚拟的表。与包含数据的表不一样,视图只包含使用时动态检索数据的查询。
+
+-    重用SQL语句。
+-    简化复杂的SQL操作。在编写查询后,可以方便地重用它而不必知道它的基本查询细节。
+-    使用表的组成部分而不是整个表。
+-    保护数据。可以给用户授予表的特定部分的访问权限而不是整个表的访问权限。
+-    更改数据格式和表示。视图可返回与底层表的表示和格式不同的数据。
+
+## 视图的规则和限制
+
+下面是关于视图创建和使用的一些最常见的规则和限制。
+
+-    与表一样,视图必须唯一命名(不能给视图取与别的视图或表相同的名字)。
+-    对于可以创建的视图数目没有限制。
+-    为了创建视图,必须具有足够的访问权限。这些限制通常由数据库管理人员授予。
+-    视图可以嵌套,即可以利用从其他视图中检索数据的查询来构造个视图。
+-    ORDER BY可以用在视图中,但如果从该视图检索数据SELECT中也含有ORDER BY,那么该视图中的ORDER BY将被覆盖。
+-    视图不能索引,也不能有关联的触发器或默认值。
+-    视图可以和表一起使用。
+
+## 使用视图CREATE VIEW
+
+-    视图用CREATE VIEW语句来创建。使用SHOW CREATE VIEW viewname;来查看创建视图的语句。
+-    用DROP删除视图,其用法为DROP VIEW viewname
+-    更新视图时,可以先用DROP再用CREATE,可以直接用CREATEOR REPLACE VIEW。如果要更新的视图不存在,则第2条更新语句会创建一个视图;如果要更新的视图存在,则第2条更新语句会替换原有视图。
+
+```mysql
+CREATE VIEW productcustomers AS
+SELECT cust_name, cust_contact, prod_id
+FROM customers, orders, orderitems
+WHERE customers.cust_id = orders.cust_id 
+AND orderitems.order_num = orders.order_num;
+```
+
+视图极大地简化了复杂SQL语句的使用。利用视图,可一次性编写基础的SQL,然后根据需要多次使用。
+
+## 用视图重新格式化检索出的数据
+
+```mysql
+SELECT Concat(RTrim(vendname), ' (', RTrim(vend_country), ')') 
+AS vend_title
+FROM vendors
+ORDER BY vend name;
+```
+
+```mysql
+CREATE VIEW vendorlocations AS
+SELECT Concat (RTrim(vend_name), ' (', RTrim(vend_country), ')')
+AS vend_title
+FROM vendors
+ORDER BY vend_name;
+```
+
+## 用视图过滤不想要的数据WHERE IS NOT
+
+```mysql
+CREATE VIEW customeremaillist AS
+SELECT cust_id, cust_name, cust_email
+FROM customers
+WHERE cust_email IS NOT NULL;
+```
+
+## 使用视图与计算字段
+
+```mysql
+SELECT prod_id, 
+	quantity,
+	item_price,
+	quantity*item_price AS expanded_price 
+FROM orderitems
+WHERE order_num = 20005;
+```
+
+转换为一个视图
+
+```mysql
+CREATE VIEW orderitemsexpanded AS 
+SELECT order_num,
+	prod_id,
+	quantity,
+	item_price,
+	quantity*item_price AS expanded_price 
+FROM orderitems;
+```
+
+```mysql
+SELECT *
+FROM orderitemsexpanded
+WHERE order_num = 20005;
+```
+
+## 更新视图
+
+通常,视图是可更新的(即,可以对它们用INSERT, UPDATE和DELETE)。更新一个视图将更新其基表。如果你对视图增加或删除行,实际上是对其基表增加或删除行。
+
+但是,并非所有视图都是可更新的。基本上可以说,如果MySQL不能正确地确定被更新的基数据,则不允许更新(包括插入和删除)。这实际上意味着,如果视图定义中有以下操作,则不能进行视图的更新:
+
+-    分组(使用GROUP BY和HAVING);
+-    联结;
+-    子查询:
+-    并;
+-    聚集函数(Min()、Count ()、Sum()等);
+-    DISTINCT;
+-    导出(计算)列。
+
+# 使用存储过程
+
+-    通过把处理封装在容易使用的单元中,简化复杂的操作。
+-    由于不要求反复建立一系列处理步骤,这保证了数据的完整性。如果所有开发人员和应用程序都使用同一(试验和测试)存储过程,则所使用的代码都是相同的。这一点的延伸就是防止错误。需要执行的步骤越多,出错的可能性就越大。防止错误保证了数据的一致性。
+-    简化对变动的管理。如果表名、列名或业务逻辑(或别的内容)有变化,只需要更改存储过程的代码。使用它的人员甚至不需要知道这些变化。这一点的延伸就是安全性。通过存储过程限制对基础数据的访问减少了数据讹误(无意识的或别的原因所导致的数据讹误)的机会。
+-    提高性能。因为使用存储过程比使用单独的SQL语句要快。
+-    存在一些只能用在单个请求中的MySQL元素和特性,存储过程可以使用它们来编写功能更强更灵活的代码
+
+## 执行存储过程CALL
+
+MySQL称存储过程的执行为调用,因此MySQL执行存储过程的语句为CALL, CALL接受存储过程的名字以及需要传递给它的任意参数。
+
+```mysql
+CALL productpricing(
+    @pricelow,
+    @pricehigh,
+    @priceaverage
+);
+```
+
+## 创建存储过程CREATE PROCEDURE BEGIN END
+
+```mysql
+CREATE PROCEDURE productpricing()
+BEGIN
+	SELECT Avg(prod_price) AS priceaverage
+	FROM products;
+END;
+```
+
+## 删除存储过程DROP PROCEDURE
+
+```mysql
+DROP PROCEDURE productpricing;
+```
+
+>    仅当存在时删除	如果指定的过程不存在,则DROPPROCEDURE将产生一个错误。当过程存在想删除它时(如果过程不存在也不产生错误)可使用DROP PROCEDURE IF EXISTS.
+
+## 使用参数
+
+```mysql
+CREATE PROCEDURE productpricing(
+    OUT pl DECIMAL(8, 2),
+    OUT ph DECIMAL(8, 2),
+    OUT pa DECIMAL(8, 2)
+)
+BEGIN
+SELECT Min(prod_price)
+INTO p1
+FROM products;
+SELECT Max(prod_price)
+INTO ph
+FROM products;
+SELECT Avg(prod_price)
+INTO pa
+FROM products;
+END
+```
+
+关键字OUT指出相应的参数用来从存储过程传出一个值(返回给调用者),MySQL支持IN (传递给存储过程)、OUT (从存储过程传出,如这里所用)和INOUT (对存储过程传入和传出)类型的参数。存储过程的代码位于BEGIN和END语句内,如前所见,它们是一系列SELECT语句,用来检索值,然后保存到相应的变量(通过指定INTO关键字)。
+
+```mysql
+CALL productpricing(
+    @pricelow,
+    @pricehigh,
+    @priceaverage
+);
+```
+
