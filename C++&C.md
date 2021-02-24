@@ -188,6 +188,19 @@ if(sayings[i].length()<shortest->length());//使用->操作符通过指针访问
 if(sayingts[i]<*first)//使用*解除引用操作符获得对象
 ```
 
+## 二维动态数组<span id="STL_vector数组"> </span>
+
+```cpp
+int **p;
+p = new int*[length];    //注意，int*[length]表示一个有10个元素的指针数组
+for (int i = 0; i < length; ++i)
+{
+    p[i] = new int[wide];
+}
+```
+
+[二维vector](#二维vector)
+
 # class 类
 
 |   权限    |      |
@@ -952,13 +965,26 @@ auto_ptr被c++11摒弃，**避免潜在的内存泄漏问题**
 
 STL不是面向对象编程，而是泛型编程
 
-## 模板类vector
+## 容器
+
+**各种容器的特性**
+
+|   容器   | 特性                                                         |
+| :------: | ------------------------------------------------------------ |
+|  vector  | 序列容器，C++标准严格要求次容器的实现内存必须是连续的，唯一可以和标准C兼容的stl容器，任意元素的读取、修改具有常数时间复杂度，在序列**尾部进行插入**、删除是常数时间复杂度，但在序列的头部插入、删除的时间复杂度是O(n)，可以在任何位置插入新元素，有随机访问功能，插入删除操作需要考虑。重新分配一段连续的内存空间，其大小是现在连续空间的2倍，再将原先空间中的元素复制到新的空间中，性能消耗比较大，尤其是当元素是非内部数据时。vector的另一个常见的问题就是clear操作。clear函数只是把vector的size清为零，但vector中的元素在内存中并没有消除 |
+|  queue   | 一个队列，实现先进先出功能，queue不是标准的STL容器，却以标准的STL容器为基础。queue是在deque的基础上封装的。之所以选择deque而不选择vector是因为deque在删除元素的时候释放空间，同时在重新申请空间的时候无需拷贝所有元素。 |
+|  deque   | 序列容器，内存也是连续的，和vector相似，区别在于在序列的头部插入和删除操作也是常数时间复杂度,可以在任何位置插入新元素，有随机访问功能。deque支持**双端插入数据**。**deque的内存空间分布是小片的连续，小片间用链表相连，实际上内部有一个map的指针。deque空间的重新分配要比vector快，重新分配空间后，原有的元素是不需要拷贝的，可以认为deque是vector和list的折中 |
+|   list   | 序列容器，内存是不连续的，任意元素的访问、修改时间复杂度是O(n)，插入、删除操作是常数时间复杂度,可以在任何位置插入新元素。 |
+|   set    | **关联容器**，元素不允许有重复，数据被组织成一棵**红黑树**，查找的速度非常快，时间复杂度是O(logN) |
+| multiset | **关联容器**，和set一样，却别是**允许有重复的元素**，具备时间复杂度O(logN)查找功能。 |
+|   map    | **关联容器**，按照{键，值}方式组成集合，按照键组织成一棵**红黑树**，查找的时间复杂度O(logN)，其中键不允许重复。 |
+| multimap | 和map一样，区别是**键可以重复**                              |
+
+### vector
 
 ```c++
 #include <vector>
 ```
-
-
 
 ```c++
 vector<type-name>name(length);
@@ -966,7 +992,7 @@ vector<type-name>name(length);
 
 vector使用动态内存分配，可以用初始化参数来指出需要多少矢量
 
-### 合并两个vector
+#### 合并两个vector
 
 ```c++
 #include <vector>
@@ -977,7 +1003,40 @@ vector<type_name> name_two(size);
 name_one.insert(name_one.end(),name_two.begin(),name_two.end());
 ```
 
-## stack
+#### 二维vector<span id="二维vector"> </span>
+
+-    先定义好二维数组结构，在直接赋值
+
+```cpp
+#include <vector>
+namespace std;
+vector<vector<typename>> name(length);
+```
+
+-    利用Vector的push_back函数
+
+```cpp
+#include <vector>
+using namespace std;
+vector<vector<int>> vec;
+ 
+vector<int> a;
+a.push_back(1);
+a.push_back(2);
+a.push_back(3);
+ 
+vector<int> b;
+b.push_back(4);
+b.push_back(5);
+b.push_back(6);
+ 
+vec.push_back(a);
+vec.push_back(b);
+```
+
+[STL vector数组](#STL_vector数组)
+
+### stack
 
 ```c++
 #include <stack>
@@ -992,6 +1051,30 @@ name_one.insert(name_one.end(),name_two.begin(),name_two.end());
 ```c++
 stack<typename> name;
 ```
+
+### deque
+
+### string
+
+### queue
+
+### list
+
+### priority_queue
+
+### set/multiset
+
+### map/multimap
+
+## 迭代器
+
+## 空间分配器
+
+## 适配器
+
+## 算法
+
+## 仿函数
 
 
 
