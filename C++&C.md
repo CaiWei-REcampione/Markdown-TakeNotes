@@ -30,7 +30,7 @@ typename* name=new <typename>;
 
 ## 字符串
 
-*    C风格字符串
+### C风格字符串
 
 ```c++
 char site[]="...";
@@ -46,50 +46,27 @@ char site[7]={'R','U,'N','O','O','B','\0'};
 | **strchr(s1, ch);** | 返回一个指针，指向字符串 s1 中字符 ch 的第一次出现的位置。   |
 | **strstr(s1, s2);** | 返回一个指针，指向字符串 s1 中字符串 s2 的第一次出现的位置。 |
 
-## C++ string类
-
 ```c++
-#include <iostream>
-using namespace std;
-string string-name;
+char info[100];
+cin>>info;//read a word
+cin.getline(info,100);//read a line, discard
+cin.get(info,100);//read a line, leave
 ```
 
-### substr函数
+### string对象
 
-原型：string substr ( size_t pos = 0, size_t n = npos ) const;
-功能：获得子字符串。
-参数说明：pos为起始位置（默认为0），n为结束位置（默认为npos）
-返回值：子字符串
+```c++
+string stuff;
+cin>>stuff;//read a word
+getline(cin,stuff);//read a line, discard
+```
 
-### to_string函数
+#### getline版本
 
-c++11标准增加了全局函数std::to_string:
-
-原型：
-
-string to_string (int val);
-
-string to_string (long val);
-
-string to_string (long long val);
-
-string to_string (unsigned val);
-
-string to_string (unsigned long val);
-
-string to_string (unsigned long long val);
-
-string to_string (float val);
-
-string to_string (double val);
-
-string to_string (long double val);
-
-功能：int转换成string
-
-### atoi/atof/atol
-
-采用标准库中atoi函数,对于其他类型也都有相应的标准库函数，比如浮点型atof(),long型atol()等等
+```c++
+cin.getline(info,100,':');//read up to :, discard :
+getline(stuff,':');//read up to :, discard :
+```
 
 # 注释
 
@@ -814,86 +791,6 @@ C++ 标准规定，type_info 类至少要有如下所示的 4 个 public 属性�
 |   static_cast    | static_cast<type-name>(expression)      | 仅当type_name可被隐式转换为expession所属的类型或expresion可被隐式转换为type_name所属的类型时，上述转换才是合法的 |
 | reinterpret_cast | reinterpret_cast<type-name>(expression) | reinterprete_cast运算符并不支持所有的类型转换，不能将函数指针转换为数据指针，反之亦然 |
 
-# string class
-
->    **string实际上是模板具体化basic_string<char>的一个typedef，同时省略了与内存管理相关的参数**
-
-## 构造函数
-
-|                           构造函数                           |                             描述                             |
-| :----------------------------------------------------------: | :----------------------------------------------------------: |
-|                     string(const char*s)                     |               将string对象初始化Wies指向的NBTS               |
-|                 string(size_type n, char c)                  | 创建一个包含n个元素的string对象，其中每个元素都被初始化为字符c |
-|                  string(const string& str)                   |            将一个string对象初始化为string对象str             |
-|                           string()                           |              创建一个默认的string对象，长度为0               |
-|              string(const char* s, size_type n)              | 将string对象初始化为s指向的NBTS的前n的字符，即使超过了NBTS结尾 |
-|       template<class Iter>string(Iter begin, Iter end)       | 将string对象初始化为区间[begin, end]内的字符，其中begin和end的行为就像指针，用于指定位置，范围包括begin在内，但不包括end |
-| string(const string& str,string size_type pos = 0,size_type n = npos) | 将一个string对象初始化为对象str中从位置pos开始到结尾的字符，或从位置pos开始的n个字符 |
-|                string(string && str)noexcept                 | C++11新增，将一个string对象初始化为string对象str，并可能修改str |
-|              string(initializer_list<char> il)               |   c++11新增，将一个string对象初始化为初始化列表il中的字符    |
-
-## string类输入
-
-### c风格字符串-数组
-
-```c++
-char info[100];
-cin>>info;//read a word
-cin.getline(info,100);//read a line, discard
-cin.get(info,100);//read a line, leave
-```
-
-### string对象
-
-```c++
-string stuff;
-cin>>stuff;//read a word
-getline(cin,stuff);//read a line, discard
-```
-
-### getline版本
-
-```c++
-cin.getline(info,100,':');//read up to :, discard :
-getline(stuff,':');//read up to :, discard :
-```
-
-## 使用字符串
-
-### 比较字符串
-
-string类对全部6个关系运算符都进行重载。如果在机器排列序列中，一个对象位与另一个对象的前面，则前者被视为小于后者。如果机器排列序列为ASCII码，则数字将小于大写字符，而大写字符小于小写字符。
-
-### 字符串的长度
-
-*    size()和length()成员函数都返回字符串中的字符数
-
-### 搜索给定子字符或字符
-
-| 方法原型                                                     | 描述                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| size_type find(const string & str, size_type pos = 0)const   | 从字符串的pos位置开始，查找子字符串str。如果找到，则返回该子字符串首次出现时其首字符的索引；否则，返回string::npos |
-| size_type find(const char *s, size_type pos = 0)const        | 从字符串的pos位置开始，查找子字符串s。如果找到，则返回该子字符串首次出现时首字符的索引；否则，返回string::npos |
-| size_type find(const char * s, size_type pos = 0, size_type n) | 从字符串的pos位置开始，查找s的前n个字符组成的子字符串。如果找到，则返回该子字符串首次出现时其首字符的索引；否则，返回string::npos |
-| size_type find(char ch,size_type pos = 0)const               | 从字符串的pos位置开始，查找字符ch。如果找到，则返回该字符首次出现的位置；否则，返回string::npos |
-
-由于关系运算符被重载，因此可以像对待数值变量那样对待字符串
-
-```c++
-while(guesses>0&&attempt!=target)
-```
-
->    npos变量是string类的静态成员，它的值是string对象能存储的最大字符数。由于索引从0开始，所以它比最大的索引值大1，因此可以使用它来表示没有查找到字符或字符串。
-
-### 自动调整大小
-
-|    方法    |               解释               |
-| :--------: | :------------------------------: |
-| capacity() | 返回当前分配给字符串的内存块大小 |
-| reserve()  |       请求内存块的最小长度       |
-
-很多C++实现分配一个比实际字符串大的内存块，为字符串提供了增大空间。然而，如果字符串不断增大，超过了内存块的大小，程序将分配一个大小为原来两倍的新内存块，以提供足够的增大空间，避免不断地分配新的内存块。
-
 # 智能指针
 
 ```c++
@@ -969,28 +866,49 @@ STL不是面向对象编程，而是泛型编程
 
 **各种容器的特性**
 
-|   容器   | 特性                                                         |
-| :------: | ------------------------------------------------------------ |
-|  vector  | 序列容器，C++标准严格要求次容器的实现内存必须是连续的，唯一可以和标准C兼容的stl容器，任意元素的读取、修改具有常数时间复杂度，在序列**尾部进行插入**、删除是常数时间复杂度，但在序列的头部插入、删除的时间复杂度是O(n)，可以在任何位置插入新元素，有随机访问功能，插入删除操作需要考虑。重新分配一段连续的内存空间，其大小是现在连续空间的2倍，再将原先空间中的元素复制到新的空间中，性能消耗比较大，尤其是当元素是非内部数据时。vector的另一个常见的问题就是clear操作。clear函数只是把vector的size清为零，但vector中的元素在内存中并没有消除 |
-|  queue   | 一个队列，实现先进先出功能，queue不是标准的STL容器，却以标准的STL容器为基础。queue是在deque的基础上封装的。之所以选择deque而不选择vector是因为deque在删除元素的时候释放空间，同时在重新申请空间的时候无需拷贝所有元素。 |
-|  deque   | 序列容器，内存也是连续的，和vector相似，区别在于在序列的头部插入和删除操作也是常数时间复杂度,可以在任何位置插入新元素，有随机访问功能。deque支持**双端插入数据**。**deque的内存空间分布是小片的连续，小片间用链表相连，实际上内部有一个map的指针。deque空间的重新分配要比vector快，重新分配空间后，原有的元素是不需要拷贝的，可以认为deque是vector和list的折中 |
-|   list   | 序列容器，内存是不连续的，任意元素的访问、修改时间复杂度是O(n)，插入、删除操作是常数时间复杂度,可以在任何位置插入新元素。 |
-|   set    | **关联容器**，元素不允许有重复，数据被组织成一棵**红黑树**，查找的速度非常快，时间复杂度是O(logN) |
-| multiset | **关联容器**，和set一样，却别是**允许有重复的元素**，具备时间复杂度O(logN)查找功能。 |
-|   map    | **关联容器**，按照{键，值}方式组成集合，按照键组织成一棵**红黑树**，查找的时间复杂度O(logN)，其中键不允许重复。 |
-| multimap | 和map一样，区别是**键可以重复**                              |
+|         容器          | 特性                                                         |
+| :-------------------: | ------------------------------------------------------------ |
+|   [vector](#vector)   | 序列容器，C++标准严格要求次容器的实现内存必须是连续的，唯一可以和标准C兼容的stl容器，任意元素的读取、修改具有常数时间复杂度，在序列**尾部进行插入**、删除是常数时间复杂度，但在序列的头部插入、删除的时间复杂度是O(n)，可以在任何位置插入新元素，有随机访问功能，插入删除操作需要考虑。重新分配一段连续的内存空间，其大小是现在连续空间的2倍，再将原先空间中的元素复制到新的空间中，性能消耗比较大，尤其是当元素是非内部数据时。vector的另一个常见的问题就是clear操作。clear函数只是把vector的size清为零，但vector中的元素在内存中并没有消除 |
+|    [queue](#queue)    | 一个队列，实现先进先出功能，queue不是标准的STL容器，却以标准的STL容器为基础。queue是在deque的基础上封装的。之所以选择deque而不选择vector是因为deque在删除元素的时候释放空间，同时在重新申请空间的时候无需拷贝所有元素。 |
+|    [deque](#deque)    | 序列容器，内存也是连续的，和vector相似，区别在于在序列的头部插入和删除操作也是常数时间复杂度,可以在任何位置插入新元素，有随机访问功能。deque支持**双端插入数据**。**deque的内存空间分布是小片的连续，小片间用链表相连，实际上内部有一个map的指针。deque空间的重新分配要比vector快，重新分配空间后，原有的元素是不需要拷贝的，可以认为deque是vector和list的折中 |
+|     [list](#list)     | 序列容器，内存是不连续的，任意元素的访问、修改时间复杂度是O(n)，插入、删除操作是常数时间复杂度,可以在任何位置插入新元素。 |
+|      [set](#set)      | **关联容器**，元素不允许有重复，数据被组织成一棵**红黑树**，查找的速度非常快，时间复杂度是O(logN) |
+| [multiset](#multiset) | **关联容器**，和set一样，却别是**允许有重复的元素**，具备时间复杂度O(logN)查找功能。 |
+|      [map](#map)      | **关联容器**，按照{键，值}方式组成集合，按照键组织成一棵**红黑树**，查找的时间复杂度O(logN)，其中键不允许重复。 |
+| [multimap](#multimap) | 和map一样，区别是**键可以重复**                              |
 
-### vector
+### <span id="vector">vector</span>
+
+#### 前置
 
 ```c++
 #include <vector>
+using namespace std;
 ```
+
+#### 声明
 
 ```c++
 vector<type-name>name(length);
 ```
 
 vector使用动态内存分配，可以用初始化参数来指出需要多少矢量
+
+#### 大小
+
+```cpp
+vector.size();   //返回容器中元素的个数
+vector.empty();  //判断容器是否为空
+vector.resize(num);  //重新指定容器的长度为num，若容器变长，则以默认值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
+vector.resize(num, elem); //重新指定容器的长度为num，若容器变长，则以elem值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
+```
+
+#### 数据存取：
+
+```cpp
+vector.at(idx);   //返回索引idx所指的数据，如果idx越界，抛出out_of_range异常。
+vector[idx];   //返回索引idx所指的数据，越界时，运行直接报错
+```
 
 #### 合并两个vector
 
@@ -1003,7 +921,7 @@ vector<type_name> name_two(size);
 name_one.insert(name_one.end(),name_two.begin(),name_two.end());
 ```
 
-#### 二维vector<span id="二维vector"> </span>
+#### <span id="二维vector">二维vector</span>
 
 -    先定义好二维数组结构，在直接赋值
 
@@ -1038,33 +956,221 @@ vec.push_back(b);
 
 ### stack
 
+#### 前置
+
 ```c++
 #include <stack>
+using namespace std;
 ```
 
--    empty：判断堆栈元素是否为空，true表示栈元素为空；
--    pop：移除栈顶元素；
--    push：栈顶添加元素；
--    top：返回栈顶元素；
--    size：返回栈中元素数目；
+#### 构造函数
 
-```c++
+```cpp
 stack<typename> name;
 ```
 
-### deque
+#### 判断是否为空
 
-### string
+```cpp
+s.empty()//判断堆栈元素是否为空，true表示栈元素为空；
+```
 
-### queue
+#### 出栈
 
-### list
+```cpp
+s.pop()//移除栈顶元素；
+```
+
+#### 入栈
+
+```cpp
+s.push()//栈顶添加元素；
+```
+
+#### 返回栈顶元素
+
+```cpp
+s.top()//返回栈顶元素；
+```
+
+#### 返回长度
+
+```cpp
+s.size()//返回栈中元素数目；
+```
+
+### <span id="deque">deque</span>
+
+### <span id="string">string</span>
+
+#### 前置
+
+```cpp
+#include <iostream>
+using namespace std;
+string string-name;
+```
+
+#### 构造函数
+
+|                           构造函数                           |                             描述                             |
+| :----------------------------------------------------------: | :----------------------------------------------------------: |
+|                     string(const char*s)                     |               将string对象初始化Wies指向的NBTS               |
+|                 string(size_type n, char c)                  | 创建一个包含n个元素的string对象，其中每个元素都被初始化为字符c |
+|                  string(const string& str)                   |            将一个string对象初始化为string对象str             |
+|                           string()                           |              创建一个默认的string对象，长度为0               |
+|              string(const char* s, size_type n)              | 将string对象初始化为s指向的NBTS的前n的字符，即使超过了NBTS结尾 |
+|       template<class Iter>string(Iter begin, Iter end)       | 将string对象初始化为区间[begin, end]内的字符，其中begin和end的行为就像指针，用于指定位置，范围包括begin在内，但不包括end |
+| string(const string& str,string size_type pos = 0,size_type n = npos) | 将一个string对象初始化为对象str中从位置pos开始到结尾的字符，或从位置pos开始的n个字符 |
+|                string(string && str)noexcept                 | C++11新增，将一个string对象初始化为string对象str，并可能修改str |
+|              string(initializer_list<char> il)               |   c++11新增，将一个string对象初始化为初始化列表il中的字符    |
+
+#### 搜索给定子字符或字符
+
+| 方法原型                                                     | 描述                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| size_type find(const string & str, size_type pos = 0)const   | 从字符串的pos位置开始，查找子字符串str。如果找到，则返回该子字符串首次出现时其首字符的索引；否则，返回string::npos |
+| size_type find(const char *s, size_type pos = 0)const        | 从字符串的pos位置开始，查找子字符串s。如果找到，则返回该子字符串首次出现时首字符的索引；否则，返回string::npos |
+| size_type find(const char * s, size_type pos = 0, size_type n) | 从字符串的pos位置开始，查找s的前n个字符组成的子字符串。如果找到，则返回该子字符串首次出现时其首字符的索引；否则，返回string::npos |
+| size_type find(char ch,size_type pos = 0)const               | 从字符串的pos位置开始，查找字符ch。如果找到，则返回该字符首次出现的位置；否则，返回string::npos |
+
+由于关系运算符被重载，因此可以像对待数值变量那样对待字符串
+
+```c++
+while(guesses>0&&attempt!=target)
+```
+
+>    npos变量是string类的静态成员，它的值是string对象能存储的最大字符数。由于索引从0开始，所以它比最大的索引值大1，因此可以使用它来表示没有查找到字符或字符串。
+
+#### 自动调整大小
+
+|    方法    |               解释               |
+| :--------: | :------------------------------: |
+| capacity() | 返回当前分配给字符串的内存块大小 |
+| reserve()  |       请求内存块的最小长度       |
+
+很多C++实现分配一个比实际字符串大的内存块，为字符串提供了增大空间。然而，如果字符串不断增大，超过了内存块的大小，程序将分配一个大小为原来两倍的新内存块，以提供足够的增大空间，避免不断地分配新的内存块。
+
+#### 获取字符串的首地址
+
+```cpp
+s.c_str();用来获取字符串的首地址
+```
+
+#### 拷贝
+
+```cpp
+s.copy(buff,5,5);//将字符串s从第5个开始后面5个字符考给buff；第3个形参不写的化默认到末尾
+```
+
+#### 求字符串长度
+
+```cpp
+s.length();//求字符串长度
+```
+
+#### 判断是否为空
+
+```cpp
+s.empty();//是否为空，为空返回1
+```
+
+#### 赋值
+
+```cpp
+string &assign(const char *s);//把字符串s赋值给当前字符串
+string &assign(const char *s,int n);//把字符串s的钱n个字符赋值给当前字符串
+string &assign(int n,char c);//将n个c赋值给当前字符串
+string &assign(const char *s,int start,int n);//把字符串s从start开始的后n个字符赋值给当前字符串
+```
+
+#### 链接
+
+```cpp
+string &append(const char *s);//把字符串s赋值给当前字符串
+string &append(const char *s,int n);//把字符串s的钱n个字符赋值给当前字符串
+string &append(int n,char c);//将n个c赋值给当前字符串
+string &append(const char *s,int start,int n);//把字符串s从start开始的后n个字符赋值给当前字符串
+```
+
+#### 比较
+
+```cpp
+int compare(const string &s)const;
+int compare(const char *s)const;
+返回值，大于返回1；小于返回-1；等于返回0
+```
+
+#### 查找
+
+```cpp
+int find(char c,int pos=0);//从pos位开始找c字符，返回值为c字符所在的位置
+int find(const char *s,int pos =0);//从pos位开始找s字符串，返回值为s字符串所在的位置
+int find(const string &s,int pos =0);//从pos位开始找s字符串，返回值为s字符串所在的位置找不到返回-1；
+```
+
+#### 替换
+
+```cpp
+string &replace(int pos,int n,const char *s);
+string &replace(int pos,int n,const string &s);//从pos位开始后面n个用字符串s替换
+```
+
+#### 插入
+
+```cpp
+string &insert(int pos,const char *s);
+string &insert(int pos,const char *s);//在pos位插入s字符串
+```
+
+#### 删除
+
+```cpp
+string &erase (int pos =0,int n=npos);//如果无参的化，默认从头删到尾
+```
+
+#### 获得子字符串
+
+```cpp
+string substr ( size_t pos = 0, size_t n = npos ) const;//pos为起始位置（默认为0），n为结束位置（默认为npos）
+```
+
+### 转换为string类型
+
+c++11标准增加了全局函数std::to_string:
+
+原型：
+
+```cpp
+string to_string (int val);
+string to_string (long val);
+string to_string (long long val);
+string to_string (unsigned val);
+string to_string (unsigned long val);
+string to_string (unsigned long long val);
+string to_string (float val);
+string to_string (double val);
+string to_string (long double val);
+//功能：int转换成string
+```
+
+### atoi/atof/atol
+
+采用标准库中atoi函数,对于其他类型也都有相应的标准库函数，比如浮点型atof(),long型atol()等等
+
+---
+
+
+
+### <span id="queue">queue</span>
+
+### <span id="list">list</span>
 
 ### priority_queue
 
-### set/multiset
+### <span id="set">set</span>/<span id="multiset">multiset</span>
 
-### map/multimap
+### <span id="map">map</span>/<span id="multimap">multimap</span>
 
 ## 迭代器
 
