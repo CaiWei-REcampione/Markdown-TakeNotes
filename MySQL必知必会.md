@@ -1648,7 +1648,7 @@ WHERE order_num = 20005;
 -    DISTINCT;
 -    导出(计算)列。
 
-# 使用存储过程
+# 使用存储过程PROCEDURE
 
 -    通过把处理封装在容易使用的单元中,简化复杂的操作。
 -    由于不要求反复建立一系列处理步骤,这保证了数据的完整性。如果所有开发人员和应用程序都使用同一(试验和测试)存储过程,则所使用的代码都是相同的。这一点的延伸就是防止错误。需要执行的步骤越多,出错的可能性就越大。防止错误保证了数据的一致性。
@@ -1716,4 +1716,412 @@ CALL productpricing(
     @priceaverage
 );
 ```
+
+## 建立智能存储过程
+
+```mysql
+-- Name: ordertotal
+-- Parameters: onumber = order number
+--                       taxable =0 if not taxable, 1 if taxable
+--                       ototal = order total variable
+
+CREATE PROCEDURE ordertotal(
+    IN onumber INT,
+    IN taxable BOOLEAN,
+    OUT ototal DECIMAL (8,2)
+) COMMENT 'Obtain order total, optionally adding tax' 
+BECIN
+
+	-- Declare variable for total
+    DECLARE total DECIMAL (8,2);
+    -- Declare tax percentage 
+    DECLARE taxrate INT DEFAULT 6;
+    
+    -- Get the order totalSELECT 
+    Sum(item price*quantity) 
+    FROM orderitems
+    WHERE order num = onumber 
+    INTO total;
+    
+    -- Is this taxable?
+    IF taxable THEN
+    	-- Yes, so add taxrate to the total
+    	SELECT total+(total/100*taxrate) INTO total;
+    END IF;
+    
+    -- And finally, save to out variable 
+    SELECT total INTO ototal;
+END:
+```
+
+```mysql
+CALL ordertotal (20005, o, @total);
+SELECT @total;
+```
+
+## 检查存储过程SHOW
+
+为显示用来创建一个存储过程的CREATE语句,用SHOW CREATEPROCEDURE 语句:
+
+```mysql
+SHOW CREATE PROCEDURE ordertota1;
+```
+
+# 使用游标
+
+## 创建游标DECLARE CURSOR FOR SELECT FROM
+
+游标用DECLARE语句创建, DECLARE命名游标,并定义相应的SELECT语句,根据需要带WHERE和其他子句。
+
+```mysql
+CREATE PROCEDURE processorders()
+BEGIN
+	DECLARE ordernumbers CURSOR
+	FOR
+	SELECT order_num FROM orders;
+END;
+```
+
+## 打开和关闭游标OPEN CLOSE
+
+游标用OPEN CURSOR语句来打开:
+
+```mysql
+OPEN ordernumbers;
+```
+
+游标处理完成后,应当使用如下语句关闭游标:
+
+```mysql
+CLOSE ordernumbers;
+```
+
+## 使用游标数据FETCH
+
+在一个游标被打开后,可以使用FETCH语句分别访问它的每一行。FETCH指定检索什么数据(所需的列),检索出来的数据存储在什么地方。它还向前移动游标中的内部行指针,使下一条FETCH语句检索下一行(不重复读取同一行)。
+
+```mysql
+CREAJE PROCEDURE processorders() 
+BEGIN
+	-- Declare local variables 
+	DECLARE o INT;
+	
+	-- Declare the cursor
+	DECLARE ordernumbers CURSOR 
+	FOR
+	SELECT order_num FROM orders;
+	
+	-- Open the cursor 
+	OPEN ordernumbers;
+	
+	-- Get order number
+	FETCH ordernumbers INTO o;
+	
+	-- Close the cursor 
+	CLOSE ordernumbers;
+END;
+```
+
+```mysql
+CREATE PROCEDURE processorders() 
+BEGIN
+
+	-- Declare local variables 
+	DECLARE done BOOLEAN DEFAULT 0;
+	DECLARE o INT;
+	
+	-- Declare the cursor 
+	DECLARE ordernumbers CURSOR
+	FOR
+	SELECT order_num FROM orders;
+	
+	-- Declare continue handler
+	DECLARE CONTINUE HANDLER FOR SQLSTATE '02000' SET done=1;
+	
+	-- Open the cursor 
+	OPEN ordernumbers;
+	
+	-- Loop through all rows 
+	REPEAT
+	
+		-- Get order number
+		FETCH ordernumbers INTO o;
+		
+	-- End of 1oop
+	UNTIL done END REPEAT;
+	
+	-- Close the cursor 
+	CLOSE ordernumbers;
+
+END;
+```
+
+# 触发器TRIGGER
+
+## 创建触发器CREATE TRIGGER AFTER ON
+
+在创建触发器时,需要给出4条信息:
+
+-    唯一的触发器名:
+-    触发器关联的表;
+-    触发器应该响应的活动(DELETE, INSERT或UPDATE);
+-    触发器何时执行(处理之前或之后)。
+
+```mysql
+CREATE TRIGGER newproduct AFTER INSERT ON products 
+FOR EACH ROW SELECT 'Product added';
+```
+
+CREATE TRIGGER用来创建名为newproduct的新触发器。触发器可在一个操作发生之前或之后执行,这里给出了AFTER INSERT,所以此触发器将在INSERT语句成功执行后执行。这个触发器还指定FOR EACH ROW,因此代码对每个插入行执行。
+
+## 删除触发器DROP TRIGGER
+
+为了删除一个触发器,可使用DROP TRIGGER语句,如下所示:
+
+```mysql
+DROP TRIGGER newproduct;
+```
+
+## 使用触发器
+
+### INSERT触发器CREATE TRIGGER AFTER INSERT ON
+
+-    在INSERT触发器代码内,可引用一个名为NEW的虚拟表,访问被插入的行;
+-    在BEFORE INSERT触发器中, NEW中的值也可以被更新(允许更改被插入的值);
+-    对于AUTO_INCREMENT列, NEW在INSERT执行之前包含0,在INSERT执行之后包含新的自动生成值。
+
+```mysql
+CREATE TRIGGER neworder AFTER INSERT ON orders 
+FOR EACH ROW SELECT NEW.order_num;
+```
+
+### DELETE触发器
+
+# 管理事务处理
+
+事务处理( transaction processing)可以用来维护数据库的完整性,它保证成批的MySQL操作要么完全执行,要么完全不执行.
+
+>    事务(transaction)指一组SQL语句;
+>
+>    回退(ro1lback)指撤销指定SQL语句的过程;
+>
+>    提交(commit)指将未存储的SQL语句结果写入数据库表;
+>
+>    保留点(savepoint)指事务处理中设置的临时占位符(placeholder),你可以对它发布回退(与回退整个事务处理不同)。
+
+## 控制事务处理
+
+MysQL使用下面的语句来标识事务的开始:
+
+```mysql
+START TRANSACTION
+```
+
+### 使用ROLLBACK
+
+MysQL的ROLLBACK命令用来回退(撤销) MySQL语句
+
+```mysql
+SELECT FROM ordertotals;
+START TRANSACTION;
+DELETE FROM ordertotals;
+SELECT FROM * ordertotals;
+ROLLBACK;
+SELECT * FROM ordertotals;
+```
+
+### 使用COMMIT
+
+一般的MySQL语句都是直接针对数据库表执行和编写的。这就是所谓的隐含提交(implicit commit),即提交(写或保存)操作是自动进行的。
+
+<u>但是,在事务处理块中,提交不会隐含地进行。</u>为进行明确的提交,使用COMMIT语句,如下所示:
+
+```mysql
+START TRANSACTION;
+DELETE FROM orderitems WHERE order_num = 20010;
+DELETE FROM orders WHERE order_num = 20010;
+COMMIT;
+```
+
+### 使用保留点SAVEPOINT ROLLBACK TO
+
+简单的ROLLBACK和COMMIT语句就可以写入或撤销整个事务处理。,但是,只是对简单的事务处理才能这样做,更复杂的事务处理可能需要部分提交或回退。
+
+为了支持回退部分事务处理,必须能在事务处理块中合适的位置放置占位符。这样,如果需要回退,可以回退到某个占位符。
+
+这些占位符称为保留点。为了创建占位符,可如下使用SAVEPOINT语句:
+
+```mysql
+SAVEPOINT delete1;
+```
+
+```mysql
+ROLLBACK TO deletel;
+```
+
+## 更改默认的提交行为
+
+```mysql
+SET autocommit=0;
+```
+
+# 全球化和本地化
+
+数据库表被用来存储和检索数据。不同的语言和字符集需要以不同的方式存储和检索。因此, MySQL需要适应不同的字符集(不同的字母和字符),适应不同的排序和检索数据的方法。
+
+## 字符集和校对顺序
+
+显示所有可用的字符集以及每个字符集的描述和默认校对
+
+```mysql
+SHOW CHARACTER SET;
+```
+
+查看所支持校对的完整列表
+
+```mysql
+SHOW COLLATION;
+```
+
+# 安全管理
+
+## 访问控制ROOT
+
+不要使用root 应该严肃对待root登录的使用。仅在绝对需,要时使用它(或许在你不能登录其他管理账号时使用),<u>不应该在日常的MySQL操作中使用root</u>.
+
+## 管理用户USE
+
+MySQL用户账号和信息存储在名为mysql的MySQL数据库中。一般不需要直接访问mysql数据库和表(你稍后会明白这一点),但有时需要直接访问。需要直接访问它的时机之一是在需要获得所有用户账号列表时。为此,可使用以下代码:
+
+```mysql
+USE mysql;
+SELECT user FROM user;
+```
+
+## 创建用户账号CREATE USER
+
+```mysql
+CREATE USER ben IDENTIFIED BY 'p@$$word'
+```
+
+## 删除用户账号DROP USER
+
+```mysql
+DROP USER bforta;
+```
+
+## 设置访问权限GRANT
+
+为看到赋予用户账号的权限,使用<u>SHOW GRANTS FOR</u>
+
+```mysql
+SHOW GRANTS FOR bforta;
+```
+
+为设置权限,使用GRANT语句。
+
+GRANT要求你至少给出以下信息:
+
+-    要授予的权限
+-    被授予访问权限的数据库或表
+-    用户名
+
+```mysql
+GRANT SELECT ON crashcourse.* TO bforta;
+```
+
+GRANT的反操作为REVOKE,用它来撤销特定的权限
+
+```mysql
+REVOKE SELECT ON crashcourse.* FROM bforta;
+```
+
+
+
+|          权限           |                             说明                             |
+| :---------------------: | :----------------------------------------------------------: |
+|           ALL           |                  除GRANT OPTION外的所有权限                  |
+|          ALTER          |                       使用ALTER TABLE                        |
+|                         |             使用ALTER PROCEDURE和DROP PROCEDURE              |
+|         CREATE          |                       使用CREATE TABLE                       |
+|     CREATE ROUTINE      |                     使用CREATE PROCEDURE                     |
+| CREATE TEMPORARY TABLES |                  使用CREATE TEMPORARY TABLE                  |
+|       CREATE USER       | 使用CREATE USER, DROP USER, RENAME USER和REVOKE ALL PRIVILEGES |
+|       CREATE VIEW       |                       使用CREATE VIEW                        |
+|         DELETE          |                          使用DELETE                          |
+|          DROP           |                        使用DROP TABLE                        |
+|         EXECUTE         |                      使用CALL和存储过程                      |
+|          FILEG          |          使用SELECT INTO OUTFILE和LOAD DATA INFILE           |
+|       RANT OPTION       |                      使用GRANT和REVOKE                       |
+|          INDEX          |                 使用CREATE INDEX和DROP INDEX                 |
+|         INSERT          |                          使用INSERT                          |
+|       LOCK TABLES       |                       使用LOCK TABLES                        |
+|         PROCESS         |                  使用SHOW FULL PROCESSLIST                   |
+|         RELOAD          |                          使用FLUSH                           |
+|   REPLICATION CLIENT    |                       服务器位置的访问                       |
+|    REPLICATION SLAVE    |                        由复制从属使用                        |
+|         SELECT          |                          使用SELECT                          |
+|        SHOW DATA        |                      使用SHOW DATABASES                      |
+|     BASESSHOW VIEW      |                     使用SHOW CREATE VIEM                     |
+|        SHUTDOWN         |           使用mysqladmin shutdown (用来关闭MySQL)            |
+|          SUPER          | 使用CHANGE MASTER, KILL, LOGS, PURGE. MASTER和SET GLOBAL,还允许mysqladmin调试登录 |
+|         UPDATE          |                          使用UPDATE                          |
+|          USAGE          |                          无访问权限                          |
+
+## 更改口令SET PASSWORD
+
+```mysql
+SET PASSWORD FOR bforta = Password('n3w p@ssword');
+```
+
+# 数据库维护
+
+## 刷新未写数据FLUSH TABLES
+
+## 进行数据库维护
+
+-    ANALYZE TABLE,用来检查表键是否正确。
+
+```mysql
+ANALYZE TABLE orders;
+```
+
+-    CHECK TABLE用来针对许多问题对表进行检查。在MyISAM表上还对索引进行检查。CHECK TABLE支持一系列的用于MyISAM表的方式。CHANGED检查自最后一次检查以来改动过的表。EXTENDED执行最彻底的检查, FAST只检查未正常关闭的表, MEDIUM检查所有被删除的链接并进行键检验, QUICK只进行快速扫描。
+
+```mysql
+CHECK TABLE orders, orderitems;
+```
+
+## 诊断启动问题
+
+-    --help显示帮助-一个选项列表
+-    --safe-mode装载减去某些最佳配置的服务器
+-    --verbose显示全文本消息(为获得更详细的帮助消息与--help联合使用)
+-    --version显示版本信息然后退出
+
+## 日志文件
+
+*    错误日志。它包含启动和关闭问题以及任意关键错误的细节。此日志通常名为hostname. err,位于data目录中。此日志名可用--log-error命令行选项更改。
+*    查询日志。它记录所有MySQL活动,在诊断问题时非常有用。此日志文件可能会很快地变得非常大,因此不应该长期使用它。此日志通常名为hostname.log,位于data目录中。此名字可以用--log命令行选项更改。
+*    二进制日志。它记录更新过数据(或者可能更新过数据)的所有语句。此日志通常名为hostname-bin,位于data目录内。此名字可以用--log-bin命令行选项更改。注意,这个日志文件是MySQL5中添加的,以前的MySQL版本中使用的是更新日志。
+*    缓慢查询日志。顾名思义,此日志记录执行缓慢的任何查询。这·个日志在确定数据库何处需要优化很有用。此日志通常名为hostname-slow.log ,位于data目录中。此名字可以用--log-slow-queries命令行选项更改。 
+
+# 改善性能
+
+*    首先, MySQL (与所有DBMS一样)具有特定的硬件建议。在学习和研究MySQL时,使用任何旧的计算机作为服务器都可以。但对用于生产的服务器来说,应该坚持遵循这些硬件建议。
+*    一般来说,关键的生产DBMS应该运行在自己的专用服务器上。
+*    MySQL是用一系列的默认设置预先配置的,从这些设置开始通常是很好的。但过一段时间后你可能需要调整内存分配、缓冲区大小等。(为查看当前设置,可使用SHOW VARIABLES;和SHOwSTATUS; )
+*    MySQL一个多用户多线程的DBMS,换言之,它经常同时执行多个任务。如果这些任务中的某一个执行缓慢,则所有请求都会执行缓慢。如果你遇到显著的性能不良,可使用SHOW PROCESSLIST显示所有活动进程(以及它们的线程ID和执行时间)。你还可以用KILL命令终结某个特定的进程(使用这个命令需要作为管理员登录)。
+*    总是有不止一种方法编写同一条SELECT语句。应该试验联结、并、子查询等,找出最佳的方法。
+*    使用EXPLAIN语句让MySQL解释它将如何执行一条SELECT语句。
+*    一般来说,存储过程执行得比一条一条地执行其中的各条MySQL语句块。
+*    应该总是使用正确的数据类型。决不要检索比需求还要多的数据。换言之,不要用SELECT * (除非你真正需要每个列)。
+*    有的操作(包括INSERT)支持一个可选的DELAYED关键字,如果使用它,将把控制立即返回给调用程序,并且一旦有可能就实际执行该操作。
+*    在导入数据时,应该关闭自动提交。你可能还想删除索引(包括FULLTEXT索引),然后在导入完成后再重建它们。
+*    必须索引数据库表以改善数据检索的性能。确定索引什么不是一件微不足道的任务,需要分析使用的SELECT语句以找出重复的WHERE和ORDER BY子句。如果一个简单的WHERE子句返回结果所花的时间太长,则可以断定其中使用的列(或几个列)就是需要索引的对象。
+*    你的SELECT语句中有一系列复杂的OR条件吗?通过使用多条SELECT语句和连接它们的UNION语句,你能看到极大的性能改进。
+*    索引改善数据检索的性能,但损害数据插入、删除和更新的性能,如果你有一些表,它们收集数据且不经常被搜索,则在有必要之.前不要索引它们。(索引可根据需要添加和删除。)
+*    LIKE很慢。一般来说,最好是使用FULLTEXT而不是LIKE.数据库是不断变化的实体。
+*    一组优化良好的表一会儿后可能就面目全非了。由于表的使用和内容的更改,理想的优化和配置也会改变。
+*    最重要的规则就是,每条规则在某些条件下都会被打破。
 
