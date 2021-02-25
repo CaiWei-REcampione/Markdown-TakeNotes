@@ -906,6 +906,7 @@ vector.resize(num, elem); //重新指定容器的长度为num，若容器变长�
 #### 数据存取：
 
 ```cpp
+vector.push_back(object);	//原数据不动，增加数据
 vector.at(idx);   //返回索引idx所指的数据，如果idx越界，抛出out_of_range异常。
 vector[idx];   //返回索引idx所指的数据，越界时，运行直接报错
 ```
@@ -1477,18 +1478,22 @@ cin>>value_holder;
 
 基本类型
 
-*    signed char &
-*    unsigned char &
-*    char &
-*    unsigned short &
-*    int &
-*    unsigned int &
-*    long &
-*    unsigned long &
-*    long long &(c++11)
-*    float &
-*    double &
-*    long double &
+|      基本类型      |
+| :----------------: |
+|   signed char &    |
+|  unsigned char &   |
+|       char &       |
+|  unsigned short &  |
+|       int &        |
+|   unsigned int &   |
+|       long &       |
+|  unsigned long &   |
+| long long &(c++11) |
+|      float &       |
+|      double &      |
+|   long double &    |
+
+
 
 典型运算符函数原型
 
@@ -1784,6 +1789,41 @@ int main(int argc, char *argv[])
 >    -    void tmain(int argc, TCHAR* argv[])
 >    -    int tmain (void)
 >    -    void tmain (void)
+
+## 事件处理器和消息传递窗口
+
+
+
+事件处理器是操作系统调用的一个函数，每次都发送某种类型的消息
+
+大多数应用程序都有窗口或窗体,每个窗口都要有自己的事件处理器,一旦在窗口中发生事件都要调用事件处理器。
+
+```cpp
+#include <windows.h>
+```
+
+### 声明窗口过程原型
+
+```cpp
+IRESUTT CALLBACK WndProc (HWND hWnd, UINT uMsg. WPARAM wParam, LPARAM lParam);
+```
+
+### 程序入口点
+
+```cpp
+int WINAPI WinMain(HINSTANCE hThis, HINSTANCE hPrev, LPSTR szCmdLine, int iCmdShow)
+```
+
+-    注意,在返回类型(int)后面有一个WINAPI宏,它表示一种调用约定(calling convention)。
+
+WTNAPI或stdcall意味着栈的清理工作由被调函数来完成。WinMain是函数名,该函数必须有4个参数,而且参数的顺序要与声明中的顺序相同。
+
+|   参数    | 含义                                                         |
+| :-------: | :----------------------------------------------------------- |
+|   hThis   | 应用程序当前实例的句柄                                       |
+|   hPrev   | 应用程序上一个实例的句柄。hPrev参数一定是NULL，应该是为了兼容旧版本的windows操作系统,所以没有写明当前版本的值。 |
+| scCmdLine | szCndLine或应用程序的命令行,包括该程序的名称                 |
+| iCmdShow  | 控制如何显示窗口                                             |
 
 
 
