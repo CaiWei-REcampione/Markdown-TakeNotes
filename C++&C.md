@@ -2,6 +2,11 @@
 
 [toc]
 
+# 编程规范
+
+-    边界条件
+-    差错处理
+
 # 参数声明
 
 ```c++
@@ -135,12 +140,14 @@ getline(stuff,':');//read up to :, discard :
 
 ## algorithm
 
-|            函数             | 含义 |
-| :-------------------------: | ---- |
-|  sort(begin, end, less())   | 升序 |
-| sort(begin, end, greater()) | 降序 |
+|             函数              | 含义 |
+| :---------------------------: | ---- |
+|  sort(begin, end, less<>())   | 升序 |
+| sort(begin, end, greater<>()) | 降序 |
 
+*    sort()为类模板，需要声明其类型
 
+[为数组vector排序](#vector排序)
 
 ## for(:)语句
 
@@ -924,15 +931,20 @@ name_one.insert(name_one.end(),name_two.begin(),name_two.end());
 
 #### <span id="二维vector">二维vector</span>
 
--    先定义好二维数组结构，在直接赋值
+-    先定义好二维数组结构，再直接赋值
 
 ```cpp
 #include <vector>
 namespace std;
 vector<vector<typename>> name(length);
+for(int i=0;i<length;i++){
+    for(int j=0;j<width;j++){
+        name[i].push_back(object);
+    }
+}
 ```
 
--    利用Vector的push_back函数
+-    利用vector的push_back函数
 
 ```cpp
 #include <vector>
@@ -954,6 +966,27 @@ vec.push_back(b);
 ```
 
 [STL vector数组](#STL_vector数组)
+
+#### <span id=vector排序>排序</span>
+
+```cpp
+#include <algorithm>
+using namespace std;
+int main(){
+    vector<int> vec={4,5,2,7,6};
+    sort(vec.begin(),vec.end,less<int>());//从小到大
+    for(int x:vec){//打印数据
+        cout<<x<<" ";
+    }
+    cout<<endl;
+    sort(vec.begin(),vec.end(),greater<int>());//从大到小
+    for(int y:vec){//打印数据
+        cout<<y<<" ";
+    }
+}
+```
+
+
 
 ### stack
 
@@ -1802,19 +1835,21 @@ int main(int argc, char *argv[])
 #include <windows.h>
 ```
 
-### 声明窗口过程原型
+### WinMain函数
+
+-    声明窗口过程原型
 
 ```cpp
 IRESUTT CALLBACK WndProc (HWND hWnd, UINT uMsg. WPARAM wParam, LPARAM lParam);
 ```
 
-### 程序入口点
+-    程序入口点
 
 ```cpp
 int WINAPI WinMain(HINSTANCE hThis, HINSTANCE hPrev, LPSTR szCmdLine, int iCmdShow)
 ```
 
--    注意,在返回类型(int)后面有一个WINAPI宏,它表示一种调用约定(calling convention)。
+注意,在返回类型(int)后面有一个WINAPI宏,它表示一种调用约定(calling convention)。
 
 WTNAPI或stdcall意味着栈的清理工作由被调函数来完成。WinMain是函数名,该函数必须有4个参数,而且参数的顺序要与声明中的顺序相同。
 
@@ -1825,7 +1860,155 @@ WTNAPI或stdcall意味着栈的清理工作由被调函数来完成。WinMain是
 | scCmdLine | szCndLine或应用程序的命令行,包括该程序的名称                 |
 | iCmdShow  | 控制如何显示窗口                                             |
 
+接下来,在WinMain的函数体中,用UNREFPERENCED RARAMETER宏告诉编译器不使用某些参数,方便编译器进行一些额外的优化。
 
+```cpp
+UNREFERENCED_PARAMETER( hPrev );
+UNREFERENCED_PARAMETER( szCmdLine );
+```
+
+-    WINDCLASSEX窗口结构的实例化代码wndx
+
+```cpp
+WNDCLASSEX wndEx={ 0 };
+```
+
+-    下面的代码定义了在实例化窗口类后分配的额外字节数cbClsExtra
+
+     ```cpp
+     wndEx.cbClsExtra = 0;
+     ```
+
+-    窗口结构的大小cbsize
+
+```
+wndEx.cbsize = sizeof( wndEx)
+```
+
+-    实例化窗口实例后分配的额外字节数cbwndExtra
+
+```cpp
+wndEx.cbWndExtra = 0;
+```
+
+-    窗口类背景画刷的句柄hbrBackground
+
+```cpp
+wndEx.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
+```
+
+-    窗口类光标的句柄hCursor
+
+```cpp
+wndEx.hCursor = LoadCursor( NULL, IDC_ARROW );
+```
+
+-    窗口类图标的句柄hIcon/hIconSm
+
+```cpp
+wndEx.hIcon = LoadIcon( NULL, IDI_APPLICATION );
+wndEx.hIconSm = LoadIcon( NULL, IDI_APPLICATION );
+```
+
+-    包含窗口过程的实例句柄hInstance
+
+```cpp
+wndEx.hInstance = hThis;
+```
+
+-    指向窗口过程的指针lpfnWndProc
+
+```cpp
+wndEx.lpfnWndProc = WndProc;
+```
+
+-    指向以空字符结尾的字符串或原子的指针lpszClassName
+
+```cpp
+wndEx.lpszClassName = TEXT ("GUIProject");
+```
+
+-    指向以空字符结尾的字符串的指针,该字符串指定了窗口类菜单的资源名lpszMenuName
+
+```cpp
+wndEx.lpszMenuName = NULL;
+```
+
+-    窗口类的样式
+
+```cpp
+wndEx.style = CS_HREDRAW | CS_VREDRAM;
+```
+
+-    注册一个窗口类,供CreateWindow或CreateWindowEx函数稍后使用
+
+```cpp
+if( !RegisterClassEx( &wndEx)){
+    return -1;
+}
+```
+
+-    CreateWindowAPI创建一个重叠、弹出的窗口或子窗口。它指定该窗口类、窗口标题、窗口样式、窗口的初始位置和大小(可选的)。该函数还指定了窗口的父窗口或所有者(如果有的话),以及窗口的菜单。
+
+```cpp
+HWND hWnd = CreateWindow( wndEx.lpszClassName, TEXT("GUI Project"), WS_OVERLAPPEDWINDOW, 200, 200, 400, 300, HWND_DESKTOP, NULL, hThis, 0);
+if ( !hwnd ){
+    return -1;
+}
+```
+
+-    如果指定窗口的更新域未被填满,UpdateWindow函数就向窗口发送一条WM_PAINT消息,更新指定窗口的客户区。该函数绕过应用程序的消息队列,向指定窗口的窗口过程直接发送一条WM_PAINT消息。
+
+     ```cpp
+     UpdateWindow( hWnd );
+     ```
+
+-    下面的代码设置指定窗口的显示状态
+
+```
+Showwindow( hwnd, icmdshow);
+```
+
+-    我们还需要一个MsG结构的实例来表示窗口消息
+
+```cpp
+MSG msg = { 0 };
+```
+
+接下来,进入一个消息循环。
+
+>    Windows中的应用程序是事件驱动的,它们不会显式调用函数来获得输入，而是等待系统把输入传递给它们。系统把所有的输入传递给应用程序的不同窗口。每个窗口都有一个叫做窗口过程的函数,当有输入需要传递给窗口时,系统调用会调用该函数。窗口过程处理输入,并把控制权返回系统。
+
+-    GetMessageAPI从主调线程的消息队列中检索信息
+
+```cpp
+while ( GetMessage( &msg, NULL, NULL, NULL )){
+	//把虚拟键消息翻译成字符消息
+    TranslateMessage(&msg);
+    //分发一条消息给窗口过程
+    DispatchMessage(&msg);
+}
+```
+
+>    当关闭应用程序或发送一些触发其退出的命令时,系统会释放应用程序消息队列。这意味着该应用程序不会再有消息,而且while循环也将结束。
+
+-    DestroyWindowAPI销毁指定的窗口。该函数向指定窗口发送WM_DESTROY和WM_NCDESTROY消息，使窗口无效并移除其键盘焦点(keyboard focus)。此外，该函数还将销毁指定窗口的菜单,清空线程的消息队列,销毁与窗口过程相关的计时器,解除窗口对剪切板的所有权,如果该窗口在查看器链的顶端,还将打断剪切板的查看器链。
+
+```cpp
+DestroyWindow( hWnd );
+```
+
+-    注销窗口类,释放该类占用的内存
+
+```cpp
+UnregisterClass( wndEx.lpszClassName, hThis );
+```
+
+-    下面的return函数从应用程序消息队列中返回一个成功退出代码或最后一个消息代码
+
+```cpp
+return (int) msg.wParam;
+```
 
 # 参考
 
