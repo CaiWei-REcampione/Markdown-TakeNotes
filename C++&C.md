@@ -924,7 +924,7 @@ vector.resize(num);  //重新指定容器的长度为num，若容器变长，则
 vector.resize(num, elem); //重新指定容器的长度为num，若容器变长，则以elem值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
 ```
 
-#### 数据存取：
+#### 数据存取
 
 ```cpp
 vector.push_back(object);	//原数据不动，增加数据
@@ -980,6 +980,16 @@ vec.push_back(b);
 ```
 
 [STL vector数组](#STL_vector数组)
+
+##### 获得二维vector数组宽长
+
+```cpp
+vector<vector<int>> matrix = { {1,2,3,4,5},{5,6,7,8,9},{9,10,11,12,13} };
+int raws = matrix.size(); //行
+int cols = matrix[0].size(): //列
+```
+
+
 
 #### <span id=vector排序>排序</span>
 
