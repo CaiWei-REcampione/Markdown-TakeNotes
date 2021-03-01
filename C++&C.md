@@ -33,9 +33,24 @@ typename* name=new <typename>;
 
 
 
-## 字符串
+# struct
 
-### C风格字符串
+## pair< , >
+
+### 生成pair< , >
+
+```cpp
+pair<int ,int >p (5,6);
+pair<int ,int > p1= make_pair(5,6);
+pair<string,double> p2 ("aa",5.0);
+pair <string ,double> p3 = make_pair("aa",5.0);
+```
+
+
+
+# 字符串
+
+## C风格字符串
 
 ```c++
 char site[]="...";
@@ -58,7 +73,7 @@ cin.getline(info,100);//read a line, discard
 cin.get(info,100);//read a line, leave
 ```
 
-### string对象
+## string对象
 
 ```c++
 string stuff;
@@ -66,7 +81,7 @@ cin>>stuff;//read a word
 getline(cin,stuff);//read a line, discard
 ```
 
-#### getline版本
+### getline版本
 
 ```c++
 cin.getline(info,100,':');//read up to :, discard :
