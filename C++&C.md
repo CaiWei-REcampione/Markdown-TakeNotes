@@ -1247,6 +1247,33 @@ string to_string (long double val);
 
 ### <span id="map">map</span>/<span id="multimap">multimap</span>
 
+|      函数       | 含义                            |
+| :-------------: | :------------------------------ |
+|     begin()     | 返回指向map头部的迭代器         |
+|     clear()     | 删除所有元素                    |
+|     count()     | 返回指定元素出现的次数          |
+|     empty()     | 如果map为空则返回true           |
+|      end()      | 返回指向map末尾的迭代器         |
+|  equal_range()  | 返回特殊条目的迭代器对          |
+|     erase()     | 删除一个元素                    |
+|     find()      | 查找一个元素                    |
+| get_allocator() | 返回map的配置器                 |
+|    insert()     | 插入元素                        |
+|   key_comp()    | 返回比较元素key的函数           |
+|  lower_bound()  | 返回键值>=给定元素的第一个位置  |
+|   max_size()    | 返回可以容纳的最大元素个数      |
+|    rbegin()     | 返回一个指向map尾部的逆向迭代器 |
+|     rend()      | 返回一个指向map头部的逆向迭代器 |
+|     size()      | 返回map中元素的个数             |
+|     swap()      | 交换两个map                     |
+|  upper_bound()  | 返回键值>给定元素的第一个位置   |
+|  value_comp()   | 返回比较元素value的函数         |
+
+#### first和second
+
+>    The elements of a map<string,int> are of type pair<string,int>;
+>    The first member of a pair is called first and the second member second.
+
 ## 迭代器
 
 ## 空间分配器
@@ -1866,8 +1893,6 @@ int main(int argc, char *argv[])
 
 ## 事件处理器和消息传递窗口
 
-
-
 事件处理器是操作系统调用的一个函数，每次都发送某种类型的消息
 
 大多数应用程序都有窗口或窗体,每个窗口都要有自己的事件处理器,一旦在窗口中发生事件都要调用事件处理器。
@@ -1876,7 +1901,7 @@ int main(int argc, char *argv[])
 #include <windows.h>
 ```
 
-### WinMain函数
+## WinMain函数
 
 -    声明窗口过程原型
 
@@ -2051,6 +2076,46 @@ UnregisterClass( wndEx.lpszClassName, hThis );
 return (int) msg.wParam;
 ```
 
+## CreateProcess
+
+```cpp
+#define CreateProcess  CreateProcessW
+CreateProcessW(
+    _In_opt_ LPCWSTR lpApplicationName,
+    _Inout_opt_ LPWSTR lpCommandLine,
+    _In_opt_ LPSECURITY_ATTRIBUTES lpProcessAttributes,
+    _In_opt_ LPSECURITY_ATTRIBUTES lpThreadAttributes,
+    _In_ BOOL bInheritHandles,
+    _In_ DWORD dwCreationFlags,
+    _In_opt_ LPVOID lpEnvironment,
+    _In_opt_ LPCWSTR lpCurrentDirectory,
+    _In_ LPSTARTUPINFOW lpStartupInfo,
+    _Out_ LPPROCESS_INFORMATION lpProcessInformation
+    );
+```
+
+example:
+
+```cpp
+STARTUPINFO startupInfo = { 0 };
+PROCESS_INFORMATION processInformation = { 0 };
+BOOL bSuccess = CreateProcess(TEXT("C:\\Windows\\notepad.exe"), NULL, NULL, NULL, FALSE, NULL, NULL, NULL, &startupInfo, &processInformation);
+```
+
+createProcess函数用于创建一个新进程及其主线程。新进程在主调进程的安全上下文中运行。
+
+操作系统为进程分配进程标识符。集成标识符用于标识进程，在进程终止之前有效。
+
+最初线程的线程标识符由进程分配，该标识符可用于在OpenThread中打开一个线程的句柄。线程标识符在线程终止之前有效，可作为系统中线程的唯一标识。这些标识符都返回<u>PROCESS_INFORMATION</u>结构中。
+
+主调线程可以使用<u>WaitForInputIdle</u>函数，在新进程完成其初始化且正在等待用户输入时等待。
+
+CreateProcess不会等到新进程完成初始化才返回
+
+ExitProcess函数用于终止进程，给所属进程中的所有DLL发送一条即将终止的通知。
+
+>    只要进程中有一个线程调用ExitProcess函数，<u>该进程的其他线程都会立即终止</u>，根本没机会执行其他代码
+
 ## 进程和线程的概念
 
 进程是执行程序的实例。每个进程都有自己的虚拟地址空间和控制线程。
@@ -2068,21 +2133,7 @@ return (int) msg.wParam;
 -    用户要求创建新进程
 -    启动批处理作业
 
-createProcess函数用于创建一个新进程及其主线程。新进程在主调进程的安全上下文中运行。
-
-操作系统为进程分配进程标识符。集成标识符用于标识进程，在进程终止之前有效。
-
-最初线程的线程标识符由进程分配，该标识符可用于在OpenThread中打开一个线程的句柄。线程标识符在线程终止之前有效，可作为系统中线程的唯一标识。这些标识符都返回<u>PROCESS_INFORMATION</u>结构中。
-
-主调线程可以使用<u>WaitForInputIdle</u>函数，在新进程完成其初始化且正在等待用户输入时等待。
-
-CreateProcess不会等到新进程完成初始化才返回
-
-ExitProcess函数用于终止进程，给所属进程中的所有DLL发送一条即将终止的通知。
-
->    只要进程中有一个线程调用ExitProcess函数，<u>该进程的其他线程都会立即终止</u>，根本没机会执行其他代码
-
-### 进程处于的3种状态
+## 进程处于的3种状态
 
 -    运行
 
@@ -2107,6 +2158,23 @@ PCB是操作系统为了管理进程，在内核中设置的一种数据结构�
 -    进程标识数据
 -    进程状态数据 
 -    进程控制数据
+
+#### Winternl.h
+
+winternl.h头文件包含了大部分Windows内部函数的原型和数据表示
+
+## 进程间通信(IPC)
+
+两个或更多实体读取或写入某共享数据的情况，最终的结果取决于进程的执行顺序，称为<u>竞态条件</u>。
+
+程序中能被访问共享内存的部分叫做<u>临界区</u>。为了避免竞态条件，必须确保一次只能有一个进程进入临界区。
+
+要使用共享数据，必须处理好下面4个条件：
+
+-    不允许同时有两个进程在临界区内
+-    不得对CPU的速度或数量进行假设
+-    在临界区外运行的进程不得阻碍其他进程
+-    不得有任何进程处于永远等待进入临界区
 
 
 
