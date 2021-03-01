@@ -37,16 +37,38 @@ typename* name=new <typename>;
 
 ## pair< , >
 
+pair是将2个数据组合成一组数据，当需要这样的需求时就可以使用pair，如stl中的map就是将key和value放在一起来保存。另一个应用是，当一个函数需要返回2个数据的时候，可以选择pair。 pair的实现是一个结构体，主要的两个成员变量是first second 因为是使用struct不是class，所以可以直接使用pair的成员变量。
+
+### 标准库类型
+
+```cpp
+#include <utility>
+```
+
+### 类模板
+
+```cpp
+template<class T1,class T2> struct pair;
+//参数：T1是第一个值的数据类型，T2是第二个值的数据类型。
+//功能：pair将一对值(T1和T2)组合成一个值，
+```
+
 ### 生成pair< , >
 
 ```cpp
-pair<int ,int >p (5,6);
-pair<int ,int > p1= make_pair(5,6);
-pair<string,double> p2 ("aa",5.0);
-pair <string ,double> p3 = make_pair("aa",5.0);
+pair<T1, T2> p1;            //创建一个空的pair对象（使用默认构造），它的两个元素分别是T1和T2类型，采用值初始化。
+pair<T1, T2> p1(v1, v2);    //创建一个pair对象，它的两个元素分别是T1和T2类型，其中first成员初始化为v1，second成员初始化为v2。
+make_pair(v1, v2);          // 以v1和v2的值创建一个新的pair对象，其元素类型分别是v1和v2的类型。
 ```
 
+### 操作
 
+```cpp
+p1 < p2;                    // 两个pair对象间的小于运算，其定义遵循字典次序：如 p1.first < p2.first 或者 !(p2.first < p1.first) && (p1.second < p2.second) 则返回true。
+p1 == p2；                  // 如果两个对象的first和second依次相等，则这两个对象相等；该运算使用元素的==操作符。
+p1.first;                   // 返回对象p1中名为first的公有数据成员
+p1.second;                 // 返回对象p1中名为second的公有数据成员
+```
 
 # 字符串
 
