@@ -157,10 +157,12 @@ swap包含在命名空间std里面
 
 ## algorithm
 
-|             函数              | 含义 |
-| :---------------------------: | ---- |
-|  sort(begin, end, less<>())   | 升序 |
-| sort(begin, end, greater<>()) | 降序 |
+|             函数              | 含义       |
+| :---------------------------: | ---------- |
+|  sort(begin, end, less<>())   | 升序       |
+| sort(begin, end, greater<>()) | 降序       |
+|           min(a,b)            | 返回最小值 |
+|           max(a,b)            | 返回最大值 |
 
 *    sort()为类模板，需要声明其类型
 
