@@ -192,19 +192,21 @@ swap包含在命名空间std里面
 
 ## ctype.h
 
-|        函数         |                   描述                   |
-| :-----------------: | :--------------------------------------: |
-| int isalnum(int c)  |  该函数检查所传的字符是否是字母和数字。  |
-| int isalpha(int c)  |     该函数检查所传的字符是否是字母。     |
-| int iscntrl(int c)  |   该函数检查所传的字符是否是控制字符。   |
-| int isdigit(int c)  |  该函数检查所传的字符是否是十进制数字。  |
-| int isgraph(int c)  |  该函数检查所传的字符是否有图形表示法。  |
-| int islower(int c)  |   该函数检查所传的字符是否是小写字母。   |
-| int isprint(int c)  |   该函数检查所传的字符是否是可打印的。   |
-| int ispunct(int c)  | 该函数检查所传的字符是否是标点符号字符。 |
-| int isspace(int c)  |   该函数检查所传的字符是否是空白字符。   |
-| int isupper(int c)  |   该函数检查所传的字符是否是大写字母。   |
-| int isxdigit(int c) | 该函数检查所传的字符是否是十六进制数字。 |
+|           函数            |                   描述                   |
+| :-----------------------: | :--------------------------------------: |
+|    int isalnum(int c)     |  该函数检查所传的字符是否是字母和数字。  |
+|    int isalpha(int c)     |     该函数检查所传的字符是否是字母。     |
+|    int iscntrl(int c)     |   该函数检查所传的字符是否是控制字符。   |
+|    int isdigit(int c)     |  该函数检查所传的字符是否是十进制数字。  |
+|    int isgraph(int c)     |  该函数检查所传的字符是否有图形表示法。  |
+|    int islower(int c)     |   该函数检查所传的字符是否是小写字母。   |
+|    int isprint(int c)     |   该函数检查所传的字符是否是可打印的。   |
+|    int ispunct(int c)     | 该函数检查所传的字符是否是标点符号字符。 |
+|    int isspace(int c)     |   该函数检查所传的字符是否是空白字符。   |
+|    int isupper(int c)     |   该函数检查所传的字符是否是大写字母。   |
+|    int isxdigit(int c)    | 该函数检查所传的字符是否是十六进制数字。 |
+| char tolower(char target) |                 返回小写                 |
+| char touppre(char target) |                 返回大写                 |
 
 ## for(:)语句
 
