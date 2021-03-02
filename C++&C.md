@@ -33,6 +33,22 @@ typename* name=new <typename>;
 
 
 
+## 不同类型转换
+
+### int to string
+
+```cpp
+string name = to_string(int);
+```
+
+### char to string
+
+```cpp
+string name = string(1,char);
+```
+
+
+
 # struct
 
 ## pair< , >
@@ -1089,6 +1105,15 @@ s.pop()//移除栈顶元素；
 ```cpp
 s.push()//栈顶添加元素；
 ```
+
+#### 出栈并返回栈顶数据
+
+```cpp
+savename = s.top();
+s.pop();
+```
+
+
 
 #### 返回栈顶元素
 
