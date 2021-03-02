@@ -1238,6 +1238,23 @@ string &erase (int pos =0,int n=npos);//如果无参的化，默认从头删到�
 string substr ( size_t pos = 0, size_t n = npos ) const;//pos为起始位置（默认为0），n为结束位置（默认为npos）
 ```
 
+#### 从string中拆分单词
+
+```cpp
+#include <sstream>
+void split_String(vector<string>& ves, string str)
+{
+	istringstream ss(str);
+	string s;
+	while (ss >> s)
+	{
+		ves.push_back(s);
+	}
+}
+```
+
+
+
 ### 转换为string类型
 
 c++11标准增加了全局函数std::to_string:
