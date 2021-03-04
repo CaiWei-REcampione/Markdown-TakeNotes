@@ -47,6 +47,22 @@ string name = to_string(int);
 string name = string(1,char);
 ```
 
+### char to int
+
+```cpp
+char target = '5';
+int save = target -'0';
+cout<<save;
+```
+
+### int to char
+
+```cpp
+int a = 5;
+char ca = a + '0';
+cout<<ca;
+```
+
 
 
 # struct
@@ -195,12 +211,13 @@ swap包含在命名空间std里面
 
 ## algorithm
 
-|             函数              | 含义       |
-| :---------------------------: | ---------- |
-|  sort(begin, end, less<>())   | 升序       |
-| sort(begin, end, greater<>()) | 降序       |
-|           min(a,b)            | 返回最小值 |
-|           max(a,b)            | 返回最大值 |
+|                 函数                 | 含义       |
+| :----------------------------------: | ---------- |
+|      sort(begin, end, less<>())      | 升序       |
+|    sort(begin, end, greater<>())     | 降序       |
+|               min(a,b)               | 返回最小值 |
+|               max(a,b)               | 返回最大值 |
+| reverse(object.begin(),object.end()) | 翻转       |
 
 *    sort()为类模板，需要声明其类型
 
@@ -210,17 +227,17 @@ swap包含在命名空间std里面
 
 |           函数            |                   描述                   |
 | :-----------------------: | :--------------------------------------: |
-|    int isalnum(int c)     |  该函数检查所传的字符是否是字母和数字。  |
-|    int isalpha(int c)     |     该函数检查所传的字符是否是字母。     |
-|    int iscntrl(int c)     |   该函数检查所传的字符是否是控制字符。   |
-|    int isdigit(int c)     |  该函数检查所传的字符是否是十进制数字。  |
-|    int isgraph(int c)     |  该函数检查所传的字符是否有图形表示法。  |
-|    int islower(int c)     |   该函数检查所传的字符是否是小写字母。   |
-|    int isprint(int c)     |   该函数检查所传的字符是否是可打印的。   |
-|    int ispunct(int c)     | 该函数检查所传的字符是否是标点符号字符。 |
-|    int isspace(int c)     |   该函数检查所传的字符是否是空白字符。   |
-|    int isupper(int c)     |   该函数检查所传的字符是否是大写字母。   |
-|    int isxdigit(int c)    | 该函数检查所传的字符是否是十六进制数字。 |
+|    int isalnum(char c)    |  该函数检查所传的字符是否是字母和数字。  |
+|    int isalpha(char c)    |     该函数检查所传的字符是否是字母。     |
+|    int iscntrl(char c)    |   该函数检查所传的字符是否是控制字符。   |
+|    int isdigit(char c)    |  该函数检查所传的字符是否是十进制数字。  |
+|    int isgraph(char c)    |  该函数检查所传的字符是否有图形表示法。  |
+|    int islower(char c)    |   该函数检查所传的字符是否是小写字母。   |
+|    int isprint(char c)    |   该函数检查所传的字符是否是可打印的。   |
+|    int ispunct(char c)    | 该函数检查所传的字符是否是标点符号字符。 |
+|    int isspace(char c)    |   该函数检查所传的字符是否是空白字符。   |
+|    int isupper(char c)    |   该函数检查所传的字符是否是大写字母。   |
+|   int isxdigit(char c)    | 该函数检查所传的字符是否是十六进制数字。 |
 | char tolower(char target) |                 返回小写                 |
 | char touppre(char target) |                 返回大写                 |
 
@@ -1276,6 +1293,41 @@ void split_String(vector<string>& ves, string str)
 		ves.push_back(s);
 	}
 }
+```
+
+
+
+#### string去除空格
+
+```cpp
+#include <string> 
+#include <algorithm> 
+#include <functional> 
+#include <cctype> 
+using namespace std; 
+inline string& ltrim(string &ss) 
+{ 
+	int (*pf)(int) = isspace; 
+	string::iterator p = find_if(ss.begin(),ss.end(),not1(ptr_fun(pf))); 
+	ss.erase(ss.begin(),p); 
+	return ss; 
+} 
+inline string& rtrim(string &ss) 
+{ 
+	int (*pf)(int) = isspace; 
+	string::reverse_iterator p = find_if(ss.rbegin(),ss.rend(),not1(ptr_fun(pf))); 
+    ss.erase(p.base(),ss.end()); 
+    return ss; 
+} 
+inline string& trim(string &st) 
+{ 
+    ltrim(rtrim(st)); 
+    return st; 
+}
+```
+
+```cpp
+res = res.substr(res.find_first_not_of(' '),res.find_last_not_of(' ') + 1)
 ```
 
 
