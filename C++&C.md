@@ -1262,6 +1262,7 @@ int compare(const char *s)const;
 int find(char c,int pos=0);//从pos位开始找c字符，返回值为c字符所在的位置
 int find(const char *s,int pos =0);//从pos位开始找s字符串，返回值为s字符串所在的位置
 int find(const string &s,int pos =0);//从pos位开始找s字符串，返回值为s字符串所在的位置找不到返回-1；
+//查找不到，则返回string::npos
 string find_first_of();
 string find_last_of();
 string find_first_not_of();
@@ -1315,34 +1316,10 @@ void split_String(vector<string>& ves, string str)
 #### string去除空格
 
 ```cpp
-#include <string> 
-#include <algorithm> 
-#include <functional> 
-#include <cctype> 
-using namespace std; 
-inline string& ltrim(string &ss) 
-{ 
-	int (*pf)(int) = isspace; 
-	string::iterator p = find_if(ss.begin(),ss.end(),not1(ptr_fun(pf))); 
-	ss.erase(ss.begin(),p); 
-	return ss; 
-} 
-inline string& rtrim(string &ss) 
-{ 
-	int (*pf)(int) = isspace; 
-	string::reverse_iterator p = find_if(ss.rbegin(),ss.rend(),not1(ptr_fun(pf))); 
-    ss.erase(p.base(),ss.end()); 
-    return ss; 
-} 
-inline string& trim(string &st) 
-{ 
-    ltrim(rtrim(st)); 
-    return st; 
-}
-```
-
-```cpp
-res = res.substr(res.find_first_not_of(' '),res.find_last_not_of(' ') + 1)
+string str;
+str.erase(0,str.find_first_not_of(' '));
+str.erase(str.find_last_not_of(' ')+1);
+cout<<str;
 ```
 
 
