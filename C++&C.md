@@ -41,6 +41,16 @@ typename* name=new <typename>;
 string name = to_string(int);
 ```
 
+### string to int
+
+```cpp
+string a = "5";
+int ai = atoi(a.c_str());
+cout << ai;
+```
+
+
+
 ### char to string
 
 ```cpp
@@ -1252,6 +1262,10 @@ int compare(const char *s)const;
 int find(char c,int pos=0);//从pos位开始找c字符，返回值为c字符所在的位置
 int find(const char *s,int pos =0);//从pos位开始找s字符串，返回值为s字符串所在的位置
 int find(const string &s,int pos =0);//从pos位开始找s字符串，返回值为s字符串所在的位置找不到返回-1；
+string find_first_of();
+string find_last_of();
+string find_first_not_of();
+string find_last_not_of();
 ```
 
 #### 替换
@@ -1278,6 +1292,7 @@ string &erase (int pos =0,int n=npos);//如果无参的化，默认从头删到�
 
 ```cpp
 string substr ( size_t pos = 0, size_t n = npos ) const;//pos为起始位置（默认为0），n为结束位置（默认为npos）
+//为半区间[)
 ```
 
 #### 从string中拆分单词
