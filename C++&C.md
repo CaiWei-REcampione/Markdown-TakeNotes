@@ -31,6 +31,22 @@ typename* name=new <typename>;
 |       double       |
 |    long double     |
 
+## 判断是否溢出
+
+*    最值
+
+INT_MAX
+
+```cpp
+int main(){
+    int a,b;
+    if(INT_MAX/b<a){
+        return 0;
+    }
+    return a*b;
+}
+```
+
 
 
 # system("")指令
@@ -1435,7 +1451,12 @@ string to_string (long double val);
 
 ### <span id="set">set</span>/<span id="multiset">multiset</span>
 
-### <span id="map">map</span>/<span id="multimap">multimap</span>
+### <span id="map">map</span>
+
+map是STL的一个关联容器，提供一对一的数据处理能力
+
+-    第一个参数称为关键字，每个关键字只能在map中出现一次
+-    第二个参数称为该关键字的值
 
 |      函数       | 含义                            |
 | :-------------: | :------------------------------ |
@@ -1463,6 +1484,75 @@ string to_string (long double val);
 
 >    The elements of a map<string,int> are of type pair<string,int>;
 >    The first member of a pair is called first and the second member second.
+
+#### map构造函数
+
+```cpp
+map<int,string> mapname;
+```
+
+#### map数据插入操作
+
+##### 使用insert函数插入pair数据
+
+```cpp
+mapname.insert(pair<int,string>(1,"zhao"));
+mapname.insert(pair<int,string>(2,"qian"));
+mapname.insert(pair<int,string>(3,"sum"));
+```
+
+##### 使用数组
+
+```cpp
+mapname[1]="zhao";
+mapname[2]="qian";
+mapname[3]="sum";
+```
+
+>    用insert插入数据，涉及到集合的唯一性，当map中有这个关键字时，insert不能实现数据的插入
+>
+>    使用数组方式插入数据，插入的数据会覆盖该关键字之前对应的值
+
+#### 遍历map
+
+```cpp
+cout<<"content of map as followed: \n";
+map<string,int>::iterator iter;
+for(iter=mapname.begin();iter!=mapname.end();iter++){
+    cout<<iter->first<<" "<<iter->second<<endl;
+}
+```
+
+#### map中的查找
+
+```cpp
+map<string,int>::iterator iter;
+iter=mapname.find(key);
+if(iter!=mapname.end()){
+    cout<<"find\n";
+}
+else{
+    cout<<"not find\n";
+}
+```
+
+#### map中的删除
+
+##### 清空map
+
+```cpp
+mapname.clear();
+```
+
+##### 删除map中的指定数据
+
+```cpp
+map<string,int>::iterator iter;
+iter=mapname.find(2);
+mapname.erase(iter);
+```
+
+### <span id="multimap">multimap</span>
 
 ## 迭代器
 
