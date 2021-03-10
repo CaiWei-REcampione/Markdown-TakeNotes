@@ -7,6 +7,16 @@
 -    边界条件
 -    差错处理
 
+## 调试
+
+### 运行时间
+
+```cpp
+cout << "The run time is: " << (double)clock() / CLOCKS_PER_SEC << "s" << std::endl;
+```
+
+
+
 # 参数声明
 
 ```c++
@@ -1388,8 +1398,10 @@ string &insert(int pos,const char *s);//在pos位插入s字符串
 #### 删除
 
 ```cpp
-string &erase (int pos =0,int n=npos);//如果无参的化，默认从头删到尾
+basic_string & erase(size_type pos=0, size_type n=npos);
 ```
+
+即从给定起始位置pos处开始删除, 要删除字符的长度为n, 返回值修改后的string对象引用
 
 #### 获得子字符串
 
@@ -1462,6 +1474,16 @@ string to_string (long double val);
 ### <span id="set">set</span>/<span id="multiset">multiset</span>
 
 ### <span id="map">map</span>
+
+#### 特性
+
+从小到大排序
+
+key值不重复
+
+
+
+为了实现快速查找，map内部本身就是按序存储的（比如红黑树）。在我们插入<key, value>键值对时，就会按照key的大小顺序进行存储。这也是作为key的类型必须能够进行<运算比较的原因。现在我们用string类型作为key，因此，我们的存储就是按字典排序储存的。
 
 map是STL的一个关联容器，提供一对一的数据处理能力
 
