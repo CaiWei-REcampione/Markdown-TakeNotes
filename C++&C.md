@@ -1473,6 +1473,109 @@ string to_string (long double val);
 
 ### <span id="set">set</span>/<span id="multiset">multiset</span>
 
+（1）set是STL中一个很有用的容器，用来存储同一种数据类型的数据结构（可以称之为K的模型），基本功能与数组相似。
+（2）set与数组不同的是，在set中每个元素的值都是唯一的。
+（3）而且set插入数据时，能够根据元素的值自动进行排序。
+（4）set中数元素的值并不能直接被改变。
+
+#### 概念区别
+
+（1）set的底层是红黑树，是红黑树里面K的模型；
+
+K模型：表示只能存放同一种数据类型
+KV模型：表示能存放两种数据类型
+
+（2）map的底层也是红黑树，而它是KV模型。
+（3）set不允许插入重复数据，而multiset允许插入相同的数据。
+
+>    补充：multiset：multiset功能与set类似，接口也基本一样，最主要的区别是：set不允许数据冗余，而multiset允许数据冗余
+
+#### 模板参数定义
+
+```cpp
+template < class T,                        // 表示set里面存放的数据类型
+           class Compare = less<T>,        // 仿函数，可以指定让set按照什么方式进行比较数据
+           class Alloc = allocator<T>     // 空间配置器，默认是系统提供的
+         >
+```
+
+##### 插入数据（接口为insert）
+
+```cpp
+pair<iterator,bool> insert (const value_type& val);
+
+iterator insert (iterator position, const value_type& val);
+
+template <class InputIterator>   
+void insert (InputIterator first, InputIterator last);
+```
+
+##### set的遍历
+
+###### 正向迭代器
+
+```cpp
+set<int>::iterator it1 = s.begin();
+while (it1 != s.end())
+{
+     cout << *it1 << " ";
+     ++it1;
+}
+```
+
+###### 反向迭代器
+
+```cpp
+set<int>::reverse_iterator it1 = s.rbegin();
+while (it1 != s.rend())
+{
+     cout << *it1 << " ";
+     ++it1;
+}
+cout << endl;
+```
+
+##### set删除数据（接口为erase)
+
+###### 删除某个位置
+
+```cpp
+set<int>::iterator pos = s.find(10);
+if (pos != s.end())   //！=s.end()说明数据存在
+{
+    s.erase(pos);
+}
+```
+
+###### 删除某个区间
+
+```cpp
+void erase (iterator first, iterator last);
+```
+
+利用该方式删除的是一个左闭右开的区间；（即last表示最后一个删除数据的下一个位置）；
+
+##### set查找数据（接口为find)
+
+```cpp
+iterator   find (const value_type& val)  const;
+```
+
+##### count（统计数据是否存在于set里面）
+
+```cpp
+size_type    count (const value_type& val)   const;
+```
+
+（1）返回值只有0或1；
+（2）如果返回1说明查找的数据存在，如果查找的数据不存在则返回零。
+注意：multiset的count返回该值出现的次数；
+
+##### swap
+
+（1）交换两个set,接口及参数如下：void swap (set& x);
+（2）底层是将两个set的根进行交换
+
 ### <span id="map">map</span>
 
 #### 特性
@@ -1583,6 +1686,18 @@ map<string,int>::iterator iter;
 iter=mapname.find(2);
 mapname.erase(iter);
 ```
+
+##### 遍历map并删除数据
+
+```cpp
+for( std::map<int, int>::iterator iter = test_map.begin(); iter != test_map.end(); ){
+     if( iter->first % 2 == 0){
+         iter = test_map.erase(iter);
+     }else iter++;
+  }
+```
+
+
 
 ### <span id="multimap">multimap</span>
 
