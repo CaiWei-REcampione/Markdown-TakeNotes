@@ -1135,6 +1135,14 @@ name_one.insert(name_one.end(),name_two.begin(),name_two.end());
 
 #### <span id="二维vector">二维vector</span>
 
+*    已知vector行数，直接定义
+
+```cpp
+vector<vector<type-name>>vector-name(rowNumber,vector<type-name>());
+```
+
+
+
 -    先定义好二维数组结构，再直接赋值
 
 ```cpp
@@ -1467,7 +1475,169 @@ string to_string (long double val);
 
 ### <span id="queue">queue</span>
 
+queue 和 stack 有一些成员函数相似，但在一些情况下，工作方式有些不同：
+
+#### front()
+
+返回 queue 中第一个元素的引用。如果 queue 是常量，就返回一个常引用；如果 queue 为空，返回值是未定义的。
+
+#### back()
+
+返回 queue 中最后一个元素的引用。如果 queue 是常量，就返回一个常引用；如果 queue 为空，返回值是未定义的。
+
+#### push(const T& obj)
+
+在 queue 的尾部添加一个元素的副本。这是通过调用底层容器的成员函数 push_back() 来完成的。
+
+#### push(T&& obj)
+
+以移动的方式在 queue 的尾部添加元素。这是通过调用底层容器的具有右值引用参数的成员函数 push_back() 来完成的。
+
+#### pop()
+
+删除 queue 中的第一个元素。
+
+#### size()
+
+返回 queue 中元素的个数。
+
+#### empty()
+
+如果 queue 中没有元素的话，返回 true。
+
+#### emplace()
+
+用传给 emplace() 的参数调用 T 的构造函数，在 queue 的尾部生成对象。
+
+#### swap(queue<Template-name> &other_q)
+
+将当前 queue 中的元素和参数 queue 中的元素交换。它们需要包含相同类型的元素。也可以调用全局函数模板 swap() 来完成同样的操作。
+
+
+queue<T> 模板定义了拷贝和移动版的 operator=()，对于所保存元素类型相同的 queue 对象，它们有一整套的比较运算符，这些运算符的工作方式和 stack 容器相同。
+
+和 stack 一样，queue 也没有迭代器。访问元素的唯一方式是遍历容器内容，并移除访问过的每一个元素。
+
 ### <span id="list">list</span>
+
+声明一个int型的list：
+
+```cpp
+list<int> a；
+```
+
+#### list的构造函数
+
+```cpp
+list<int>a{1,2,3}
+list<int>a(n)    //声明一个n个元素的列表，每个元素都是0
+list<int>a(n, m)  //声明一个n个元素的列表，每个元素都是m
+list<int>a(first, last)  //声明一个列表，其元素的初始值来源于由区间所指定的序列中的元素，first和last是迭代器
+```
+
+#### begin()、end()
+
+通过调用list容器的成员函数begin()得到一个指向容器起始位置的iterator，可以调用list容器的end()函数来得到list末端下一位置
+
+#### push_back()、push_front()
+
+使用list的成员函数push_back和push_front插入一个元素到list中。其中push_back()是从list的末端插入，而push_front()是从list的头部插入。
+
+#### empty()
+
+判断list是否为空 
+
+#### resize()
+
+调用resize(n)将list的长度改为只容纳n个元素，超出的元素将被删除。如果n比list原来的长度长，那么默认超出的部分元素置为0。也可以用resize(n, m)的方式将超出的部分赋值为m。
+
+#### clear()
+
+清空list中的所有元素 
+
+#### front()、back()
+
+通过front()可以获得list容器中的头部元素，通过back()可以获得list容器的最后一个元素。
+
+注意：当list元素为空时，这时候调用front()和back()不会报错。因此在编写程序时，最好先调用empty()函数判断list是否为空，再调用front()和back()函数。
+
+#### pop_back()、pop_front()
+
+使用pop_back()可以删掉尾部第一个元素，pop_front()可以删掉头部第一个元素。注意：list必须不为空，如果当list为空的时候调用pop_back()和pop_front()会使程序崩掉。
+
+#### assign()
+
+有两种使用情况：
+
+*    a.assign(n, val):将a中的所有元素替换成n个val元素
+*    a.assign(b.begin(), b.end()) 
+
+#### swap()
+
+交换两个链表。a.swap(b)和swap(a, b)，都可以完成a链表和b链表的交换。
+
+#### reverse()
+
+可以实现list的逆置 
+
+#### merge()
+
+a.merge(b) 调用结束后b变为空，a中元素包含原来a和b的元素。
+
+#### insert()
+
+在指定位置插入一个或多个元素
+
+```cpp
+a.insert(a.begin(),100);  //在a的开始位置（即头部）插入100
+a.insert(a.begin(),2, 100);   //在a的开始位置插入2个100
+a.insert(a.begin(),b.begin(), b.end());//在a的开始位置插入b从开始到结束的所有位置的元素
+```
+
+#### erase()
+
+删除一个元素或一个区域的元素
+
+```cpp
+a.erase(a.begin());  //将a的第一个元素删除
+a.erase(a.begin(),a.end());  //将a的从begin()到end()之间的元素删除。
+```
+
+#### remove()
+
+从list中删除元素
+
+#### remove_if()函数
+
+括号中可以传入
+
+*    回调函数
+
+回调函数的原型为boolisRemove(T &obj1);
+
+函数名任意，如果obj1需要被移除则返回1，否则返回0
+
+使用方法：
+
+```cpp
+list.remove_if(isRemove);
+```
+
+这种方法最简单，但是无法向回调函数中传递参数，每一个条件就要有一个回调函数，因此不推荐使用
+
+*    创建用于比较的类，传入类名及初始化参数
+
+用于比较的类必须重载bool operator()(T &obj1)方法，如果obj1需要被移除则返回1，否则返回0.
+
+用于比较的类还应当包含必要的构造函数，用于传递参数。
+
+使用方法：
+
+```cp
+list.remove_if(classname(args));
+```
+
+
 
 ### priority_queue
 
