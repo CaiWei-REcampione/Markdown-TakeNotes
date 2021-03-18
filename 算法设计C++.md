@@ -156,3 +156,25 @@ bool binarySearch(vector<T>vec, int target) {
 	return false;
 }
 ```
+
+# 拆分字符串
+
+## 生成单词
+
+```cpp
+/// <summary>
+/// detached string
+/// </summary>
+/// <param name="str">object string</param>
+/// <returns>vector of the string</returns>
+vector<string> detachedString(string& str) {
+	istringstream ss(str);
+	vector<string>res;
+	string temp;
+	while (ss >> temp) {
+		res.push_back(temp);
+	}
+	return res;
+}
+```
+
