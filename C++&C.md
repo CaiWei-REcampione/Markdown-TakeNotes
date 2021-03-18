@@ -1838,7 +1838,7 @@ if(iter!=mapname.end()){
 }
 else{
     cout<<"not find\n";
-}
+}//find没有查找到，就返回mapname.end()
 ```
 
 #### map中的删除

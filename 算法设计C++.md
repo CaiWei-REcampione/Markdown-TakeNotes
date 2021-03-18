@@ -178,3 +178,27 @@ vector<string> detachedString(string& str) {
 }
 ```
 
+# 计数
+
+```cpp
+/// <summary>
+/// count for the value
+/// </summary>
+/// <typeparam name="T">typename</typeparam>
+/// <param name="vec">vector</param>
+/// <returns>return map</returns>
+template<typename T>
+map<T, int> count(vector<T>& vec) {
+	map<T, int>res;
+	for (int i = 0; i < vec.size(); i++) {
+		if (res.find(vec[i]) == res.end()) {
+			res[vec[i]] = 1;
+		}
+		else {
+			res[vec[i]]++;
+		}
+	}
+	return res;
+}
+```
+
