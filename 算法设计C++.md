@@ -202,3 +202,242 @@ map<T, int> count(vector<T>& vec) {
 }
 ```
 
+# 质数
+
+```cpp
+/// <summary>
+/// get primes
+/// </summary>
+/// <param name="n">range of the primes</param>
+/// <returns>vector of the primes</returns>
+vector<int> primes(int n) {
+	vector<int>res;
+	if (n <= 0) {
+		return res;
+	}
+	bool* notPrime = new bool[n];
+	for (int i = 0; i < n; i++) {
+		notPrime[i] = false;
+	}
+	for (int i = 2; i < n; i++) {
+		if (notPrime[i] == false) {
+			res.push_back(i);
+		}
+		for (int j = 2; i * j < n; j++) {
+			notPrime[i * j] = true;
+		}
+	}
+	return res;
+}
+```
+
+# 最小公约数
+
+```cpp
+//辗转相除法求最大公约数函数
+int divisor(int a, int b) {
+	int temp;
+
+	//比较两个数的大小，值大的数为a，值小的数为b
+	if (a < b) {
+		temp = a;
+		a = b;
+		b = temp;
+	}
+
+	//求余
+	while (b != 0) {
+		temp = a % b;
+		a = b;
+		b = temp;
+	}
+	return a;
+}
+
+//求最小公倍数
+int multiple(int a, int b) {
+	int divisor(int a, int b);
+	int temp;
+	temp = divisor(a, b);
+	return(a * b / temp);
+}
+
+//函数递归调用求最大公约数
+int gcd(int a, int b) {
+	if (a % b == 0) {
+		return b;
+	}
+	else {
+		return gcd(b, a % b);
+	}
+}
+
+//穷举法求最大公约数
+int divisor1(int a, int b) {
+	int temp;
+	temp = (a > b) ? b : a;   //求较小值
+	while (temp > 0) {
+		if (a % temp == 0 && b % temp == 0) {
+			break;
+		}
+		else {
+			temp--;
+		}
+	}
+	return (temp);
+}
+
+//穷举法求最小公倍数
+int multiple1(int a, int b) {
+	int p, q, temp;
+	p = (a > b) ? a : b;  //求两数中的最大值
+	q = (a > b) ? b : a;  //求两数中的最小值
+	temp = p;
+	while (1) {
+		if (p % q == 0) {
+			break;
+		}
+		else {
+			p += temp;
+		}
+	}
+	return (p);
+}
+
+//更相减损法求最大公约数
+int gcd1(int a, int b) {
+	int i = 0, temp, x = 0;
+	while (a % 2 == 0 && b % 2 == 0) {    //m,n有公约数2时
+		a /= 2;
+		b /= 2;
+		i += 1;
+	}
+	//a,b的值互换
+	if (a < b) {
+		temp = a;
+		a = b;
+		b = temp;
+	}
+	while (x) {
+		x = a - b;
+		a = (b > x) ? b : x;   
+		b = (b < x) ? b : x;
+		if (b == (a - b)) {    //差和减数相等
+			break;
+		}
+	}
+	if (i == 0) {
+		return b;
+	}
+	else {
+		return (int)pow(2, i)*b;
+	}
+}
+```
+
+# 最大公倍数
+
+```cpp
+int lcm(int m, int n)
+{
+	int max;
+	if (m < n)
+	{
+		max = n;
+	}
+	else
+	{
+		max = m;
+	}
+	
+	while (true)
+	{
+		if (max % m == 0 && max % n == 0 )
+		{
+			return max;
+		}
+		
+		max++;
+	}
+}
+```
+
+# 进制转换
+
+## 十进制转二进制
+
+```cpp
+/// <summary>
+/// get Binary
+/// </summary>
+/// <param name="x">Decimalism value</param>
+/// <returns>vector of the Binary Code</returns>
+vector<int> getBinary(int x){
+    vector<int>res(32,0);
+    if(x>=0){
+        int i=0;
+        while(x!=0){
+            res[31-i]=x%2;
+            x/=2;
+            i++;
+        }
+    }
+    else{
+        x=abs(x);
+        int i=0;
+        while(x!=0){
+            res[31-i]=x%2;
+            x/=2;
+            i++;
+        }
+        for(int i=0;i<32;i++){
+            if(res[i]==0){
+                res[i]=1;
+            }
+            else{
+                res[i]=0;
+            }
+        }
+        for(int i=31;i>=0;i--){
+            if(res[i]==0){
+                res[i]=1;
+                break;
+            }
+            else{
+                res[i]=0;
+            }
+        }
+    }
+    return res;
+}
+```
+
+## 十进制转十六进制
+
+```cpp
+/// <summary>
+/// get Hex
+/// </summary>
+/// <param name="x">Hex value</param>
+/// <returns>vector of the Hex Code</returns>
+string toHex(int num) {
+    if(num==0){
+        return "0";
+    }
+    int len=0;
+    string ans="";
+    while(num&&len<8){
+        int bit=num&15;
+        if(bit<10){
+            ans=(char)('0'+bit)+ans;
+        }
+        else{
+            ans=(char)('a'+bit-10)+ans;
+        }
+        num>>=4;
+        len++;
+    }
+    return ans;
+}
+```
+

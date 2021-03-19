@@ -57,7 +57,42 @@ int main(){
 }
 ```
 
+## memset初始化
 
+C++中，memset通常包含在头<cstring>中。
+
+```cpp
+/*
+第一个参是指针变量，指向任何类型的数据
+第二个参是赋值量，表示要初始化的值（int类型）
+第三个参是赋值内存的大小
+*/
+void* __cdecl memset(
+    _Out_writes_bytes_all_(_Size) void*  _Dst,
+    _In_                          int    _Val,
+    _In_                          size_t _Size
+    );
+```
+
+### bool类赋值
+
+```cpp
+memset(a,0,sizeof(a))；//0是false 1是true
+```
+
+### char数组类赋值
+
+```cpp
+memset(ch,‘I’,sizeof(ch)); //初始化为对应字符
+memset(ch,65,sizeof(ch)); //直接用ascll码初始化
+```
+
+### int类赋值
+
+```cpp
+int num[10];
+memset(num,0,sizeof(num));
+```
 
 # system("")指令
 
@@ -332,6 +367,10 @@ swap包含在命名空间std里面
 | reverse(object.begin(),object.end()) | 翻转       |
 
 *    sort()为类模板，需要声明其类型
+
+     *    如果cmp返回结果为假, 那么函数就会将他们互换位置；
+
+          如果cmp返回结果为真，就会保持原来位置不变。
 
 [为数组vector排序](#vector排序)
 
