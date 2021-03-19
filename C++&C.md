@@ -94,6 +94,22 @@ int num[10];
 memset(num,0,sizeof(num));
 ```
 
+# 函数
+
+*    声明
+
+*    定义
+
+*    参数
+
+*    返回
+
+*    ```cpp
+     returntypename functionname(parametertype name1,parametertype name2,...){
+         return value;
+     }
+     ```
+
 # system("")指令
 
 下面列出常用的DOS命令,都可以用system函数调用:
@@ -429,6 +445,19 @@ for (int i = 0; i < length; ++i)
 [二维vector](#二维vector)
 
 # class 类
+
+```cpp
+class classname{
+public:
+    friend function;
+    classname();
+    ~classname();
+private:
+protected:
+};
+```
+
+
 
 |   权限    |      |
 | :-------: | :--: |
