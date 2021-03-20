@@ -1154,6 +1154,21 @@ STL不是面向对象编程，而是泛型编程
 |      [map](#map)      | **关联容器**，按照{键，值}方式组成集合，按照键组织成一棵**红黑树**，查找的时间复杂度O(logN)，其中键不允许重复。 |
 | [multimap](#multimap) | 和map一样，区别是**键可以重复**                              |
 
+## 遍历
+
+```cpp
+vector<int>vec;
+for(vector<int>::iterator iter=vec.begin();iter!=vec.end();iter++){
+    cout<<setw(4)<<left<<*iter;
+}
+for(int i=0;i<vec.size();i++){
+    cout<<setw(4)<<left<<vec[i];
+}
+for(int x:vec){
+    cout<<setw(4)<<left<<x;
+}
+```
+
 ### <span id="vector">vector</span>
 
 #### 前置
@@ -1190,12 +1205,19 @@ vector[idx];   //返回索引idx所指的数据，越界时，运行直接报错
 
 >    访问数组使用[]运算符与数组相似，都是从0开始
 
+#### 插入数据
+
+```cpp
+terator insert( iterator loc, const TYPE &val );
+void insert( iterator loc, size_type num, const TYPE &val );
+void insert( iterator loc, input_iterator start, input_iterator end );
+```
+
 #### 合并两个vector
 
 ```c++
 #include <vector>
 using namespace std;
-
 vector<type_name> name_one(size);
 vector<type_name> name_two(size);
 name_one.insert(name_one.end(),name_two.begin(),name_two.end());

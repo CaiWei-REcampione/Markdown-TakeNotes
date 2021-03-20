@@ -545,7 +545,51 @@ string toHex(int num) {
 }
 ```
 
-# 获得不同的vector unique	
+# 补数
+
+```cpp
+int findComplement(int num) {
+    vector<int>res;
+    while(num!=0){
+        res.push_back(num%2);
+        num/=2;
+    }
+    for(int &x:res){
+        if(x==1){
+            x=0;
+        }
+        else{
+            x=1;
+        }
+    }
+    int count=0;
+    for(int i=0;i<res.size();i++){
+        count+=pow(2,i)*res[i];
+    }
+    return count;
+}
+```
+
+# 判断是非为n的幂
+
+```cpp
+bool isPowerOfN(int num,int n) {
+	if (num <= 0) {
+		return false;
+	}
+	while (num != 0) {
+		if (num % n != 0 and num != 1) {
+			return false;
+		}
+		else {
+			num /= n;
+		}
+	}
+	return true;
+}
+```
+
+# 获得不同的vector序列 unique
 
 ```cpp
 /// <summary>
