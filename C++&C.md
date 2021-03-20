@@ -1166,7 +1166,7 @@ using namespace std;
 #### 声明
 
 ```c++
-vector<type-name>name(length);
+vector<type-name>name(length,initialize value);
 ```
 
 vector使用动态内存分配，可以用初始化参数来指出需要多少矢量
