@@ -48,7 +48,7 @@ vector<T>selectionSort(vector<T>vec) {
 }
 ```
 
-### 插入排序	insertionSort
+## 插入排序	insertionSort
 
 ```cpp
 /// <summary>
@@ -72,7 +72,7 @@ vector<T> insertionSort(vector<T> vec) {
 }
 ```
 
-### 快速排序	quickSort
+## 快速排序	quickSort
 
 ```cpp
 /// <summary>
@@ -91,7 +91,7 @@ template<typename T>
 void quickSort(vector<T>& vec, int left, int right) {
 	int middle = vec[(left + right) / 2];
 	int tleft = left, tright = right;
-	while (tleft < tright) {
+	while (tleft <= tright) {
 		while (vec[tleft] < middle) {
 			tleft++;
 		}
@@ -117,13 +117,53 @@ void quickSort(vector<T>& vec, int left, int right) {
 }
 ```
 
->    简便方法
->
->    使用<algorithm>头文件的sort函数
->
->    sort(object.begin(),object.end(),less<>())//从小到大
->
->    sort(object.begin(),object.end(),greater<>())//从大到小
+## sort函数
+
+```cpp
+/// <summary>
+/// greater to lower
+/// </summary>
+/// <typeparam name="T">typename</typeparam>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <returns>
+/// true: don't swap
+/// false: swap
+/// </returns>
+template<typename T>
+bool cmp(T a, T b) {
+	if (a > b) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+```
+
+```cpp
+/// <summary>
+/// lower to greater
+/// </summary>
+/// <typeparam name="T">typename</typeparam>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <returns>
+/// true: don't swap
+/// false: swap
+/// </returns>
+template<typename T>
+bool cmp(T a, T b) {
+	if (a < b) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+```
+
+
 
 # 查找
 
@@ -155,6 +195,30 @@ bool binarySearch(vector<T>vec, int target) {
 	}
 	return false;
 }
+```
+
+## 查找是否有相同的值
+
+```cpp
+/// <summary>
+/// find if vector has equal value item
+/// </summary>
+/// <typeparam name="T">typename</typeparam>
+/// <param name="vec"></param>
+/// <returns></returns>
+bool findEqual(vector<T> vec) {
+	map<T, bool>hash;
+	for (int i = 0; i < vec.size(); i++) {
+		if (hash.find(vec[i]) == hash.end()) {
+			hash[vec[i]] = true;
+		}
+		else {
+			return true;
+		}
+	}
+	return false;
+}
+
 ```
 
 # 拆分字符串
@@ -201,6 +265,46 @@ map<T, int> count(vector<T>& vec) {
 	return res;
 }
 ```
+
+```cpp
+/// <summary>
+/// count number of the vector item value
+/// </summary>
+/// <typeparam name="T">typename</typeparam>
+/// <param name="vec">vector</param>
+/// <returns>return pair of the vector</returns>
+template<typename T>
+vector<pair<T, int>> count(vector<T>& vec) {
+	vector<pair<T, int>>res;
+	if (vec.size() == 0) {
+		return res;
+	}
+	else {
+		pair<T, int>temp;
+		temp.first = vec[0];
+		temp.second = 1;
+		res.push_back(temp);
+		for (int i = 1; i < vec.size(); i++) {
+			bool find = false;
+			for (int j = 0; j < res.size(); j++) {
+				if (res[j].first == vec[i]) {
+					res[j].second++;
+					find = true;
+					break;
+				}
+			}
+			if (!find) {
+				temp.first = vec[i];
+				temp.second = 1;
+				res.push_back(temp);
+			}
+		}
+		return res;
+	}
+}
+```
+
+
 
 # 质数
 
@@ -438,6 +542,44 @@ string toHex(int num) {
         len++;
     }
     return ans;
+}
+```
+
+# 获得不同的vector unique	
+
+```cpp
+/// <summary>
+/// greater to lower
+/// </summary>
+/// <typeparam name="T">typename</typeparam>
+/// <param name="a"></param>
+/// <param name="b"></param>
+/// <returns>
+/// true: don't swap
+/// false: swap
+/// </returns>
+template<typename T>
+bool cmp(T a, T b) {
+	if (a > b) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+/// <summary>
+/// get difference vector
+/// </summary>
+/// <typeparam name="T">typename</typeparam>
+/// <param name="vec">vector</param>
+/// <returns>difference vector</returns>
+template<typename T>
+vector<T> getDifference(vector<T> vec) {
+	vector<T>res = vec;
+	sort(res.begin(), res.end(), cmp<T>);
+	auto iter = unique(res.begin(), res.end());
+	res.erase(iter, res.end());
+	return res;
 }
 ```
 
