@@ -244,7 +244,7 @@ vector<string> detachedString(string& str) {
 
 # 计数
 
-*    map
+## map
 
 ```cpp
 /// <summary>
@@ -268,7 +268,7 @@ map<T, int> count(vector<T>& vec) {
 }
 ```
 
-*    vector
+## vector+pair
 
 ```cpp
 /// <summary>
@@ -308,7 +308,7 @@ vector<pair<T, int>> count(vector<T>& vec) {
 }
 ```
 
-*    vector
+## vector(26,0)——只出现英文单词
 
 ```cpp
 string str = "frtrhehgvaewhrqhfbvzvjkaheglaefsdarg";
@@ -646,7 +646,7 @@ vector<T> getDifference(vector<T> vec) {
 }
 ```
 
-# DP
+# DP动态规划
 
 ```cpp
 int longestIncreasingSubsequence(vector<int>& nums) {
@@ -2460,6 +2460,67 @@ public:
     }
 };
 ```
+
+# 52. 下一个排列
+
+给定一个整数数组来表示排列，找出其之后的一个排列。
+
+### 样例
+
+例1:
+
+```
+输入:[1]
+输出:[1]
+```
+
+例2:
+
+```
+输入:[1,3,2,3]
+输出:[1,3,3,2]
+```
+
+例3:
+
+```
+输入:[4,3,2,1]
+输出:[1,2,3,4]
+```
+
+### 注意事项
+
+排列中可能包含重复的整数
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: A list of integers
+     * @return: A list of integers
+     */
+    vector<int> nextPermutation(vector<int> &nums) {
+        if(nums.size()==1){
+            return nums;
+        }
+        int i=nums.size()-2;
+        while(i>=0 and nums[i]>=nums[i+1]){
+            i--;
+        }
+        int j=nums.size()-1;
+        if(i>=0){
+            while(nums[j]<=nums[i]){
+                j--;
+            }
+            swap(nums[i],nums[j]);
+        }
+        reverse(nums.begin()+i+1,nums.end());
+        return nums;
+    }
+};
+```
+
+
 
 # 53. 翻转字符串中的单词
 
