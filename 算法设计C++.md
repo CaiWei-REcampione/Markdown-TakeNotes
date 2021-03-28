@@ -4278,6 +4278,77 @@ public:
 };
 ```
 
+# 408. 二进制求和
+
+给定两个二进制字符串，返回他们的和（用二进制表示）。
+
+### 样例
+
+**样例 1：**
+
+```
+输入：
+a = "0", b = "0"
+输出：
+"0"
+```
+
+**样例 2：**
+
+```
+输入：
+a = "11", b = "1"
+输出：
+"100"
+```
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param a: a number
+     * @param b: a number
+     * @return: the result
+     */
+    string addBinary(string &a, string &b) {
+		int size=max(a.size(),b.size());
+		string res;
+		reverse(a.begin(),a.end());
+		reverse(b.begin(),b.end());
+		int carry=0;
+		for(int i=0;i<size;i++){
+			int tempa,tempb;
+			if(i<a.size()){
+				tempa=a[i]-'0';
+			}
+			else{
+				tempa=0;
+			}
+			if(i<b.size()){
+				tempb=b[i]-'0';
+			}
+			else{
+				tempb=0;
+			}
+			int sum=carry+tempa+tempb;
+			carry=0;
+			if(sum>=2){
+				carry=1;
+				sum-=2;
+			}
+			res.push_back(sum+'0');
+		}
+		if(carry==1){
+			res.push_back('1');
+		}
+		reverse(res.begin(),res.end());
+		return res;
+    }
+};
+```
+
+
+
 # 1746. 二叉搜索树结点最小距离
 
 给定一个二叉搜索树的根结点 root, 返回树中任意两节点的差的最小值。
