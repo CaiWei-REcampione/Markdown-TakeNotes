@@ -2091,8 +2091,6 @@ std::sort(sutVector.begin(), stuVector.end(), Less());
 
 ## 仿函数
 
-
-
 # c++输入和输出
 
 ## 流和缓冲区
@@ -2109,6 +2107,26 @@ C++程序把输入和输出看做字节流。输入时，程序从输入流中�
 缓冲区是用作中介的内存块，将信息从设备传输到程序或从程序传输给设备的临时存储工具。
 
 输出时，程序首先填满缓冲区，然后把整块数据传输给硬盘，并清空缓冲区，以备下一批输出使用。这被称为**刷新缓冲区**。
+
+### 输出和指针
+
+```cpp
+char name[20]="Dudly Diddlemore";
+cout<<name;
+char *pn="Violet D'Amore";
+cout<<pn;
+```
+
+## 拼接输出
+
+```cpp
+ostream&operator<<(type);
+```
+
+```cpp
+string name="Mark";
+cout<<"My name is "<<name<<endl;
+```
 
 ## 流、缓冲区和iostream文件
 
@@ -2219,7 +2237,9 @@ width()方法只影响将显示的下一个项目，然后字段宽度将恢复�
 用fill()成员函数来改变填充字符
 
 ```c++
-cout.fill('char');
+cout.fill('*');
+string str="fillchar";
+cout<<setw(20)<<str;
 ```
 
 ## 设置浮点数的显示精度
