@@ -41,6 +41,22 @@ typename* name=new <typename>;
 |       double       |
 |    long double     |
 
+## auto
+
+实现自动类型推断，进行显式初始化，让编译器能将变量的类型设置为初始值的类型
+
+## decltype
+
+将变量的类型声明为表达式指定的类型
+
+```cpp
+decltype(x) y;//让y的类型与x相同
+```
+
+### nullptr
+
+空指针是不会指向有效数据的指针，nullptr是指针类型，不能转换为整型数据
+
 ## 判断是否溢出
 
 *    最值
@@ -109,6 +125,20 @@ memset(num,0,sizeof(num));
          return value;
      }
      ```
+
+## lambda表达式
+
+```cpp
+[caputrue](params)opt->ret{body;};
+[函数对象参数] (操作符重载函数参数) mutable 或 exception 声明 -> 返回值类型 {函数体}
+```
+
+>    [] 不截取任何变量
+>    [&] 截取外部作用域中所有变量，并作为引用在函数体中使用
+>    [=] 截取外部作用域中所有变量，并拷贝一份在函数体中使用
+>    [=, &foo] 截取外部作用域中所有变量，并拷贝一份在函数体中使用，但是对foo变量使用引用
+>    [bar] 截取bar变量并且拷贝一份在函数体重使用，同时不截取其他变量
+>    [this] 截取当前类中的this指针。如果已经使用了&或者=就默认添加此选项。
 
 # system("")指令
 
@@ -540,6 +570,23 @@ baseDMA&baseDMA::operator=(const baseDMA&rs){//赋值运算符
 ```
 
 ### 地址运算符
+
+## 默认的方法和禁用的方法
+
+```cpp
+class Someclass{
+public:
+    Someclass()=default;
+    Someclass(const Someclass &)=delete;
+    Someclass& operator=(const Someclass &)=delete;
+    Someclass(Someclass &&)=default;
+    Someclass & operator=(Someclass &&)=default;
+    Someclass & operator+(const Someclass &)const;
+    ...
+}
+```
+
+
 
 ## 派生类和基类之间的关系
 
@@ -1158,12 +1205,14 @@ STL不是面向对象编程，而是泛型编程
 
 ```cpp
 vector<int>vec;
+///迭代器遍历
 for(vector<int>::iterator iter=vec.begin();iter!=vec.end();iter++){
     cout<<setw(4)<<left<<*iter;
 }
 for(int i=0;i<vec.size();i++){
     cout<<setw(4)<<left<<vec[i];
 }
+///基于范围的for循环
 for(int x:vec){
     cout<<setw(4)<<left<<x;
 }
@@ -2089,6 +2138,20 @@ std::sort(sutVector.begin(), stuVector.end(), Less());
 
 
 
+### generate随机数填充
+
+```cpp
+generate(vec.begin(), vec.end(), rand);
+```
+
+### count_if统计
+
+```cpp
+int count = count_if(vec.begin(), vec.end(), [](int x) {return x % 2 == 0; });
+```
+
+
+
 ## 仿函数
 
 # c++输入和输出
@@ -2646,6 +2709,40 @@ seek_dir参数是ios_base类中定义的另一种整型,有3个可能的值。
 streampos类型的值定位到文件中的一个位置。它可以是类,但如果是这样的话,这个类将包含一个接受streamoff参数的构造函数和一个接受整数参数的构造函数,以便将两种类型转换为streampos值。
 
 streampos值表示文件中的绝对位置(从文件开始处算起)。可以将streampos位置看作是相对于文件开始处的位置(以字节为单位,第一个字节的编号为0)。
+
+## 二进制
+
+### 读取文件
+
+```cpp
+/// <summary>
+/// 读取文件
+/// </summary>
+/// <returns></returns>
+while (fin.read((char*)&pl, sizeof(pl))) {
+    cout << setw(20) << pl.name << ": " << setprecision(0) << setw(6) << pl.g << endl;
+}
+fin.close();
+```
+
+### 输入文件
+
+```cpp
+/// <summary>
+/// 输出文件
+/// </summary>
+/// <returns></returns>
+fout.write((char*)&pl, sizeof(pl));
+```
+## 打印二进制文件内容
+
+```cpp
+while (fin.read((char*)&pl, sizeof(pl))) {
+    cout << setw(20) << pl.name << ": " << pl.population << setprecision(2) << setw(6) << pl.g << endl;
+}
+```
+
+
 
 ## 内核格式化
 
