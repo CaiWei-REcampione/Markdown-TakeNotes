@@ -2765,6 +2765,241 @@ public:
 };
 ```
 
+# 66.  二叉树的前序遍历
+
+描述
+
+给出一棵二叉树，返回其节点值的前序遍历。
+
+首个数据为根节点，后面接着是其左儿子和右儿子节点值，"#"表示不存在该子节点。节点数量不超过20
+
+样例
+
+**样例 1:**
+
+```
+输入：{1,2,3}
+输出：[1,2,3]
+解释：
+   1
+  / \
+ 2   3
+它将被序列化为{1,2,3}
+前序遍历
+```
+
+**样例 2:**
+
+```
+输入：{1,#,2,3}
+输出：[1,2,3]
+解释：
+1
+ \
+  2
+ /
+3
+它将被序列化为{1,#,2,3}
+前序遍历
+```
+
+挑战
+
+你能使用非递归实现么？
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: A Tree
+     * @return: Preorder in ArrayList which contains node values.
+     */
+    vector<int>preorder;
+    void traverse(TreeNode*root){
+        if(root==NULL){
+            return;
+        }
+        preorder.push_back(root->val);
+        traverse(root->left);
+        traverse(root->right);
+    }
+    vector<int> preorderTraversal(TreeNode * root) {
+        preorder.clear();
+        traverse(root);
+        return preorder;
+    }
+};
+```
+
+# 67.  二叉树的中序遍历
+
+描述
+
+给出一棵二叉树,返回其中序遍历
+
+样例
+
+**样例 1:**
+
+```
+输入：{1,2,3}
+输出：[2,1,3]
+解释：
+   1
+  / \
+ 2   3
+它将被序列化为{1,2,3}
+中序遍历
+```
+
+**样例 2:**
+
+```
+输入：{1,#,2,3}
+输出：[1,3,2]
+解释：
+1
+ \
+  2
+ /
+3
+它将被序列化为{1,#,2,3}
+中序遍历
+```
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: A Tree
+     * @return: Inorder in ArrayList which contains node values.
+     */
+    vector<int>res;
+    void traversal(TreeNode* root){
+        while(root==NULL){
+            return;
+        }
+        traversal(root->left);
+        res.push_back(root->val);
+        traversal(root->right);
+    }
+    vector<int> inorderTraversal(TreeNode * root) {
+        res.clear();
+        traversal(root);
+        return res;
+    }
+};
+```
+
+
+
+# 68. 二叉树的后序遍历
+
+描述
+
+给出一棵二叉树，返回其节点值的前序遍历。
+
+首个数据为根节点，后面接着是其左儿子和右儿子节点值，"#"表示不存在该子节点。节点数量不超过20
+
+样例
+
+**样例 1:**
+
+```
+输入：{1,2,3}
+输出：[1,2,3]
+解释：
+   1
+  / \
+ 2   3
+它将被序列化为{1,2,3}
+前序遍历
+```
+
+**样例 2:**
+
+```
+输入：{1,#,2,3}
+输出：[1,2,3]
+解释：
+1
+ \
+  2
+ /
+3
+它将被序列化为{1,#,2,3}
+前序遍历
+```
+
+挑战
+
+你能使用非递归实现么？
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: A Tree
+     * @return: Preorder in ArrayList which contains node values.
+     */
+    vector<int>preorder;
+    void traverse(TreeNode*root){
+        if(root==NULL){
+            return;
+        }
+        preorder.push_back(root->val);
+        traverse(root->left);
+        traverse(root->right);
+    }
+    vector<int> preorderTraversal(TreeNode * root) {
+        preorder.clear();
+        traverse(root);
+        return preorder;
+    }
+};
+```
+
+
+
 # 75. 寻找峰值
 
 你给出一个整数数组(size为n)，其具有以下特点：

@@ -500,3 +500,138 @@ set side='n'
 where side='m';
 ```
 
+# 2045 · 输出 Hello LintCode
+
+描述
+
+请编写 SQL 语句，返回 "Hello LintCode!" 语句，不用在意返回结果集的列名
+
+表定义：无
+
+样例
+
+表内容：（无）
+
+在运行你的 SQL 语句之后，表应返回：
+
+| Hello LintCode! |
+| --------------- |
+| Hello LintCode! |
+
+```cpp
+-- Write your SQL Query here --
+SELECT "Hello LintCode!"
+```
+
+
+
+# 2046 · 查询课程创建日期按 ‘年-月-日 时：分：秒’ 显示
+
+描述
+
+请编写 SQL 语句，查询 `courses` 表，查询课程创建时间，按照 ’年-月-日 时：分：秒’ 的格式返回结果，返回列名显示为 `DATE_FORMAT`。
+
+表定义: courses（课程表）
+
+|     列名      |     类型     |     注释     |
+| :-----------: | :----------: | :----------: |
+|      id       | int unsigned |     主键     |
+|     name      |   varchar    |   课程名称   |
+| student_count |     int      |   学生总数   |
+|  created_at   |     date     | 课程创建时间 |
+|  teacher_id   |     int      |   讲师 id    |
+
+查询返回列名需要与样例输出的列名大小写一致
+
+样例
+
+样例一：
+
+表内容：courses
+
+| **id** | **name**                | **student_count** | **created_at**     | **teacher_id** |
+| ------ | ----------------------- | ----------------- | ------------------ | -------------- |
+| 1      | Senior Algorithm        | 880               | 2020-6-1 09:03:12  | 4              |
+| 2      | System Design           | 1350              | 2020-7-18 10:03:12 | 3              |
+| 3      | Django                  | 780               | 2020-2-29 12:03:12 | 3              |
+| 4      | Web                     | 340               | 2020-4-22 13:03:12 | 4              |
+| 5      | Big Data                | 700               | 2020-9-11 16:03:12 | 1              |
+| 6      | Artificial Intelligence | 1660              | 2018-5-13 18:03:12 | 3              |
+| 7      | Java P6+                | 780               | 2019-1-19 13:03:12 | 3              |
+| 8      | Data Analysis           | 500               | 2019-7-12 13:03:12 | 1              |
+| 10     | Object Oriented Design  | 300               | 2020-8-8 13:03:12  | 4              |
+| 12     | Dynamic Programming     | 2000              | 2018-8-18 20:03:12 | 1              |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **DATE_FORMAT**     |
+| ------------------- |
+| 2020-06-01 09:03:12 |
+| 2020-07-18 10:03:12 |
+| 2020-02-29 12:03:12 |
+| 2020-04-22 13:03:12 |
+| 2020-09-11 16:03:12 |
+| 2018-05-13 18:03:12 |
+| 2019-01-19 13:03:12 |
+| 2019-07-12 13:03:12 |
+| 2020-08-08 13:03:12 |
+| 2018-08-18 20:03:12 |
+
+样例二：
+
+表内容：courses
+
+| **id** | **name**                | **student_count** | **created_at** | **teacher_id** |
+| ------ | ----------------------- | ----------------- | -------------- | -------------- |
+| 1      | Senior Algorithm        | 880               | null           | 4              |
+| 2      | System Design           | 1350              | null           | 3              |
+| 3      | Django                  | 780               | null           | 3              |
+| 4      | Web                     | 340               | null           | 4              |
+| 5      | Big Data                | 700               | null           | 1              |
+| 6      | Artificial Intelligence | 1660              | null           | 3              |
+| 7      | Java P6+                | 780               | null           | 3              |
+| 8      | Data Analysis           | 500               | null           | 1              |
+| 10     | Object Oriented Design  | 300               | null           | 4              |
+| 12     | Dynamic Programming     | 2000              | null           | 1              |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **DATE_FORMAT** |
+| --------------- |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+
+>    样例二中课程表中没有课程创建时间，所以统计结果为空。
+
+```cpp
+-- Write your SQL Query here -- 
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select DATE_FORMAT(created_at,'%Y-%m-%d %H:%i:%s') DATE_FORMAT 
+from courses;
+```
+
+## DATE_FORMAT() 用法
+
+我们在SQL中使用 `DATE_FORMAT()` 方法来格式化输出 date/time。
+需要注意的是 `DATE_FORMAT()` 函数返回的是**字符串**格式。
+
+**语法**
+
+```
+SELECT DATE_FORMAT(date,format);
+```
+
+其中
+
+`date` 一个有效日期。
+
+`format` 是 date/time 的输出格式。
+
