@@ -693,6 +693,14 @@ int jump(vector<int> &A) {
 
 ---
 
+# DFS
+
+深度优先遍历图算法步骤：
+
+1.   访问顶点v；
+2.   依次从v的未被访问的邻接点出发，对图进行深度优先遍历；直至图中和v有路径相通的顶点都被访问；
+3.   若此时图中尚有顶点未被访问，则从一个未被访问的顶点出发，重新进行深度优先遍历，直到图中所有顶点均被访问过为止。
+
 # LeetCode
 
 # 1. A + B 问题
@@ -3239,6 +3247,91 @@ public:
 };
 ```
 
+# 93.  平衡二叉树
+
+描述
+
+给定一个二叉树,确定它是高度平衡的。对于这个问题,一棵高度平衡的二叉树的定义是：一棵二叉树中每个节点的两个子树的深度相差不会超过1。 
+
+样例
+
+```
+样例  1:
+	输入: tree = {1,2,3}
+	输出: true
+	
+	样例解释:
+	如下，是一个平衡的二叉树。
+		  1  
+		 / \                
+		2  3
+
+	
+样例  2:
+	输入: tree = {3,9,20,#,#,15,7}
+	输出: true
+	
+	样例解释:
+	如下，是一个平衡的二叉树。
+		  3  
+		 / \                
+		9  20                
+		  /  \                
+		 15   7 
+
+	
+样例  2:
+	输入: tree = {1,#,2,3,4}
+	输出: false
+	
+	样例解释:
+	如下，是一个不平衡的二叉树。1的左右子树高度差2
+		  1  
+		   \                
+		   2                
+		  /  \                
+		 3   4
+	
+```
+
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: The root of binary tree.
+     * @return: True if this Binary tree is Balanced, or false.
+     */
+    bool isBalanced(TreeNode * root) {
+        return dfs(root).first;
+    }
+    pair<bool,int>dfs(TreeNode*root){
+        if(!root){
+            return {true,0};
+        }
+        auto l=dfs(root->left);
+        auto r=dfs(root->right);
+        pair<bool,int>ans={true,max(l.second,r.second)+1};
+        ans.first&=l.first&&r.first &&(abs(l.second-r.second)<=1);
+        return ans;
+    }
+};
+```
+
+
+
 # 100. 删除排序数组中的重复数字
 
 给定一个排序数组，在原数组中“删除”重复出现的数字，使得每个元素只出现一次，并且返回“新”数组的长度。
@@ -4374,6 +4467,63 @@ public:
 	}
 };
 ```
+
+# 185.  矩阵的之字型遍历
+
+描述
+
+给你一个包含 *m* x *n* 个元素的矩阵 (*m* 行, *n* 列), 求该矩阵的之字型遍历。
+
+样例
+
+```
+样例 1:
+	输入: [[1]]
+	输出:  [1]
+
+样例 2:
+	输入:   
+	[
+    [1, 2,  3,  4],
+    [5, 6,  7,  8],
+    [9,10, 11, 12]
+  ]
+
+	输出:  [1, 2, 5, 9, 6, 3, 4, 7, 10, 11, 8, 12]
+```
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param matrix: An array of integers
+     * @return: An array of integers
+     */
+    vector<int> printZMatrix(vector<vector<int>> &matrix) {
+        vector<int>ret;
+        if(matrix.empty()||matrix[0].empty()){
+            return ret;
+        }
+        int n=matrix.size(),m=matrix[0].size();
+        int i,j;
+        for(int s=0;s<=n+m-2;++s){
+            if(s%2!=0){
+                for(j=min(s,m-1),i=s-j;i<n and i>=0 and j<m and j>=0;++i,--j){
+                    ret.push_back(matrix[i][j]);
+                }
+            }
+            else{
+                for(i=min(s,n-1),j=s-i;i>=0 and i<n and j>=0 and j<m;--i,++j){
+                    ret.push_back(matrix[i][j]);
+                }
+            }
+        }
+        return ret;
+    }
+};
+```
+
+
 
 # 188. 插入五
 
