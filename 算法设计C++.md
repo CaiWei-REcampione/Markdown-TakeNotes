@@ -4650,6 +4650,51 @@ public:
 };
 ```
 
+# 334. 队列检查
+
+描述
+
+班上的学生根据他们的年级照片的身高升序排列，确定当前未站在正确位置的学生人数
+
+1<= len(heights) <=10^51<=*l**e**n*(*h**e**i**g**h**t**s*)<=1051<= heights[i] <= 10^91<=*h**e**i**g**h**t**s*[*i*]<=109
+
+样例
+
+```
+	输入:  heights = [1,1,3,3,4,1]
+	输出: 3
+	解释:  经过排序后 heights变成了[1,1,1,3,3,4]，有三个学生不在应在的位置上
+```
+
+```cpp
+bool cmp(int x,int y){
+    if(x<y){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+class Solution {
+public:
+    /**
+     * @param heights: Students height
+     * @return: How many people are not where they should be
+     */
+    int orderCheck(vector<int> &heights) {
+        int res=0;
+        vector<int>count(heights);
+        sort(count.begin(),count.end(),cmp);
+        for(int i=0;i<count.size();i++){
+            if(count[i]!=heights[i]){
+                res++;
+            }
+        }
+        return res;
+    }
+};
+```
+
 
 
 # 402. 连续子数组求和
