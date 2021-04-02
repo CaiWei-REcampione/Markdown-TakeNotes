@@ -4608,6 +4608,48 @@ public:
 };
 ```
 
+# 309.  交叉数组
+
+描述
+
+给定两个相同长度的数组，通过取第一个数组的第一个元素，第二个数组的第一个元素，第一个数组的第二个元素...依此类推来交叉它们。返回新的交错数组。
+注意 ： 长度 ≤ 10000
+
+样例
+
+```
+输入: 
+[1,2]
+[3,4]
+输出: 
+[1,3,2,4]
+```
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param A: the array A
+     * @param B: the array B
+     * @return: returns an alternate array of arrays A and B.
+     */
+    vector<int> interleavedArray(vector<int> &A, vector<int> &B) {
+        vector<int>res;
+        if(A.size()==0){
+            return res;
+        }
+        else{
+            size_t size= A.size();
+            for(int i=0;i<size;i++){
+                res.push_back(A[i]);
+                res.push_back(B[i]);
+            }
+        }
+        return res;
+    }
+};
+```
+
 
 
 # 402. 连续子数组求和
