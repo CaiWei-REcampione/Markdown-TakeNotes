@@ -954,6 +954,22 @@ template <typename T>void report(T& hf){...}
 
 通过在类中声明模板，可以创建非约束友元函数
 
+## 可变参数模板
+
+*    模板参数包（ parameter pack）
+*    函数参数包
+*    展开（ unpack）参数包
+*    递归
+
+```cpp
+template<typename...Args>
+void show_list(Args...args){
+	
+}
+```
+
+
+
 # 异常
 
 ## 调用abort()
