@@ -1,3 +1,230 @@
+# 嵌入式系统入门
+
+## 什么是嵌入式系统
+
+可以把嵌入式系统理解为一种为特定设备服务的软件硬件可裁剪的计算机
+系统。
+
+## 嵌入式系统应用领域
+
+*    家用电器和电子类产品
+
+*    交通工具
+
+*    公共电子设施
+
+## 嵌入式系统发展
+
+嵌入式系统的种类繁多， 按照系统硬件的核心处理器来说， 可以分成嵌入式微控制器和嵌入式微处理器。
+
+### 嵌入式微控制器
+
+嵌入式微控制器也就是传统意义上的单片机， 它可以说是目前嵌入式系统的前身。
+
+单片机就是把一个计算机的主要功能集成到了一个芯片上， 简单说，单片机就是一个计算机。 它的特点是体积小、 结构简单、 便于开发， 以及价格经济。
+
+### 嵌入式微处理器
+
+嵌入式处理器在一个芯片上集成了复杂的功能， 同时一些微处理器还把常见的外部设备控制器也集成到芯片内部。 
+
+由于嵌入式微处理器提供了强大的处理能力， 一些厂商以及计算机爱好者在嵌入式微 处理器上面开发了操作系统， 帮助使用嵌入式系统的人简化开发、 提高工作效率， 这在单片机上是很难实现的。
+
+在一个嵌入式微处理器内部集成了许多外部设备控制器。 这种设计方法大大简化了外部电路的设计和调试， 同时整个系统的硬件体积也大幅缩小。
+
+## 典型的嵌入式系统组成
+
+与传统计算机不同的是，嵌入式系统种类繁多。许多的芯片厂商、软件厂商加入其中，
+导致有多种硬件和软件， 甚至解决方案。 一般来说， 不同的嵌入式系统的软、 硬件是很难
+兼容的， 软件必须修改， 而硬件必须重新设计才能使用。 虽然软、硬件种类繁多， 但是不同的嵌入式系统还是有很多相同之处的。
+
+硬件部分可以分成嵌入式处理器和外部设备。 处理器是整个系统的核心， 负责处理所有的软件程序以及外部设备的信号。 外部设备在不同的系统中有不同的选择。 
+
+软件部分可以分成两层，最靠近硬件的是嵌入式操作系统。操作系统是软硬件的接口，负责管理系统的所有软件和硬件资源。 操作系统还可以通过驱动程序与外部设备打交道。最上层的是应用软件， 应用软件利用操作系统提供的功能开发出针对某个需求的程序， 供用户使用。
+
+# 嵌入式软硬件系统
+
+## 电路基本知识
+
+### 模拟电路
+
+处理模拟信号的电路称做模拟电路。 模拟信号的特点是信号是线性变化的，意思是信号变化是连续的。 
+
+### 数字电路
+
+通常数字电路具有逻辑运算和逻辑处理的功能。
+
+与模拟信号不同，数字信号使用电压的高低或者电流的有无表示逻辑上的1或0,因此数字电路可以方便地表示出二进制数。
+
+数字电路可以分成脉冲电路和逻辑电路两部分， 脉冲电路负责信号变换和测量； 逻辑电路负责处理数字逻辑。
+
+与模拟电路不同， 数字电路关心的是信号状态的变化。 通过数字逻辑可以处理复杂的 二进制信息， 因此数字电路是计算机的基础。 
+
+### 数制转换
+
+计算机是由数字电路构成的 ， 其内部数据的传输和处理都使用二进制方式。 
+
+二进制的特点是 “逢2进1”。
+
+与十进制数类似，十六进制数是逢16进1位。
+
+## 计算机组成原理
+
+### 计算机体系的发展
+
+计算机是由硬件系统和软件系统两大部分组成的。 按照功能又可以划分为指令系统、存储系统、 输入输出系统等。 
+
+冯. 诺依曼结构是以数学家 John Von Neumann 的名字命名的，他最早提出了该结构。 该结构把计算机分成了运算器、 控制器、 存储器、 输入设备和输出设备5个部分。 它的工作原理是把让计算机工作的指令（也可理解为程序）存储在存储器内，工作的流程是从存储器取出指令， 由运算器运算指令， 控制器负责处理输入设备和输出设备。
+
+哈佛结构最大的特点就是把指令和数据分开存储。 控制器可以先读取指令，然后交给运算器解码， 得到数据地址后， 控制器读取数据交给运算器：在运算器运算的时候，控制器可以读取下一条指令或者数据。
+
+这种把指令和数据分开存储的方式可以获得较高的执行效率。 
+
+### 中央处理器
+
+中央处理器的英文全称是 Central Process Unit，简称 CPU，是一个计算机系统的核心。
+
+CPU 是由运算器、 控制器、 寄存器和内部总线组成的。 在 CPU 之外再加入总线、 存储设备、 输入输出设备就可以构成 个完整的计算机系统。
+
+输入输出设备就可以构成 个完整的计算机系统。
+
+CPU 有几个重要的参数，包括工作频率、 字长、 指令集和缓存。 工作频率通常是用户最多听到的参数， 一个 CPU 的工作频率包括了主频和外频，以及外部总线频率。 主频是CPU 的实际工作频率，外频是 CPU 工作的基准频率，还有 个是总线的工作频率。
+
+决定 CPU 处理数据能力的是 CPU 的字长，有的教材也称做位宽，它是 CPU 在一个周期期能处理的最大数据宽度。
+
+CPU 内部是通过执行指令工作的。 每种 CPU 都有专门的一组指令， 称为指令集。 
+
+按照指令的执行方式可以把计算机 CPU 指令集分成复杂指令集和精简指令集。 复杂指令集(CISC）的特点是使程序中的指令按照顺序执行。 其优点是结构简单， 便于控制；缺点也很明显， 由于指令顺序执行， 计算机各部分不能同时工作， 执行效率不高。 常见的 CISC指令集 CPU 是 Intel 的 X86 系列。
+
+缓存是 CPU 内部一个重要的器件， 主要用来暂时存储指令和数据， 是由于 CPU 内部和外部工作的速度不同造成的。 一个 CPU 的缓存越大， 相对处理指令的能力就越强。
+
+### 存储系统
+
+由于材料和价格因素的限制， 计算机的存储器件在容量、 速度等方面需要匹配。 存储系统的作用就是设计一个让各种存储器相互配置达到最优性价比的方案。
+
+### 总线系统
+
+总线是CPU连接外部设备的通道。通常包括数据总线（DataBus）、地址总线
+( AddressBus）和控制总线（ControlBus）。
+
+地址总线负责向外部设备发送地址信息；数据总线负责从外部设备读取或者写入信息：控制总线负责发送信号控制外部设备。
+
+总线的出现规范了 CPU 和外设之间的通信标准，简化了外部器件的设计。使用一些通用的总线可以有效地降低开发成本。
+
+### 输入输出系统
+
+输入输出系统由外部设备和输入输出控制器组成， 是 CPU 与外部通信的系统。 CPU通过总线与输入输出系统相连。由于外部设备的速度差异， CPU 可以使用不同的方式控制外部设备的访问。 常见的有轮询方式、 中断控制方式和 DMA 方式。
+
+嵌入式系统通常会设计许多的中断信号控制线， 供连接不同的外部设备。
+
+#### DMA
+
+对于这种大量的数据传输可以不通过 CPU 而直接传送到内存，这种方式叫做直接内存访问（ Direct Memory Access ）， 简称 <u>DMA</u>。使用 DMA 方式， 外部 设备在数据准备好之后只需要向 DMA 控制器发送一个命令， 把数据的地址和大小传送过 去， 由 DMA 控制器负责把数据从外部设备直接存放到内存。
+
+## 软件基础知识
+
+嵌入式系统的基础是硬件，软件是嵌入式系统的灵魂。
+
+### 什么是软件
+
+ 严格地说， 软件是由程序和文档构成的， 程序是一组按照特 定结构细织的指令和数据集合。
+
+通常软件可以分成系统软件和应用软件，以及目前兴起的介于二者之间的中间件软件。
+
+系统软件是使用计算机提供的基本功能，例如操作系统和数据库系统。
+软件的另一个组成部分是文档。 随着软件复杂程度的提高，文档也越来越重要。 常见的软件文档有开发文档和用户文档， 前者面向开发人员，后者面向最终用户。软件开发人员应该养成编写文档的好习惯。
+
+### 软件开发流程
+
+需求分析、 概要设计和详细设计、 编码和调试、 测试和维护
+
+编码调试是最关键的 个环节。该阶段根据需求分析的结果，按照文档的要求在特定的平台和工具环境下完成程序编写和调试的工作。在整个软件开发流程中， 编码调试是占用时间开发流程最长的， 这个过程需要细心和经验丰富的程序员来完成。
+
+测试的目的是找出软件的问题，或者存在的缺陷（Bug）。软件测试可以分成不同层次，代码级别的有单元测试，高层的有集成测试等。测试手段的好坏直接决定了软件的质量。
+
+### 常见的软件开发模型
+
+#### 瀑布模型
+
+瀑布模型把软件开发分成需求阶段、 规格说明阶段、 设计阶段和实现阶段。需求阶段由系统分析师确定整个系统的功能需求， 被认可后制定整体的规格并且建立文档。进入设计阶段后，系统分析员按照模块划分整个系统， 并且设计每个模块的功能和接口。最后在完成阶段由程序员完成模块的编码调试，组合成完整的软件。瀑布模型使线型结构便于管理， 被广泛地应用在软件开发团队中。
+
+#### 增量模型
+
+增量模型的思想是，通过不断增加软件的功能完成整个系统。该模型首先开发出一个基本的软件框架，然后在上面不断增加新的功能。增加功能是按照特定的步骤和策略完成的， 最终的目标是完成所有的需求。增量模型的好处是可以让用户尽早地看到软件产品，可以提出意见促进以后的修改。
+
+#### 统一软件开发模型
+
+统一软件开发模型借鉴了之前的成功经验和失败教训，融入了瀑布模型和增量模型的思想。统一软件开发模型把个软件项目分成初始阶段、 细化阶段、 构造阶段和移交阶段。 在每个阶段中保留了瀑布模型的工作流程。在整体的流程上采用增量模型的迭代思想， 不断演进， 最终达到所有需求完成的目标。 统 个复杂的开发过程，适合大型的软件系统。该模型还制定了过程描述语言UML，可以帮助开发人员减少开发过程中的错误。
+
+### 计算机编程语言
+
+计算机语言可以分成机器语言、 汇编语言和高级语言。 
+
+#### 机器语言
+
+机器语言是供计算机本身识别的， 为二进制串。 
+
+#### 汇编语言
+
+汇编语言是对机器语言的抽象， 其实质与机器语言是相同的。汇编语言的指令与机器语言是一对应的。 此外， 汇编语言还设计了伪指令和宏指令， 帮助编程人员提高开发效率。汇编语言是依赖体系结构的，在一种CPU上能执行的汇编语言在其他CPU上可能就无法执行了。
+
+#### 高级语言
+
+高级语言从程序的功能角度出发， 从各种功能中抽象出计算机可以处理的方法提供给用户。 用户可以像使用类似自然语言样书写程序， 极大地提高了开发效率。 高级语言的一个功能或者说是个函数可能对应汇编语言的若干条指令。嵌入式系统开发中常见的高级语言有C和C＋＋。
+
+#### 解释语言
+
+无论是汇编语言还是高级语言都不能被计算机直接执行， 需要转换为机器语言，这个过程叫做编译。 对于高级语言来说， 还有类解释型的语言，通过特定的解释器可以边解释用户编写的程序内容边输出结果。常见的脚本语言都属于解释语言。
+
+### 数据结构
+
+计算机的本质是处理数据的机器。 数据是计算机加工和处理的对象。 计算机中的数据有很多种类， 如何处理数据就成为了一门学问。 
+
+数据结构包括数据逻辑结构、 物理结构和数据操作3方面的内容。
+
+计算机把处理的数据分成多种类型， 包括一些基本结构类型。 数据结构中认为数据元素是基本的类型。 数据的逻辑结构描述数据元素之间的逻辑关系， 是抽象出来的数学模型， 与具体的机器无关。
+数据的物理结构描述数据元素的存储结构， 依赖于具体的计算机实现。
+
+## 操作系统知识
+
+#### 什么是操作系统
+
+操作系统是一类特殊的系统软件。 它管理整个系统的所有硬件和软件， 通常是整个计算机系统中最接近硬件的系统软件。 操作系统屏蔽了硬件的底层特性， 向应用软件提供了一个统一的接口。 对于应用软件来说， 不需要知道硬件的具体特性， 使用操作系统提供的接口即可完成相应的功能。 除此之外， 操作系统通过特定的算法统筹安排整个计算机系统软硬件资源， 使计算机的资源利用率更高， 甚至获得比硬件更多的功能。
+
+#### 操作系统由什么组成
+
+按照软件的结构划分， 操作系统可以分成内核、 驱动程序和程序库。 内核是操作系统的核心， 也是整个系统软件的核心。
+
+*    内核从抽象的层面提供最基本的功能， 通常代码短小精炼。 
+*    驱动程序是计算机系统必不可少的一类系统软件， 系统和驱动程序打交道而不会直接访问硬件， 硬件的具体细节由驱动程序完成， 是软硬件的接口。 
+*    程序库是操作系统向用户提供的程序接口。
+
+#### 几种操作系统的设计思路
+
+通常内核有简单结构、 层次结构、 微内核结构和虚拟机结构等。
+
+##### 简单结构
+
+简单结构比较好理解， 内核中各种功能没有严格的界限， 混杂在一起。
+
+##### 层次结构
+
+层次结构的设计思想是把内核需要提供的功能划分出层次， 最底层仅提供抽象出来的最基本的功能， 每一层利用下面的一层功能， 以此类推， 最上面的层可以提供丰富的功能。 这种设计思路结构清晰是操作系统内核的一大进步。
+
+##### 微内核结构
+
+其设计思想是内核提供最基本最核心
+的功能， 注重把系统的服务功能和基本操作分开。 
+
+### 操作系统分类
+
+按照用户角度可以分成单用户和多用户操作系统。 单用户操作系统仅支持一个用户， 特点是系统利用率低，但是便于管理；多用户操作系统支持数个用户， 并且同时可以运行多个用户的程序，提高了资源利用率，但是管理难度也相应提高。
+
+按照系统对任务的处理相应时间来划分， 可以把操作系统分成分时系统和实时系统。分时系统中，不同用户的进程按照定的策略分别得到 CPU 资源，未能得到资源的用户只能等待。 实时系统则不然， 任务是按照优先级和响应时间分配的， 在一个设定的响应时间内， 任务必须得到响应。
+
+随着网络的发展，现在出现了分布式操作系统。通过把一个网络内的计算机资源共享，个计算任务可以分散在不同的计算机上进行， 最后把结果汇总。 分布式操作系统能最大限度地利用现有的资源， 得到强大的计算能力， 是未来科学计算领域的一个发展趋势。
+
+---
+
 # **计算机：辅助人脑的好工具**
 
 ## 计算机硬件的五大单元
@@ -269,7 +496,7 @@ Unicode 编码系统， 我们常常称呼的UTF8 或万国码的编码
 计算机只认识 0 与 1 而已，而且计算机最重要的运算与逻辑判断是在 CPU 内部， 而CPU 其实是具有微指令集的。因此，我们需要 CPU 帮忙工作时，就得要参考微指令集的内容， 然后撰写让 CPU 读的懂的脚本给 CPU 执行，这样就能够让 CPU 运作了。
 
 *    需要了解机器语言：机器只认识 0 与 1，因此你必须要学习直接写给机器看的语言！ 这个地方相当的难呢！
-*     需要了解所有硬件的相关功能函数：因为你的程序必须要写给机器看， 当然你就得要参考机器本身的功能， 然后针对该功能去撰写程序代码。例如，你要让 DVD 影片能够放映， 那就得要参考 DVD 光驱的硬件信息才行。万一你的系统有比较冷门的硬件，光是参考技术手册可能会昏倒～
+*    需要了解所有硬件的相关功能函数：因为你的程序必须要写给机器看， 当然你就得要参考机器本身的功能， 然后针对该功能去撰写程序代码。例如，你要让 DVD 影片能够放映， 那就得要参考 DVD 光驱的硬件信息才行。万一你的系统有比较冷门的硬件，光是参考技术手册可能会昏倒～
 *    程序不具有可移植性：每个 CPU 都有独特的微指令集，同样的，每个硬件都有其功能函数。 因此，你为 A 计算机写的程序，理论上是没有办法在 B 计算机上面运作的！而且程序代码的修改非常困难！ 因为是机器码，并不是人类看的懂得程序语言啊！
 *    程序具有专一性：因为这样的程序必须要针对硬件功能函数来撰写， 如果已经开发了一支浏览器程序，想要再开发文件管理程序时，还是得从头再参考硬件的功能函数来继续撰写。
 
@@ -658,3 +885,1506 @@ WWW 服务器几乎是所有的网络主机都会安装的一个功能，因为�
 *    Linux 操作系统的文件使用目录树系统，与磁盘的对应需要有『挂载』的动作才行；
 *    新手的简单分区，建议只要有/及 swap 两个分区槽即可
 
+# Linux基本指令
+
+## 基本命令
+
+### 关机和重启
+
+#### 关机
+
+```
+shutdown -h now        立刻关机
+shutdown -h 5        5分钟后关机
+poweroff         立刻关机
+```
+
+#### 重启
+
+```
+shutdown -r now        立刻重启
+shutdown -r 5        5分钟后重启
+reboot                立刻重启
+```
+
+#### 帮助命令
+
+--help命令
+
+```
+shutdown --help：
+ifconfig  --help：查看网卡信息
+```
+
+man命令（命令说明书） 
+
+```
+man shutdown
+```
+
+
+注意：man shutdown打开命令说明书之后，使用按键q退出
+
+## 目录操作命令
+
+### 目录切换 cd
+
+命令：cd 目录
+
+```
+cd /        切换到根目录
+cd /usr        切换到根目录下的usr目录
+cd ../        切换到上一级目录 或者  cd ..
+cd ~        切换到home目录
+cd -        切换到上次访问的目录
+```
+
+### 目录查看 ls [-al]
+
+命令：ls [-al]
+
+```
+ls                查看当前目录下的所有目录和文件
+ls -a            查看当前目录下的所有目录和文件（包括隐藏的文件）
+ls -l 或 ll       列表查看当前目录下的所有目录和文件（列表查看，显示更多信息）
+ls /dir            查看指定目录下的所有目录和文件   如：ls /usr
+```
+
+### 目录操作【增，删，改，查】
+
+#### 创建目录【增】 mkdir
+
+命令：mkdir 目录
+
+```
+mkdir    aaa            在当前目录下创建一个名为aaa的目录
+mkdir    /usr/aaa    在指定目录下创建一个名为aaa的目录
+```
+
+#### 删除目录或文件【删】rm
+
+命令：rm [-rf] 目录
+
+删除文件：
+
+```
+rm 文件        删除当前目录下的文件
+rm -f 文件    删除当前目录的的文件（不询问）
+```
+
+删除目录：
+
+```
+rm -r aaa    递归删除当前目录下的aaa目录
+rm -rf aaa    递归删除当前目录下的aaa目录（不询问）
+```
+
+全部删除：
+
+```
+rm -rf *    将当前目录下的所有目录和文件全部删除
+rm -rf /*    【自杀命令！慎用！慎用！慎用！】将根目录下的所有文件全部删除
+```
+
+注意：rm不仅可以删除目录，也可以删除其他文件或压缩包，为了方便大家的记忆，无论删除任何目录或文件，都直接使用 rm -rf 目录/文件/压缩包
+
+#### 目录修改【改】mv 和 cp
+
+##### 重命名目录
+
+​    注意：mv的语法不仅可以对目录进行重命名而且也可以对各种文件，压缩包等进行    重命名的操作
+
+##### 剪切目录
+
+```
+mv 目录名称 目录的新位置
+```
+
+​    示例：将/usr/tmp目录下的aaa目录剪切到 /usr目录下面     mv /usr/tmp/aaa /usr
+​    注意：mv语法不仅可以对目录进行剪切操作，对文件和压缩包等都可执行剪切操作
+
+##### 拷贝目录
+
+```
+cp -r 目录名称 目录拷贝的目标位置   -r代表递归
+```
+
+​    示例：将/usr/tmp目录下的aaa目录复制到 /usr目录下面     cp /usr/tmp/aaa  /usr
+​    注意：cp命令不仅可以拷贝目录还可以拷贝文件，压缩包等，拷贝文件和压缩包时不    用写-r递归
+
+#### 搜索目录【查】find
+
+```
+find 目录 参数 文件名称
+```
+
+示例：find /usr/tmp -name 'a*'    查找/usr/tmp目录下的所有以a开头的目录或文件
+
+## 文件操作命令
+
+### 文件操作【增，删，改，查】
+
+#### 新建文件【增】touch
+
+```
+touch 文件名
+```
+
+示例：在当前目录创建一个名为aa.txt的文件        touch  aa.txt
+
+#### 删除文件 【删】 rm
+
+```
+rm -rf 文件名
+```
+
+#### 修改文件【改】 vi或vim
+
+【vi编辑器的3种模式】
+    基本上vi可以分为三种状态，分别是命令模式（command mode）、插入模式（Insert mode）和底行模式（last line mode），各模式的功能区分如下：
+
+##### 命令行模式(command mode）
+
+​      控制屏幕光标的移动，字符、字或行的删除，查找，移动复制某区段及进入Insert mode下，或者到 last line mode。
+​      命令行模式下的常用命令：
+
+```
+【1】控制光标移动：↑，↓，j
+【2】删除当前行：dd 
+【3】查找：/字符
+【4】进入编辑模式：i o a
+【5】进入底行模式：:
+```
+
+##### 编辑模式（Insert mode）
+
+​      只有在Insert mode下，才可以做文字输入，按「ESC」键可回到命令行模式。
+​      编辑模式下常用命令：
+​      【1】ESC 退出编辑模式到命令行模式；
+
+##### 底行模式（last line mode）
+
+​     将文件保存或退出vi，也可以设置编辑环境，如寻找字符串、列出行号……等。
+​     底行模式下常用命令：
+
+```
+【1】退出编辑：   :q
+【2】强制退出：   :q!
+【3】保存并退出：  :wq
+```
+
+#### 打开文件
+
+```
+vi 文件名
+```
+
+示例：打开当前目录下的aa.txt文件     vi aa.txt 或者 vim aa.txt
+
+注意：使用vi编辑器打开文件后，并不能编辑，因为此时处于命令模式，点击键盘i/a/o进入编辑模式。
+
+#### 编辑文件
+
+使用vi编辑器打开文件后点击按键：i ，a或者o即可进入编辑模式。
+
+```
+i:在光标所在字符前开始插入
+a:在光标所在字符后开始插入
+o:在光标所在行的下面另起一新行插入
+```
+
+保存或者取消编辑
+
+##### 保存文件
+
+```
+第一步：ESC  进入命令行模式
+第二步：:     进入底行模式
+第三步：wq     保存并退出编辑
+```
+
+##### 取消编辑
+
+```
+第一步：ESC  进入命令行模式
+第二步：:     进入底行模式
+第三步：q!     撤销本次修改并退出编辑
+```
+
+#### 文件的查看【查】
+
+cat/more/less/tail
+
+```
+cat：看最后一屏
+```
+
+示例：使用cat查看/etc/sudo.conf文件，只能显示最后一屏内容
+cat sudo.conf
+
+```
+more：百分比显示
+```
+
+示例：使用more查看/etc/sudo.conf文件，可以显示百分比，回车可以向下一行，空格可以向下一页，q可以退出查看
+more sudo.conf
+
+```
+less：翻页查看
+```
+
+示例：使用less查看/etc/sudo.conf文件，可以使用键盘上的PgUp和PgDn向上    和向下翻页，q结束查看
+less sudo.conf
+
+```
+tail：指定行数或者动态查看
+```
+
+示例：使用tail -10 查看/etc/sudo.conf文件的后10行，Ctrl+C结束  
+tail -10 sudo.conf
+
+### 权限修改
+
+rwx：r代表可读，w代表可写，x代表该文件是一个可执行文件，如果rwx任意位置变为-则代表不可读或不可写或不可执行文件。
+
+示例：给aaa.txt文件权限改为可执行文件权限，aaa.txt文件的权限是-rw-------
+
+第一位：-就代表是文件，d代表是文件夹
+第一段（3位）：代表拥有者的权限
+第二段（3位）：代表拥有者所在的组，组员的权限
+第三段（最后3位）：代表的是其他用户的权限
+
+   421  421  421
+
+-  rw-   ---     ---
+
+```
+chmod +x aaa.txt
+```
+
+或者采用8421法
+命令：chmod 100 aaa.txt
+
+## 压缩文件操作
+
+### 打包和压缩
+
+Windows的压缩文件的扩展名  .zip/.rar
+
+```
+linux中的打包文件：aa.tar      
+linux中的压缩文件：bb.gz    
+linux中打包并压缩的文件：.tar.gz
+```
+
+Linux中的打包文件一般是以.tar结尾的，压缩的命令一般是以.gz结尾的。
+而一般情况下打包和压缩是一起进行的，打包并压缩后的文件的后缀名一般.tar.gz。
+
+```
+tar -zcvf 打包压缩后的文件名 要打包的文件
+```
+
+其中：z：调用gzip压缩命令进行压缩
+  c：打包文件
+  v：显示运行过程
+  f：指定文件名
+
+示例：打包并压缩/usr/tmp 下的所有文件 压缩后的压缩包指定名称为xxx.tar
+tar -zcvf ab.tar aa.txt bb.txt 
+或：tar -zcvf ab.tar  *
+
+### 解压
+
+```
+tar [-zxvf] 压缩文件    
+```
+
+其中：x：代表解压
+示例：将/usr/tmp 下的ab.tar解压到当前目录下
+
+示例：将/usr/tmp 下的ab.tar解压到根目录/usr下
+tar -xvf ab.tar -C /usr------C代表指定解压的位置
+
+## 查找命令
+
+### grep
+
+grep命令是一种强大的文本搜索工具
+
+使用实例：
+
+```
+ps -ef | grep sshd  查找指定ssh服务进程 
+ps -ef | grep sshd | grep -v grep 查找指定服务进程，排除gerp身 
+ps -ef | grep sshd -c 查找指定进程个数  
+```
+
+### find
+
+find命令在目录结构中搜索文件，并对搜索结果执行指定的操作。 
+
+find 默认搜索当前目录及其子目录，并且不过滤任何结果（也就是返回所有文件），将它们全都显示在屏幕上。
+
+使用实例：
+
+```
+find . -name "*.log" -ls  在当前目录查找以.log结尾的文件，并显示详细信息。 
+find /root/ -perm 600   查找/root/目录下权限为600的文件 
+find . -type f -name "*.log"  查找当目录，以.log结尾的普通文件 
+find . -type d | sort   查找当前所有目录并排序 
+find . -size +100M  查找当前目录大于100M的文件
+```
+
+### locate
+
+locate 让使用者可以很快速的搜寻某个路径。默认每天自动更新一次，所以使用locate 命令查不到最新变动过的文件。为了避免这种情况，可以在使用locate之前，先使用updatedb命令，手动更新数据库。如果数据库中没有查询的数据，则会报出locate: can not stat () `/var/lib/mlocate/mlocate.db': No such file or directory该错误！updatedb即可！
+
+yum -y install mlocate 如果是精简版CentOS系统需要安装locate命令
+
+使用实例：
+
+updatedb
+locate /etc/sh 搜索etc目录下所有以sh开头的文件 
+locate pwd 查找和pwd相关的所有文件
+
+### whereis
+
+whereis命令是定位可执行文件、源代码文件、帮助文件在文件系统中的位置。这些文件的属性应属于原始代码，二进制文件，或是帮助文件。
+
+使用实例：
+
+whereis ls    将和ls文件相关的文件都查找出来
+
+### which
+
+which命令的作用是在PATH变量指定的路径中，搜索某个系统命令的位置，并且返回第一个搜索结果。
+
+使用实例：
+
+which pwd  查找pwd命令所在路径 
+which java  查找path中java的路径 
+
+## su、sudo
+
+### su
+
+su用于用户之间的切换。但是切换前的用户依然保持登录状态。如果是root 向普通或虚拟用户切换不需要密码，反之普通用户切换到其它任何用户都需要密码验证。
+
+su test:切换到test用户，但是路径还是/root目录
+su - test : 切换到test用户，路径变成了/home/test
+su : 切换到root用户，但是路径还是原来的路径
+su - : 切换到root用户，并且路径是/root
+su不足：如果某个用户需要使用root权限、则必须要把root密码告诉此用户。
+
+退出返回之前的用户：exit
+
+### sudo
+
+sudo是为所有想使用root权限的普通用户设计的。可以让普通用户具有临时使用root权限的权利。只需输入自己账户的密码即可。
+
+进入sudo配置文件命令：
+
+vi /etc/sudoer或者visudo
+案例：
+允许hadoop用户以root身份执行各种应用命令，需要输入hadoop用户的密码。
+hadoop  ALL=(ALL)   ALL 
+
+案例：
+只允许hadoop用户以root身份执行ls 、cat命令，并且执行时候免输入密码。 
+配置文件中： 
+hadoop  ALL=NOPASSWD:  /bin/ls, /bin/cat 
+
+## 系统服务
+
+service iptables status  --查看iptables服务的状态
+service iptables start  --开启iptables服务
+service iptables stop  --停止iptables服务
+service iptables restart  --重启iptables服务
+
+chkconfig iptables off  --关闭iptables服务的开机自启动
+chkconfig iptables on  --开启iptables服务的开机自启动
+
+## 网络管理
+
+### 主机名配置
+
+[root@node1 ~]# vi /etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=node1
+
+### IP 地址配置
+
+[root@node1 ~]# vi /etc/sysconfig/network-scripts/ifcfg-eth0
+
+### 域名映射
+
+/etc/hosts文件用于在通过主机名进行访问时做ip地址解析之用。所以，你想访问一个什么样的主机名，就需要把这个主机名和它对应的ip地址。
+
+[root@node1 ~]# vi /etc/hosts
+
+在最后加上
+
+192.168.52.201  node1
+192.168.52.202  node2
+192.168.52.203  node3
+
+## 定时任务指令crontab 配置
+
+crontab是Unix和Linux用于设置定时任务的指令。通过crontab命令，可以在固定间隔时间,执行指定的系统指令或shell脚本。时间间隔的单位可以是分钟、小时、日、月、周及以上的任意组合。
+
+crontab安装：
+
+yum install crontabs
+服务操作说明：
+
+service crond start   ## 启动服务 
+service crond stop    ## 关闭服务 
+service crond restart ## 重启服务
+
+### 命令格式
+
+crontab [-u user] file
+
+crontab [-u user] [ -e | -l | -r ]
+
+参数说明：
+
+-u user：用来设定某个用户的crontab服务  
+
+file：file是命令文件的名字,表示将file做为crontab的任务列表文件
+
+并载入crontab。
+
+-e：编辑某个用户的crontab文件内容。如果不指定用户，则表示编辑当前
+
+用户的crontab文件。
+
+-l：显示某个用户的crontab文件内容。如果不指定用户，则表示显示当前
+
+用户的crontab文件内容。
+
+-r：删除定时任务配置，从/var/spool/cron目录中删除某个用户的crontab
+
+文件，如果不指定用户，则默认删除当前用户的crontab文件。
+
+命令示例：
+
+crontab file [-u user] ## 用指定的文件替代目前的crontab
+crontab -l [-u user]  ## 列出用户目前的crontab
+crontab -e [-u user]  ## 编辑用户目前的crontab
+
+### 配置说明、实例
+
+命令：*   *    *   *   *   command  
+
+解释：分  时  日  月  周  命令
+
+第1列表示分钟1～59 每分钟用*或者 */1表示    
+
+第2列表示小时0～23（0表示0点）
+
+第3列表示日期1～31  
+
+第4列表示月份1～12  
+
+第5列标识号星期0～6（0表示星期天）  
+
+第6列要运行的命令
+
+配置实例：
+
+先打开定时任务所在的文件：
+crontab -e
+
+每分钟执行一次date命令 
+*/1 * * * * date >> /root/date.txt
+
+每晚的21:30重启apache。 
+30 21 * * * service httpd restart
+
+每月1、10、22日的4 : 45重启apache。  
+45 4 1,10,22 * * service httpd restart
+
+每周六、周日的1 : 10重启apache。 
+10 1 * * 6,0 service httpd restart
+
+每天18 : 00至23 : 00之间每隔30分钟重启apache。
+0,30   18-23    *   *   *   service httpd restart
+晚上11点到早上7点之间，每隔一小时重启apache
+
+*  23-7/1    *   *   *   service httpd restart
+     十、其他命令
+     10.1 查看当前目录：pwd
+     命令：pwd     查看当前目录路径
+
+10.2 查看进程：ps -ef
+命令：ps -ef    查看所有正在运行的进程
+
+10.3 结束进程：kill
+命令：kill pid 或者 kill -9 pid(强制杀死进程)           pid:进程号
+
+10.4 网络通信命令：
+ifconfig：查看网卡信息
+
+命令：ifconfig 或 ifconfig | more
+
+ping：查看与某台机器的连接情况
+
+命令：ping ip
+
+netstat -an：查看当前系统端口
+
+命令：netstat -an
+
+搜索指定端口
+命令：netstat -an | grep 8080
+
+10.5 配置网络
+命令：setup
+
+10.6 重启网络
+命令：service network restart
+
+10.7 切换用户
+命令：su - 用户名
+
+10.8 关闭防火墙
+命令：chkconfig iptables off
+
+或者：
+
+ iptables -L;
+ iptables -F;
+ service iptables stop
+10.9 修改文件权限
+命令：chmod 777
+
+10.10 清屏
+命令：ctrl + l
+
+10.11 vi模式下快捷键
+esc后:
+
+保存并退出快捷键：shift+z+z
+
+光标跳到最后一行快捷键：shift+g
+
+删除一行：dd
+
+复制一行内容：y+y
+
+粘贴复制的内容：p
+
+十一、Linux项目部署
+11.1 安装jdk1.8
+先卸载open-jdk
+
+java -version
+rpm -qa | grep java
+
+rpm -e --nodeps java-1.7.0-openjdk-1.7.0.45-2.4.3.3.el6.x86_64
+rpm -e --nodeps java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64
+
+开始安装：
+mkdir /usr/local/src/java
+rz 上传jdk tar包
+tar -zxvf jdk-8u181-linux-x64.tar.gz
+
+yum install glibc.i686
+
+配置环境变量：
+ vi /etc/profile
+
+ 在末尾行添加
+  #set java environment
+  JAVA_HOME=/usr/local/src/jdk8/jdk1.8.0_181
+  CLASSPATH=.:$JAVA_HOME/lib.tools.jar
+  PATH=$JAVA_HOME/bin:$PATH
+  export JAVA_HOME CLASSPATH PATH
+
+保存退出
+source /etc/profile  使更改的配置立即生效
+java -version  查看JDK版本信息，如果显示出1.8证明成功
+
+11.2 安装MySQL5.6
+11.2.1 上传MySQL5.6的tar包
+创建目录：mkdir /usr/local/src/mysql5.6
+
+上传：MySQL-5.6.34-1.rhel5.x86_64.rpm-bundle.tar 到上面的目录中
+
+11.2.2 安装
+第一步：解压
+
+     命令：tar -xvf MySQL-5.6.34-1.rhel5.x86_64.rpm-bundle.tar
+
+第二步：检测是否已经安装了mysql
+
+     命令：rpm -qa | grep mysql   
+    
+     如果已经安装了，将其卸载，如：
+    
+     rpm -e --nodeps  mysql-libs-5.1.71-1.el6.x86_64
+
+第三步：安装MySQL的服务端
+
+     命令：rpm -ivh MySQL-server-5.6.34-1.rhel5.x86_64.rpm
+
+第四步：安装MySQL的客户端
+
+     命令：rpm -ivh MySQL-client-5.6.34-1.rhel5.x86_64.rpm
+
+第五步：查看MySQL服务运行状态
+
+     命令：service mysql status
+
+第六步：启动MySQL服务
+
+     命令：service mysql start
+
+第七步：使用root账号登录mysql
+
+在安装mysql server时有句提示：
+
+
+
+注意：这个密码是不安全的，所有需要修改初始密码。
+
+使用密码登录mysql账号：mysql -uroot -p
+修改root密码：SET PASSWORD = PASSWORD('root');
+11.2.3 开机自动启动设置
+加入到系统服务：
+
+chkconfig --add mysql
+
+自动启动：
+
+chkconfig mysql on
+
+查询列表：
+
+chkconfig
+
+说明：都没关闭（off）时是没有自动启动。
+
+11.2.4 开启远程访问
+登录：
+
+mysql -uroot –proot
+
+设置远程访问（使用root密码）：
+
+grant all privileges on *.* to 'root' @'%' identified by 'root';
+
+flush privileges;
+
+退出mysql，在centos环境下打开3306防火墙
+
+/sbin/iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+
+/etc/rc.d/init.d/iptables save
+
+/etc/init.d/iptables status
+
+11.3 安装tomcat部署项目
+准备工作：将web项目打成war包，改名为ROOT.war
+
+11.3.1 创建ucenter用户
+一般情况下，发布应用程序都不是使用root用户的，需要创建一个普通用户来发布程序；
+
+创建ucenter用户：
+
+useradd -d /ucenter ucenter
+
+设置密码：
+
+passwd ucenter （密码 ucenter）
+
+切换用户：
+
+su - ucenter
+
+11.3.2 安装Tomcat
+tomcat只要解压就可以使用。
+
+1、创建web目录
+mkdir /ucenter/web
+
+2、上传apache-tomcat-7.0.57.tar.gz
+
+3、解压：tar -xvf apache-tomcat-7.0.57.tar.gz
+
+4、重命名：mv apache-tomcat-7.0.57 itcast-usermanage
+
+5、启动tomcat：
+     cd itcast-usermanage/bin/
+     ./startup.sh 或者 sh startup.sh
+
+6、查看日志：
+     tail -f ../logs/catalina.out
+
+7、查看效果 http://192.168.0.160:8080/
+
+发现无法访问：
+
+
+
+8、防火墙打开 8080 端口
+     /sbin/iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
+
+     /etc/rc.d/init.d/iptables save
+
+9、安装成功
+
+
+
+11.3.3 部署用户管理项目
+1、上传usermanage.sql和ROOT.war到/ucenter/web
+
+2、执行数据库脚本
+
+     cat user_manager.sql | mysql -uroot -p123456
+
+3、部署web程序
+
+3.1 删除webapps下的所有文件
+
+     cd /ucenter/web/usermanage/webapps
+    
+     rm -rf *
+
+3.2 拷贝ROOT.war到webapps
+
+     cp /ucenter/web/ROOT.war .
+
+3.3 重新启动tomcat
+
+     cd ../bin/
+    
+     sh startup.sh && tail -f ../logs/catalina.out
+
+3.4 启动浏览器测试
+
+注意事项：Centos环境下部署项目中文乱码问题解决方案
+
+    今天在一台新的CentOS机器上使用c3p0连接池操作mysql数据库出现中文乱码问题，具体表现为：查询时无中文乱码问题，写数据时中文乱码，查看了机器上数据库字符集也是UTF8，应该不会出现中文乱码才对，最后在c3p0配置文件中 jdbcUrl后加上：?useUnicode=true&amp;characterEncoding=UTF8 中文就不会乱码了。
+
+【C3P0配置文件】
+
+<?xml version="1.0" encoding="UTF-8"?>
+<c3p0-config>
+  <default-config>
+    <property name="driverClass">com.mysql.jdbc.Driver</property>
+	<property name="jdbcUrl">jdbc:mysql://localhost:3306/user_manager_yun6?useUnicode=true&amp;characterEncoding=UTF8 </property>
+	<property name="user">root</property>
+	<property name="password">root</property>
+	<property name="acquireIncrement">2</property>
+	<property name="initialPoolSize">5</property>
+	<property name="minPoolSize">1</property>
+	<property name="maxPoolSize">5</property>
+  </default-config>
+</c3p0-config>
+11.4 Linux下使用FastDFS
+相关的安装包我打包到云盘上了，链接：https://pan.baidu.com/s/13NDYYil4mgLhkb5CYsc2Ww  提取码：66tn
+
+单节点FastDFS
+
+整个安装过程非常复杂，很容易出错，建议进行多次备份。
+
+我们这里不打算安装多台虚拟机，因此会把tracker和storage都安装在一起。
+
+11.4.1 安装gcc
+GCC用来对C语言代码进行编译运行，使用yum命令安装：
+
+yum -y install gcc
+后面会用到解压命令（unzip），所以这里可以用yum把unzip 也装一下
+
+yum install -y unzip zip
+11.4.2 安装libevent
+yum -y install libevent
+11.4.3 安装libfastcommon-master
+解压刚刚上传的libfastcommon-master.zip
+unzip libfastcommon-master.zip
+
+进入解压完成的目录
+cd libfastcommon-master
+
+编译并且安装：
+./make.sh 
+./make.sh install
+
+11.4.4 安装fastdfs
+tar -zxvf FastDFS_v5.08.tar.gz
+cd FastDFS
+./make.sh
+./make.sh install
+如果安装成功，会看到/etc/init.d/下看到提供的脚本文件：
+
+ll /etc/init.d/ | grep fdfs
+
+
+fdfs_trackerd 是tracker启动脚本
+
+fdfs_storaged 是storage启动脚本
+
+能够在 /etc/fdfs/ 目录下看到默认的配置文件模板：
+
+ll /etc/fdfs/
+
+
+tarcker.conf.sample 是tracker的配置文件模板
+
+storage.conf.sample 是storage的配置文件模板
+
+client.conf.sample 是客户端的配置文件模板
+
+11.4.5 配置并启动tracker服务
+1）首先将模板文件复制
+
+cp /etc/fdfs/tracker.conf.sample /etc/fdfs/tracker.conf
+2）修改复制后的配置文件：
+
+vim /etc/fdfs/tracker.conf 
+
+修改的内容如下：
+
+base_path=/项目名/tracker                 # 存储日志和数据的根目录
+3）新建目录：
+
+mkdir -p /项目名/tracker
+注意：关闭防火墙：
+
+chkconfig iptables off
+4）启动和停止
+
+service fdfs_trackerd start # 启动fdfs_trackerd服务，停止用stop
+检查FastDFS Tracker Server是否启动成功：
+
+ps -ef | grep fdfs_trackerd
+设置tracker服务开机启动:
+
+chkconfig fdfs_trackerd on
+11.4.6 配置并启动storage服务
+1）首先将模板文件复制
+
+cp /etc/fdfs/storage.conf.sample /etc/fdfs/storage.conf
+2）修改复制后的配置文件：
+
+vim /etc/fdfs/storage.conf
+
+修改的内容如下:
+
+base_path=/项目名/storage                 # 数据和日志文件存储根目录 
+
+store_path0=/项目名/storage           # 第一个存储目录 
+
+tracker_server=192.168.56.101:22122       #  tracker服务器IP和端口 
+3）新建目录：
+
+mkdir -p /项目名/storage
+注意关闭防火墙： chkconfig iptables off
+
+4）启动和停止
+
+service fdfs_storaged start  # 启动fdfs_storaged服务，停止用stop
+设置storage服务开机启动：
+
+chkconfig fdfs_storaged on
+ps -ef | grep fdfs
+
+
+
+11.5 安装fastdfs-nginx-module
+11.5.1 解压
+tar -zxvf fastdfs-nginx-module_v1.16.tar.gz
+11.5.2 修改config
+1）进入src目录
+
+cd fastdfs-nginx-module/src/
+2）编辑config
+
+vim config
+使用以下底行命令：
+
+:%s+/usr/local/+/usr/+g
+将所有的/usr/local替换为 /usr，这个才是正确的目录:
+
+
+
+11.5.3 配置nginx与FastDFS关联配置文件
+复制 fastdfs-nginx-module 源码中的配置文件到/etc/fdfs 目录， 并修改
+
+cp /usr/local/项目名/fastdfs-nginx-module/src/mod_fastdfs.conf /etc/fdfs/
+
+vi /etc/fdfs/mod_fastdfs.conf
+修改以下配置：
+
+connect_timeout=10                       # 客户端访问文件连接超时时长（单位：秒）
+
+tracker_server=192.168.56.101:22122    # tracker服务IP和端口
+
+url_have_group_name=true                # 访问链接前缀加上组名
+
+store_path0=/leyou/storage            # 文件存储路径
+复制 FastDFS 的部分配置文件到/etc/fdfs 目录
+
+cd /usr/local/项目名/FastDFS/conf/
+cp http.conf mime.types /etc/fdfs/
+11.6 安装Nginx的插件
+11.6.1 如果没有安装过nginx
+1、安装nginx的依赖库
+
+yum -y install gcc pcre pcre-devel zlib zlib-devel openssl openssl-devel
+2、解压安装包
+
+tar -zxvf nginx-1.10.0.tar.gz
+
+3、配置nginx安装包，并指定fastdfs-nginx-model
+
+cd nginx-1.10.0
+
+./configure --prefix=/opt/nginx --sbin-path=/usr/bin/nginx --add-module=/usr/local/leyou/fastdfs-nginx-module/src
+注意：在执行./configure配置nginx参数的时候，需要将fastdfs-nginx-moudle源码作为模块编译进去。
+
+4、编译并安装
+
+make && make install
+11.6.2 如果已经安装过nginx
+1、 进入nginx目录：
+
+cd /usr/local/项目名/nginx-1.10.0/
+2、 配置FastDFS 模块
+
+./configure --prefix=/opt/nginx --sbin-path=/usr/bin/nginx --add-module=/usr/local/项目名/fastdfs-nginx-module/src
+注意：这次配置时，要添加fastdfs-nginx-moudle模块
+
+3、编译，注意，这次不要安装（install）
+
+make
+4、替换nginx二进制文件:
+
+备份：
+
+mv /usr/bin/nginx /usr/bin/nginx-bak
+用新编译的nginx启动文件替代原来的：
+
+cp objs/nginx /usr/bin/
+11.6.3 启动nginx
+配置nginx整合fastdfs-module模块
+
+我们需要修改nginx配置文件，在/opt/nginx/config/nginx.conf文件中：
+
+vim  /opt/nginx/conf/nginx.conf
+将文件中，原来的server 80{ ...} 部分代码替换为如下代码：
+
+server {
+    listen       80;
+    server_name  image.项目名.com;
+	# 监听域名中带有group的，交给FastDFS模块处理
+    location ~/group([0-9])/ {
+        ngx_fastdfs_module;
+    }
+    location / {
+        root   html;
+        index  index.html index.htm;
+    }
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   html;
+    }
+}
+启动nginx：
+
+nginx	# 启动nginx
+
+nginx -s stop	# 停止nginx
+
+nginx -s reload	# 重新载入配置文件
+
+可通过ps -ef | grep nginx查看nginx是否已启动成功
+
+
+
+11.6.4 设置nginx开机启动
+创建一个开机启动的脚本：
+
+vim /etc/init.d/nginx
+添加以下内容：
+
+#!/bin/sh
+#
+
+nginx - this script starts and stops the nginx daemon
+
+#
+
+chkconfig:   - 85 15
+
+description:  NGINX is an HTTP(S) server, HTTP(S) reverse \
+
+proxy and IMAP/POP3 proxy server
+
+processname: nginx
+
+config:      /etc/nginx/nginx.conf
+
+config:      /etc/sysconfig/nginx
+
+pidfile:     /var/run/nginx.pid
+
+Source function library.
+
+. /etc/rc.d/init.d/functions
+
+Source networking configuration.
+
+. /etc/sysconfig/network
+
+Check that networking is up.
+
+[ "$NETWORKING" = "no" ] && exit 0
+
+nginx="/usr/bin/nginx"
+prog=$(basename $nginx)
+
+NGINX_CONF_FILE="/opt/nginx/conf/nginx.conf"
+
+[ -f /etc/sysconfig/nginx ] && . /etc/sysconfig/nginx
+
+lockfile=/var/lock/subsys/nginx
+
+make_dirs() {
+
+make required directories
+
+   user=`$nginx -V 2>&1 | grep "configure arguments:.*--user=" | sed 's/[^*]*--user=\([^ ]*\).*/\1/g' -`
+   if [ -n "$user" ]; then
+      if [ -z "`grep $user /etc/passwd`" ]; then
+         useradd -M -s /bin/nologin $user
+      fi
+      options=`$nginx -V 2>&1 | grep 'configure arguments:'`
+      for opt in $options; do
+          if [ `echo $opt | grep '.*-temp-path'` ]; then
+              value=`echo $opt | cut -d "=" -f 2`
+              if [ ! -d "$value" ]; then
+
+echo "creating" $value
+
+​                  mkdir -p $value && chown -R $user $value
+​              fi
+​          fi
+​       done
+​    fi
+}
+
+start() {
+    [ -x $nginx ] || exit 5
+    [ -f $NGINX_CONF_FILE ] || exit 6
+    make_dirs
+    echo -n $"Starting $prog: "
+    daemon $nginx -c $NGINX_CONF_FILE
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && touch $lockfile
+    return $retval
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog -QUIT
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && rm -f $lockfile
+    return $retval
+}
+
+restart() {
+    configtest || return $?
+    stop
+    sleep 1
+    start
+}
+
+reload() {
+    configtest || return $?
+    echo -n $"Reloading $prog: "
+    killproc $nginx -HUP
+    RETVAL=$?
+    echo
+}
+
+force_reload() {
+    restart
+}
+
+configtest() {
+  $nginx -t -c $NGINX_CONF_FILE
+}
+
+rh_status() {
+    status $prog
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        $1
+        ;;
+    stop)
+        rh_status_q || exit 0
+        $1
+        ;;
+    restart|configtest)
+        $1
+        ;;
+    reload)
+        rh_status_q || exit 7
+        $1
+        ;;
+    force-reload)
+        force_reload
+        ;;
+    status)
+        rh_status
+        ;;
+    condrestart|try-restart)
+        rh_status_q || exit 0
+            ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}"
+        exit 2
+esac
+修改文件权限，并加入服务列表
+
+修改权限
+
+chmod 777 /etc/init.d/nginx 
+
+添加到服务列表
+
+chkconfig --add /etc/init.d/nginx 
+设置开机启动
+
+chkconfig nginx on
+11.7 安装Elasticsearch
+需要虚拟机JDK1.8及以上
+
+11.7.1 新建一个用户leyou
+出于安全考虑，elasticsearch默认不允许以root账号运行。
+
+创建用户：
+
+useradd leyou
+设置密码：
+
+passwd leyou
+切换用户：
+
+su - leyou
+11.7.2 上传安装包,并解压
+我们将安装包上传到：/home/leyou目录
+
+解压缩：
+
+tar -zxvf elasticsearch-6.2.4.tar.gz
+我们把目录重命名：
+
+mv elasticsearch-6.3.0/ elasticsearch
+
+
+进入，查看目录结构：
+
+
+
+11.7.3 修改配置
+我们进入config目录：cd config
+
+需要修改的配置文件有两个：
+
+
+
+1、jvm.options
+
+Elasticsearch基于Lucene的，而Lucene底层是java实现，因此我们需要配置jvm参数。
+
+编辑jvm.options：
+
+vim jvm.options
+默认配置如下：
+
+-Xms1g
+-Xmx1g
+
+内存占用太多了，我们调小一些：
+
+-Xms512m
+-Xmx512m
+
+2、elasticsearch.yml
+
+vim elasticsearch.yml
+修改数据和日志目录：
+
+path.data: /home/leyou/elasticsearch/data # 数据目录位置
+path.logs: /home/leyou/elasticsearch/logs # 日志目录位置
+我们把data和logs目录修改指向了elasticsearch的安装目录。但是这两个目录并不存在，因此我们需要创建出来。
+
+进入elasticsearch的根目录，然后创建：
+
+mkdir data
+mkdir logs
+
+
+修改绑定的ip：
+
+network.host: 0.0.0.0 # 绑定到0.0.0.0，允许任何ip来访问
+默认只允许本机访问，修改为0.0.0.0后则可以远程访问
+
+11.7.4 运行
+进入elasticsearch/bin目录，可以看到下面的执行文件：
+
+
+
+然后输入命令：
+
+./elasticsearch
+或者后台运行：
+
+./elasticsearch -d
+11.7.5 错误1：内核过低
+
+
+修改elasticsearch.yml文件，在最下面添加如下配置： 然后重启
+
+bootstrap.system_call_filter: false
+11.7.6 错误2：文件权限不足
+
+
+我们用的是leyou用户，而不是root，所以文件权限不足。
+
+首先用root用户登录。直接输入exit命令
+
+然后修改配置文件:
+
+vim /etc/security/limits.conf
+添加下面的内容：
+
+* soft nofile 65536
+
+* hard nofile 131072
+
+* soft nproc 4096
+
+* hard nproc 4096
+     11.7.7 错误3：线程数不够
+     [1]: max number of threads [1024] for user [leyou] is too low, increase to at least [4096]
+
+继续修改配置：
+
+vim /etc/security/limits.d/90-nproc.conf 
+修改下面的内容：
+
+* soft nproc 1024
+     改为
+
+* soft nproc 4096
+     11.7.8 错误4：进程虚拟内存
+     [3]: max virtual memory areas vm.max_map_count [65530] likely too low, increase to at least [262144]
+
+vm.max_map_count：限制一个进程可以拥有的VMA(虚拟内存区域)的数量，继续修改配置文件， ：
+
+vim /etc/sysctl.conf 
+添加下面内容：
+
+vm.max_map_count=655360
+然后执行命令：
+
+sysctl -p
+11.7.9 重启终端窗口
+所有错误修改完毕，一定要重启你的 Xshell终端，否则配置无效。
+
+11.8 安装RabbitMQ
+cd /usr/local/myapp
+
+mkdir rabbitmq
+
+cd rabbitmq
+11.8.1 安装Erlang
+1、在线安装
+
+yum install esl-erlang_17.3-1~centos~6_amd64.rpm
+
+yum install esl-erlang-compat-R14B-1.el6.noarch.rpm
+2、离线安装
+
+
+
+依次执行命令：
+
+1）rpm -ivh esl-erlang-17.3-1.x86_64.rpm --force --nodeps
+
+
+
+2）rpm -ivh esl-erlang_17.3-1~centos~6_amd64.rpm --force --nodeps
+
+
+
+3）rpm -ivh esl-erlang-compat-R14B-1.el6.noarch.rpm --force --nodeps
+
+
+
+11.8.2 安装RabbitMQ
+
+
+安装：
+
+rpm -ivh rabbitmq-server-3.4.1-1.noarch.rpm
+
+
+11.8.3 设置配置文件
+cp /usr/share/doc/rabbitmq-server-3.4.1/rabbitmq.config.example
+/etc/rabbitmq/rabbitmq.config
+开启用户远程访问
+
+vi /etc/rabbitmq/rabbitmq.config
+
+
+注意要去掉后面的逗号。
+
+11.8.4 启动、停止
+service rabbitmq-server start
+
+service rabbitmq-server stop
+
+service rabbitmq-server restart
+11.8.5 开启web界面管理工具
+rabbitmq-plugins enable rabbitmq_management
+
+service rabbitmq-server restart
+11.8.6 设置开机启动
+chkconfig rabbitmq-server on
+11.8.7 防火墙开放15672端口
+/sbin/iptables -I INPUT -p tcp --dport 15672 -j ACCEPT
+
+/etc/rc.d/init.d/iptables save
+11.9 redis安装和配置
+11.9.1 安装
+解压
+
+tar -xvf redis-4.0.9.tar.gz
+编译安装
+
+ mv redis-4.0.9 redis
+ cd redis
+ make && make install
+11.9.2 配置
+修改安装目录下的redis.conf文件
+
+vim redis.conf
+修改以下配置：
+
+#bind 127.0.0.1 # 将这行代码注释，监听所有的ip地址，外网可以访问
+protected-mode no # 把yes改成no，允许外网访问
+daemonize yes # 把no改成yes，后台运行
+11.9.3 启动或停止
+redis提供了服务端命令和客户端命令：
+
+redis-server 服务端命令，可以包含以下参数： start 启动 stop 停止
+
+redis-cli 客户端控制台，包含参数： -h xxx 指定服务端地址，缺省值是127.0.0.1 -p xxx 指定服务端端口，缺省值是6379
+
+11.9.4 设置开机启动
+1) 输入命令，新建文件
+
+vim /etc/init.d/redis
+输入下面内容：
+
+#!/bin/sh
+
+chkconfig:   2345 90 10
+
+description:  Redis is a persistent key-value database
+
+PATH=/usr/local/bin:/sbin:/usr/bin:/bin
+
+REDISPORT=6379
+EXEC=/usr/local/bin/redis-server
+REDIS_CLI=/usr/local/bin/redis-cli
+
+PIDFILE=/var/run/redis.pid
+
+CONF="/usr/local/leyou/redis/redis.conf"
+
+case "$1" in  
+    start)  
+        if [ -f $PIDFILE ]  
+        then  
+                echo "$PIDFILE exists, process is already running or crashed"  
+        else  
+                echo "Starting Redis server..."  
+                $EXEC $CONF  
+        fi  
+        if [ "$?"="0" ]   
+        then  
+              echo "Redis is running..."  
+        fi  
+        ;;  
+    stop)  
+        if [ ! -f $PIDFILE ]  
+        then  
+                echo "$PIDFILE does not exist, process is not running"  
+        else  
+                PID=$(cat $PIDFILE)  
+                echo "Stopping ..."  
+                $REDIS_CLI -p $REDISPORT SHUTDOWN  
+                while [ -x ${PIDFILE} ]  
+               do  
+                    echo "Waiting for Redis to shutdown ..."  
+                    sleep 1  
+                done  
+                echo "Redis stopped"  
+        fi  
+        ;;  
+   restart|force-reload)  
+        ${0} stop  
+        ${0} start  
+        ;;  
+  *)  
+    echo "Usage: /etc/init.d/redis {start|stop|restart|force-reload}" >&2  
+        exit 1  
+esac
+然后保存退出
+
+注意：以下信息需要根据安装目录进行调整：
+
+EXEC=/usr/local/bin/redis-server # 执行脚本的地址
+
+REDIS_CLI=/usr/local/bin/redis-cli # 客户端执行脚本的地址
+
+PIDFILE=/var/run/redis.pid # 进程id文件地址
+
+CONF="/usr/local/src/redis-3.0.2/redis.conf" #配置文件地址
+
+2）设置权限
+
+chmod 755 /etc/init.d/redis
+3）启动测试
+
+/etc/init.d/redis start
+启动成功会提示如下信息：
+
+Starting Redis server...
+Redis is running...
+
+4）设置开机自启动
+
+chkconfig --add /etc/init.d/redis
+chkconfig redis on
+
+## 参考
+
+*    鸟哥的Linux私房菜-基础篇-第四版
+*    ARM嵌入式LINUX系统开发详解 第2版  弓雷著

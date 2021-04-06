@@ -1,9 +1,3 @@
-
-
-# 目录
-
-[toc]
-
 # 了解SQL
 
 SQL(发音为字母S-Q-L或sequel)是结构化查询语言(Structured QueryLanguage)的缩写。SQL是一种专门用来与数据库通信的语言。
@@ -2124,4 +2118,903 @@ CHECK TABLE orders, orderitems;
 *    LIKE很慢。一般来说,最好是使用FULLTEXT而不是LIKE.数据库是不断变化的实体。
 *    一组优化良好的表一会儿后可能就面目全非了。由于表的使用和内容的更改,理想的优化和配置也会改变。
 *    最重要的规则就是,每条规则在某些条件下都会被打破。
+
+## MySQL逻辑架构
+
+*    客户端
+*    连接/线程处理
+*    查询缓存
+*    解析器
+*    优化器
+
+最上层的服务并不是MySQL所独有的,大多数基于网络的客户端/服务器的工具或者服务都有类似的架构。
+
+第二层架构。大多数MySQL的核心服务功能都在这一层,包括查询解析、分析、优化、缓存以及所有的内置函数(例如, 日期、时间、数学和加密函数),所有跨存储引擎的功能都在这一层实现:存储过程、触发器、视图等。
+
+第三层包含了<u>存储引擎</u>。存储引擎负责MySQL中数据的存储和提取。服务器通过API与存储引擎进行通信。这些接口屏蔽了不同存储引擎之间的差异,使得这些差异对上层的查询过程透明。存储引擎API包含几十个底层函数,用于执行诸如“开始一个事务”或者“根据主键提取一行记录”等操作。但存储引擎不会去解析SQL,不同存储引擎之间也不会相互通信,而只是简单地响应上层服务器的请求。
+
+## 连接管理与安全性
+
+每个客户端连接都会在服务器进程中拥有一个<u>线程</u>,这个连接的查询,只会在这个单独的线程中执行,该线程只能轮流在某个CPU核心或者CPU中运行。服务器会负责缓存线程,因此不需要为每一个新建的连接创建或者销毁线程。
+
+当客户端(应用)连接到MySQL服务器时,服务器需要对其进行认证。<u>认证基于用户名、原始主机信息和密码。</u>如果使用了安全套接字(SSL),的方式连接,还可以使用X. 509证书认证。一旦客户端连接成功,服务器会继续验证该客户端是否具有执行某个特定查询的权限(例如,是否允许客户端对world数据库的Country表执行SELECT语句)。
+
+### 优化与执行
+
+MySQL会解析查询,并创建内部<u>数据结构</u>(解析树),然后对其进行各种优化,包括重写查询、决定表的读取顺序,以及选择合适的索引等。
+
+用户可以通过特殊的<u>关键字提示(hint)优化器</u>,影响它的决策过程。也可以请求优化器解释(explain)优化过程的各个因素,使用户可以知道服务器是如何进行优化决策的,并提供一个参考基准,便于用户重构查询和schema、修改相关配置,使应用尽可能高效运行。
+
+## 并发控制
+
+服务器层
+
+存储引擎层
+
+### 读写锁
+
+在处理并发读或者写时,可以通过实现一个由两种类型的锁组成的锁系统来解决问题。这两种类型的锁通常被称为<u>共享锁(shared lock)</u>和<u>排他锁(exclusivelock)</u> ,也叫读锁(read lock)和写锁(write lock)。
+
+读锁是共享的,或者说是相互不阻塞的。多个客户在同一时刻可以同时读取同一个资源,而互不干扰。
+
+写锁则是排他的,也就是说一个写锁会阻塞其他的写锁和读锁,这是出于安全策略的考虑,只有这样,才能确保在给定的时间里,只有一个用户能执行写入,并防止其他用户读取正在写入的同一资源。
+
+### 锁粒度
+
+任何时候,在给定的资源上,锁定的数据量越少,则系统的并发程度越高,只要相互之间不发生冲突即可。
+
+<u>加锁需要消耗资源</u>。锁的各种操作,包括获得锁、检查锁是,否已经解除、释放锁等,都会增加系统的开销。如果系统花费大量的时间来管理锁,而不是存取数据,那么系统的性能可能会因此受到影响。
+
+所谓的锁策略,就是在锁的开销和数据的安全性之间寻求平衡,这种平衡当然也会影响到性能。
+
+### 表锁(table lock)
+
+<u>表锁是MySQL中最基本的锁策略,并且是开销最小的策略。</u>
+
+表锁会锁定整张表。一个用户在对表进行写操作(插入、删除、更新等)前,需要先获得写锁,这会阻塞其他用户对该表的所有读写操作。只有没有写锁时,其他读取的用户才能获得读锁,读锁之间是不相互阻塞的。
+
+在特定的场景中,表锁也可能有良好的性能。另外,<u>写锁也比读锁有更高的优先级</u>,因此一个写锁请求可能会被插入到读锁队列的前面(写锁可以插入到锁队列中读锁的前面,反之读锁则不能插入到写锁的前面)。尽管存储引擎可以管理自己的锁, MySQL本身还是会使用各种有效的表锁来实现不同的目的。
+
+### 行级锁(row lock)
+
+<u>行级锁可以最大程度地支持并发处理，同时也带来了最大的锁开销。</u>众所周知,在InnoDB和XtraDB,以及其他一些存储引擎中实现了行级锁。行级锁只在存储引擎层实现,而MySaL服务器层没有实现。服务器层完全不了解存储引擎中的锁实现。
+
+## 事务
+
+<u>事务就是一组原子性的SQL查询,或者说一个独立的工作单元。</u>如果数据库引擎能够成功地对数据库应用该组查询的全部语句,那么就执行该组查询。如果其中有任何一条语句因为崩溃或其他原因无法执行,那么所有的,语句都不会执行。<u>也就是说,事务内的语句,要么全部执行成功,要么全部执行失败。</u>
+
+可以用START TRANSACTION语句开始一个事务,然后要么使用COMMIT提交事务将修改的数据持久保留,要么使用ROLLBACK撤销所有的修改。
+
+```mysql
+START TRANSACTION;
+SELECT balance FROM checking WHERE customer_id = 10233276;
+UPDATE checking SET balance = balance - 200.00 WHERE customer_id = 10233276;
+UPDATE savings SET balance = balance + 200.00 WHERE customer_id = 10233276;
+COMMIT;
+```
+
+*    原子性(atomicity)
+
+一个事务必须被视为一个不可分割的最小工作单元,整个事务中的所有操作要么全部提交成功,要么全部失败回滚,对于一个事务来说,不可能只执行其中的一部分操作,这就是事务的原子性。
+
+*    一致性(consistency)
+
+数据库总是从一个一致性的状态转换到另外一个一致性的状态。
+
+*    隔离性(isolation)
+
+通常来说,一个事务所做的修改在最终提交以前,对其他事务是不可见的。
+
+*    持久性(durability)
+
+一旦事务提交,则其所做的修改就会永久保存到数据库中。此时即使系统崩溃,修改的数据也不会丢失。持久性是个有点模糊的概念,因为实际上持久性也分很多不同的级别。有些持久性策略能够提供非常强的安全保障,而有些则未必。而且不可能有能做到100%的持久性保证的策略。
+
+### 隔离级别
+
+*    READ UNCOMMITTED (未提交读)
+
+在READ UNCOMMITTED级别,事务中的修改,即使没有提交,对其他事务也都是可见的。事务可以读取未提交的数据,这也被称为<u>脏读</u>(Dirty Read)。这个级别会导致很多问题,从性能上来说, READUNCOMMITTED不会比其他的级别好太多,但却缺乏其他级别的很多好处,除非真的有非常必要的理由,在实际应用中一般很少使用。
+
+*    READ COMMITTED (提交读)
+
+大多数数据库系统的默认隔离级别都是READ COMMITTED (但MySQL不是)。READ COMMITTED满足前面提到的隔离性的简单定义:一个事务开始时,只能“看见”已经提交的事务所做的修改。换句话说,一个事务从开始直到提交之前,所做的任何修改对其他事务都是不可见的。这个级别有时候也叫做<u>不可重复读</u>(nonrepeatable read) ,因为两次执行同样的查询,可能会得到不一样的结果。
+
+*    REPEATABLE READ (可重复读)
+
+REPEATABLE READ解决了脏读的问题。该级别保证了在同一个事务中多次读取同样记录的结果是一致的。但是理论上,可重复读隔离级别还是无法解决另外一个<u>幻读(Phantom Read)</u>的问题。所谓幻读,指的是<u>当某个事务在读取某个范围内的记录时,另外一个事务又在该范围内插入了新的记录,当之前的事务再次读取该范围的记录时,会产生幻行(Phantom Row)</u>, InnoDB和XtraDB存储引擎通过多版本并发控制(MvCC, Multiversion Concurrency Control)解决了幻读的问题。
+
+*    SERIALIZABLE (可串行化)
+
+SERIAL IZABLE是最高的隔离级别。它通过强制事务串行执行,<u>避免了前面说的幻读的问题</u>。简单来说, SERIAL IZABLE会在读取的每一行数据上都加锁,所以可能导致大量的超时和锁争用的问题。实际应用中也很少用到这个隔离级别,只有在非常需要确保数据的一致性而且可以接受没有并发的情况下,才考虑采用该级别。
+
+| 隔离级别         | 脏读可能性 | 不可重复读可能性 | 幻读可能性 | 加锁读 |
+| ---------------- | ---------- | ---------------- | ---------- | ------ |
+| READ UNCOMMITTED | √          | √                | √          | ×      |
+| READ COMMITTED   | ×          | √                | √          | ×      |
+| REPEATABLE READ  | ×          | ×                | √          | ×      |
+| SERIALIZABLE     | ×          | ×                | ×          | √      |
+
+### 死锁
+
+<u>死锁是指两个或者多个事务在同一资源上相互占用,并请求锁定对方占用的资源,从而导致恶性循环的现象。</u>当多个事务试图以不同的顺序锁定资源时,就可能会产生死锁。多个事务同时锁定同一个资源时,也会产生死锁。
+
+为了解决这种问题,数据库系统实现了各种死锁检测和死锁超时机制。还有一种解决方式,就是当查询的时间达到锁等待超时的设定后放弃锁请求,这种方式通常来说不太好。InnoDB目前处理死锁的方法是,将持有最少行级排他锁的事务进行回滚(这是相对比较简单的死锁回滚算法)。
+
+<u>锁的行为和顺序是和存储引擎相关的</u>。以同样的顺序执行语句,有些存储引擎会产生死锁,有些则不会。<u>死锁的产生有双重原因:有些是因为真正的数据冲突,这种情况通常很难避免,但有些则完全是由于存储引擎的实现方式导致的。</u>
+
+<u>死锁发生以后,只有部分或者完全回滚其中一个事务,才能打破死锁。</u>·对于事务型的系统,这是无法避免的,所以应用程序在设计时必须考虑如何处理死锁。大多数情况下只需要重新执行因死锁回滚的事务即可。
+
+
+
+# leetcode例题
+
+## 1913. 查询学生学籍信息
+
+编写一个 SQL 语句，满足条件：无论 students 是否有学籍 (enrollments) 信息，学生都需要根据如下两个表提供以下信息：
+
+-    student_name,
+-    phone,
+-    hometown,
+-    address
+
+表定义 1: students (学生表)
+
+|     列名     |     类型     |   注释   |
+| :----------: | :----------: | :------: |
+|      id      | int unsigned |   主键   |
+| student_name |   varchar    | 学生姓名 |
+|    phone     |   varchar    | 学生电话 |
+
+表定义 2: enrollments (学籍表)
+
+|    列名    |     类型     |  注释   |
+| :--------: | :----------: | :-----: |
+|     id     | int unsigned |  主键   |
+| student_id | int unsigned | 学生 id |
+|  hometown  |   varchar    |  家乡   |
+|  address   |   varchar    |  地址   |
+
+### 样例
+
+**样例一：**
+
+表内容 1: schedules
+
+|  id  | student_name |    phone    |
+| :--: | :----------: | :---------: |
+|  1   |    Li Lei    | 13888888888 |
+|  2   |  Han Meimei  | 13999999999 |
+|  3   |     Amy      | 13788889999 |
+
+表内容 2: enrollments
+
+|  id  | student_id |   hometown    |    address    |
+| :--: | :--------: | :-----------: | :-----------: |
+|  1   |     1      | Shi Jiazhuang |   Hang Zhou   |
+|  2   |     2      |   Heng Shui   |   Tang Shan   |
+|  3   |     3      |   Cang Zhou   | Shi Jiazhuang |
+
+返回：
+
+| student_name |    phone    |   hometown    |    address    |
+| :----------: | :---------: | :-----------: | :-----------: |
+|    Li Lei    | 13888888888 | Shi Jiazhuang |   Hang Zhou   |
+|  Han Meimei  | 13999999999 |   Heng Shui   |   Tang Shan   |
+|     Amy      | 13788889999 |   Cang Zhou   | Shi Jiazhuang |
+
+**样例二：**
+
+表内容 1: students
+
+|  id  | student_name |    phone    |
+| :--: | :----------: | :---------: |
+|  1   |    Li Lei    | 13888888888 |
+|  2   |  Han Meimei  | 13999999999 |
+|  3   |     Amy      | 13788889999 |
+|  4   |    Jason     | 13788789999 |
+
+表内容 2: enrollments
+
+|  id  | student_id |   hometown    |    address    |
+| :--: | :--------: | :-----------: | :-----------: |
+|  1   |     1      | Shi Jiazhuang |   Hang Zhou   |
+|  2   |     2      |   Heng Shui   |   Tang Shan   |
+|  3   |     3      |   Cang Zhou   | Shi Jiazhuang |
+|  4   |     1      |  Guang Zhou   |   Shi Hezi    |
+
+应该返回:
+
+| student_name |    phone    |   hometown    |    address    |
+| :----------: | :---------: | :-----------: | :-----------: |
+|    Li Lei    | 13888888888 | Shi Jiazhuang |   Hang Zhou   |
+|  Han Meimei  | 13999999999 |   Heng Shui   |   Tang Shan   |
+|     Amy      | 13788889999 |   Cang Zhou   | Shi Jiazhuang |
+|    Li Lei    | 13888888888 |  Guang Zhou   |   Shi Hezi    |
+|    Jason     | 13788789999 |     null      |     null      |
+
+```sql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select s.student_name, s.phone, e.hometown, e.address
+from students s
+left join enrollments e
+on s.id = e.student_id
+```
+
+## 1920. 查找重名的同学
+
+编写一个 SQL 语句，查找 students 表中所有重名同学的名字。
+
+表定义: students (学生表)
+
+| 列名 |     类型     |   注释   |
+| :--: | :----------: | :------: |
+|  id  | int unsigned |   主键   |
+| name |   varchar    | 学生姓名 |
+
+### 样例
+
+**样例一：**
+
+表内容: students
+
+|  id  |   name    |
+| :--: | :-------: |
+|  1   |  DaMing   |
+|  2   |    Amy    |
+|  3   | HanMeimei |
+|  4   |    Amy    |
+
+你的 SQL 查询应该返回以下结果：
+
+| name |
+| :--: |
+| Amy  |
+
+**样例二：**
+
+表内容: students
+
+|  id  |  name  |
+| :--: | :----: |
+|  1   | DaMing |
+|  2   |  Amy   |
+|  3   | DaMing |
+|  4   |  Amy   |
+
+你的 SQL 查询应该返回以下结果：
+
+|  name  |
+| :----: |
+|  Amy   |
+| DaMing |
+
+```sql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select name from students
+group by name
+having count(*) > 1
+```
+
+## 1921. 从不充值的玩家
+
+某游戏数据库包含两个表，用户 (users) 表和充值 (recharges) 表，编写一个 SQL 语句，找出所有从未充值的玩家。
+
+表定义 1: users (用户表)
+
+| 列名 |     类型     |   注释   |
+| :--: | :----------: | :------: |
+|  id  | int unsigned |   主键   |
+| name |   varchar    | 用户姓名 |
+
+表定义 2: recharges (充值表)
+
+|  列名   |     类型     |  注释   |
+| :-----: | :----------: | :-----: |
+|   id    | int unsigned |  主键   |
+| user_id |     int      | 用户 id |
+
+### 样例
+
+**样例一：**
+
+表内容 1: users
+
+|  id  |     name     |
+| :--: | :----------: |
+|  1   | XiaoXuesheng |
+|  2   |     Mike     |
+|  3   |     John     |
+|  4   |    Maria     |
+
+表内容 2: recharges
+
+|  id  | user_id |
+| :--: | :-----: |
+|  1   |    3    |
+|  2   |    1    |
+
+按照上述要求，你的查询应该返回：
+
+| player |
+| :----: |
+|  Mike  |
+| Maria  |
+
+**样例二：**
+
+表内容 1: users
+
+|  id  |     name     |
+| :--: | :----------: |
+|  1   | XiaoXuesheng |
+|  2   |     Mike     |
+|  3   |     John     |
+
+表内容 2: recharges
+
+|  id  | user_id |
+| :--: | :-----: |
+|  1   |    3    |
+|  2   |    1    |
+
+按照上述要求，你的查询应该返回：
+
+| player |
+| :----: |
+|  Mike  |
+
+### 注意事项
+
+提示：
+
+1.   你可以通过学习 SQL 联合查询相关知识来解决这个问题
+2.   返回的列名：player
+
+```sql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select name as player 
+from users u 
+where id 
+not in (select user_id from recharges)
+```
+
+## 1924. 推荐学理科的同学
+
+如果一个学生的数学超过 90 分，或者理综超过 95 分，那么就推荐这个学生去学理科。
+请编写一个 SQL 语句，输出表中所有适合学理科学生的姓名、数学成绩及理综成绩。
+
+-    cst (comprehensive science test 理综)
+
+表定义: student_scores (学生成绩表)
+
+|  列名   |  类型   |     注释     |
+| :-----: | :-----: | :----------: |
+|  name   | varchar |   学生姓名   |
+| chinese |   int   | 学生语文分数 |
+|  math   |   int   | 学生数学分数 |
+| english |   int   | 学生英语分数 |
+|   cst   |   int   | 学生理综分数 |
+
+### 样例
+
+**样例一：**
+
+表内容: student_scores
+
+|   name   | chinese | math | english | cst  |
+| :------: | :-----: | :--: | :-----: | :--: |
+| KangKang |   95    |  91  |   89    |  97  |
+|   Jane   |   90    |  93  |   98    |  98  |
+| Micheal  |   85    |  76  |   93    |  92  |
+|  Maria   |   88    |  89  |   95    |  94  |
+|  LiHua   |   30    |  13  |   19    |  23  |
+
+根据上表，我们应该输出：
+
+|   name   | math | cst  |
+| :------: | :--: | :--: |
+| KangKang |  91  |  97  |
+|   Jane   |  93  |  98  |
+
+**样例二：**
+
+表内容: student_scores
+
+|   name   | chinese | math | english | cst  |
+| :------: | :-----: | :--: | :-----: | :--: |
+| KangKang |   95    |  90  |   89    |  97  |
+|   Jane   |   90    |  90  |   98    |  95  |
+
+根据上表，我们应该输出：
+
+|   name   | math | cst  |
+| :------: | :--: | :--: |
+| KangKang |  90  |  97  |
+
+```mysql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select name, math, cst
+FROM student_scores e
+where e.math>90 or e.cst>95
+```
+
+## 1923. 增长的疫情感染人数
+
+编写一个 SQL 语句，来查找与前一天的日期相比美国的新增病例数更高的所有日期的 id。
+
+表定义: new_cases (新增疫情)
+
+|      列名       |     类型     |     注释     |
+| :-------------: | :----------: | :----------: |
+|       id        | int unsigned |     主键     |
+|      date       |     date     |     日期     |
+| increased_count |     int      | 新增感染人数 |
+
+### 样例
+
+**样例一：**
+
+表内容: new_cases
+
+|  id  |    date    | increased_count |
+| :--: | :--------: | :-------------: |
+|  1   | 2020-12-25 |     100994      |
+|  2   | 2020-12-26 |     216858      |
+|  3   | 2020-12-27 |     152102      |
+|  4   | 2020-12-28 |     189044      |
+
+在运行你的 SQL 语句之后，应返回：
+
+|  id  |
+| :--: |
+|  2   |
+|  4   |
+
+-    说明：
+     -    2020-12-26 美国的新增病例数比前一天高（100994 -> 216858）
+     -    2020-12-28 美国的新增病例数比前一天高（152102 -> 189044）
+
+**样例二：**
+
+表内容: new_cases
+
+|  id  |    date    | increased_count |
+| :--: | :--------: | :-------------: |
+|  1   | 2011-12-25 |     100994      |
+|  2   | 2011-12-26 |     296858      |
+|  3   | 2011-12-27 |     152102      |
+|  4   | 2011-12-28 |     149044      |
+
+在运行你的 SQL 语句之后，应返回：
+
+|  id  |
+| :--: |
+|  2   |
+
+-    说明：
+     -    2011-12-26 美国的新增病例数比前一天高（100994 -> 296858）
+
+### 注意事项
+
+返回结果**不要求顺序**
+
+```sql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select a.id 
+from new_cases as a,new_cases as b
+where a.id = b.id + 1 and a.increased_count > b.increased_count
+```
+
+## 1926. 热门的英雄
+
+编写一个 SQL 语句，找出所有英雄热度为非 T3 (不热门)的并且 id 为奇数的英雄，结果请按 ban 率由大到小排列。
+Tx (x = 0, 1 ,2, ...) 表示英雄的热度，其中，T0 表示热门英雄，T1 表示次热门英雄，T2 表示正常热度英雄，T3 表示不热门英雄，T4 及以后表示冷门英雄。
+
+表定义: heroes (英雄表)
+
+|    列名    |     类型     |     注释     |
+| :--------: | :----------: | :----------: |
+|     id     | int unsigned |     主键     |
+|    name    |   varchar    |   英雄名字   |
+| popularity |   varchar    | 英雄热门等级 |
+|    ban     |    float     | 英雄被禁概率 |
+
+### 样例
+
+**样例一：**
+
+表内容: heroes
+
+|  id  |    name    | popularity |  ban  |
+| :--: | :--------: | :--------: | :---: |
+|  1   |   Lv Bu    |     T0     | 0.90  |
+|  2   | Ju Youjing |     T1     | 0.24  |
+|  3   |  Ma Chao   |     T1     | 10.26 |
+|  4   |  Guan Yu   |     T2     | 1.56  |
+|  5   | Meng Tian  |     T3     | 2.10  |
+
+对于上面的例子，正确的输出为：
+
+|  id  |  name   | popularity | probability |
+| :--: | :-----: | :--------: | :---------: |
+|  1   | Ma Chao |     T1     |   10.26%    |
+|  2   |  Lv Bu  |     T0     |    0.90%    |
+
+**样例二：**
+
+表内容: heroes
+
+|  id  |    name    | popularity |  ban  |
+| :--: | :--------: | :--------: | :---: |
+|  1   |   Lv Bu    |     T3     | 0.90  |
+|  2   | Ju Youjing |     T1     | 0.24  |
+|  3   |  Ma Chao   |     T1     | 10.26 |
+|  4   |  Guan Yu   |     T2     | 1.56  |
+
+对于上面的例子，正确的输出为：
+
+|  id  |  name   | popularity | probability |
+| :--: | :-----: | :--------: | :---------: |
+|  1   | Ma Chao |     T1     |   10.26%    |
+
+### 注意事项
+
+请注意，所返回的 probability 需要带上百分号 (%)
+
+```sql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select id, name, popularity, concat(ban,'%') as probability
+from heroes
+where popularity!='T3' and id%2=1
+order by ban desc
+```
+
+## 1927. 硬币翻面
+
+给定一个 coins 表，其中的 side 属性表示硬币的正反面，p 表示正面 (positive)，n 表示反面 (negative)
+交换所有的 p 和 n 值（例如，将所有 p 值改为 n，反之亦然）。
+要求只使用一个**更新 (UPDATE)** 语句，并且**没有**中间的临时表。
+
+表定义: coins (硬币表)
+
+| 列名 |     类型     |   注释   |
+| :--: | :----------: | :------: |
+|  id  | int unsigned |   主键   |
+| side |   varchar    | 硬币的面 |
+
+### 样例
+
+**样例一：**
+
+表内容: coins
+
+|  id  | side |
+| :--: | :--: |
+|  1   |  p   |
+|  2   |  n   |
+|  3   |  p   |
+|  4   |  n   |
+
+运行你所编写的 SQL 语句之后，将会得到以下表：
+
+|  id  | side |
+| :--: | :--: |
+|  1   |  n   |
+|  2   |  p   |
+|  3   |  n   |
+|  4   |  p   |
+
+**样例二：**
+
+表内容: coins
+
+|  id  | side |
+| :--: | :--: |
+|  1   |  p   |
+|  2   |  n   |
+
+运行你所编写的 SQL 语句之后，将会得到以下表：
+
+|  id  | side |
+| :--: | :--: |
+|  1   |  n   |
+|  2   |  p   |
+
+### 注意事项
+
+提示：
+
+1.   你可以通过学习 SQL 语句中的 **UPDATE 语句**和**条件判断相关知识**来解决该问题。
+2.   只能写一个 UPDATE 语句，请不要编写任何 SELECT 语句。
+3.   我们会单独验证数据库中的数据是否都被修改为如下的信息。
+
+```sql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+update coins
+set side='m'
+where side='p';
+
+update coins
+set side='p'
+where side='n';
+
+update coins
+set side='n'
+where side='m';
+```
+
+## 1931.  寻找特定的患者
+
+描述
+
+patients 表中保存了所有患者信息和感染他们的人 (infected_by_id)
+编写一个 SQL 语句，返回一个列表，列表中出现的名字需要满足条件：感染他们的人的 id **不是2**
+
+表定义: patients (患者表)
+
+|      列名      |     字段     |   注释    |
+| :------------: | :----------: | :-------: |
+|       id       | int unsigned |   主键    |
+|      name      |   varchar    | 患者姓名  |
+| infected_by_id |     int      | 感染者 id |
+
+样例
+
+**样例一：**
+
+表内容: patients
+
+|  id  |   name   | infected_by_id |
+| :--: | :------: | :------------: |
+|  1   |   Amy    |      null      |
+|  2   |   Bob    |      null      |
+|  3   | Catalina |       2        |
+|  4   |   Deng   |      null      |
+|  5   |  Eason   |       1        |
+|  6   |  Frank   |       2        |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| name  |
+| :---: |
+|  Amy  |
+|  Bob  |
+| Deng  |
+| Eason |
+
+**样例二：**
+
+表内容: patients
+
+|  id  |   name   | infected_by_id |
+| :--: | :------: | :------------: |
+|  1   |   Amy    |      null      |
+|  2   |   Bob    |      null      |
+|  3   | Catalina |       2        |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| name |
+| :--: |
+| Amy  |
+| Bob  |
+
+```sql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select name
+from patients
+where  infected_by_id is null or infected_by_id<>2;
+```
+
+## 1941.  寻找直角三角形
+
+描述
+
+李华的作业是判断三条线段是否可以构成直角三角形
+假设表 line_segments 保存了所有由三条长度为 a, b, c 的线段构成的组，请你帮李华写一个 SQL 语句，来判断每组线段是否可以组成一个直角三角形
+
+表定义: line_segments (线段表)
+
+| 列名 |     类型     |    注释    |
+| :--: | :----------: | :--------: |
+|  id  | int unsigned |    主键    |
+|  a   |     int      | a 线段长度 |
+|  b   |     int      | b 线段长度 |
+|  c   |     int      | c 线段长度 |
+
+样例
+
+**样例一：**
+
+表内容: line_segments
+
+|  id  |  a   |  b   |  c   |
+| :--: | :--: | :--: | :--: |
+|  1   |  3   |  4   |  5   |
+|  2   |  10  |  20  |  15  |
+|  3   |  1   |  2   |  10  |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  |  a   |  b   |  c   | right_triangle |
+| :--: | :--: | :--: | :--: | :------------: |
+|  1   |  3   |  4   |  5   |      Yes       |
+|  2   |  10  |  20  |  15  |       No       |
+|  3   |  1   |  2   |  10  |       No       |
+
+**样例二：**
+
+表内容: line_segments
+
+|  id  |  a   |  b   |  c   |
+| :--: | :--: | :--: | :--: |
+|  1   |  6   |  6   |  6   |
+|  2   |  5   |  12  |  13  |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  |  a   |  b   |  c   | right_triangle |
+| :--: | :--: | :--: | :--: | :------------: |
+|  1   |  6   |  6   |  6   |       No       |
+|  2   |  5   |  12  |  13  |      Yes       |
+
+```cpp
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+SELECT *,
+IF
+( POW( a, 2 ) + POW( b, 2 ) = POW( c, 2 ), 'Yes', 'No' ) AS 'right_triangle'
+FROM
+line_segments
+```
+
+
+
+## 2045.  输出 Hello LintCode
+
+描述
+
+请编写 SQL 语句，返回 "Hello LintCode!" 语句，不用在意返回结果集的列名
+
+表定义：无
+
+样例
+
+表内容：（无）
+
+在运行你的 SQL 语句之后，表应返回：
+
+| Hello LintCode! |
+| --------------- |
+| Hello LintCode! |
+
+```cpp
+-- Write your SQL Query here --
+SELECT "Hello LintCode!"
+```
+
+
+
+## 2046.  查询课程创建日期按 ‘年-月-日 时：分：秒’ 显示
+
+描述
+
+请编写 SQL 语句，查询 `courses` 表，查询课程创建时间，按照 ’年-月-日 时：分：秒’ 的格式返回结果，返回列名显示为 `DATE_FORMAT`。
+
+表定义: courses（课程表）
+
+|     列名      |     类型     |     注释     |
+| :-----------: | :----------: | :----------: |
+|      id       | int unsigned |     主键     |
+|     name      |   varchar    |   课程名称   |
+| student_count |     int      |   学生总数   |
+|  created_at   |     date     | 课程创建时间 |
+|  teacher_id   |     int      |   讲师 id    |
+
+查询返回列名需要与样例输出的列名大小写一致
+
+样例
+
+样例一：
+
+表内容：courses
+
+| **id** | **name**                | **student_count** | **created_at**     | **teacher_id** |
+| ------ | ----------------------- | ----------------- | ------------------ | -------------- |
+| 1      | Senior Algorithm        | 880               | 2020-6-1 09:03:12  | 4              |
+| 2      | System Design           | 1350              | 2020-7-18 10:03:12 | 3              |
+| 3      | Django                  | 780               | 2020-2-29 12:03:12 | 3              |
+| 4      | Web                     | 340               | 2020-4-22 13:03:12 | 4              |
+| 5      | Big Data                | 700               | 2020-9-11 16:03:12 | 1              |
+| 6      | Artificial Intelligence | 1660              | 2018-5-13 18:03:12 | 3              |
+| 7      | Java P6+                | 780               | 2019-1-19 13:03:12 | 3              |
+| 8      | Data Analysis           | 500               | 2019-7-12 13:03:12 | 1              |
+| 10     | Object Oriented Design  | 300               | 2020-8-8 13:03:12  | 4              |
+| 12     | Dynamic Programming     | 2000              | 2018-8-18 20:03:12 | 1              |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **DATE_FORMAT**     |
+| ------------------- |
+| 2020-06-01 09:03:12 |
+| 2020-07-18 10:03:12 |
+| 2020-02-29 12:03:12 |
+| 2020-04-22 13:03:12 |
+| 2020-09-11 16:03:12 |
+| 2018-05-13 18:03:12 |
+| 2019-01-19 13:03:12 |
+| 2019-07-12 13:03:12 |
+| 2020-08-08 13:03:12 |
+| 2018-08-18 20:03:12 |
+
+样例二：
+
+表内容：courses
+
+| **id** | **name**                | **student_count** | **created_at** | **teacher_id** |
+| ------ | ----------------------- | ----------------- | -------------- | -------------- |
+| 1      | Senior Algorithm        | 880               | null           | 4              |
+| 2      | System Design           | 1350              | null           | 3              |
+| 3      | Django                  | 780               | null           | 3              |
+| 4      | Web                     | 340               | null           | 4              |
+| 5      | Big Data                | 700               | null           | 1              |
+| 6      | Artificial Intelligence | 1660              | null           | 3              |
+| 7      | Java P6+                | 780               | null           | 3              |
+| 8      | Data Analysis           | 500               | null           | 1              |
+| 10     | Object Oriented Design  | 300               | null           | 4              |
+| 12     | Dynamic Programming     | 2000              | null           | 1              |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **DATE_FORMAT** |
+| --------------- |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+| null            |
+
+>    样例二中课程表中没有课程创建时间，所以统计结果为空。
+
+```cpp
+-- Write your SQL Query here -- 
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select DATE_FORMAT(created_at,'%Y-%m-%d %H:%i:%s') DATE_FORMAT 
+from courses;
+```
+
+## DATE_FORMAT() 用法
+
+我们在SQL中使用 `DATE_FORMAT()` 方法来格式化输出 date/time。
+需要注意的是 `DATE_FORMAT()` 函数返回的是**字符串**格式。
+
+**语法**
+
+```
+SELECT DATE_FORMAT(date,format);
+```
+
+其中
+
+`date` 一个有效日期。
+
+`format` 是 date/time 的输出格式。
+
+# 参考
+
+*    高性能MySQL
+*    MySQL必知必会
 
