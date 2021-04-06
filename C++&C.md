@@ -12,7 +12,7 @@
 ### 运行时间
 
 ```cpp
-cout << "The run time is: " << (double)clock() / CLOCKS_PER_SEC << "s" << std::endl;
+cout << "The run time is: "<< (double)clock()/ CLOCKS_PER_SEC << "s"<< std::endl;
 ```
 
 
@@ -65,11 +65,11 @@ INT_MAX
 
 ```cpp
 int main(){
-    int a,b;
-    if(INT_MAX/b<a){
-        return 0;
-    }
-    return a*b;
+ int a,b;
+ if(INT_MAX/b<a){
+ return 0;
+}
+ return a*b;
 }
 ```
 
@@ -84,10 +84,10 @@ C++中，memset通常包含在头<cstring>中。
 第三个参是赋值内存的大小
 */
 void* __cdecl memset(
-    _Out_writes_bytes_all_(_Size) void*  _Dst,
-    _In_                          int    _Val,
-    _In_                          size_t _Size
-    );
+ _Out_writes_bytes_all_(_Size) void* _Dst,
+ _In_  int  _Val,
+ _In_  size_t _Size
+);
 ```
 
 ### bool类赋值
@@ -110,6 +110,12 @@ int num[10];
 memset(num,0,sizeof(num));
 ```
 
+# 关键字
+
+## noexcept（ C++11）
+
+关键字 noexcept 用于指出函数不会引发异常。它也可用作运算符，判断操作数（表达式）是否可能引发异常；如果操作数可能引发异常，则返回 false，否则返回 true。
+
 # 函数
 
 *    声明
@@ -122,7 +128,7 @@ memset(num,0,sizeof(num));
 
 *    ```cpp
      returntypename functionname(parametertype name1,parametertype name2,...){
-         return value;
+      return value;
      }
      ```
 
@@ -130,91 +136,91 @@ memset(num,0,sizeof(num));
 
 ```cpp
 [caputrue](params)opt->ret{body;};
-[函数对象参数] (操作符重载函数参数) mutable 或 exception 声明 -> 返回值类型 {函数体}
+[函数对象参数](操作符重载函数参数) mutable 或 exception 声明-> 返回值类型{函数体}
 ```
 
->    [] 不截取任何变量
->    [&] 截取外部作用域中所有变量，并作为引用在函数体中使用
->    [=] 截取外部作用域中所有变量，并拷贝一份在函数体中使用
->    [=, &foo] 截取外部作用域中所有变量，并拷贝一份在函数体中使用，但是对foo变量使用引用
->    [bar] 截取bar变量并且拷贝一份在函数体重使用，同时不截取其他变量
->    [this] 截取当前类中的this指针。如果已经使用了&或者=就默认添加此选项。
+>    []不截取任何变量
+>    [&]截取外部作用域中所有变量，并作为引用在函数体中使用
+>    [=]截取外部作用域中所有变量，并拷贝一份在函数体中使用
+>    [=,&foo]截取外部作用域中所有变量，并拷贝一份在函数体中使用，但是对foo变量使用引用
+>    [bar]截取bar变量并且拷贝一份在函数体重使用，同时不截取其他变量
+>    [this]截取当前类中的this指针。如果已经使用了&或者=就默认添加此选项。
 
 # system("")指令
 
 下面列出常用的DOS命令,都可以用system函数调用:
 
-ASSOC  显示或修改文件扩展名关联。
-AT    计划在计算机上运行的命令和程序。
-ATTRIB  显示或更改文件属性。
-BREAK  设置或清除扩展式 CTRL+C 检查。
-CACLS  显示或修改文件的访问控制列表(ACLs)。
-CALL   从另一个批处理程序调用这一个。
-CD    显示当前目录的名称或将其更改。
-CHCP   显示或设置活动代码页数。
-CHDIR  显示当前目录的名称或将其更改。
-CHKDSK  检查磁盘并显示状态报告。
+ASSOC 显示或修改文件扩展名关联。
+AT 计划在计算机上运行的命令和程序。
+ATTRIB 显示或更改文件属性。
+BREAK 设置或清除扩展式 CTRL+C 检查。
+CACLS 显示或修改文件的访问控制列表(ACLs)。
+CALL 从另一个批处理程序调用这一个。
+CD 显示当前目录的名称或将其更改。
+CHCP 显示或设置活动代码页数。
+CHDIR 显示当前目录的名称或将其更改。
+CHKDSK 检查磁盘并显示状态报告。
 CHKNTFS 显示或修改启动时间磁盘检查。
-CLS   清除屏幕。
-CMD   打开另一个 Windows 命令解释程序窗口。
-COLOR  设置默认控制台前景和背景颜色。
-COMP   比较两个或两套文件的内容。
+CLS 清除屏幕。
+CMD 打开另一个 Windows 命令解释程序窗口。
+COLOR 设置默认控制台前景和背景颜色。
+COMP 比较两个或两套文件的内容。
 COMPACT 显示或更改 NTFS 分区上文件的压缩。
 CONVERT 将 FAT 卷转换成 NTFS。您不能转换当前驱动器。
-COPY   将至少一个文件复制到另一个位置。
-DATE   显示或设置日期。
-DEL   删除至少一个文件。
-DIR   显示一个目录中的文件和子目录。
+COPY 将至少一个文件复制到另一个位置。
+DATE 显示或设置日期。
+DEL 删除至少一个文件。
+DIR 显示一个目录中的文件和子目录。
 DISKCOMP 比较两个软盘的内容。
 DISKCOPY 将一个软盘的内容复制到另一个软盘。
-DOSKEY  编辑命令行、调用 Windows 命令并创建宏。
-ECHO   显示消息，或将命令回显打开或关上。
+DOSKEY 编辑命令行、调用 Windows 命令并创建宏。
+ECHO 显示消息，或将命令回显打开或关上。
 ENDLOCAL 结束批文件中环境更改的本地化。
-ERASE  删除至少一个文件。
-EXIT   退出 CMD.EXE 程序(命令解释程序)。
-FC    比较两个或两套文件，并显示不同处。
-FIND   在文件中搜索文字字符串。
+ERASE 删除至少一个文件。
+EXIT 退出 CMD.EXE 程序(命令解释程序)。
+FC 比较两个或两套文件，并显示不同处。
+FIND 在文件中搜索文字字符串。
 FINDSTR 在文件中搜索字符串。
-FOR   为一套文件中的每个文件运行一个指定的命令
-FORMAT  格式化磁盘，以便跟 Windows 使用。
-FTYPE  显示或修改用于文件扩展名关联的文件类型。
-GOTO   将 Windows 命令解释程序指向批处理程序中某个标明的行。
+FOR 为一套文件中的每个文件运行一个指定的命令
+FORMAT 格式化磁盘，以便跟 Windows 使用。
+FTYPE 显示或修改用于文件扩展名关联的文件类型。
+GOTO 将 Windows 命令解释程序指向批处理程序中某个标明的行。
 GRAFTABL 启用 Windows 来以图像模式显示扩展字符集。
-HELP   提供 Windows 命令的帮助信息。
-IF    执行批处理程序中的条件性处理。
-LABEL  创建、更改或删除磁盘的卷标。
-MD    创建目录。
-MKDIR  创建目录。
-MODE   配置系统设备。
-MORE   一次显示一个结果屏幕。
-MOVE   将文件从一个目录移到另一个目录。
-PATH   显示或设置可执行文件的搜索路径。
-PAUSE  暂停批文件的处理并显示消息。
-POPD   还原 PUSHD 保存的当前目录的上一个值。
-PRINT  打印文本文件。
-PROMPT  更改 Windows 命令提示符。
-PUSHD  保存当前目录，然后对其进行更改。
-RD    删除目录。
+HELP 提供 Windows 命令的帮助信息。
+IF 执行批处理程序中的条件性处理。
+LABEL 创建、更改或删除磁盘的卷标。
+MD 创建目录。
+MKDIR 创建目录。
+MODE 配置系统设备。
+MORE 一次显示一个结果屏幕。
+MOVE 将文件从一个目录移到另一个目录。
+PATH 显示或设置可执行文件的搜索路径。
+PAUSE 暂停批文件的处理并显示消息。
+POPD 还原 PUSHD 保存的当前目录的上一个值。
+PRINT 打印文本文件。
+PROMPT 更改 Windows 命令提示符。
+PUSHD 保存当前目录，然后对其进行更改。
+RD 删除目录。
 RECOVER 从有问题的磁盘恢复可读信息。
-REM   记录批文件或 CONFIG.SYS 中的注释。
-REN   重命名文件。
-RENAME  重命名文件。
+REM 记录批文件或 CONFIG.SYS 中的注释。
+REN 重命名文件。
+RENAME 重命名文件。
 REPLACE 替换文件。
-RMDIR  删除目录。
-SET   显示、设置或删除 Windows 环境变量。
+RMDIR 删除目录。
+SET 显示、设置或删除 Windows 环境变量。
 SETLOCAL 开始批文件中环境更改的本地化。
-SHIFT  更换批文件中可替换参数的位置。
-SORT   对输入进行分类。
-START  启动另一个窗口来运行指定的程序或命令。
-SUBST  将路径跟一个驱动器号关联。
-TIME   显示或设置系统时间。
-TITLE  设置 CMD.EXE 会话的窗口标题。
-TREE   以图形模式显示驱动器或路径的目录结构。
-TYPE   显示文本文件的内容。
-VER   显示 Windows 版本。
-VERIFY  告诉 Windows 是否验证文件是否已正确写入磁盘。
-VOL   显示磁盘卷标和序列号。
-XCOPY  复制文件和目录树。
+SHIFT 更换批文件中可替换参数的位置。
+SORT 对输入进行分类。
+START 启动另一个窗口来运行指定的程序或命令。
+SUBST 将路径跟一个驱动器号关联。
+TIME 显示或设置系统时间。
+TITLE 设置 CMD.EXE 会话的窗口标题。
+TREE 以图形模式显示驱动器或路径的目录结构。
+TYPE 显示文本文件的内容。
+VER 显示 Windows 版本。
+VERIFY 告诉 Windows 是否验证文件是否已正确写入磁盘。
+VOL 显示磁盘卷标和序列号。
+XCOPY 复制文件和目录树。
 
 ## 不同类型转换
 
@@ -252,7 +258,7 @@ cout<<save;
 
 ```cpp
 int a = 5;
-char ca = a + '0';
+char ca = a +'0';
 cout<<ca;
 ```
 
@@ -260,7 +266,7 @@ cout<<ca;
 
 # struct
 
-## pair< , >
+## pair< ,>
 
 pair是将2个数据组合成一组数据，当需要这样的需求时就可以使用pair，如stl中的map就是将key和value放在一起来保存。另一个应用是，当一个函数需要返回2个数据的时候，可以选择pair。 pair的实现是一个结构体，主要的两个成员变量是first second 因为是使用struct不是class，所以可以直接使用pair的成员变量。
 
@@ -278,21 +284,21 @@ template<class T1,class T2> struct pair;
 //功能：pair将一对值(T1和T2)组合成一个值，
 ```
 
-### 生成pair< , >
+### 生成pair< ,>
 
 ```cpp
-pair<T1, T2> p1;            //创建一个空的pair对象（使用默认构造），它的两个元素分别是T1和T2类型，采用值初始化。
-pair<T1, T2> p1(v1, v2);    //创建一个pair对象，它的两个元素分别是T1和T2类型，其中first成员初始化为v1，second成员初始化为v2。
-make_pair(v1, v2);          // 以v1和v2的值创建一个新的pair对象，其元素类型分别是v1和v2的类型。
+pair<T1, T2> p1; //创建一个空的pair对象（使用默认构造），它的两个元素分别是T1和T2类型，采用值初始化。
+pair<T1, T2> p1(v1, v2); //创建一个pair对象，它的两个元素分别是T1和T2类型，其中first成员初始化为v1，second成员初始化为v2。
+make_pair(v1, v2); //以v1和v2的值创建一个新的pair对象，其元素类型分别是v1和v2的类型。
 ```
 
 ### 操作
 
 ```cpp
-p1 < p2;                    // 两个pair对象间的小于运算，其定义遵循字典次序：如 p1.first < p2.first 或者 !(p2.first < p1.first) && (p1.second < p2.second) 则返回true。
-p1 == p2；                  // 如果两个对象的first和second依次相等，则这两个对象相等；该运算使用元素的==操作符。
-p1.first;                   // 返回对象p1中名为first的公有数据成员
-p1.second;                 // 返回对象p1中名为second的公有数据成员
+p1 < p2; //两个pair对象间的小于运算，其定义遵循字典次序：如 p1.first < p2.first 或者!(p2.first < p1.first)&&(p1.second < p2.second)则返回true。
+p1 == p2；//如果两个对象的first和second依次相等，则这两个对象相等；该运算使用元素的==操作符。
+p1.first; //返回对象p1中名为first的公有数据成员
+p1.second; //返回对象p1中名为second的公有数据成员
 ```
 
 # 字符串
@@ -307,9 +313,9 @@ char site[7]={'R','U,'N','O','O','B','\0'};
 |        函数         | 目的                                                         |
 | :-----------------: | :----------------------------------------------------------- |
 | **strcpy(s1, s2);** | 复制字符串 s2 到字符串 s1。                                  |
-| **strcat(s1, s2);** | 连接字符串 s2 到字符串 s1 的末尾。连接字符串也可以用 **+** 号，例如: `string str1 = "runoob"; string str2 = "google"; string str = str1 + str2;` |
+| **strcat(s1, s2);** | 连接字符串 s2 到字符串 s1 的末尾。连接字符串也可以用**+**号，例如: `string str1 = "runoob"; string str2 = "google"; string str = str1 + str2;` |
 |   **strlen(s1);**   | 返回字符串 s1 的长度。                                       |
-| **strcmp(s1, s2);** | 如果 s1 和 s2 是相同的，则返回 0；如果 s1<s2 则返回值小于 0；如果 s1>s2 则返回值大于 0。 |
+| **strcmp(s1, s2);** | 如果 s1 和 s2 是相同的，则返回0；如果 s1<s2 则返回值小于0；如果 s1>s2 则返回值大于0。 |
 | **strchr(s1, ch);** | 返回一个指针，指向字符串 s1 中字符 ch 的第一次出现的位置。   |
 | **strstr(s1, s2);** | 返回一个指针，指向字符串 s1 中字符串 s2 的第一次出现的位置。 |
 
@@ -338,11 +344,11 @@ getline(stuff,':');//read up to :, discard :
 # 注释
 
 ```c++
-/// @brief
+///@brief
 
 //
 
-/* --- */
+/*---*/
 ```
 
 # 函数
@@ -414,7 +420,7 @@ swap包含在命名空间std里面
 
 *    sort()为类模板，需要声明其类型
 
-     *    如果cmp返回结果为假, 那么函数就会将他们互换位置；
+     *    如果cmp返回结果为假,那么函数就会将他们互换位置；
 
           如果cmp返回结果为真，就会保持原来位置不变。
 
@@ -450,8 +456,8 @@ for(auto &n:str){...};//要修改数组时
 # 指针
 
 ```c++
-<typename>* <pointname> = new <typename>
-<typename>* <pointname> = new <typename>[<length>]
+<typename>*<pointname> = new <typename>
+<typename>*<pointname> = new <typename>[<length>]
 str[i]<=>*(str+i);
 String*glamour;//声明指向类对象的指针
 String*first=&sayings[0];//将指针初始化为已有对象
@@ -465,10 +471,10 @@ if(sayingts[i]<*first)//使用*解除引用操作符获得对象
 
 ```cpp
 int **p;
-p = new int*[length];    //注意，int*[length]表示一个有10个元素的指针数组
+p = new int*[length]; //注意，int*[length]表示一个有10个元素的指针数组
 for (int i = 0; i < length; ++i)
 {
-    p[i] = new int[wide];
+ p[i]= new int[wide];
 }
 ```
 
@@ -479,9 +485,9 @@ for (int i = 0; i < length; ++i)
 ```cpp
 class classname{
 public:
-    friend function;
-    classname();
-    ~classname();
+ friend function;
+ classname();
+~classname();
 private:
 protected:
 };
@@ -508,14 +514,14 @@ typename::typename(typename name=<default value>):name(value){};
 <class name>(typename parameter=<default value>){};
 //使用new[]来初始化c_pointer
 c_name&c_name::operator=(const c_name&cn){
-    if(this==&cn){
-        return *this;
-    }
-    delete[]c_pointer;
-    //set size number of type_name units to be copied 
-    c_pointer=new type_name[size];
-    //the copy data pointed to by cn.c_pointer to location pointed to by c_pointer
-    return *this;
+ if(this==&cn){
+ return *this;
+}
+ delete[]c_pointer;
+//set size number of type_name units to be copied 
+ c_pointer=new type_name[size];
+//the copy data pointed to by cn.c_pointer to location pointed to by c_pointer
+ return *this;
 }
 ```
 
@@ -528,7 +534,7 @@ typename::~typename(){};
 ```
 
 构造函数中要么使用new[],要么使用new,而不能混用.
-*    如果**构造函数**使用的还是new[],则析构函数 应使用delete[]
+*    如果**构造函数**使用的还是new[],则析构函数应使用delete[]
 *    如果**构造函数**使用的是new,则析构函数应使用delete
 
 ### 复制构造函数
@@ -559,13 +565,13 @@ typename&operator=(const typename&_classname);
 ```c++
 using namespace std;
 baseDMA&baseDMA::operator=(const baseDMA&rs){//赋值运算符
-    if(this==&rs){
-        return *this;
-    }
-    delete[]label;
-    label=new char[strlen(rs.label)+1];
-    rating=rs.rating;
-    return *this;
+ if(this==&rs){
+ return *this;
+}
+ delete[]label;
+ label=new char[strlen(rs.label)+1];
+ rating=rs.rating;
+ return *this;
 }
 ```
 
@@ -576,13 +582,13 @@ baseDMA&baseDMA::operator=(const baseDMA&rs){//赋值运算符
 ```cpp
 class Someclass{
 public:
-    Someclass()=default;
-    Someclass(const Someclass &)=delete;
-    Someclass& operator=(const Someclass &)=delete;
-    Someclass(Someclass &&)=default;
-    Someclass & operator=(Someclass &&)=default;
-    Someclass & operator+(const Someclass &)const;
-    ...
+ Someclass()=default;
+ Someclass(const Someclass &)=delete;
+ Someclass& operator=(const Someclass &)=delete;
+ Someclass(Someclass &&)=default;
+ Someclass & operator=(Someclass &&)=default;
+ Someclass & operator+(const Someclass &)const;
+...
 }
 ```
 
@@ -593,10 +599,10 @@ public:
 ```c++
 class Base{
 private:
-    typename value;
+ typename value;
 public:
-    Base(typename _value=<default value>):value(_value){};
-    virtual ~class_one(){};
+ Base(typename _value=<default value>):value(_value){};
+ virtual ~class_one(){};
 }
 
 class Pro():
@@ -606,7 +612,7 @@ private:
 	
 public:
 	Pro(){};
-    ~Pro(){};
+~Pro(){};
 }
 ```
 
@@ -664,7 +670,7 @@ uses-a关系
 ### 多重继承
 
 ```c++
-class classname:public class_one,public class_two{...}  
+class classname:public class_one,public class_two{...}
 ```
 
 
@@ -675,7 +681,7 @@ class classname:public class_one,public class_two{...}
 
 ```c++
 double student::sum()const{
-    return std::valarray<double>::sum();
+ return std::valarray<double>::sum();
 }
 ```
 
@@ -684,8 +690,8 @@ double student::sum()const{
 ```c++
 class Student:private std::string,private std:vallary<double>{
 public:
-    using std::valarray<double>::min;
-    using std::valarray<double>::max;
+ using std::valarray<double>::min;
+ using std::valarray<double>::max;
 }
 ```
 
@@ -697,35 +703,35 @@ public:
 
 ```c++
 baseDMA::~baseDMA(){//析构函数
-    delete[]label;
-    return;
+ delete[]label;
+ return;
 }
 hasDMA::~hasDMA(){//析构函数
-    delete style;
-    return;
+ delete style;
+ return;
 }
 ```
 
 ```c++
 using namespace std;
 baseDMA::baseDMA(const baseDMA&rs){//复制构造函数
-    label=new char[strlen(re.label)+1];
-    strcpy(label,rs.label);
-    rating=rs.rating;
-    return;
+ label=new char[strlen(re.label)+1];
+ strcpy(label,rs.label);
+ rating=rs.rating;
+ return;
 }
 ```
 
 ```c++
 using namespace std;
 baseDMA&baseDMA::operator=(const baseDMA&rs){//赋值运算符
-    if(this==&rs){
-        return *this;
-    }
-    delete[]label;
-    label=new char[strlen(rs.label)+1];
-    rating=rs.rating;
-    return *this;
+ if(this==&rs){
+ return *this;
+}
+ delete[]label;
+ label=new char[strlen(rs.label)+1];
+ rating=rs.rating;
+ return *this;
 }
 ```
 
@@ -785,11 +791,11 @@ M1会增加编程的复杂程度，这种**复杂性主要是由于派生类通�
 ```c++
 class classname{
 private:
-    typename value;
+ typename value;
 public:
-    classname(typename _name=<default value>):value(_name){};
-    //friend function
-    friend typename functionname(typename _name){};
+ classname(typename _name=<default value>):value(_name){};
+//friend function
+ friend typename functionname(typename _name){};
 }
 ```
 
@@ -817,7 +823,7 @@ ofstream& operator<<(ofstream& _out,<object>& _name);//重载ofstream
 
 ```c++
 //---
-for(  ;  ;  ){
+for(; ; ){
 
 }
 //---
@@ -855,7 +861,7 @@ template<typename T>
 //function
 ```
 
->    **不能将模板成员函数放在独立的实现文件中** 
+>    **不能将模板成员函数放在独立的实现文件中**
 
 由于模板不是函数，不能单独编译。模板类必须与特定的模板实例化请求一起使用
 
@@ -890,7 +896,7 @@ template class ArrayTP<string,100>;
 ```c++
 template<typename T>
 class SortedArray{
-    //details omitted
+//details omitted
 }
 ```
 
@@ -917,8 +923,8 @@ class Crab
 ```c++
 template<class T>
 class HsaFriend{
-    public:
-    friend void counts();//friend to all HasFriend instantiations
+ public:
+ friend void counts();//friend to all HasFriend instantiations
 }
 ```
 
@@ -1024,13 +1030,13 @@ c++通常通过将信息放在栈中来处理函数调用
 class logic_error:public exception{
 public:
 explicit logic_error(const string& what_arg);
-    ...
+...
 }
 
 class domain_error:public logic_error{
 public:
 explicit domain_error(const string& what_arg);
-    ...
+...
 }
 ```
 
@@ -1097,21 +1103,21 @@ typeid运算符使能够确定两个对象是否为同种类型，与sizeof有�
 ```
 class type_info {
 public:
-    virtual ~type_info();
-    int operator==(const type_info& rhs) const;
-    int operator!=(const type_info& rhs) const;
-    int before(const type_info& rhs) const;
-    const char* name() const;
-    const char* raw_name() const;
+ virtual ~type_info();
+ int operator==(const type_info& rhs) const;
+ int operator!=(const type_info& rhs) const;
+ int before(const type_info& rhs) const;
+ const char* name() const;
+ const char* raw_name() const;
 private:
-    void *_m_data;
-    char _m_d_name[1];
-    type_info(const type_info& rhs);
-    type_info& operator=(const type_info& rhs);
+ void *_m_data;
+ char _m_d_name[1];
+ type_info(const type_info& rhs);
+ type_info& operator=(const type_info& rhs);
 };
 ```
 
-C++ 标准规定，type_info 类至少要有如下所示的 4 个 public 属性的成员函数，其他的扩展函数编译器开发者可以自由发挥，不做限制。
+C++标准规定，type_info 类至少要有如下所示的4 个 public 属性的成员函数，其他的扩展函数编译器开发者可以自由发挥，不做限制。
 
 |                     原型                     |                             用法                             |
 | :------------------------------------------: | :----------------------------------------------------------: |
@@ -1135,10 +1141,10 @@ C++ 标准规定，type_info 类至少要有如下所示的 4 个 public 属性�
 
 ```c++
 void remodel(string & str){
-    string * ps=new string(str);
-    ...
-        str = ps;
-    return;
+ string * ps=new string(str);
+...
+ str = ps;
+ return;
 }
 ```
 
@@ -1223,14 +1229,14 @@ STL不是面向对象编程，而是泛型编程
 vector<int>vec;
 ///迭代器遍历
 for(vector<int>::iterator iter=vec.begin();iter!=vec.end();iter++){
-    cout<<setw(4)<<left<<*iter;
+ cout<<setw(4)<<left<<*iter;
 }
 for(int i=0;i<vec.size();i++){
-    cout<<setw(4)<<left<<vec[i];
+ cout<<setw(4)<<left<<vec[i];
 }
 ///基于范围的for循环
 for(int x:vec){
-    cout<<setw(4)<<left<<x;
+ cout<<setw(4)<<left<<x;
 }
 ```
 
@@ -1254,9 +1260,9 @@ vector使用动态内存分配，可以用初始化参数来指出需要多少�
 #### 大小
 
 ```cpp
-vector.size();   //返回容器中元素的个数
-vector.empty();  //判断容器是否为空
-vector.resize(num);  //重新指定容器的长度为num，若容器变长，则以默认值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
+vector.size(); //返回容器中元素的个数
+vector.empty(); //判断容器是否为空
+vector.resize(num); //重新指定容器的长度为num，若容器变长，则以默认值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
 vector.resize(num, elem); //重新指定容器的长度为num，若容器变长，则以elem值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
 ```
 
@@ -1264,8 +1270,8 @@ vector.resize(num, elem); //重新指定容器的长度为num，若容器变长�
 
 ```cpp
 vector.push_back(object);	//原数据不动，增加数据
-vector.at(idx);   //返回索引idx所指的数据，如果idx越界，抛出out_of_range异常。
-vector[idx];   //返回索引idx所指的数据，越界时，运行直接报错
+vector.at(idx); //返回索引idx所指的数据，如果idx越界，抛出out_of_range异常。
+vector[idx]; //返回索引idx所指的数据，越界时，运行直接报错
 ```
 
 >    访问数组使用[]运算符与数组相似，都是从0开始
@@ -1305,9 +1311,9 @@ vector<vector<type-name>>vector-name(rowNumber,vector<type-name>());
 namespace std;
 vector<vector<typename>> name(length);
 for(int i=0;i<length;i++){
-    for(int j=0;j<width;j++){
-        name[i].push_back(object);
-    }
+ for(int j=0;j<width;j++){
+ name[i].push_back(object);
+}
 }
 ```
 
@@ -1317,17 +1323,17 @@ for(int i=0;i<length;i++){
 #include <vector>
 using namespace std;
 vector<vector<int>> vec;
- 
+
 vector<int> a;
 a.push_back(1);
 a.push_back(2);
 a.push_back(3);
- 
+
 vector<int> b;
 b.push_back(4);
 b.push_back(5);
 b.push_back(6);
- 
+
 vec.push_back(a);
 vec.push_back(b);
 ```
@@ -1337,7 +1343,7 @@ vec.push_back(b);
 ##### 获得二维vector数组宽长
 
 ```cpp
-vector<vector<int>> matrix = { {1,2,3,4,5},{5,6,7,8,9},{9,10,11,12,13} };
+vector<vector<int>> matrix = {{1,2,3,4,5},{5,6,7,8,9},{9,10,11,12,13}};
 int raws = matrix.size(); //行
 int cols = matrix[0].size(): //列
 ```
@@ -1350,16 +1356,16 @@ int cols = matrix[0].size(): //列
 #include <algorithm>
 using namespace std;
 int main(){
-    vector<int> vec={4,5,2,7,6};
-    sort(vec.begin(),vec.end,less<int>());//从小到大
-    for(int x:vec){//打印数据
-        cout<<x<<" ";
-    }
-    cout<<endl;
-    sort(vec.begin(),vec.end(),greater<int>());//从大到小
-    for(int y:vec){//打印数据
-        cout<<y<<" ";
-    }
+ vector<int> vec={4,5,2,7,6};
+ sort(vec.begin(),vec.end,less<int>());//从小到大
+ for(int x:vec){//打印数据
+ cout<<x<<"";
+}
+ cout<<endl;
+ sort(vec.begin(),vec.end(),greater<int>());//从大到小
+ for(int y:vec){//打印数据
+ cout<<y<<"";
+}
 }
 ```
 
@@ -1564,7 +1570,7 @@ string &insert(int pos,const char *s);//在pos位插入s字符串
 basic_string & erase(size_type pos=0, size_type n=npos);
 ```
 
-即从给定起始位置pos处开始删除, 要删除字符的长度为n, 返回值修改后的string对象引用
+即从给定起始位置pos处开始删除,要删除字符的长度为n,返回值修改后的string对象引用
 
 #### 获得子字符串
 
@@ -1594,8 +1600,8 @@ void split_String(vector<string>& ves, string str)
 
 ```cpp
 string str;
-str.erase(0,str.find_first_not_of(' '));
-str.erase(str.find_last_not_of(' ')+1);
+str.erase(0,str.find_first_not_of(''));
+str.erase(str.find_last_not_of('')+1);
 cout<<str;
 ```
 
@@ -1642,11 +1648,11 @@ queue 和 stack 有一些成员函数相似，但在一些情况下，工作方�
 
 #### push(const T& obj)
 
-在 queue 的尾部添加一个元素的副本。这是通过调用底层容器的成员函数 push_back() 来完成的。
+在 queue 的尾部添加一个元素的副本。这是通过调用底层容器的成员函数 push_back()来完成的。
 
 #### push(T&& obj)
 
-以移动的方式在 queue 的尾部添加元素。这是通过调用底层容器的具有右值引用参数的成员函数 push_back() 来完成的。
+以移动的方式在 queue 的尾部添加元素。这是通过调用底层容器的具有右值引用参数的成员函数 push_back()来完成的。
 
 #### pop()
 
@@ -1662,11 +1668,11 @@ queue 和 stack 有一些成员函数相似，但在一些情况下，工作方�
 
 #### emplace()
 
-用传给 emplace() 的参数调用 T 的构造函数，在 queue 的尾部生成对象。
+用传给 emplace()的参数调用 T 的构造函数，在 queue 的尾部生成对象。
 
 #### swap(queue<Template-name> &other_q)
 
-将当前 queue 中的元素和参数 queue 中的元素交换。它们需要包含相同类型的元素。也可以调用全局函数模板 swap() 来完成同样的操作。
+将当前 queue 中的元素和参数 queue 中的元素交换。它们需要包含相同类型的元素。也可以调用全局函数模板 swap()来完成同样的操作。
 
 
 queue<T> 模板定义了拷贝和移动版的 operator=()，对于所保存元素类型相同的 queue 对象，它们有一整套的比较运算符，这些运算符的工作方式和 stack 容器相同。
@@ -1685,9 +1691,9 @@ list<int> a；
 
 ```cpp
 list<int>a{1,2,3}
-list<int>a(n)    //声明一个n个元素的列表，每个元素都是0
-list<int>a(n, m)  //声明一个n个元素的列表，每个元素都是m
-list<int>a(first, last)  //声明一个列表，其元素的初始值来源于由区间所指定的序列中的元素，first和last是迭代器
+list<int>a(n)//声明一个n个元素的列表，每个元素都是0
+list<int>a(n, m)//声明一个n个元素的列表，每个元素都是m
+list<int>a(first, last)//声明一个列表，其元素的初始值来源于由区间所指定的序列中的元素，first和last是迭代器
 ```
 
 #### begin()、end()
@@ -1700,7 +1706,7 @@ list<int>a(first, last)  //声明一个列表，其元素的初始值来源于�
 
 #### empty()
 
-判断list是否为空 
+判断list是否为空
 
 #### resize()
 
@@ -1708,7 +1714,7 @@ list<int>a(first, last)  //声明一个列表，其元素的初始值来源于�
 
 #### clear()
 
-清空list中的所有元素 
+清空list中的所有元素
 
 #### front()、back()
 
@@ -1725,7 +1731,7 @@ list<int>a(first, last)  //声明一个列表，其元素的初始值来源于�
 有两种使用情况：
 
 *    a.assign(n, val):将a中的所有元素替换成n个val元素
-*    a.assign(b.begin(), b.end()) 
+*    a.assign(b.begin(), b.end())
 
 #### swap()
 
@@ -1733,19 +1739,19 @@ list<int>a(first, last)  //声明一个列表，其元素的初始值来源于�
 
 #### reverse()
 
-可以实现list的逆置 
+可以实现list的逆置
 
 #### merge()
 
-a.merge(b) 调用结束后b变为空，a中元素包含原来a和b的元素。
+a.merge(b)调用结束后b变为空，a中元素包含原来a和b的元素。
 
 #### insert()
 
 在指定位置插入一个或多个元素
 
 ```cpp
-a.insert(a.begin(),100);  //在a的开始位置（即头部）插入100
-a.insert(a.begin(),2, 100);   //在a的开始位置插入2个100
+a.insert(a.begin(),100); //在a的开始位置（即头部）插入100
+a.insert(a.begin(),2,100); //在a的开始位置插入2个100
 a.insert(a.begin(),b.begin(), b.end());//在a的开始位置插入b从开始到结束的所有位置的元素
 ```
 
@@ -1754,8 +1760,8 @@ a.insert(a.begin(),b.begin(), b.end());//在a的开始位置插入b从开始到�
 删除一个元素或一个区域的元素
 
 ```cpp
-a.erase(a.begin());  //将a的第一个元素删除
-a.erase(a.begin(),a.end());  //将a的从begin()到end()之间的元素删除。
+a.erase(a.begin()); //将a的第一个元素删除
+a.erase(a.begin(),a.end()); //将a的从begin()到end()之间的元素删除。
 ```
 
 #### remove()
@@ -1818,10 +1824,10 @@ KV模型：表示能存放两种数据类型
 #### 模板参数定义
 
 ```cpp
-template < class T,                        // 表示set里面存放的数据类型
-           class Compare = less<T>,        // 仿函数，可以指定让set按照什么方式进行比较数据
-           class Alloc = allocator<T>     // 空间配置器，默认是系统提供的
-         >
+template < class T,//表示set里面存放的数据类型
+ class Compare = less<T>,//仿函数，可以指定让set按照什么方式进行比较数据
+ class Alloc = allocator<T> //空间配置器，默认是系统提供的
+>
 ```
 
 ##### 插入数据（接口为insert）
@@ -1831,7 +1837,7 @@ pair<iterator,bool> insert (const value_type& val);
 
 iterator insert (iterator position, const value_type& val);
 
-template <class InputIterator>   
+template <class InputIterator> 
 void insert (InputIterator first, InputIterator last);
 ```
 
@@ -1843,8 +1849,8 @@ void insert (InputIterator first, InputIterator last);
 set<int>::iterator it1 = s.begin();
 while (it1 != s.end())
 {
-     cout << *it1 << " ";
-     ++it1;
+ cout << *it1 << "";
+++it1;
 }
 ```
 
@@ -1854,8 +1860,8 @@ while (it1 != s.end())
 set<int>::reverse_iterator it1 = s.rbegin();
 while (it1 != s.rend())
 {
-     cout << *it1 << " ";
-     ++it1;
+ cout << *it1 << "";
+++it1;
 }
 cout << endl;
 ```
@@ -1866,9 +1872,9 @@ cout << endl;
 
 ```cpp
 set<int>::iterator pos = s.find(10);
-if (pos != s.end())   //！=s.end()说明数据存在
+if (pos != s.end())//！=s.end()说明数据存在
 {
-    s.erase(pos);
+ s.erase(pos);
 }
 ```
 
@@ -1883,13 +1889,13 @@ void erase (iterator first, iterator last);
 ##### set查找数据（接口为find)
 
 ```cpp
-iterator   find (const value_type& val)  const;
+iterator  find (const value_type& val) const;
 ```
 
 ##### count（统计数据是否存在于set里面）
 
 ```cpp
-size_type    count (const value_type& val)   const;
+size_type  count (const value_type& val) const;
 ```
 
 （1）返回值只有0或1；
@@ -1918,7 +1924,7 @@ size_type    count (const value_type& val)   const;
 >
 >    有序性，这是map结构最大的优点，其元素的有序性在很多应用中都会简化很多的操作
 >    红黑树，内部实现一个红黑书使得map的很多操作在lgn的时间复杂度下就可以实现，因此效率非常的高
->    缺点： 空间占用率高，因为map内部实现了红黑树，虽然提高了运行效率，但是因为每一个节点都需要额外保存父节点、孩子节点和红/黑性质，使得每一个节点都占用大量的空间
+>    缺点：空间占用率高，因为map内部实现了红黑树，虽然提高了运行效率，但是因为每一个节点都需要额外保存父节点、孩子节点和红/黑性质，使得每一个节点都占用大量的空间
 >
 >    适用处：对于那些有顺序要求的问题，用map会更高效一些
 >
@@ -1926,12 +1932,12 @@ size_type    count (const value_type& val)   const;
 >
 >    unordered_map：
 >
->    优点： 因为内部实现了哈希表，因此其<u>查找速度</u>非常的快
->    缺点： 哈希表的建立比较耗费时间
+>    优点：因为内部实现了哈希表，因此其<u>查找速度</u>非常的快
+>    缺点：哈希表的建立比较耗费时间
 >    适用处：对于查找问题，unordered_map会更加高效一些，因此遇到查找问题，常会考虑一下用unordered_map
 >    总结：
 >
->    内存占有率的问题就转化成红黑树 VS hash表 , 还是unorder_map占用的内存要高。
+>    内存占有率的问题就转化成红黑树 VS hash表,还是unorder_map占用的内存要高。
 >    但是unordered_map执行效率要比map高很多
 >    对于unordered_map或unordered_set容器，其遍历顺序与创建该容器时输入的顺序不一定相同，因为遍历是按照哈希表从前往后依次遍历的
 >    **map和unordered_map的使用**
@@ -2011,7 +2017,7 @@ mapname[3]="sum";
 cout<<"content of map as followed: \n";
 map<string,int>::iterator iter;
 for(iter=mapname.begin();iter!=mapname.end();iter++){
-    cout<<iter->first<<" "<<iter->second<<endl;
+ cout<<iter->first<<""<<iter->second<<endl;
 }
 ```
 
@@ -2021,10 +2027,10 @@ for(iter=mapname.begin();iter!=mapname.end();iter++){
 map<string,int>::iterator iter;
 iter=mapname.find(key);
 if(iter!=mapname.end()){
-    cout<<"find\n";
+ cout<<"find\n";
 }
 else{
-    cout<<"not find\n";
+ cout<<"not find\n";
 }//find没有查找到，就返回mapname.end()
 ```
 
@@ -2048,10 +2054,10 @@ mapname.erase(iter);
 
 ```cpp
 for( std::map<int, int>::iterator iter = test_map.begin(); iter != test_map.end(); ){
-     if( iter->first % 2 == 0){
-         iter = test_map.erase(iter);
-     }else iter++;
-  }
+ if( iter->first %2 == 0){
+ iter = test_map.erase(iter);
+}else iter++;
+}
 ```
 
 
@@ -2085,7 +2091,7 @@ iterator unique(iterator it_1,iterator it_2);
 *    有三个参数，且前两个参数类型为迭代器，最后一个参数类型可以看作是bool类型：
 
 ```
-iterator unique(iterator it_1,iterator it_2,``bool` `MyFunc);
+iterator unique(iterator it_1,iterator it_2,``bool``MyFunc);
 ```
 
 该类型的unique函数我们使用的比较少，其中前两个参数和返回值同上面类型的unique函数是一样的，主要区别在于第三个参数。这里的第三个参数表示的是**自定义元素是否相等**。也就是说通过自定义两个元素相等的规则，来对容器中元素进行去重。这里的第三个参数与STL中sort函数的第三个参数功能类似。
@@ -2133,7 +2139,7 @@ functional提供了一种基于模板的比较函数对象，equal_to<Type>、no
 ```cpp
 <返回类型说明符> operator <运算符符号>(<参数表>)
 {
-    <函数体>
+<函数体>
 }
 ```
 
@@ -2143,12 +2149,12 @@ functional提供了一种基于模板的比较函数对象，equal_to<Type>、no
 
 ```cpp
 struct Less
-{ 
-   bool operator()(const Student& s1, const Student& s2)
-       {  
-             return s1.name < s2.name; //从小到大排序    
-       }
- };
+{
+ bool operator()(const Student& s1, const Student& s2)
+{
+ return s1.name < s2.name; //从小到大排序
+}
+};
 std::sort(sutVector.begin(), stuVector.end(), Less());
 ```
 
@@ -2163,7 +2169,7 @@ generate(vec.begin(), vec.end(), rand);
 ### count_if统计
 
 ```cpp
-int count = count_if(vec.begin(), vec.end(), [](int x) {return x % 2 == 0; });
+int count = count_if(vec.begin(), vec.end(),[](int x){return x %2 == 0; });
 ```
 
 
@@ -2221,7 +2227,7 @@ iostream文件中包含一些专门设计用来实现、管理流和缓冲区的
 ---
 
 *    cin对象对应于标准输入流。在默认情况下,这个流被关联到标准输入设备(通常为键盘)。wcin对象与此类似,但处理的是whar_t类型。
-*    cout对象与标准输出流相对应。在默认情况下,这个流被关联到标准输出设备(通常为显示器) 。wcout对象与此类似,但处理的是wchar_t类型。
+*    cout对象与标准输出流相对应。在默认情况下,这个流被关联到标准输出设备(通常为显示器)。wcout对象与此类似,但处理的是wchar_t类型。
 *    cerr对象与标准错误流相对应,可用于显示错误消息。在默认情况下,这个流被关联到标准输出设备(通常为显示器)。这个流没有被缓冲,这意味着信息将被直接发送给屏幕,而不会等到缓冲区填满或新的换行符。wcerr对象与此类似,但处理的是whar_t类型。
 *    clog对象也对应着标准错误流。在默认情况下,这个流被关联到标准输出设备(通常为显示器)。这个流被缓冲。wclog对象与此类似,但处理的是wchar_t类型。
 *    对象代表流。当iostream文件为程序声明一个cout对象时,该对象将包含存储了与输出有关的信息的数据成员,如显示数据时使用的字段宽度、小数位数、显示整数时采用的计数方法以及描述用来处理输出流的缓冲区的streambuf对象的地址。下面的语句通过指向的streambuf对象将字符串"Bjarna free"中的字符放到cout管理的缓冲区中。
@@ -2433,15 +2439,15 @@ mask是位模式，mask中所有的位都设置为1，将使得对应的位被�
 | badbit                   | 如果流被破坏，则设置为1                                      |
 | failbit                  | 如果输入操作未能读取预期的字符或输出操作没有写入预期的字符，则设置为1 |
 | goodbit                  | 另一种表示0的方法                                            |
-| good( )                  | 如果流可以使用（所有的位都被清除），则返回true               |
-| eof( )                   | 如果eofbit被设置，则返回true                                 |
-| bad( )                   | 如果badbit被设置，则返回true                                 |
-| fail( )                  | 如果badbit或failbit被设置，则返回true                        |
-| rdstate( )               | 返回流状态                                                   |
-| exceptions( )            | 返回一个位掩码，指出哪些标记导致异常被引发                   |
+| good()                   | 如果流可以使用（所有的位都被清除），则返回true               |
+| eof()                    | 如果eofbit被设置，则返回true                                 |
+| bad()                    | 如果badbit被设置，则返回true                                 |
+| fail()                   | 如果badbit或failbit被设置，则返回true                        |
+| rdstate()                | 返回流状态                                                   |
+| exceptions()             | 返回一个位掩码，指出哪些标记导致异常被引发                   |
 | exceptions( isostate ex) | 设置哪些状态将导致clear()引发异常；例如，如果ex是eofbit，则如果eofbit被设置，clear()将引发异常 |
-| clear( iostate s)        | 将流状态设置为s；s的默认值为0（goodbit）；如果(restate()& exceptions())! = 0，则引发异常basic_ ios:: failure |
-| setstate( iostate s)     | 调用clear（ rdstate( )｜ s）。 这将设置与s中设置的位对应的流状态位，其他流状态位保持不变 |
+| clear( iostate s)        | 将流状态设置为s；s的默认值为0（goodbit）；如果(restate()& exceptions())!= 0，则引发异常basic_ ios:: failure |
+| setstate( iostate s)     | 调用clear（ rdstate()｜ s）。这将设置与s中设置的位对应的流状态位，其他流状态位保持不变 |
 
 ### 设置状态
 
@@ -2459,9 +2465,9 @@ setstate(eofbit);
 
 ### I/O和异常
 
-exceptions( )方法返回一个位字段,它包含3位,分别对应于eofbit,failbit和badbit。修改流状态涉及clear( )或setstate( ),这都将使用clear( )。
+exceptions()方法返回一个位字段,它包含3位,分别对应于eofbit,failbit和badbit。修改流状态涉及clear()或setstate(),这都将使用clear()。
 
-修改流状态后, clear( )方法将当前的流状态与exceptions ( )返回的值进行比较。如果在返回值中某一位被设置,而当前状态中的对应位也被设置,则clear ( )将引发ios_base:: failure异常。如果两个值都设置了badbit,将发生这种情况。如果exceptions ( )返回goodbit,则不会引发任何异常。ios base:: failure异常类是从std::exception类派生而来的,因此包含一个what( )方法。
+修改流状态后, clear()方法将当前的流状态与exceptions ()返回的值进行比较。如果在返回值中某一位被设置,而当前状态中的对应位也被设置,则clear ()将引发ios_base:: failure异常。如果两个值都设置了badbit,将发生这种情况。如果exceptions ()返回goodbit,则不会引发任何异常。ios base:: failure异常类是从std::exception类派生而来的,因此包含一个what()方法。
 
 ### 流状态的影响
 
@@ -2469,7 +2475,7 @@ exceptions( )方法返回一个位字段,它包含3位,分别对应于eofbit,fai
 
 设置流状态位有一个非常重要的后果:流将对后面的输入或输出关闭,直到位被清除。
 
-如果希望程序在流状态位被设置后能够读取后面的输入,就必须将流状态重置为良好。这可以通过调用clear( )方法来实现
+如果希望程序在流状态位被设置后能够读取后面的输入,就必须将流状态重置为良好。这可以通过调用clear()方法来实现
 
 ```c++
 cin.clear();
@@ -2514,7 +2520,7 @@ istream & operator>>(int &);
 cin>>hex;
 ```
 
-在单字符模式下, >>运算符将读取该字符,将它放置到指定的位置。在其他模式下, >>运算符将读取一个指定类型的数据。也就是说,它读取从非空白字符开始,到与目标类型不匹配的第一个字符之间的全部内容。
+在单字符模式下,>>运算符将读取该字符,将它放置到指定的位置。在其他模式下,>>运算符将读取一个指定类型的数据。也就是说,它读取从非空白字符开始,到与目标类型不匹配的第一个字符之间的全部内容。
 
 #### cin方法
 
@@ -2526,7 +2532,7 @@ cin>>hex;
 |     cin.gcount();      |            获取一个字符变量中包括空白字符的个数。            |
 |      cin.read();       |                      只能读取一行的内容                      |
 |     cin.getlie();      |               不限定行数直到到达结束标志为止。               |
-|      cin.peek();       | 假设要读取输入,直到遇到换行*或句点,则可以用peek ( )查看输入流中的下一个字符,以此来判断是否继续读取: |
+|      cin.peek();       | 假设要读取输入,直到遇到换行*或句点,则可以用peek ()查看输入流中的下一个字符,以此来判断是否继续读取: |
 |        gcount()        |           返回最后一个非格式化抽取方法读取的字符数           |
 |       putback()        | 将一个字符插入到输入字符串中，被插入的字符将是下一条输入语句读取的第一个字符。 |
 
@@ -2540,7 +2546,7 @@ cin>>hex;
 
 *    get(char &)
 
-在使用char参数或没有参数的情况下, get()方法读取下一个输入字符,即使该字符是空格、制表符或换行符。get (char &ch)版本将输入字符赋给其参数, 而get (void)版本将输入字符转换为整型(通常是int),并将其返回。
+在使用char参数或没有参数的情况下, get()方法读取下一个输入字符,即使该字符是空格、制表符或换行符。get (char &ch)版本将输入字符赋给其参数,而get (void)版本将输入字符转换为整型(通常是int),并将其返回。
 
 *    get(void)
 
@@ -2565,7 +2571,7 @@ cin.get(c1)返回cin，因此可以放在get()的前面
 ```c++
 int ch;
 while((ch = cin.get())!=EOF){
-    //process input
+//process input
 }
 ```
 
@@ -2581,7 +2587,7 @@ while((ch = cin.get())!=EOF){
 
 *    首先,应确定是否希望跳过空白。如果跳过空白更方便,则使用抽取运算符>>。例如,提供菜单选项时,跳过空白更为方便。
 
-*    如果希望程序检查每个字符,请使用get ( )方法。在get( )方法中, get (char &)的接口更佳。get (void)的主要优点是,它与标准c语言中的getchar ( )函数极其类似,这意味着可以通过包含iostream (而不是stdio.h),并用cin. get( )替换所有的getchar( ),用cout. put(ch)替换所有的putchar(ch),来将C程序转换为C++程序。
+*    如果希望程序检查每个字符,请使用get ()方法。在get()方法中, get (char &)的接口更佳。get (void)的主要优点是,它与标准c语言中的getchar ()函数极其类似,这意味着可以通过包含iostream (而不是stdio.h),并用cin. get()替换所有的getchar(),用cout. put(ch)替换所有的putchar(ch),来将C程序转换为C++程序。
 
 #### 字符串输入getline()、get()和ignore()
 
@@ -2600,10 +2606,10 @@ istream & getline(char *, int);
 
 上述函数都在读取最大数目的字符或遇到换行符后为止。
 
-get( )和getline( )之间的主要区别在于, 
+get()和getline()之间的主要区别在于,
 
-*    get()将换行符留在输入流中,这样接下来的输入操作首先看到是将是换行符 
-*    getline( )抽取并丢弃输入流中的换行符
+*    get()将换行符留在输入流中,这样接下来的输入操作首先看到是将是换行符
+*    getline()抽取并丢弃输入流中的换行符
 
 ```c++
 cin.ignore();
@@ -2619,7 +2625,7 @@ istream & ignore(int = 1, int = EOF);
 
 #### 意外字符串输入
 
-get (char *, int)和getline ( )的某些输入形式将影响流状态。与其他输入函数一样,这两个函数在
+get (char *, int)和getline ()的某些输入形式将影响流状态。与其他输入函数一样,这两个函数在
 
 *    遇到文件尾时将设置eofbit
 *    遇到流被破坏(如设备故障)时将设置badbit
@@ -2710,7 +2716,7 @@ istream & seekg(streampos);
 
 第二个原型定位到离文件开头特定距离(单位为字节)的位置
 
--    来看seekg ( )的第一个原型的参数。
+-    来看seekg ()的第一个原型的参数。
 
 streamoff值被用来度量相对于文件特定位置的偏移量(单位为字节)。streamoff参数表示相对于三个位置之一的偏移量为特定值(以字节为单位)的文件位置(类型可定义为整型或类)。
 
@@ -2731,12 +2737,12 @@ streampos值表示文件中的绝对位置(从文件开始处算起)。可以将
 ### 读取文件
 
 ```cpp
-/// <summary>
-/// 读取文件
-/// </summary>
-/// <returns></returns>
-while (fin.read((char*)&pl, sizeof(pl))) {
-    cout << setw(20) << pl.name << ": " << setprecision(0) << setw(6) << pl.g << endl;
+///<summary>
+///读取文件
+///</summary>
+///<returns></returns>
+while (fin.read((char*)&pl, sizeof(pl))){
+ cout << setw(20)<< pl.name << ": "<< setprecision(0)<< setw(6)<< pl.g << endl;
 }
 fin.close();
 ```
@@ -2744,17 +2750,17 @@ fin.close();
 ### 输入文件
 
 ```cpp
-/// <summary>
-/// 输出文件
-/// </summary>
-/// <returns></returns>
+///<summary>
+///输出文件
+///</summary>
+///<returns></returns>
 fout.write((char*)&pl, sizeof(pl));
 ```
 ## 打印二进制文件内容
 
 ```cpp
-while (fin.read((char*)&pl, sizeof(pl))) {
-    cout << setw(20) << pl.name << ": " << pl.population << setprecision(2) << setw(6) << pl.g << endl;
+while (fin.read((char*)&pl, sizeof(pl))){
+ cout << setw(20)<< pl.name << ": "<< pl.population << setprecision(2)<< setw(6)<< pl.g << endl;
 }
 ```
 
@@ -2762,7 +2768,7 @@ while (fin.read((char*)&pl, sizeof(pl))) {
 
 ## 内核格式化
 
-iostream族(family)支持程序与终端之间的1/0,而fstream族使用相同的接口提供程序和文件之间的1/0. C++库还提供了sstream族,它们使用相同的接口提供程序和string对象之间的1/0.也就是说,可以使用于cout的ostream方法将格式化信息写入到string对象中,并使用istream方法(如getline( ))来读取string对象中的信息。读取string对象中的格式化信息或将格式化信息写入string对象中被称为**内核格式化**(incoreformatting)。下面简要地介绍一下这些工具(string的sstream族支持取代了char数组的strstream.h族支持)。
+iostream族(family)支持程序与终端之间的1/0,而fstream族使用相同的接口提供程序和文件之间的1/0. C++库还提供了sstream族,它们使用相同的接口提供程序和string对象之间的1/0.也就是说,可以使用于cout的ostream方法将格式化信息写入到string对象中,并使用istream方法(如getline())来读取string对象中的信息。读取string对象中的格式化信息或将格式化信息写入string对象中被称为**内核格式化**(incoreformatting)。下面简要地介绍一下这些工具(string的sstream族支持取代了char数组的strstream.h族支持)。
 
 头文件sstream定义了一个从ostream类派生而来的ostringstream类(还有一个基于wostream的wostringstream类,这个类用于宽字符集)。如果创建了一个ostringstream对象,则可以将信息写入其中,它将存储这些信息。可以将可用于cout的方法用于ostringstream对象。
 
@@ -2774,7 +2780,7 @@ iostream族(family)支持程序与终端之间的1/0,而fstream族使用相同�
 
 在传统的操作系统中,每个进程都有自己的地址空间和一个执行线程,该线程通常叫<u>主线程</u>(primary thread).一般而言,运行在同一个进程中的多个线程具有相同的地址空间(即进程的地址空间),在准并行上下文中,这些线程就像是多个单独运行的进程,只不过它们的地址空间相同。
 
-## _tmain() 和 main()
+## _tmain()和 main()
 
 首先，这个_tmain()是为了支持unicode所使用的main一个别名而已。
 
@@ -2785,7 +2791,7 @@ iostream族(family)支持程序与终端之间的1/0,而fstream族使用相同�
 #include <tchar.h>
 ```
 
-我们可以在头文件<tchar.h>里找到_tmain的宏定义   
+我们可以在头文件<tchar.h>里找到_tmain的宏定义
 
 ```c++
 #define  _tmain  main
@@ -2810,7 +2816,7 @@ int main(int argc, char* argv[]);
 int _tmain(int argc, _TCHAR *argv[])
 ```
 
-(1) 当你程序当前的字符集为unicode时，int _tmain(int argc, TCHAR *argv[])会被翻译成
+(1)当你程序当前的字符集为unicode时，int _tmain(int argc, TCHAR *argv[])会被翻译成
 
 ```c++
 int wmain(int argc, wchar_t *argv[])
@@ -2818,7 +2824,7 @@ int wmain(int argc, wchar_t *argv[])
 
 wmain也是main的另一个别名,是为了支持二个字节的语言环境
 
-(2) 当你程序当前的字符集为ANSI时，int _tmain(int argc, TCHAR *argv[])会被翻译成
+(2)当你程序当前的字符集为ANSI时，int _tmain(int argc, TCHAR *argv[])会被翻译成
 
 ```c++
 int main(int argc, char *argv[])
@@ -2876,7 +2882,7 @@ UNREFERENCED_PARAMETER( szCmdLine );
 -    WINDCLASSEX窗口结构的实例化代码wndx
 
 ```cpp
-WNDCLASSEX wndEx={ 0 };
+WNDCLASSEX wndEx={0 };
 ```
 
 -    下面的代码定义了在实例化窗口类后分配的额外字节数cbClsExtra
@@ -2900,7 +2906,7 @@ wndEx.cbWndExtra = 0;
 -    窗口类背景画刷的句柄hbrBackground
 
 ```cpp
-wndEx.hbrBackground = (HBRUSH) (COLOR_WINDOW + 1);
+wndEx.hbrBackground = (HBRUSH)(COLOR_WINDOW +1);
 ```
 
 -    窗口类光标的句柄hCursor
@@ -2949,17 +2955,17 @@ wndEx.style = CS_HREDRAW | CS_VREDRAM;
 -    注册一个窗口类,供CreateWindow或CreateWindowEx函数稍后使用
 
 ```cpp
-if( !RegisterClassEx( &wndEx)){
-    return -1;
+if(!RegisterClassEx(&wndEx)){
+ return -1;
 }
 ```
 
 -    CreateWindowAPI创建一个重叠、弹出的窗口或子窗口。它指定该窗口类、窗口标题、窗口样式、窗口的初始位置和大小(可选的)。该函数还指定了窗口的父窗口或所有者(如果有的话),以及窗口的菜单。
 
 ```cpp
-HWND hWnd = CreateWindow( wndEx.lpszClassName, TEXT("GUI Project"), WS_OVERLAPPEDWINDOW, 200, 200, 400, 300, HWND_DESKTOP, NULL, hThis, 0);
-if ( !hwnd ){
-    return -1;
+HWND hWnd = CreateWindow( wndEx.lpszClassName, TEXT("GUI Project"), WS_OVERLAPPEDWINDOW,200,200,400,300, HWND_DESKTOP, NULL, hThis,0);
+if (!hwnd ){
+ return -1;
 }
 ```
 
@@ -2978,7 +2984,7 @@ Showwindow( hwnd, icmdshow);
 -    我们还需要一个MsG结构的实例来表示窗口消息
 
 ```cpp
-MSG msg = { 0 };
+MSG msg = {0 };
 ```
 
 接下来,进入一个消息循环。
@@ -2988,11 +2994,11 @@ MSG msg = { 0 };
 -    GetMessageAPI从主调线程的消息队列中检索信息
 
 ```cpp
-while ( GetMessage( &msg, NULL, NULL, NULL )){
+while ( GetMessage(&msg, NULL, NULL, NULL )){
 	//把虚拟键消息翻译成字符消息
-    TranslateMessage(&msg);
-    //分发一条消息给窗口过程
-    DispatchMessage(&msg);
+ TranslateMessage(&msg);
+//分发一条消息给窗口过程
+ DispatchMessage(&msg);
 }
 ```
 
@@ -3021,25 +3027,25 @@ return (int) msg.wParam;
 ```cpp
 #define CreateProcess  CreateProcessW
 CreateProcessW(
-    _In_opt_ LPCWSTR lpApplicationName,
-    _Inout_opt_ LPWSTR lpCommandLine,
-    _In_opt_ LPSECURITY_ATTRIBUTES lpProcessAttributes,
-    _In_opt_ LPSECURITY_ATTRIBUTES lpThreadAttributes,
-    _In_ BOOL bInheritHandles,
-    _In_ DWORD dwCreationFlags,
-    _In_opt_ LPVOID lpEnvironment,
-    _In_opt_ LPCWSTR lpCurrentDirectory,
-    _In_ LPSTARTUPINFOW lpStartupInfo,
-    _Out_ LPPROCESS_INFORMATION lpProcessInformation
-    );
+ _In_opt_ LPCWSTR lpApplicationName,
+ _Inout_opt_ LPWSTR lpCommandLine,
+ _In_opt_ LPSECURITY_ATTRIBUTES lpProcessAttributes,
+ _In_opt_ LPSECURITY_ATTRIBUTES lpThreadAttributes,
+ _In_ BOOL bInheritHandles,
+ _In_ DWORD dwCreationFlags,
+ _In_opt_ LPVOID lpEnvironment,
+ _In_opt_ LPCWSTR lpCurrentDirectory,
+ _In_ LPSTARTUPINFOW lpStartupInfo,
+ _Out_ LPPROCESS_INFORMATION lpProcessInformation
+);
 ```
 
 example:
 
 ```cpp
-STARTUPINFO startupInfo = { 0 };
-PROCESS_INFORMATION processInformation = { 0 };
-BOOL bSuccess = CreateProcess(TEXT("C:\\Windows\\notepad.exe"), NULL, NULL, NULL, FALSE, NULL, NULL, NULL, &startupInfo, &processInformation);
+STARTUPINFO startupInfo = {0 };
+PROCESS_INFORMATION processInformation = {0 };
+BOOL bSuccess = CreateProcess(TEXT("C:\\Windows\\notepad.exe"), NULL, NULL, NULL, FALSE, NULL, NULL, NULL,&startupInfo,&processInformation);
 ```
 
 createProcess函数用于创建一个新进程及其主线程。新进程在主调进程的安全上下文中运行。
@@ -3096,7 +3102,7 @@ ExitProcess函数用于终止进程，给所属进程中的所有DLL发送一条
 PCB是操作系统为了管理进程，在内核中设置的一种数据结构。绝大多数操作系统程序都要访问和修改它。通常，要根据PCB为进程构建数据。
 
 -    进程标识数据
--    进程状态数据 
+-    进程状态数据
 -    进程控制数据
 
 #### Winternl.h
@@ -3120,6 +3126,6 @@ winternl.h头文件包含了大部分Windows内部函数的原型和数据表示
 
 # 参考
 
-*    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书） (C和C++实务精选) . 人民邮电出版社.  
-*    [黑山共和国]米洛斯·留莫维奇（Milos Ljumovic）. C++多线程编程实战 (Kindle 位置 344-345). 人民邮电出版社.
+*    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书）(C和C++实务精选).人民邮电出版社.
+*    [黑山共和国]米洛斯·留莫维奇（Milos Ljumovic）. C++多线程编程实战(Kindle 位置344-345).人民邮电出版社.
 
