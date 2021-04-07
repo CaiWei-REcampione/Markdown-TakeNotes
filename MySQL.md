@@ -2873,10 +2873,144 @@ SELECT *,
 IF
 ( POW( a, 2 ) + POW( b, 2 ) = POW( c, 2 ), 'Yes', 'No' ) AS 'right_triangle'
 FROM
-line_segments
+line_segments;
 ```
 
+## 1983.  查询课程表中学生上课人数平均值
 
+描述
+
+请编写 SQL 语句，查询课程表 `courses` 中学生人数 `student_count `的平均值，最后返回结果列名显示为 `average_student_count `。
+
+表定义: courses (课程表)
+
+|     列名      |  类型   |   注释   |
+| :-----------: | :-----: | :------: |
+|      id       |   int   |   主键   |
+|     name      | varchar | 课程名称 |
+| student_count |   int   | 学生人数 |
+|  created_at   |  date   | 开课时间 |
+|  teacher_id   |   int   | 讲师 id  |
+
+若 student_count 为空，就什么都不返回返回统计结果的列名需要更改如果查询不到结果，就什么都不返回
+
+样例
+
+**样例一：**
+
+表内容 : courses
+
+| id   | name                | student_count | created_at | teacher_id |
+| ---- | ------------------- | ------------- | ---------- | ---------- |
+| 1    | Advanced Algorithms | 880           | 2020-6-1   | 4          |
+| 2    | System Design       | 1350          | 2020-7-18  | 3          |
+| 3    | Django              | 780           | 2020-2-28  | 3          |
+| 4    | Web                 | 340           | 2020-4-22  | 4          |
+| 5    | Big Data            | 700           | 2020-9-11  | 1          |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| average_student_count |
+| --------------------- |
+| 810                   |
+
+**样例二：**
+
+表内容 : courses
+
+| id   | name                | student_count | created_at | teacher_id |
+| ---- | ------------------- | ------------- | ---------- | ---------- |
+| 1    | Advanced Algorithms | 0             | 2020-6-1   | 4          |
+| 2    | System Design       | 0             | 2020-7-18  | 3          |
+| 3    | Django              | 0             | 2020-2-28  | 3          |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| average_student_count |
+| --------------------- |
+| 0                     |
+
+```mysql
+select AVG(student_count) as average_student_count
+from courses;
+```
+
+## 2022.  将课程创建日期均推迟一年
+
+描述
+
+请编写 SQL 语句，修改课程表 `courses` 中课程的课程创建日期，将课程创建日期均往后推迟一年，最后返回课程名称 `name` 及修改后的课程创建日期，修改后的课程创建日期命名为 `new_created` 。
+
+表定义: courses（课程表）
+
+|     列名      |     类型     |     注释     |
+| :-----------: | :----------: | :----------: |
+|      id       | int unsigned |     主键     |
+|     name      |   varchar    |   课程名称   |
+| student_count |     int      |   学生总数   |
+|  created_at   |     date     | 课程创建日期 |
+|  teacher_id   |     int      |   讲师 id    |
+
+只更改课程创建时间的年份如果课程创建时间为闰年的 2 月 29 号，则增加一年后为次年 2 月的最后一天，即 28 号
+
+样例
+
+**样例一：**
+
+表内容 : courses
+
+| **id** | **name**                | **student_count** | **created_at** | **teacher_id** |
+| ------ | ----------------------- | ----------------- | -------------- | -------------- |
+| 1      | Advanced Algorithms     | 880               | 2020/6/1       | 4              |
+| 2      | System Design           | 1350              | 2020/7/18      | 3              |
+| 3      | Django                  | 780               | 2020/2/29      | 3              |
+| 4      | Web                     | 340               | 2020/4/22      | 4              |
+| 5      | Big Data                | 700               | 2020/9/11      | 1              |
+| 6      | Artificial Intelligence | 1660              | 2018/5/13      | 3              |
+| 7      | Java P6+                | 780               | 2019/1/19      | 3              |
+| 8      | Data Analysis           | 500               | 2019/7/12      | 1              |
+| 10     | Object Oriented Design  | 300               | 2020/8/8       | 4              |
+| 12     | Dynamic Programming     | 2000              | 2018/8/18      | 1              |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **name**                | **new_created** |
+| ----------------------- | --------------- |
+| Advanced Algorithms     | 2021/6/1        |
+| System Design           | 2021/7/18       |
+| Django                  | 2021/2/29       |
+| Web                     | 2021/4/22       |
+| Big Data                | 2021/9/11       |
+| Artificial Intelligence | 2019/5/13       |
+| Java P6+                | 2020/1/19       |
+| Data Analysis           | 2020/7/12       |
+| Object Oriented Design  | 2020/8/8        |
+| Dynamic Programming     | 2019/8/18       |
+
+**样例二：**
+
+表内容 : courses
+
+| **id** | **name**                | **student_count** | **created_at** | **teacher_id** |
+| ------ | ----------------------- | ----------------- | -------------- | -------------- |
+| 1      | Advanced Algorithms     | 880               | 2020/6/1       | 4              |
+| 6      | Artificial Intelligence | 1660              | 2018/5/13      | 3              |
+| 7      | Java P6+                | 780               | 2019/1/19      | 3              |
+| 3      | Django                  | 780               | 2020/2/29      | 3              |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **id** | **name**                | **student_count** | **created_at** | **teacher_id** |
+| ------ | ----------------------- | ----------------- | -------------- | -------------- |
+| 1      | Advanced Algorithms     | 880               | 2021/6/1       | 4              |
+| 6      | Artificial Intelligence | 1660              | 2019/5/13      | 3              |
+| 7      | Java P6+                | 780               | 2020/1/19      | 3              |
+| 3      | Django                  | 780               | 2021/2/28      | 3              |
+
+```mysql
+select name,DATE_ADD(created_at , INTERVAL 1 YEAR)  as new_created
+from courses;
+```
 
 ## 2045.  输出 Hello LintCode
 
