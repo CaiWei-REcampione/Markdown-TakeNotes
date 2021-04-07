@@ -223,6 +223,193 @@ CPU 内部是通过执行指令工作的。 每种 CPU 都有专门的一组指�
 
 随着网络的发展，现在出现了分布式操作系统。通过把一个网络内的计算机资源共享，个计算任务可以分散在不同的计算机上进行， 最后把结果汇总。 分布式操作系统能最大限度地利用现有的资源， 得到强大的计算能力， 是未来科学计算领域的一个发展趋势。
 
+# ARM处理器
+
+ARM 既是一种嵌入式处理器体系结构的缩写，也是一家公司的名字。
+
+## 微处理器和微控制器
+
+微处理器并不是因为制造工艺高超而出名的。现代计算机可以把功能复杂的
+CPU，以及一些外部器件都集成在一个芯片上，微处理器因此而得名。
+
+## ARM处理器介绍
+
+ARM 是英文 Advanced阳SC Machines 的缩写，中文译为高性能RISC 机器。从名称可以看出， ARM 是一种基于阳SC 架构的高性能处理器。
+
+### ARM 微处理器的应用领域
+
+*    工业控制
+*    无线通信
+*    网络应用
+*    消费电子产品
+
+### ARM 的功能特点
+
+ARM核心的处理器 采用RISC体系结构， 具有以卡优点：
+
+*    芯片体积小，功耗低， 制造成本低， 性能优异。
+*    支持Thumb ( 16位）和ARM (32位）两科l指令集， 8位和16位设备兼容性好。
+*    由于采用RISC架构，在内部大量使用寄存器，执行指令速度快。
+*    由于采用RISC架构， 在内部大量使用奇存器， 执行指令速度 快。
+*    大部分的指令都是操作寄存器， 只有很少指令会访问外部内存。
+*    采用多级流水线结构处理速度快。
+*    支持多种寻址方式， 数据存取方式灵活。
+*    指令长度固定， 便于编译器操作以及执行指令。
+
+## ARM指令集
+
+指令集指 个微处理器所有指令的集合， 每种微处理器都有自己的指令集。
+
+ARM处 理器使用RISC(精简指令集)。
+
+精简指令集的最大特点是所有的指令占用相同的存储空间。
+
+### 算术运算指令
+
+算术运算指令用于普通数据计算。常见的指令有ADD、ADC、SUB和SBC。
+
+#### ADD指令
+
+ADD指令用于普通的加法运算。
+
+```
+ADD{条件}{S}<dest>,<op_1>,<op_2> 
+//dest是目的寄存器，op 1和op 2是操作数dest = op_1 + op_2
+```
+
+ADD指令把两个操作数 op_1和 op_2 相加， 结果存放到目的寄存器 dest 中。 操作数op_1 和 op_2 可以是寄存器或者是 个立即数。
+
+#### ADC指令
+
+ADC 指令用于带进位的加法运算。
+
+```
+ADC{条件}{S}<dest>, <op_1>, <op_2> 
+//dest是目的寄存器，op_l和op_2是操作数dest = op_1＋ op_2 + carry  
+```
+
+ADC 指令把两个操作数 op_1 和 op_2 相加， 结果存放到目的寄存器 dest 中。 ADC 指在使用一个进位标志位， 可以进行大于 32 位的加法操作。 如计算两个 32 位数的和， 结果可以存放到一个64位数中。
+
+#### SUB指令
+
+SUB指令用于普通的减法运算。
+
+```
+SUB{条件}{S}<dest>, <op_1>, <op_2>
+//dest是目的寄存器，op l 和 op 2是操作数dest = op 1 - op 2 
+```
+
+SUB指令使用操作数op_1减去操作数op_2， 结果存放到目的寄存器dest中。
+
+#### SBC指令
+
+SBC指令用于带借位的减法运算。
+
+```
+SBC｛条件｝｛S} <dest>, <op 1>, <op 2> 
+//dest是目的寄存器，op_1 和 op_2是操作数dest = op_1 - op_2 - !carry
+```
+
+SBC指令的作用是两个操作数的减法， 结果存放到目的寄存器中。SBC指令支持借位标志， 因此可以支持大于32位数的减法操作。
+
+### 逻辑运算指令	
+
+#### AND指令
+
+AND指令求两个操作数的逻辑与的结果。
+
+```
+AND｛条件｝｛S} <dest>, <op l>, <op 2>
+//dest是目的寄存器，op_1 和 op_2是操作数dest = op_1 AND op_2 
+```
+
+
+AND指令在两个操作数op_1和op_2之间做逻辑与操作，结果存放到目的寄存器dest
+
+#### EOR指令
+
+EOR指令对两个操作数做异或运算。
+
+```
+EOR{条件}{S}<dest>, <op_1>, <op_2> 
+//dest是目的寄存器，op_1 和 op_2 是操作数 dest ＝ op_1 EOR op_2
+```
+
+EOR 指令的作用是对两个操作数 op_1 和 op_2 做逻辑异或操作，结果存放到目的寄存器中， 常被用于设置某个特定位反转。 EOR 指令中， op_1 是寄存器， op_2 可以是寄存器或者立即数。
+
+#### MOV指令
+
+MOY 可以在两个操作数之间复制数据。
+
+```
+MOV{条件}{S}<dest>, <op_1> 
+//dest是目的寄存器，op_1是操作数dest = op_1
+```
+
+MOY 指令的作用是把另一个寄存器或者立即数复制到目的寄存器中， 支持操作数的移位操作。
+
+#### 分支指令
+
+在汇编语言中， 代码的跳转都是通过分支指令来完成， ARM 的分支指令比较简单
+
+B 指令可以根据设置的条件跳转到指定的代码地址。
+
+```
+B{条件}<地址>
+```
+
+B指令是分支跳转指令。 程序中遇到B指令会立即跳转到指定地址， 然后继续从新的地址开始运行程序。 高级语言（例如C语言）的 goto 语句常被翻译成B指令。
+
+#### 数据传送指令
+
+数据传送指令用于 CPU 和存储器之间的数据传送，是 ARM 处理器唯一能与外部存储器交换数据的一类指令。
+
+##### 单一数据传送指令
+
+单一数据传送指令用于向内存装载和存储一个字节或者一个字长的数据。
+
+```
+LDR{条件}  Rd,＜地址>
+STR{条件}   Rd, ＜地址>
+LDR{条件}B   Rd, ＜地址>
+STR{条件}B   Rd, ＜地址>
+```
+
+单一数据传送指令 STR 和 LDR 可以在内存和寄存器之间装载或者存储一个或多个字节的数据，并且提供了灵活的寻址方式。 Rd 是要操作的数值，地址可以是基址寄存器Rbase和变址寄存器Rindex 指定的地址。 在条件后加入标志B代表一次传送1字节数据。 
+
+```
+STR Rd, [Rbase] 		；存储Rd到Rbase所包含的有效地址
+STR Rd, [Rbase, Rindex]    ；存储Rd到Rbase+Rindex所合成的有效地址
+STR Rd, [Rbase, #index]    ；存储Rd到Rbase+index所合成的有效地址。index是立即数
+```
+
+#### 多数据传送指令
+
+多数据传送指令用于向内存装载和存储多个字节或字的数据。
+
+```
+xxM{条件}{类型} Rn {!}，＜寄存器列表＞{^}
+```
+
+其中， xx 可以是LD， 表示装载， 也可以为ST，表示存储。 多数据传送指令用于寄存器和内存之间多个数据的复制。
+
+```
+LDMED LDMIB                             ;装载前增加地址，相当于c语言的++p
+LDMFD LDMIA                            ;装载后增加地址，相当于c语言的p++
+LDMEA LDMDB                           ;装载前减小值，相当于C语言的++*p
+LDMFA LDMDA                           ;装载后减小值，相当于C语言的*p++
+STMFA STMIB                              ;存储前增加地址
+STMEA STMIA                             ;存储后增加地址
+STMFD STMDB                            ;存储前增加值
+STMED STMDA                           ;存储后增加值
+```
+
+多数据传送指令用在大量数据传送场合， 充分利用了RISC体系多寄存器的优点。
+
+## ARM的结构
+
+基于ARM的芯片有许多， 功能结构也不同， 但是最基本的是ARM核。 
+
 ---
 
 # **计算机：辅助人脑的好工具**
@@ -1145,7 +1332,9 @@ tail -10 sudo.conf
 
 ### 权限修改
 
+```
 rwx：r代表可读，w代表可写，x代表该文件是一个可执行文件，如果rwx任意位置变为-则代表不可读或不可写或不可执行文件。
+```
 
 示例：给aaa.txt文件权限改为可执行文件权限，aaa.txt文件的权限是-rw-------
 
@@ -1296,13 +1485,14 @@ hadoop  ALL=NOPASSWD:  /bin/ls, /bin/cat
 
 ## 系统服务
 
+```
 service iptables status  --查看iptables服务的状态
 service iptables start  --开启iptables服务
 service iptables stop  --停止iptables服务
 service iptables restart  --重启iptables服务
-
 chkconfig iptables off  --关闭iptables服务的开机自启动
 chkconfig iptables on  --开启iptables服务的开机自启动
+```
 
 ## 网络管理
 
@@ -1343,9 +1533,10 @@ service crond restart ## 重启服务
 
 ### 命令格式
 
+```
 crontab [-u user] file
-
 crontab [-u user] [ -e | -l | -r ]
+```
 
 参数说明：
 
@@ -1417,13 +1608,16 @@ crontab -e
      10.1 查看当前目录：pwd
      命令：pwd     查看当前目录路径
 
-10.2 查看进程：ps -ef
+## 查看进程：ps -ef
+
 命令：ps -ef    查看所有正在运行的进程
 
-10.3 结束进程：kill
+## 结束进程：kill
+
 命令：kill pid 或者 kill -9 pid(强制杀死进程)           pid:进程号
 
-10.4 网络通信命令：
+## 网络通信命令：
+
 ifconfig：查看网卡信息
 
 命令：ifconfig 或 ifconfig | more
@@ -1439,16 +1633,20 @@ netstat -an：查看当前系统端口
 搜索指定端口
 命令：netstat -an | grep 8080
 
-10.5 配置网络
+## 配置网络
+
 命令：setup
 
-10.6 重启网络
+## 重启网络
+
 命令：service network restart
 
-10.7 切换用户
+## 切换用户
+
 命令：su - 用户名
 
-10.8 关闭防火墙
+## 关闭防火墙
+
 命令：chkconfig iptables off
 
 或者：
@@ -1456,13 +1654,17 @@ netstat -an：查看当前系统端口
  iptables -L;
  iptables -F;
  service iptables stop
-10.9 修改文件权限
+
+## 修改文件权限
+
 命令：chmod 777
 
-10.10 清屏
+## 清屏
+
 命令：ctrl + l
 
-10.11 vi模式下快捷键
+## vi模式下快捷键
+
 esc后:
 
 保存并退出快捷键：shift+z+z
@@ -1475,8 +1677,10 @@ esc后:
 
 粘贴复制的内容：p
 
-十一、Linux项目部署
-11.1 安装jdk1.8
+# Linux项目部署
+
+## 安装jdk1.8
+
 先卸载open-jdk
 
 java -version
@@ -1506,13 +1710,16 @@ yum install glibc.i686
 source /etc/profile  使更改的配置立即生效
 java -version  查看JDK版本信息，如果显示出1.8证明成功
 
-11.2 安装MySQL5.6
-11.2.1 上传MySQL5.6的tar包
+## 安装MySQL5.6
+
+### 上传MySQL5.6的tar包
+
 创建目录：mkdir /usr/local/src/mysql5.6
 
 上传：MySQL-5.6.34-1.rhel5.x86_64.rpm-bundle.tar 到上面的目录中
 
-11.2.2 安装
+### 安装
+
 第一步：解压
 
      命令：tar -xvf MySQL-5.6.34-1.rhel5.x86_64.rpm-bundle.tar
@@ -1545,13 +1752,13 @@ java -version  查看JDK版本信息，如果显示出1.8证明成功
 
 在安装mysql server时有句提示：
 
-
-
 注意：这个密码是不安全的，所有需要修改初始密码。
 
 使用密码登录mysql账号：mysql -uroot -p
 修改root密码：SET PASSWORD = PASSWORD('root');
-11.2.3 开机自动启动设置
+
+### 开机自动启动设置
+
 加入到系统服务：
 
 chkconfig --add mysql
@@ -1566,7 +1773,8 @@ chkconfig
 
 说明：都没关闭（off）时是没有自动启动。
 
-11.2.4 开启远程访问
+### 开启远程访问
+
 登录：
 
 mysql -uroot –proot
@@ -1585,10 +1793,12 @@ flush privileges;
 
 /etc/init.d/iptables status
 
-11.3 安装tomcat部署项目
+## 安装tomcat部署项目
+
 准备工作：将web项目打成war包，改名为ROOT.war
 
-11.3.1 创建ucenter用户
+### 创建ucenter用户
+
 一般情况下，发布应用程序都不是使用root用户的，需要创建一个普通用户来发布程序；
 
 创建ucenter用户：
@@ -1603,7 +1813,8 @@ passwd ucenter （密码 ucenter）
 
 su - ucenter
 
-11.3.2 安装Tomcat
+### 安装Tomcat
+
 tomcat只要解压就可以使用。
 
 1、创建web目录
@@ -1626,8 +1837,6 @@ mkdir /ucenter/web
 
 发现无法访问：
 
-
-
 8、防火墙打开 8080 端口
      /sbin/iptables -I INPUT -p tcp --dport 8080 -j ACCEPT
 
@@ -1635,9 +1844,8 @@ mkdir /ucenter/web
 
 9、安装成功
 
+### 部署用户管理项目
 
-
-11.3.3 部署用户管理项目
 1、上传usermanage.sql和ROOT.war到/ucenter/web
 
 2、执行数据库脚本
@@ -1683,7 +1891,9 @@ mkdir /ucenter/web
 	<property name="maxPoolSize">5</property>
   </default-config>
 </c3p0-config>
-11.4 Linux下使用FastDFS
+
+## Linux下使用FastDFS
+
 相关的安装包我打包到云盘上了，链接：https://pan.baidu.com/s/13NDYYil4mgLhkb5CYsc2Ww  提取码：66tn
 
 单节点FastDFS
@@ -1692,16 +1902,21 @@ mkdir /ucenter/web
 
 我们这里不打算安装多台虚拟机，因此会把tracker和storage都安装在一起。
 
-11.4.1 安装gcc
+### 安装gcc
+
 GCC用来对C语言代码进行编译运行，使用yum命令安装：
 
 yum -y install gcc
 后面会用到解压命令（unzip），所以这里可以用yum把unzip 也装一下
 
 yum install -y unzip zip
-11.4.2 安装libevent
+
+### 安装libevent
+
 yum -y install libevent
-11.4.3 安装libfastcommon-master
+
+### 安装libfastcommon-master
+
 解压刚刚上传的libfastcommon-master.zip
 unzip libfastcommon-master.zip
 
@@ -1712,7 +1927,8 @@ cd libfastcommon-master
 ./make.sh 
 ./make.sh install
 
-11.4.4 安装fastdfs
+### 安装fastdfs
+
 tar -zxvf FastDFS_v5.08.tar.gz
 cd FastDFS
 ./make.sh
@@ -1737,7 +1953,8 @@ storage.conf.sample 是storage的配置文件模板
 
 client.conf.sample 是客户端的配置文件模板
 
-11.4.5 配置并启动tracker服务
+### 配置并启动tracker服务
+
 1）首先将模板文件复制
 
 cp /etc/fdfs/tracker.conf.sample /etc/fdfs/tracker.conf
@@ -1763,7 +1980,9 @@ ps -ef | grep fdfs_trackerd
 设置tracker服务开机启动:
 
 chkconfig fdfs_trackerd on
-11.4.6 配置并启动storage服务
+
+### 配置并启动storage服务
+
 1）首先将模板文件复制
 
 cp /etc/fdfs/storage.conf.sample /etc/fdfs/storage.conf
@@ -1791,12 +2010,14 @@ service fdfs_storaged start  # 启动fdfs_storaged服务，停止用stop
 chkconfig fdfs_storaged on
 ps -ef | grep fdfs
 
+## 安装fastdfs-nginx-module
 
+### 解压
 
-11.5 安装fastdfs-nginx-module
-11.5.1 解压
 tar -zxvf fastdfs-nginx-module_v1.16.tar.gz
-11.5.2 修改config
+
+### 修改config
+
 1）进入src目录
 
 cd fastdfs-nginx-module/src/
@@ -1808,9 +2029,8 @@ vim config
 :%s+/usr/local/+/usr/+g
 将所有的/usr/local替换为 /usr，这个才是正确的目录:
 
+### 配置nginx与FastDFS关联配置文件
 
-
-11.5.3 配置nginx与FastDFS关联配置文件
 复制 fastdfs-nginx-module 源码中的配置文件到/etc/fdfs 目录， 并修改
 
 cp /usr/local/项目名/fastdfs-nginx-module/src/mod_fastdfs.conf /etc/fdfs/
@@ -1829,8 +2049,11 @@ store_path0=/leyou/storage            # 文件存储路径
 
 cd /usr/local/项目名/FastDFS/conf/
 cp http.conf mime.types /etc/fdfs/
-11.6 安装Nginx的插件
-11.6.1 如果没有安装过nginx
+
+## 安装Nginx的插件
+
+### 如果没有安装过nginx
+
 1、安装nginx的依赖库
 
 yum -y install gcc pcre pcre-devel zlib zlib-devel openssl openssl-devel
@@ -1848,7 +2071,9 @@ cd nginx-1.10.0
 4、编译并安装
 
 make && make install
-11.6.2 如果已经安装过nginx
+
+### 如果已经安装过nginx
+
 1、 进入nginx目录：
 
 cd /usr/local/项目名/nginx-1.10.0/
@@ -1868,7 +2093,9 @@ mv /usr/bin/nginx /usr/bin/nginx-bak
 用新编译的nginx启动文件替代原来的：
 
 cp objs/nginx /usr/bin/
-11.6.3 启动nginx
+
+### 启动nginx
+
 配置nginx整合fastdfs-module模块
 
 我们需要修改nginx配置文件，在/opt/nginx/config/nginx.conf文件中：
@@ -1880,17 +2107,17 @@ server {
     listen       80;
     server_name  image.项目名.com;
 	# 监听域名中带有group的，交给FastDFS模块处理
-    location ~/group([0-9])/ {
-        ngx_fastdfs_module;
-    }
-    location / {
-        root   html;
-        index  index.html index.htm;
-    }
-    error_page   500 502 503 504  /50x.html;
-    location = /50x.html {
-        root   html;
-    }
+​    location ~/group([0-9])/ {
+​        ngx_fastdfs_module;
+​    }
+​    location / {
+​        root   html;
+​        index  index.html index.htm;
+​    }
+​    error_page   500 502 503 504  /50x.html;
+​    location = /50x.html {
+​        root   html;
+​    }
 }
 启动nginx：
 
@@ -1902,9 +2129,8 @@ nginx -s reload	# 重新载入配置文件
 
 可通过ps -ef | grep nginx查看nginx是否已启动成功
 
+### 设置nginx开机启动
 
-
-11.6.4 设置nginx开机启动
 创建一个开机启动的脚本：
 
 vim /etc/init.d/nginx
@@ -2069,10 +2295,13 @@ chkconfig --add /etc/init.d/nginx
 设置开机启动
 
 chkconfig nginx on
-11.7 安装Elasticsearch
+
+## 安装Elasticsearch
+
 需要虚拟机JDK1.8及以上
 
-11.7.1 新建一个用户leyou
+### 新建一个用户leyou
+
 出于安全考虑，elasticsearch默认不允许以root账号运行。
 
 创建用户：
@@ -2084,7 +2313,9 @@ passwd leyou
 切换用户：
 
 su - leyou
-11.7.2 上传安装包,并解压
+
+### 上传安装包,并解压
+
 我们将安装包上传到：/home/leyou目录
 
 解压缩：
@@ -2097,14 +2328,11 @@ mv elasticsearch-6.3.0/ elasticsearch
 
 进入，查看目录结构：
 
+### 修改配置
 
-
-11.7.3 修改配置
 我们进入config目录：cd config
 
 需要修改的配置文件有两个：
-
-
 
 1、jvm.options
 
@@ -2143,10 +2371,9 @@ mkdir logs
 network.host: 0.0.0.0 # 绑定到0.0.0.0，允许任何ip来访问
 默认只允许本机访问，修改为0.0.0.0后则可以远程访问
 
-11.7.4 运行
+### 运行
+
 进入elasticsearch/bin目录，可以看到下面的执行文件：
-
-
 
 然后输入命令：
 
@@ -2154,13 +2381,15 @@ network.host: 0.0.0.0 # 绑定到0.0.0.0，允许任何ip来访问
 或者后台运行：
 
 ./elasticsearch -d
-11.7.5 错误1：内核过低
+
+### 错误1：内核过低
 
 
 修改elasticsearch.yml文件，在最下面添加如下配置： 然后重启
 
 bootstrap.system_call_filter: false
-11.7.6 错误2：文件权限不足
+
+### 错误2：文件权限不足
 
 
 我们用的是leyou用户，而不是root，所以文件权限不足。
@@ -2203,16 +2432,21 @@ vm.max_map_count=655360
 然后执行命令：
 
 sysctl -p
-11.7.9 重启终端窗口
+
+### 重启终端窗口
+
 所有错误修改完毕，一定要重启你的 Xshell终端，否则配置无效。
 
-11.8 安装RabbitMQ
+### 安装RabbitMQ
+
 cd /usr/local/myapp
 
 mkdir rabbitmq
 
 cd rabbitmq
-11.8.1 安装Erlang
+
+### 安装Erlang
+
 1、在线安装
 
 yum install esl-erlang_17.3-1~centos~6_amd64.rpm
@@ -2220,31 +2454,23 @@ yum install esl-erlang_17.3-1~centos~6_amd64.rpm
 yum install esl-erlang-compat-R14B-1.el6.noarch.rpm
 2、离线安装
 
-
-
 依次执行命令：
 
 1）rpm -ivh esl-erlang-17.3-1.x86_64.rpm --force --nodeps
 
-
-
 2）rpm -ivh esl-erlang_17.3-1~centos~6_amd64.rpm --force --nodeps
-
-
 
 3）rpm -ivh esl-erlang-compat-R14B-1.el6.noarch.rpm --force --nodeps
 
-
-
-11.8.2 安装RabbitMQ
+### 安装RabbitMQ
 
 
 安装：
 
 rpm -ivh rabbitmq-server-3.4.1-1.noarch.rpm
 
+### 设置配置文件
 
-11.8.3 设置配置文件
 cp /usr/share/doc/rabbitmq-server-3.4.1/rabbitmq.config.example
 /etc/rabbitmq/rabbitmq.config
 开启用户远程访问
@@ -2254,24 +2480,34 @@ vi /etc/rabbitmq/rabbitmq.config
 
 注意要去掉后面的逗号。
 
-11.8.4 启动、停止
+### 启动、停止
+
 service rabbitmq-server start
 
 service rabbitmq-server stop
 
 service rabbitmq-server restart
-11.8.5 开启web界面管理工具
+
+### 开启web界面管理工具
+
 rabbitmq-plugins enable rabbitmq_management
 
 service rabbitmq-server restart
-11.8.6 设置开机启动
+
+### 设置开机启动
+
 chkconfig rabbitmq-server on
-11.8.7 防火墙开放15672端口
+
+### 防火墙开放15672端口
+
 /sbin/iptables -I INPUT -p tcp --dport 15672 -j ACCEPT
 
 /etc/rc.d/init.d/iptables save
-11.9 redis安装和配置
-11.9.1 安装
+
+## redis安装和配置
+
+### 安装
+
 解压
 
 tar -xvf redis-4.0.9.tar.gz
@@ -2280,7 +2516,9 @@ tar -xvf redis-4.0.9.tar.gz
  mv redis-4.0.9 redis
  cd redis
  make && make install
-11.9.2 配置
+
+### 配置
+
 修改安装目录下的redis.conf文件
 
 vim redis.conf
@@ -2289,14 +2527,17 @@ vim redis.conf
 #bind 127.0.0.1 # 将这行代码注释，监听所有的ip地址，外网可以访问
 protected-mode no # 把yes改成no，允许外网访问
 daemonize yes # 把no改成yes，后台运行
-11.9.3 启动或停止
+
+### 启动或停止
+
 redis提供了服务端命令和客户端命令：
 
 redis-server 服务端命令，可以包含以下参数： start 启动 stop 停止
 
 redis-cli 客户端控制台，包含参数： -h xxx 指定服务端地址，缺省值是127.0.0.1 -p xxx 指定服务端端口，缺省值是6379
 
-11.9.4 设置开机启动
+### 设置开机启动
+
 1) 输入命令，新建文件
 
 vim /etc/init.d/redis
@@ -2384,7 +2625,7 @@ Redis is running...
 chkconfig --add /etc/init.d/redis
 chkconfig redis on
 
-## 参考
+# 参考
 
 *    鸟哥的Linux私房菜-基础篇-第四版
 *    ARM嵌入式LINUX系统开发详解 第2版  弓雷著

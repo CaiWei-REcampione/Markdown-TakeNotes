@@ -11,7 +11,21 @@
 cout << "The run time is: "<< (double)clock()/ CLOCKS_PER_SEC << "s"<< std::endl;
 ```
 
+## 命名
 
+C++标识符，是系统预菌的用于描述系统使用的元素的名称，由大小写的26个英文字母、0～9之间的10个数字以及下划线组成，并且第一个元素必须是字母（大写或小写都、可以）或者下划线。
+
+标识符是区别大小写的。
+
+*    对象或变量名：在内存中占据一部分空间，C＋＋为它定义一个名称，在程序中使用对象名或变量名就可以直接访问存储空间中的值。
+*    类、结构或联合体名称：实质上是复杂类型的名称的标识符，用于标识不同种类
+     的复杂类型。
+*    类型名称：表示简单类型的名称的标识符。
+*    类、结构、联合体或枚举的成员：表示在类、结构、联合体或枚举中定义的成员变量的标识符。
+*    函数或类成员函数：表示函数名称的标识符。
+*    typedef名称z表示类型重定义的标识符。
+*    标签名称：表示C＋＋中用于标记goto语句可以跳转到的语句，此处主要用作语句指示。
+*    宏名称和宏参数：使用＃define定义的宏的名称和参数。
 
 # 参数声明
 
@@ -108,6 +122,26 @@ memset(num,0,sizeof(num));
 
 # 关键字
 
+|          |                  |           |             |
+| -------- | ---------------- | --------- | ----------- |
+| asm      | auto             | bad_cast  | bad_typeid  |
+| bool     | break            | case      | catch       |
+| char     | class            | const     | const_cast  |
+| continue | default          | delete    | do          |
+| double   | dynamic_cast     | else      | enum        |
+| except   | explicit         | extern    | false       |
+| finally  | float            | for       | friend      |
+| goto     | if               | inline    | int         |
+| long     | mutable          | namespace | new         |
+| operator | private          | protected | public      |
+| register | reinterpret_cast | return    | short       |
+| signed   | sizeof           | static    | static_cast |
+| struct   | switch           | template  | this        |
+| throw    | true             | try       | type_info   |
+| typedef  | typeid           | typename  | union       |
+| unsigned | using            | virtual   | void        |
+| volatile | while            |           |             |
+
 ## noexcept（ C++11）
 
 关键字 noexcept 用于指出函数不会引发异常。它也可用作运算符，判断操作数（表达式）是否可能引发异常；如果操作数可能引发异常，则返回 false，否则返回 true。
@@ -122,11 +156,11 @@ memset(num,0,sizeof(num));
 
 *    返回
 
-*    ```cpp
-     returntypename functionname(parametertype name1,parametertype name2,...){
-      return value;
-     }
-     ```
+```cpp
+returntypename functionname(parametertype name1,parametertype name2,...){
+    return value;
+}
+```
 
 ## lambda表达式
 
@@ -146,77 +180,81 @@ memset(num,0,sizeof(num));
 
 下面列出常用的DOS命令,都可以用system函数调用:
 
-ASSOC 显示或修改文件扩展名关联。
-AT 计划在计算机上运行的命令和程序。
-ATTRIB 显示或更改文件属性。
-BREAK 设置或清除扩展式 CTRL+C 检查。
-CACLS 显示或修改文件的访问控制列表(ACLs)。
-CALL 从另一个批处理程序调用这一个。
-CD 显示当前目录的名称或将其更改。
-CHCP 显示或设置活动代码页数。
-CHDIR 显示当前目录的名称或将其更改。
-CHKDSK 检查磁盘并显示状态报告。
-CHKNTFS 显示或修改启动时间磁盘检查。
-CLS 清除屏幕。
-CMD 打开另一个 Windows 命令解释程序窗口。
-COLOR 设置默认控制台前景和背景颜色。
-COMP 比较两个或两套文件的内容。
-COMPACT 显示或更改 NTFS 分区上文件的压缩。
-CONVERT 将 FAT 卷转换成 NTFS。您不能转换当前驱动器。
-COPY 将至少一个文件复制到另一个位置。
-DATE 显示或设置日期。
-DEL 删除至少一个文件。
-DIR 显示一个目录中的文件和子目录。
-DISKCOMP 比较两个软盘的内容。
-DISKCOPY 将一个软盘的内容复制到另一个软盘。
-DOSKEY 编辑命令行、调用 Windows 命令并创建宏。
-ECHO 显示消息，或将命令回显打开或关上。
-ENDLOCAL 结束批文件中环境更改的本地化。
-ERASE 删除至少一个文件。
-EXIT 退出 CMD.EXE 程序(命令解释程序)。
-FC 比较两个或两套文件，并显示不同处。
-FIND 在文件中搜索文字字符串。
-FINDSTR 在文件中搜索字符串。
-FOR 为一套文件中的每个文件运行一个指定的命令
-FORMAT 格式化磁盘，以便跟 Windows 使用。
-FTYPE 显示或修改用于文件扩展名关联的文件类型。
-GOTO 将 Windows 命令解释程序指向批处理程序中某个标明的行。
-GRAFTABL 启用 Windows 来以图像模式显示扩展字符集。
-HELP 提供 Windows 命令的帮助信息。
-IF 执行批处理程序中的条件性处理。
-LABEL 创建、更改或删除磁盘的卷标。
-MD 创建目录。
-MKDIR 创建目录。
-MODE 配置系统设备。
-MORE 一次显示一个结果屏幕。
-MOVE 将文件从一个目录移到另一个目录。
-PATH 显示或设置可执行文件的搜索路径。
-PAUSE 暂停批文件的处理并显示消息。
-POPD 还原 PUSHD 保存的当前目录的上一个值。
-PRINT 打印文本文件。
-PROMPT 更改 Windows 命令提示符。
-PUSHD 保存当前目录，然后对其进行更改。
-RD 删除目录。
-RECOVER 从有问题的磁盘恢复可读信息。
-REM 记录批文件或 CONFIG.SYS 中的注释。
-REN 重命名文件。
-RENAME 重命名文件。
-REPLACE 替换文件。
-RMDIR 删除目录。
-SET 显示、设置或删除 Windows 环境变量。
-SETLOCAL 开始批文件中环境更改的本地化。
-SHIFT 更换批文件中可替换参数的位置。
-SORT 对输入进行分类。
-START 启动另一个窗口来运行指定的程序或命令。
-SUBST 将路径跟一个驱动器号关联。
-TIME 显示或设置系统时间。
-TITLE 设置 CMD.EXE 会话的窗口标题。
-TREE 以图形模式显示驱动器或路径的目录结构。
-TYPE 显示文本文件的内容。
-VER 显示 Windows 版本。
-VERIFY 告诉 Windows 是否验证文件是否已正确写入磁盘。
-VOL 显示磁盘卷标和序列号。
-XCOPY 复制文件和目录树。
+|      |      |
+| ---- | ---- |
+|ASSOC|显示或修改文件扩展名关联。 |
+|AT|计划在计算机上运行的命令和程序。 |
+|ATTRIB|显示或更改文件属性。|
+|BREAK|设置或清除扩展式|CTRL+C|检查。  |
+|CACLS|显示或修改文件的访问控制列表(ACLs)。   |
+|CALL|从另一个批处理程序调用这一个。 |
+|CD|显示当前目录的名称或将其更改。   |
+|CHCP|显示或设置活动代码页数。|
+|CHDIR|显示当前目录的名称或将其更改。|
+|CHKDSK|检查磁盘并显示状态报告。  |
+|CHKNTFS|显示或修改启动时间磁盘检查。 |
+|CLS|清除屏幕。   |
+|CMD|打开另一个|Windows|命令解释程序窗口。|
+|COLOR|设置默认控制台前景和背景颜色。   |
+|COMP|比较两个或两套文件的内容。 |
+|COMPACT|显示或更改|NTFS|分区上文件的压缩。   |
+|CONVERT|将|FAT|卷转换成|NTFS。您不能转换当前驱动器。 |
+|COPY|将至少一个文件复制到另一个位置。  |
+|DATE|显示或设置日期。  |
+|DEL|删除至少一个文件。 |
+|DIR|显示一个目录中的文件和子目录。   |
+|DISKCOMP|比较两个软盘的内容。 |
+|DISKCOPY|将一个软盘的内容复制到另一个软盘。|
+|DOSKEY|编辑命令行、调用|Windows|命令并创建宏。   |
+|ECHO|显示消息，或将命令回显打开或关上。|
+|ENDLOCAL|结束批文件中环境更改的本地化。 |
+|ERASE|删除至少一个文件。   |
+|EXIT|退出|CMD.EXE|程序(命令解释程序)。   |
+|FC|比较两个或两套文件，并显示不同处。   |
+|FIND|在文件中搜索文字字符串。  |
+|FINDSTR|在文件中搜索字符串。   |
+|FOR|为一套文件中的每个文件运行一个指定的命令 |
+|FORMAT|格式化磁盘，以便跟|Windows|使用。  |
+|FTYPE|显示或修改用于文件扩展名关联的文件类型。|
+|GOTO|将|Windows|命令解释程序指向批处理程序中某个标明的行。   |
+|GRAFTABL|启用|Windows|来以图像模式显示扩展字符集。   |
+|HELP|提供|Windows|命令的帮助信息。  |
+|IF|执行批处理程序中的条件性处理。 |
+|LABEL|创建、更改或删除磁盘的卷标。   |
+|MD|创建目录。   |
+|MKDIR|创建目录。 |
+|MODE|配置系统设备。|
+|MORE|一次显示一个结果屏幕。  |
+|MOVE|将文件从一个目录移到另一个目录。  |
+|PATH|显示或设置可执行文件的搜索路径。  |
+|PAUSE|暂停批文件的处理并显示消息。   |
+|POPD|还原|PUSHD|保存的当前目录的上一个值。  |
+|PRINT|打印文本文件。|
+|PROMPT|更改|Windows|命令提示符。   |
+|PUSHD|保存当前目录，然后对其进行更改。 |
+|RD|删除目录。   |
+|RECOVER|从有问题的磁盘恢复可读信息。   |
+|REM|记录批文件或|CONFIG.SYS|中的注释。  |
+|REN|重命名文件。 |
+|RENAME|重命名文件。 |
+|REPLACE|替换文件。   |
+|RMDIR|删除目录。 |
+|SET|显示、设置或删除|Windows|环境变量。|
+|SETLOCAL|开始批文件中环境更改的本地化。 |
+|SHIFT|更换批文件中可替换参数的位置。  |
+|SORT|对输入进行分类。  |
+|START|启动另一个窗口来运行指定的程序或命令。  |
+|SUBST|将路径跟一个驱动器号关联。 |
+|TIME|显示或设置系统时间。  |
+|TITLE|设置|CMD.EXE|会话的窗口标题。  |
+|TREE|以图形模式显示驱动器或路径的目录结构。   |
+|TYPE|显示文本文件的内容。 |
+|VER|显示|Windows|版本。   |
+|VERIFY|告诉|Windows|是否验证文件是否已正确写入磁盘。 |
+|VOL|显示磁盘卷标和序列号。|
+|XCOPY|复制文件和目录树。  |
+
+
 
 ## 不同类型转换
 
