@@ -2610,6 +2610,80 @@ from new_cases as a,new_cases as b
 where a.id = b.id + 1 and a.increased_count > b.increased_count
 ```
 
+## 1925.  超过3名球员所得到的分数
+
+描述
+
+有一个 player_scores 表，有 player (球员) 和 score (得分)
+请找到所有被三名或以上球员得过的分数
+
+如在下面这一张表中，50 这个分数被 Bryant, Carter, Durant 三个人拿到过
+所以应该输出 50
+
+表定义: player_scores (球员得分表)
+
+|  列名  |  类型   |   注释   |
+| :----: | :-----: | :------: |
+| player | varchar | 球员姓名 |
+| score  |   int   |   分数   |
+
+样例
+
+**样例一：**
+
+表内容: player_scores
+
+|  player  | score |
+| :------: | :---: |
+|  Jordan  |  63   |
+| Iverson  |  55   |
+|  Bryant  |  50   |
+|  Carter  |  50   |
+| McGrady  |  46   |
+|  James   |  51   |
+|  Durant  |  50   |
+|   Wade   |  46   |
+| Anthony  |  42   |
+| Ginobili |  39   |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| score |
+| :---: |
+|  50   |
+
+**样例二：**
+
+表内容: player_scores
+
+|  player  | score |
+| :------: | :---: |
+|  Jordan  |  66   |
+| Iverson  |  66   |
+|  Bryant  |  66   |
+|  Carter  |  66   |
+| McGrady  |  50   |
+|  James   |  50   |
+|  Durant  |  50   |
+|   Wade   |  46   |
+| Anthony  |  46   |
+| Ginobili |  42   |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| score |
+| :---: |
+|  50   |
+|  66   |
+
+```mysql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select score from player_scores
+group by score
+having count(*)>=3
+```
+
 ## 1926. 热门的英雄
 
 编写一个 SQL 语句，找出所有英雄热度为非 T3 (不热门)的并且 id 为奇数的英雄，结果请按 ban 率由大到小排列。
@@ -2876,6 +2950,70 @@ FROM
 line_segments;
 ```
 
+## 1977.  根据中国教师年龄降序排序
+
+描述
+
+请编写 SQL 语句，查询教师表 `teachers` 中的中国教师，并按照年龄降序排序。
+
+表定义: teachers (教师表)
+
+|  列名   |  类型   |   注释   |
+| :-----: | :-----: | :------: |
+|   id    |   int   |   主键   |
+|  name   | varchar | 讲师姓名 |
+|  email  | varchar | 讲师邮箱 |
+|   age   |   int   | 讲师年龄 |
+| country | varchar | 讲师国籍 |
+
+必须先用 WHERE 筛选出合适的条件，然后再使用 ORDER BY 排序，否则返回结果可能会出错。如果查询不到结果，就什么都不返回。
+
+样例
+
+**样例一：**
+
+表内容 : teachers
+
+| **id** | **name**         | **email**                                                    | **age** | **country** |
+| ------ | ---------------- | ------------------------------------------------------------ | ------- | ----------- |
+| 1      | Eastern Heretic  | [eastern.heretic@gmail.com](mailto:eastern.heretic@gmail.com) | 20      | UK          |
+| 2      | Northern Beggar  | northern.beggar@qq.com                                       | 21      | CN          |
+| 3      | Western Venom    | [western.venom@163.com](mailto:western.venom@163.com)        | 28      | USA         |
+| 4      | Southern Emperor | [southern.emperor@qq.com](mailto:southern.emperor@qq.com)    | 21      | JP          |
+| 5      | Linghu Chong     |                                                              | 18      | CN          |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **id** | **name**        | **email**              | **age** | **country** |
+| ------ | --------------- | ---------------------- | ------- | ----------- |
+| 2      | Northern Beggar | northern.beggar@qq.com | 21      | CN          |
+| 5      | Linghu Chong    |                        | 18      | CN          |
+
+**样例二:**
+
+表内容 : teachers
+
+| id   | name             | email                     | age  | country |
+| ---- | ---------------- | ------------------------- | ---- | ------- |
+| 1    | Eastern Heretic  | eastern.heretic@gmail.com | 20   | UK      |
+| 3    | Western Venom    | western.venom@163.com     | 28   | USA     |
+| 4    | Southern Emperor | southern.emperor@qq.com   | 21   | JP      |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  | name | email | age  | country |
+| :--: | :--: | :---: | :--: | :-----: |
+|      |      |       |      |         |
+
+>    因为该输入样例中没有中国国籍的教师，因此返回结果集没有数据只有列名。
+
+```mysql
+SELECT *
+FROM teachers
+where country='CN'
+ORDER BY age;
+```
+
 ## 1983.  查询课程表中学生上课人数平均值
 
 描述
@@ -3012,6 +3150,90 @@ select name,DATE_ADD(created_at , INTERVAL 1 YEAR)  as new_created
 from courses;
 ```
 
+### DATE_SUB() 函数
+
+```mysql
+SELECT DATE_SUB(date, INTERVAL expr type)
+FROM table_name
+```
+
+
+
+## 2031.  将课程创建日期均提前一个月
+
+描述
+
+请编写 SQL 语句，修改 `courses` 表中课程的开课日期，将课程创建日期均提前一个月，最后返回课程 id `id` 、课程名称 `name` 及修改后的开课日期，修改后的课程创建时间命名为 `new_created` 。
+
+表定义: courses（课程表）
+
+|     列名      |     类型     |     注释     |
+| :-----------: | :----------: | :----------: |
+|      id       | int unsigned |     主键     |
+|     name      |   varchar    |   课程名称   |
+| student_count |     int      |   学生总数   |
+|  created_at   |     date     | 课程创建时间 |
+|  teacher_id   |     int      |   讲师 id    |
+
+结果列名需要重命名如果为当年的 1 月，提前一个月则为下一年的 12 月
+
+样例
+
+**样例一：**
+
+表内容 : courses
+
+| **id** | **name**                | **student_count** | **created_at** | **teacher_id** |
+| ------ | ----------------------- | ----------------- | -------------- | -------------- |
+| 1      | Advanced Algorithms     | 880               | 2020-6-1       | 4              |
+| 2      | System Design           | 1350              | 2020-7-18      | 3              |
+| 3      | Django                  | 780               | 2020-2-29      | 3              |
+| 4      | Web                     | 340               | 2020-4-22      | 4              |
+| 5      | Big Data                | 700               | 2020-9-11      | 1              |
+| 6      | Artificial Intelligence | 1660              | 2018-5-13      | 3              |
+| 7      | Java P6+                | 780               | 2019-1-19      | 3              |
+| 8      | Data Analysis           | 500               | 2019-7-12      | 1              |
+| 10     | Object Oriented Design  | 300               | 2020-8-8       | 4              |
+| 12     | Dynamic Programming     | 2000              | 2018-8-18      | 1              |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **id** | **name**                | new_created |
+| ------ | ----------------------- | ----------- |
+| 1      | Advanced Algorithms     | 2020-5-1    |
+| 2      | System Design           | 2020-6-18   |
+| 3      | Django                  | 2020-1-29   |
+| 4      | Web                     | 2020-3-22   |
+| 5      | Big Data                | 2020-8-11   |
+| 6      | Artificial Intelligence | 2018-4-13   |
+| 7      | Java P6+                | 2018-12-19  |
+| 8      | Data Analysis           | 2019-6-12   |
+| 10     | Object Oriented Design  | 2020-7-8    |
+| 12     | Dynamic Programming     | 2018-7-18   |
+
+**样例二：**
+
+表内容 : courses
+
+| **id** | **name**                | **student_count** | **created_at** | **teacher_id** |
+| ------ | ----------------------- | ----------------- | -------------- | -------------- |
+| 1      | Advanced Algorithms     | 880               | 2020-6-1       | 4              |
+| 6      | Artificial Intelligence | 1660              | 2018-5-13      | 3              |
+| 7      | Java P6+                | 780               | 2019-1-19      | 3              |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **id** | **name**                | **student_count** | **created_at** | **teacher_id** |
+| ------ | ----------------------- | ----------------- | -------------- | -------------- |
+| 1      | Advanced Algorithms     | 880               | 2020-5-1       | 4              |
+| 6      | Artificial Intelligence | 1660              | 2018-4-13      | 3              |
+| 7      | Java P6+                | 780               | 2018-12-19     | 3              |
+
+```mysql
+SELECT id,name,DATE_ADD(created_at,INTERVAL -1 MONTH) as new_created
+FROM courses;
+```
+
 ## 2045.  输出 Hello LintCode
 
 描述
@@ -3146,6 +3368,46 @@ SELECT DATE_FORMAT(date,format);
 `date` 一个有效日期。
 
 `format` 是 date/time 的输出格式。
+
+## 2081. 向表中插入当前的日期
+
+描述
+
+请编写 SQL 语句，向记录表 `records` 中插入当前的日期
+
+表定义: records (记录表)
+
+| 列名     | 类型 | 注释     |
+| -------- | ---- | -------- |
+| now_time | date | 现在时间 |
+
+插入记录字段类型应该和表定义字段类型相符
+
+样例
+
+表内容: records (记录表)
+
+now_time
+
+>    数据表中并没有数据，`now_time` 的类型为 `date`
+
+在运行你的 SQL 语句之后，我们会执行一些语句，对插入的数据与系统的当前日期进行比较，并将比较的结果返回
+
+返回：
+
+| answer |
+| ------ |
+| true   |
+
+>    若返回为 `true` 则表明插入的当前时间正确
+>    若返回为 `false` 则表明插入的当前时间错误
+
+```mysql
+insert into records (now_time) values
+(now());
+```
+
+
 
 # 参考
 

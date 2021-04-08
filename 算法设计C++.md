@@ -1,3 +1,5 @@
+
+
 # 排序
 
 ## 冒泡算法	bubbleSort
@@ -4819,7 +4821,46 @@ public:
 };
 ```
 
+# 1148. 最长和谐子序列
 
+描述
+
+我们将一个和谐数组定义为是其最大值和最小值之间的差值恰好为1的数组。
+
+现在，给定一个整数数组，您需要在其所有可能的子序列中找到其最长的和谐子序列的长度。
+
+输入数组的长度不会超过20,000。
+
+样例
+
+```
+输入：[1,3,2,2,5,2,3,7]
+输出：5
+解释：最长的和谐子序列是[3,2,2,2,3]。
+```
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: a list of integers
+     * @return: return a integer
+     */
+    int findLHS(vector<int> &nums) {
+        map<int,int>count;
+        int ans=0;
+        for(auto num:nums){
+            count[num]++;
+        }
+        for(auto num:nums){
+            if(count[num] and count[num-1]){
+                ans=max(ans,count[num]+count[num-1]);
+            }
+        }
+        return ans;
+    }
+};
+```
 
 # 1746. 二叉搜索树结点最小距离
 
