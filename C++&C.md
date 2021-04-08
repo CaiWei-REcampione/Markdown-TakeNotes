@@ -1060,7 +1060,22 @@ ostream& operator<<(ostream& _out,<object>& _name);//重载cout
 ofstream& operator<<(ofstream& _out,<object>& _name);//重载ofstream
 ```
 
+## 重载赋值运算符
 
+赋值运算符必须是非静态成员函数，并且不能全局重载，而且派生类不能继承基类的赋值运算符。
+
+当没有重载运算符时，编译器会生成默认的赋值运算符。
+
+```cpp
+class Point{
+public:
+    Point &operator=(Point &pt){
+        _x=pt._x;
+        _y=pt._y;
+        return *this;
+    }
+}
+```
 
 # 循环
 
@@ -1078,6 +1093,14 @@ while(){
 
 }
 ```
+
+## break
+
+从循环中退出
+
+## continue
+
+转到循环开始处
 
 # valarray class
 
