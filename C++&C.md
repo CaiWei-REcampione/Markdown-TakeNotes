@@ -1355,6 +1355,14 @@ public:
 
 友元能访问类的私有成员
 
+### 友元函数的声明位置
+
+*    首先必须是在类中
+     至于是在public,protected,private无所谓,外界都可以直接调用
+*    友元函数的实现位置,也就是具体的定义(非声明)所在位置
+     *    第1种方式(推荐):在宿主类中声明的同时直接提供定义
+     *    将宿主类用一个新的namespace框起来,然后在其他cpp文件中提供友元的定义,但是需要使用类似 myNameSpace::operator<<() 这样的命名空间限定符
+
 ### 友元特性
 
 *    友元不是双向的
@@ -1581,9 +1589,20 @@ template <typename T>void report(T& hf){...}
 *    递归
 
 ```cpp
-template<typename...Args>
-void show_list(Args...args){
-	
+/*递归终止函数*/
+void function()
+{
+	//todo
+    return;
+}
+
+/*展开函数*/
+template <class T, class ...Args>
+void function(T parat, Args... rest)
+{
+	//todo
+	function(rest...);
+	return;
 }
 ```
 
