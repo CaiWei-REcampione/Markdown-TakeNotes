@@ -1,5 +1,3 @@
-[toc]
-
 # 编程规范
 
 -    边界条件
@@ -506,6 +504,22 @@ returntype class::functionname(param1,param2,......)const{
 >    [=,&foo]截取外部作用域中所有变量，并拷贝一份在函数体中使用，但是对foo变量使用引用
 >    [bar]截取bar变量并且拷贝一份在函数体重使用，同时不截取其他变量
 >    [this]截取当前类中的this指针。如果已经使用了&或者=就默认添加此选项。
+
+# 生成随机数
+
+## 整型
+
+```cpp
+srand(time(NULL));
+int target=rand()%[a]+[b];//随机数范围[b,a+b-1]
+```
+
+## 浮点数
+
+```cpp
+srand(time(NULL));
+double target=rand()/double(RAND_MAX/[a])+[b];//随机数范围[b,a+b)
+```
 
 # system("")指令
 
@@ -1473,7 +1487,11 @@ min()//返回最小的元素
 
 # template 类模板
 
+template，针对一个或多个尚未明确的类型所撰写的函数或类别。使用template时，可以显式或隐式将类型当做参数来传递。
+
 模板提供参数化类型，能够将类型名作为参数传递给接收方来建立类或函数
+
+template并非一次编译便产生出适合所有类型的代码，而是针对被使用的某个类型进行编译。
 
 ## 定义类模板
 
@@ -1494,12 +1512,20 @@ ArrayTP<ArrayTP<int,5>,10>twodee;
 
 ## 默认类型模板参数
 
+### 声明
+
 ```c++
 template<typename T1,typename T2=int>
 class classname{
 public:
 private:
 }
+```
+
+### 使用
+
+```cpp
+clasname<> newclass;
 ```
 
 ## 显式实例化
@@ -1517,22 +1543,29 @@ template class ArrayTP<string,100>;
 ```c++
 template<typename T>
 class SortedArray{
-//details omitted
+	//details omitted
 }
 ```
 
 ## 部分具体化
 
 ```c++
-template<class T1,class T2>class Pair{...}
-template<class T1>class Pair<T1,int>{...}
+template<class T1,class T2>
+class Pair{
+    ...
+};
+
+template<class T1>
+class Pair<T1,int>{
+    ...
+};
 ```
 
 ## 将模板用作参数
 
-```
+```cpp
 template<template<typename T>class Thing>
-class Crab
+class Crab;
 ```
 
 *    template<typename T>class是类型，Thing是参数
@@ -1544,8 +1577,8 @@ class Crab
 ```c++
 template<class T>
 class HsaFriend{
- public:
- friend void counts();//friend to all HasFriend instantiations
+public:
+	friend void counts();//friend to all HasFriend instantiations
 }
 ```
 
@@ -1554,8 +1587,11 @@ class HsaFriend{
 首先，在类定义的前面声明每个模板函数
 
 ```c++
-template<typename T>void counts();
-template<typename T>void report(T &);
+template<typename T>
+void counts();
+
+template<typename T>
+void report(T &);
 ```
 
 然后，在函数中再次将模板声明为友元
@@ -1577,7 +1613,7 @@ template <typename T>void counts(){...}
 template <typename T>void report(T& hf){...}
 ```
 
-## 模板类的非约束模板友元函数
+### 模板类的非约束模板友元函数
 
 通过在类中声明模板，可以创建非约束友元函数
 
@@ -1606,7 +1642,47 @@ void function(T parat, Args... rest)
 }
 ```
 
+## 非类型模板参数
 
+非类型模板参数可以看做是整个template类型的一部分。
+
+```cpp
+bitset<32> flags32;	//bitset witt 32 bits
+```
+
+## 缺省模板参数
+
+```cpp
+template<class T,class container = vector<T>>
+class MyClass;
+```
+
+如果只传给它一个参数，缺省参数可以作为第二个参数使用。
+
+## typename
+
+关键字typename用来作为型别之前的标识符号。
+
+```cpp
+template<typename T>
+```
+
+## 成员模板
+
+class member function可以是个template，但这样的member template既不能是virtual，也不能有缺省参数。
+
+```cpp
+class MyClass{
+    template <class T>
+    void f(T);
+}
+```
+
+## 基本型别的显式初始化
+
+如果采用不含参数的、明确的constructor(构造函数)调用语法，基本型别会被初始化为零。
+
+这个特性可以确保我们在撰写template程序代码时，任何型别都有一个确切的初始值。
 
 # 异常
 
