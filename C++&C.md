@@ -81,6 +81,32 @@ typename* name=new <typename>;
 valuename=typename(value);
 ```
 
+### 类型转换符
+
+#### static_cast
+
+```cpp
+static_cast<[typename1]>([typename2]);
+```
+
+利用原值重建一个临时对象，并在设立初值时使用类型转换
+
+#### dynamic_cast
+
+```cpp
+dynamic_cast<[typename1]>([typename2]);
+```
+
+将多态类型向下转型为其实际静态类型
+
+#### const_cast
+
+设定或去除类型的常数性，亦可去除volatile饰词
+
+#### reinterpret_cast
+
+<u>使用此转型动作通常带来不可移植性</u>
+
 ## 作用域
 
 每个变量只能在程序的一定范围内使用，此范围称为变量的作用域。
@@ -108,6 +134,25 @@ valuename=typename(value);
 ### 范围确定符
 
 在C＋＋中， 在变量名前加上范围确定符 "::" 前缀， 即两个冒号， 可以告诉编译器使 用全局变量而不使用本地变量。 即使代码上下文环境是嵌套的本地作用域， 范围确定符也 不能提供访问下个外层范围的变量， 只能提供对全局变量的访问。
+
+### 命名空间namespace
+
+#### 声明定义命名空间
+
+```cpp
+namespace [name]{
+	//do
+}
+```
+
+与class不同的是，namespace是开放的，可以在不同的模块中定义和扩展namespace。
+
+#### 使用命名空间
+
+```
+[name]::[name-item]
+using namespace [name]//使[name]中的所有名字曝光，可能会导致名称冲突问题
+```
 
 ## 字符常数
 
@@ -1417,25 +1462,6 @@ public:
         return *this;
     }
 }
-```
-
-# 命名空间namespace
-
-## 声明定义命名空间
-
-```cpp
-namespace [name]{
-	//do
-}
-```
-
-与class不同的是，namespace是开放的，可以在不同的模块中定义和扩展namespace。
-
-## 使用命名空间
-
-```
-[name]::[name-item]
-using namespace [name]//使[name]中的所有名字曝光，可能会导致名称冲突问题
 ```
 
 # 选择
