@@ -1937,8 +1937,68 @@ explicit domain_error(const string& what_arg);
 | exception/bad_exception | \<exception\> |
 | bad_alloc               | \<new\>       |
 | bad_cast/bad_typeid     | \<typeinfo\>  |
-| ios_base::faliure       | \<ios\>       |
+| ios_base::fallure       | \<ios\>       |
 | ...                     | \<stdexcept\> |
+
+#### 异常类别成员
+
+为了在catch子句中处理异常,必须采用异常所提供的接口.
+
+所有标准的接口只含有一个成员函数,即what(),用以获取"类型本身以外的附加信息"
+
+```cpp
+namespace std{
+    class exception{
+    public:
+        virtual const char*what()const throw();
+        ...
+    };
+}
+```
+
+很大程度决定了帮助的级别和信息的详细度.
+
+标准异常中的其他成员,用来处理生成、复制、赋值、销毁等动作。
+
+```cpp
+try{
+    //to do
+}
+catch(const std::exception& error){
+    std::cerr<<error.what()<<std::endl;
+}
+```
+
+#### 抛出标准异常
+
+生成时只需要一个string参数,成为被what()返回的描述字符串.
+
+```cpp
+namespace std{
+    class logic_error:public exception{
+        public:
+        explicit logic_error(const string&whatString);
+    };
+}
+```
+
+提供这种功能的标准异常有:logic_error及其派生类别、runtime_error及其派生类别、ios_base::fallure
+
+想要抛出一个标准异常,需要生成一个描述该异常的字符串,并将它初始化,交给异常对象
+
+```cpp
+std::string s;
+...
+throw std::out_of_range(s);
+```
+
+由于char*可被隐式转换为string,所以可以直接使用字符串字面量
+
+```
+throw std::out_of_range("out_of_range(somewhere,somehow)");
+```
+
+
 
 # RTTI
 

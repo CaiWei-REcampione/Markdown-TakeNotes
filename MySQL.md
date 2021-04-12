@@ -1043,7 +1043,7 @@ GROUP BY customers.cust_id;
 -    注意所使用的联结类型。一般我们使用内部联结,但使用外部联结也是有效的。
 -    保证使用正确的联结条件,否则将返回不正确的数据。
 -    应该总是提供联结条件,否则会得出笛卡儿积。
--    在一个联结中可以包含多个表,甚至对于每个联结可以采用不同的联结类型。虽然这样做是合法的,一般也很有用,但应该在一起测试它们前,分别测试每个联结。这将使故障排除更为简单。t
+-    在一个联结中可以包含多个表,甚至对于每个联结可以采用不同的联结类型。虽然这样做是合法的,一般也很有用,但应该在一起测试它们前,分别测试每个联结。这将使故障排除更为简单。
 
 # 组合查询
 
@@ -2948,6 +2948,142 @@ IF
 ( POW( a, 2 ) + POW( b, 2 ) = POW( c, 2 ), 'Yes', 'No' ) AS 'right_triangle'
 FROM
 line_segments;
+```
+
+## 1959.  查询中英籍的教师信息
+
+描述
+
+请编写 SQL 语句，使用 IN 查询教师表 `teachers` 中国籍为中国 (CN) 或英国 (UK) 的所有教师信息。
+
+表定义: teachers (教师表)
+
+|  列名   |  类型   |   注释   |
+| :-----: | :-----: | :------: |
+|   id    |   int   |   主键   |
+|  name   | varchar | 讲师姓名 |
+|  email  | varchar | 讲师邮箱 |
+|   age   |   int   | 讲师年龄 |
+| country | varchar | 讲师国籍 |
+
+注意：题目要求使用 IN，请不要使用 AND如果查询不到结果，就什么都不返回
+
+样例
+
+**样例一：**
+
+表内容 : teachers
+
+| id   | name             | email                     | age  | country |
+| ---- | ---------------- | ------------------------- | ---- | ------- |
+| 1    | Eastern Heretic  | eastern.heretic@gmail.com | 20   | UK      |
+| 2    | Northern Beggar  | northern.beggar@qq.com    | 21   | CN      |
+| 3    | Western Venom    | western.venom@163.com     | 28   | USA     |
+| 4    | Southern Emperor | southern.emperor@qq.com   | 21   | JP      |
+| 5    | Linghu Chong     |                           | 18   | CN      |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  |      name       |           email           | age  | country |
+| :--: | :-------------: | :-----------------------: | :--: | :-----: |
+|  1   | Eastern Heretic | eastern.heretic@gmail.com |  20  |   UK    |
+|  2   | Northern Beggar |  northern.beggar@qq.com   |  21  |   CN    |
+|  5   |  Linghu Chong   |                           |  18  |   CN    |
+
+**样例二：**
+
+表内容 : teachers
+
+| id   | name             | email                     | age  | country |
+| ---- | ---------------- | ------------------------- | ---- | ------- |
+| 1    | Eastern Heretic  | eastern.heretic@gmail.com | 18   | USA     |
+| 2    | Northern Beggar  | northern.beggar@qq.com    | 21   | JP      |
+| 3    | Western Venom    | western.venom@163.com     | 28   | USA     |
+| 4    | Southern Emperor | southern.emperor@qq.com   | 21   | JP      |
+| 5    | Linghu Chong     |                           | 18   | USA     |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  | name | email | age  | country |
+| :--: | :--: | :---: | :--: | :-----: |
+|      |      |       |      |         |
+
+>    因为输入样例中没有教师的国籍为中国(CN)或英国(UK)，因此返回结果为空。
+
+```mysql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+SELECT id,name,email,age,country
+FROM teachers
+WHERE country IN ('CN','UK');
+```
+
+## 1961.  查询非日、美籍教师信息
+
+描述
+
+请编写 SQL 语句，使用 NOT IN 查询教师表 `teachers` 中教师国籍 (country) 不为日本 (JP) 或者不为美国 (USA) 的所有教师信息。
+
+表定义: teachers (教师表)
+
+|  列名   |  类型   |   注释   |
+| :-----: | :-----: | :------: |
+|   id    |   int   |   主键   |
+|  name   | varchar | 讲师姓名 |
+|  email  | varchar | 讲师邮箱 |
+|   age   |   int   | 讲师年龄 |
+| country | varchar | 讲师国籍 |
+
+注意：题目要求使用 NOT IN如果查询不到结果，就什么都不返回
+
+样例
+
+**样例一：**
+
+表内容 : teachers
+
+| id   | name             | email                     | age  | country |
+| ---- | ---------------- | ------------------------- | ---- | ------- |
+| 1    | Eastern Heretic  | eastern.heretic@gmail.com | 20   | UK      |
+| 2    | Northern Beggar  | northern.beggar@qq.com    | 21   | CN      |
+| 3    | Western Venom    | western.venom@163.com     | 28   | USA     |
+| 4    | Southern Emperor | southern.emperor@qq.com   | 21   | JP      |
+| 5    | Linghu Chong     |                           | 18   | CN      |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  |      name       |           email           | age  | country |
+| :--: | :-------------: | :-----------------------: | :--: | :-----: |
+|  1   | Eastern Heretic | eastern.heretic@gmail.com |  20  |   UK    |
+|  2   | Northern Beggar |  northern.beggar@qq.com   |  21  |   CN    |
+|  5   |  Linghu Chong   |                           |  18  |   CN    |
+
+**样例二：**
+
+表内容 : teachers
+
+| id   | name             | email                     | age  | country |
+| ---- | ---------------- | ------------------------- | ---- | ------- |
+| 1    | Eastern Heretic  | eastern.heretic@gmail.com | 18   | USA     |
+| 2    | Northern Beggar  | northern.beggar@qq.com    | 21   | JP      |
+| 3    | Western Venom    | western.venom@163.com     | 28   | USA     |
+| 4    | Southern Emperor | southern.emperor@qq.com   | 21   | JP      |
+| 5    | Linghu Chong     |                           | 18   | USA     |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  | name | email | age  | country |
+| :--: | :--: | :---: | :--: | :-----: |
+|      |      |       |      |         |
+
+>    因为输入样例中教师的国籍都是 JP 或者 USA，因此返回的结果没有数据。
+
+```mysql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+SELECT *
+FROM teachers
+WHERE country NOT IN ('JP','USA');
 ```
 
 ## 1977.  根据中国教师年龄降序排序
