@@ -374,6 +374,17 @@ new关键字用于为指定类型的对象从空闲存储区中分配内存，�
 [::] delete [ ] 指针//delete数组
 ```
 
+## explicit
+
+C++中的explicit关键字只能用于修饰只有一个参数的类构造函数, 它的作用是表明该构造函数是显示的, 而非隐式的, 跟它相对应的另一个关键字是implicit, 意思是隐藏的,类构造函数默认情况下即声明为implicit(隐式).
+
+```cpp
+class [classname]{
+public:
+	explicit [classname]([typename] parametername);	
+};
+```
+
 # 操作符
 
 | 操作符           | 名称           | 方向     |
@@ -1406,6 +1417,25 @@ public:
         return *this;
     }
 }
+```
+
+# 命名空间namespace
+
+## 声明定义命名空间
+
+```cpp
+namespace [name]{
+	//do
+}
+```
+
+与class不同的是，namespace是开放的，可以在不同的模块中定义和扩展namespace。
+
+## 使用命名空间
+
+```
+[name]::[name-item]
+using namespace [name]//使[name]中的所有名字曝光，可能会导致名称冲突问题
 ```
 
 # 选择
