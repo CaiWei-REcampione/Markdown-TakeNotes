@@ -43,6 +43,28 @@ private:
 
 尽量把名称集合到一个命名空间里面，避免名称重复。
 
+## main()的定义式
+
+根据C++标准规格，只有两种main()是可移植的
+
+```cpp
+int main(){
+    //to do
+}
+```
+
+```cpp
+int main(int argc,char* argv[]){
+    //to do
+}
+```
+
+C++在main()的末尾定义了一个隐式的
+
+```cpp
+return 0;
+```
+
 # 数据类型
 
 ## 基本数据类型
@@ -153,9 +175,17 @@ namespace [name]{
 
 #### 使用命名空间
 
-```
+##### 直接指定标识符
+
+```cpp
 [name]::[name-item]
-using namespace [name]//使[name]中的所有名字曝光，可能会导致名称冲突问题
+```
+
+##### 使用using
+
+```cpp
+using namespace [name];//使[name]中的所有名字曝光，可能会导致名称冲突问题,using directive
+using namespace [name]::[name-item];//using declaration
 ```
 
 ## 字符常数
@@ -307,6 +337,16 @@ memset(ch,65,sizeof(ch)); //直接用ascll码初始化
 int num[10];
 memset(num,0,sizeof(num));
 ```
+
+# 复杂度
+
+| 类型    | 表示法       | 含义                                         |
+| ------- | ------------ | -------------------------------------------- |
+| 常数    | O(1)         | 运行时间与元素个数无关                       |
+| 对数    | O(log(n))    | 运行时间随元素个数的增加呈对数增长           |
+| 线性    | O(n)         | 运行时间随元素个数的增加呈线性增长           |
+| n-log-n | O(n*long(n)) | 运行时间随元素的增加呈"线性和对数的乘积"增长 |
+| 二次    | O($n^2$)     | 运行时间随元素的个数的增加呈平方增长         |
 
 # 运算符
 
@@ -1744,7 +1784,7 @@ class MyClass{
 
 这个特性可以确保我们在撰写template程序代码时，任何型别都有一个确切的初始值。
 
-# 异常
+# 错误处理(Error)和异常(Exception)处理
 
 ## 调用abort()
 
@@ -1869,6 +1909,36 @@ explicit domain_error(const string& what_arg);
 | std::overflow_error    | 当发生数学上溢时，会抛出该异常。                             |
 | std::range_error       | 当尝试存储超出范围的值时，会抛出该异常。                     |
 | std::underflow_error   | 当发生数学下溢时，会抛出该异常。                             |
+
+### 语言本身所支持的异常
+
+*    全局操作符new操作失败,会抛出bad_alloc异常
+*    执行期间,当一个加诸于reference身上的"动态类型转换操作"失败时,dynamic_cast会抛出bad_cast异常
+*    执行期类型辨识RTTI过程中,如果交给typeid的参数为零或者空指针,typeid操作符会抛出bad_typeid异常
+*    如果发生非预期的异常,bad_exception异常会接手处理
+     *    当函数抛出异常规格以外的异常,bad_exception就会调用unexpected()
+     *    如果异常规格中列出bad_exception,那么unexpected()总是会重新抛出(rethrows)bad_exception异常
+     *    如果异常规格中罗列了bad_exception,那么任何未列于规格的异常,都将在函数unexpected()中代之以bad_exception
+
+### C++标准程序库所发生的异常
+
+*    invalid_argument表示无效参数
+*    length_error指出某个行为"可能超越了最大极限"
+*    out_of_range指出参数值"不在预期范围内"
+*    domain_error指出专业领域范畴内的错误
+*    range_error指出内部计算时发生区间错误(range error)
+*    overflow_error指出算术运算发生上溢位(overflow)
+*    underflow_error指出算术运算发生下溢位(underflow)
+
+### 异常类别头文件
+
+| 类别                    | 头文件        |
+| ----------------------- | ------------- |
+| exception/bad_exception | \<exception\> |
+| bad_alloc               | \<new\>       |
+| bad_cast/bad_typeid     | \<typeinfo\>  |
+| ios_base::faliure       | \<ios\>       |
+| ...                     | \<stdexcept\> |
 
 # RTTI
 
