@@ -1654,6 +1654,35 @@ sudo minicom -s
 
 使用Ctrl+a键，输入字母z，出现minicom的命令菜单，输入大写字母q
 
+## ARM集成开发工具ADS
+
+集成开发环境Integrated development environment，简写IDE。
+
+ARM开发有标准的开发环境ARM Development Studio，简称ADS
+
+### C语言编译器armcc
+
+该编译器支持ANSIC标准，可以编译并生成32位ARM指令。
+
+armcc的基本语法如下
+
+```
+armcc [options] <file1> [file2] [file2] ...
+```
+
+可以一次编译多个文件，常见的参数如下所述
+
+*    -c：只编译不连接。
+*    -D：定义预编译宏。
+*    -E：仅对代码做预处理。
+*    -O：代码优化选项，共有3个优化级别，0表示不优化：1表示控制代码优化：2表示最大可能的优化。
+*    -I：指定头文件目录。
+*    -S：编译后生成汇编文件。
+
+### C++语言编译器armcpp
+
+该编译器支持ISO C++和EC++标准的代码，可以编译并生成32位ARM指令。armcpp的使用语法与armcc基本相同。
+
 # Linux基本指令
 
 ## 基本命令

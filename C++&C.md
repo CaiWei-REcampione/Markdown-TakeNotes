@@ -1688,10 +1688,16 @@ class MyClass{
 
 ## 调用abort()
 
+```cpp
+void abort(void);
+```
+
 受控方式运行代码
 
 abort()函数位与头文件**cstdlib**中，典型实现是向标准错误流发送消息abnormal program termination，然后终止程序
 **abort()是否刷新文件缓冲区取决于实现**，如果愿意，也可以用exit()，该函数刷新文件缓冲区，但不显示消息
+
+作用：终止程序
 
 ## 异常机制
 
@@ -1711,10 +1717,22 @@ try块表示其中特定的异常可能被激活的代码块，后面跟一个�
 
 ```c++
 try{
-
+	//保护代码块
 }
-catch{
+catch(/*找到错误*/){
+	//错误处理
+}
+```
 
+```cpp
+class Error;
+void f()
+{
+    ...
+    if(exception-condition)
+    {
+        throw Error();//抛出错误
+    }
 }
 ```
 
@@ -1772,6 +1790,25 @@ explicit domain_error(const string& what_arg);
 对于使用new导致的内存分配问题，让new引发bad_alloc异常
 
 头文件new包含bad_alloc类的声明，是从exception类公有派生而来的
+
+## C++标准的异常
+
+| 异常                   | 描述                                                         |
+| :--------------------- | :----------------------------------------------------------- |
+| **std::exception**     | 该异常是所有标准 C++ 异常的父类。                            |
+| std::bad_alloc         | 该异常可以通过 **new** 抛出。                                |
+| std::bad_cast          | 该异常可以通过 **dynamic_cast** 抛出。                       |
+| std::bad_exception     | 这在处理 C++ 程序中无法预期的异常时非常有用。                |
+| std::bad_typeid        | 该异常可以通过 **typeid** 抛出。                             |
+| **std::logic_error**   | 理论上可以通过读取代码来检测到的异常。                       |
+| std::domain_error      | 当使用了一个无效的数学域时，会抛出该异常。                   |
+| std::invalid_argument  | 当使用了无效的参数时，会抛出该异常。                         |
+| std::length_error      | 当创建了太长的 std::string 时，会抛出该异常。                |
+| std::out_of_range      | 该异常可以通过方法抛出，例如 std::vector 和 std::bitset<>::operator[]()。 |
+| **std::runtime_error** | 理论上不可以通过读取代码来检测到的异常。                     |
+| std::overflow_error    | 当发生数学上溢时，会抛出该异常。                             |
+| std::range_error       | 当尝试存储超出范围的值时，会抛出该异常。                     |
+| std::underflow_error   | 当发生数学下溢时，会抛出该异常。                             |
 
 # RTTI
 
