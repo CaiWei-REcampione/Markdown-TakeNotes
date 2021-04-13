@@ -1998,7 +1998,43 @@ throw std::out_of_range(s);
 throw std::out_of_range("out_of_range(somewhere,somehow)");
 ```
 
+#### 从标准异常类别中派生出新类别
 
+```cpp
+namespace MyLib{
+	class MyProblem:public std::exception{
+        public:
+        ...
+        MyProblem(...){
+            /*special constructor*/
+        }
+        virtual const char*what()const throw(){
+            /*what function*/
+        }
+    }
+}
+...
+void f(){
+    /*create an exception object and throw it*/
+    throw MyProblem(...);
+    ...
+}
+```
+
+```cpp
+namespace MyLib{
+    class MyRangeProblem:public std::out_of_range{
+        public:
+        MyRangeProblem(const string&whatString):out_of_range(whatString){
+        }
+    };
+    ...
+    void f(){
+        throw MyRangeProblem("here is my special range problem");
+        ...
+    }
+}
+```
 
 # RTTI
 
@@ -3019,7 +3055,26 @@ for( std::map<int, int>::iterator iter = test_map.begin(); iter != test_map.end(
 
 ## 迭代器
 
+```cpp
+[STL]<type>::iterator;
+```
+
 ## 空间分配器
+
+C++在许多地方采用特殊对象来处理内存配置和寻址,称为配置器(allocator)
+
+配置器体现出一种特定的内存模型,称为抽象表征,表现出"内存需求"至"内存低阶调用"的转换
+
+### 缺省配置器
+
+```cpp
+namespace std{
+    template<class T>
+        class allocator;
+}
+```
+
+
 
 ## 适配器
 
