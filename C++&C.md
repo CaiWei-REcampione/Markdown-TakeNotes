@@ -2212,7 +2212,7 @@ STL不是面向对象编程，而是泛型编程
 | \<utility\>    | 实现常用功能的模板类                                     |
 | \<vector\>     | 实现矢量容器的模板类                                     |
 
-## 遍历
+### 遍历
 
 ```cpp
 vector<int>vec;
@@ -3002,11 +3002,21 @@ mapname[3]="sum";
 
 #### 遍历map
 
+##### iterator
+
 ```cpp
 cout<<"content of map as followed: \n";
 map<string,int>::iterator iter;
 for(iter=mapname.begin();iter!=mapname.end();iter++){
  cout<<iter->first<<""<<iter->second<<endl;
+}
+```
+
+##### pair<typename1,typename2>
+
+```cpp
+for(std::pair<typename1,typename2> x: [map]){
+	//to do
 }
 ```
 
@@ -3073,8 +3083,6 @@ namespace std{
         class allocator;
 }
 ```
-
-
 
 ## 适配器
 
