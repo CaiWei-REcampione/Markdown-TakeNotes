@@ -2304,6 +2304,8 @@ std::auto_ptr<ClassA>f(){
 }
 ```
 
+只要有一个auto_ptr被当做参数,放进函数中,所拥有的对象就一定会被删除.
+
 #### shared_ptr
 
 如果程序要使用多个指向同一个对象的指针，应选用`shared_ptr`。这样的情况包括：
@@ -2331,6 +2333,22 @@ shared_ptr <A> sp1(p), sp2(p);
 设计weak_ptr的原因：**解决使用shared_ptr因循环引用而不能释放资源的问题。**
 
 *    weak_ptr不控制对象的生命期，但是它知道对象是否还活着，如果对象还活着，那么它可以提升为有效的shared_ptr（提升操作通过lock()函数获取所管理对象的强引用指针）；如果对象已经死了，提升会失败，返回一个空的shared_ptr。
+
+### const 指针
+
+不能更改auto_ptr的拥有权
+
+```cpp
+std::auto_ptr<int>f(){
+    const std::auto_ptr<int> p(new int);
+    std::auto_ptr<int> q(new int);
+    *p=42;			//OK,change value to which p regers
+    bad_print(p);   //COMPILE-TIME ERROR
+    *p=*q;			//OK,change value to which p refers
+    p=q;			//COMPILE-TIME ERROR
+    return p;   	//COMPILE-TIME ERROR
+}
+```
 
 # 标准模板库STL
 
