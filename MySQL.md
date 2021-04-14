@@ -3086,6 +3086,84 @@ FROM teachers
 WHERE country NOT IN ('JP','USA');
 ```
 
+## 1976.  根据学生数量排序课程信息
+
+描述
+
+请编写 SQL 语句，查询课程表 `courses`，对结果按照学生人数 `student_count` 进行升序排序。
+
+表定义: courses (课程表)
+
+|     列名      |  类型   |   注释   |
+| :-----------: | :-----: | :------: |
+|      id       |   int   |   主键   |
+|     name      | varchar | 课程名称 |
+| student_count |   int   | 学生总数 |
+|  created_at   |  date   | 开课时间 |
+|  teacher_id   |   int   | 讲师 id  |
+
+如果查询不到结果，就什么都不返回。
+
+样例
+
+**样例一：**
+
+表内容 : courses
+
+| id   | name                    | student_count | created_at | teacher_id |
+| ---- | ----------------------- | ------------- | ---------- | ---------- |
+| 1    | Advanced Algorithms     | 880           | 2020-6-1   | 4          |
+| 2    | System Design           | 1350          | 2020-7-18  | 3          |
+| 3    | Django                  | 780           | 2020-2-29  | 3          |
+| 4    | Web                     | 340           | 2020-4-22  | 4          |
+| 5    | Big Data                | 700           | 2020-9-11  | 1          |
+| 6    | Artificial Intelligence | 1660          | 2018-5-13  | 3          |
+| 7    | Java P6+                | 780           | 2019-1-19  | 3          |
+| 8    | Data Analysis           | 500           | 2019-7-12  | 1          |
+| 10   | Object Oriented Design  | 300           | 2020-8-8   | 4          |
+| 12   | Dynamic Programming     | 2000          | 2018-8-18  | 1          |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| id   | name                    | student_count | created_at | teacher_id |
+| ---- | ----------------------- | ------------- | ---------- | ---------- |
+| 10   | Object Oriented Design  | 300           | 2020-8-8   | 4          |
+| 4    | Web                     | 340           | 2020-4-22  | 4          |
+| 8    | Data Analysis           | 500           | 2019-7-12  | 1          |
+| 5    | Big Data                | 700           | 2020-9-11  | 1          |
+| 3    | Django                  | 780           | 2020-2-29  | 3          |
+| 7    | Java P6+                | 780           | 2019-1-19  | 3          |
+| 1    | Advanced Algorithms     | 880           | 2020-6-1   | 4          |
+| 2    | System Design           | 1350          | 2020-7-18  | 3          |
+| 6    | Artificial Intelligence | 1660          | 2018-5-13  | 3          |
+| 12   | Dynamic Programming     | 2000          | 2018-8-18  | 1          |
+
+**样例二：**
+
+表内容 : courses
+
+| id   | name                | student_count | created_at | teacher_id |
+| ---- | ------------------- | ------------- | ---------- | ---------- |
+| 1    | Advanced Algorithms | 880           | 2020-6-1   | 4          |
+| 2    | System Design       | 1350          | 2020-7-18  | 3          |
+| 3    | Django              | 780           | 2020-2-29  | 3          |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| id   | name                | student_count | created_at | teacher_id |
+| ---- | ------------------- | ------------- | ---------- | ---------- |
+| 3    | Django              | 780           | 2020-2-29  | 3          |
+| 1    | Advanced Algorithms | 880           | 2020-6-1   | 4          |
+| 2    | System Design       | 1350          | 2020-7-18  | 3          |
+
+```mysql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select id,name,student_count,created_at,teacher_id
+from courses
+order by student_count;
+```
+
 ## 1977.  根据中国教师年龄降序排序
 
 描述
@@ -3148,6 +3226,140 @@ SELECT *
 FROM teachers
 where country='CN'
 ORDER BY age;
+```
+
+### 1980.  查询年龄最大的中国教师
+
+描述
+
+请编写 SQL 语句，从教师表（teachers）中查询一条年龄最大的中国教师的信息。
+
+表定义: teachers (教师表)
+
+|  列名   |  类型   |   注释   |
+| :-----: | :-----: | :------: |
+|   id    |   int   |   主键   |
+|  name   | varchar | 讲师姓名 |
+|  email  | varchar | 讲师邮箱 |
+|   age   |   int   | 讲师年龄 |
+| country | varchar | 讲师国籍 |
+
+如果有多个年龄最大的老师，则返回表中满足条件的第一条数据如果查询不到结果，就什么都不返回
+
+样例
+
+**样例一：**
+
+表内容 : teachers
+
+| id   | name             | email                     | age  | country |
+| ---- | ---------------- | ------------------------- | ---- | ------- |
+| 1    | Eastern Heretic  | eastern.heretic@gmail.com | 20   | UK      |
+| 2    | Northern Beggar  | northern.beggar@qq.com    | 21   | CN      |
+| 3    | Western Venom    | western.venom@163.com     | 28   | USA     |
+| 4    | Southern Emperor | southern.emperor@qq.com   | 22   | JP      |
+| 5    | Linghu Chong     |                           | 18   | CN      |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  |      name       |         email          | age  | country |
+| :--: | :-------------: | :--------------------: | :--: | :-----: |
+|  2   | Northern Beggar | northern.beggar@qq.com |  21  |   CN    |
+
+**样例二：**
+
+表内容 : teachers
+
+| id   | name             | email                     | age  | country |
+| ---- | ---------------- | ------------------------- | ---- | ------- |
+| 1    | Eastern Heretic  | eastern.heretic@gmail.com | 20   | UK      |
+| 2    | Northern Beggar  | northern.beggar@qq.com    | 21   | USA     |
+| 3    | Western Venom    | western.venom@163.com     | 28   | USA     |
+| 4    | Southern Emperor | southern.emperor@qq.com   | 22   | JP      |
+| 5    | Linghu Chong     |                           | 18   | USA     |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  | name | email | age  | country |
+| :--: | :--: | :---: | :--: | :-----: |
+|      |      |       |      |         |
+
+>    样例二中没有符合条件的数据，所以输出中只包含表头而没有数据。
+
+```mysql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+SELECT *
+FROM teachers
+WHERE country IN ('CN')
+ORDER BY age DESC
+LIMIT 1;
+```
+
+## 1978.  根据中国教师年龄升序排序
+
+描述
+
+请编写 SQL 语句，查询教师表 `teachers` 中的中国教师，并按照年龄升序排序。
+
+表定义: teachers (教师表)
+
+|  列名   |  类型   |   注释   |
+| :-----: | :-----: | :------: |
+|   id    |   int   |   主键   |
+|  name   | varchar | 讲师姓名 |
+|  email  | varchar | 讲师邮箱 |
+|   age   |   int   | 讲师年龄 |
+| country | varchar | 讲师国籍 |
+
+必须先用 WHERE 筛选出合适的条件，然后再使用 ORDER BY 排序，否则返回结果可能会出错。如果查询不到结果，就什么都不返回。
+
+样例
+
+**样例一：**
+
+表内容 : teachers
+
+| **id** | **name**         | **email**                 | **age** | **country** |
+| ------ | ---------------- | ------------------------- | ------- | ----------- |
+| 1      | Eastern Heretic  | eastern.heretic@gmail.com | 20      | UK          |
+| 2      | Northern Beggar  | northern.beggar@qq.com    | 21      | CN          |
+| 3      | Western Venom    | western.venom@163.com     | 28      | USA         |
+| 4      | Southern Emperor | southern.emperor@qq.com   | 21      | JP          |
+| 5      | Linghu Chong     |                           | 18      | CN          |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **id** | **name**        | **email**              | **age** | **country** |
+| ------ | --------------- | ---------------------- | ------- | ----------- |
+| 5      | Linghu Chong    |                        | 18      | CN          |
+| 2      | Northern Beggar | northern.beggar@qq.com | 21      | CN          |
+
+**样例二:**
+
+表内容 : teachers
+
+| id   | name             | email                     | age  | country |
+| ---- | ---------------- | ------------------------- | ---- | ------- |
+| 1    | Eastern Heretic  | eastern.heretic@gmail.com | 20   | UK      |
+| 3    | Western Venom    | western.venom@163.com     | 28   | USA     |
+| 4    | Southern Emperor | southern.emperor@qq.com   | 21   | JP      |
+
+在运行你的 SQL 语句之后，表应返回：
+
+|  id  | name | email | age  | country |
+| :--: | :--: | :---: | :--: | :-----: |
+|      |      |       |      |         |
+
+>    因为该输入样例中没有中国国籍的教师，因此返回结果集没有数据只有列名。
+
+```mysql
+-- Write your SQL Query here --
+-- example: SELECT * FROM XX_TABLE WHERE XXX --
+select id,name,email,age,country
+from teachers
+where country in ('CN')
+order by age;
 ```
 
 ## 1983.  查询课程表中学生上课人数平均值
@@ -3543,7 +3755,71 @@ insert into records (now_time) values
 (now());
 ```
 
+## 2092.  查询授课教师编号
 
+描述
+
+请编写 SQL 语句，查询课程表 `courses` 中不重复的开课教师编号 `teacher_id` 。
+
+表定义：courses（课程表）
+
+|     列名      |  类型   |   注释   |
+| :-----------: | :-----: | :------: |
+|      id       |   int   |   主键   |
+|     name      | varchar | 课程名称 |
+| student_count |   int   | 学生总数 |
+|  created_at   |  date   | 开课时间 |
+|  teacher_id   |   int   | 讲师 id  |
+
+注意查询返回的教师编号是不重复的如果查询不到结果，应返回空
+
+样例
+
+**样例一：**
+
+表内容 : courses
+
+| id   | name                    | student_count | created_at | teacher_id |
+| ---- | ----------------------- | ------------- | ---------- | ---------- |
+| 1    | Advanced Algorithms     | 880           | 2020/6/1   | 4          |
+| 2    | System Design           | 1350          | 2020/7/18  | 3          |
+| 3    | Django                  | 780           | 2020/2/29  | 3          |
+| 4    | Web                     | 340           | 2020/4/22  | 4          |
+| 5    | Big Data                | 700           | 2020/9/11  | 1          |
+| 6    | Artificial Intelligence | 1660          | 2018/5/13  | 3          |
+
+在运行你的 SQL 语句之后，表应返回：
+
+| **teacher_id** |
+| -------------- |
+| 4              |
+| 3              |
+| 1              |
+
+**样例二：**
+
+表内容 : courses
+
+| id   | name                | student_count | created_at | teacher_id |
+| ---- | ------------------- | ------------- | ---------- | ---------- |
+| 1    | Advanced Algorithms | 880           | 2020/6/1   | NULL       |
+| 2    | System Design       | 1350          | 2020/7/18  | NULL       |
+| 3    | Django              | 880           | 2020/2/29  | NULL       |
+| 4    | Web                 | 340           | 2020/4/22  | NULL       |
+| 5    | Big Data            | 780           | 2020/9/11  | NULL       |
+
+在运行你的 SQL 语句之后，表应返回：
+
+**teacher_id**
+
+>    样例二中教师编号 `teacher_id` 内容为空，所以输出中只包含表头而没有数据。
+
+```mysql
+-- Write your SQL Query here --
+-- example: SELECT XX_COLUMN FROM XX_TABLE --
+select DISTINCT(teacher_id)
+from courses;
+```
 
 # 参考
 

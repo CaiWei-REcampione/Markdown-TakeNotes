@@ -4821,6 +4821,388 @@ public:
 };
 ```
 
+## 402. 删除链表中的元素
+
+描述
+
+删除链表中等于给定值 `val` 的所有节点。
+
+样例
+
+**样例 1：**
+
+```
+输入：head = 1->2->3->3->4->5->3->null, val = 3
+输出：1->2->4->5->null
+```
+
+**样例 2：**
+
+```
+输入：head = 1->1->null, val = 1
+输出：null
+```
+
+```cpp
+/**
+ * Definition of singly-linked-list:
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *        this->val = val;
+ *        this->next = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param head: a ListNode
+     * @param val: An integer
+     * @return: a ListNode
+     */
+    ListNode * removeElements(ListNode * head, int val) {
+        if(head==NULL){
+            return NULL;
+        }
+        ListNode*befor=NULL;
+        ListNode*temp;
+        for(temp=head;temp!=NULL;){
+            if(temp->val==val){
+                if(befor==NULL){
+                    head=head->next;
+                    if(head==NULL){
+                        return NULL;
+                    }
+                    temp=temp->next;
+                }
+                else{
+                    temp=temp->next;
+                }
+            }
+            else{
+                if(befor==NULL){
+                    befor=head;
+                }
+                else{
+                    befor->next=temp;
+                    befor=temp;
+                }
+                temp=temp->next;
+            }
+        }
+        befor->next=NULL;
+        return head;
+    }
+};
+```
+
+# 551.  嵌套列表的加权和
+
+描述
+
+给一个嵌套的整数列表, 返回列表中所有整数由它们的深度加权后的总和. 每一个元素可能是一个整数或一个列表(其元素也可能是整数或列表)
+
+样例
+
+例1:
+
+```
+输入: the list [[1,1],2,[1,1]], 
+输出: 10. 
+解释:
+four 1's at depth 2, one 2 at depth 1, 4 * 1 * 2 + 1 * 2 * 1 = 10
+```
+
+例2:
+
+```
+输入: the list [1,[4,[6]]], 
+输出: 27. 
+解释:
+one 1 at depth 1, one 4 at depth 2, and one 6 at depth 3; 1 + 4 * 2 + 6 * 3 = 27
+```
+
+```cpp
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * class NestedInteger {
+ *   public:
+ *     // Return true if this NestedInteger holds a single integer,
+ *     // rather than a nested list.
+ *     bool isInteger() const;
+ *
+ *     // Return the single integer that this NestedInteger holds,
+ *     // if it holds a single integer
+ *     // The result is undefined if this NestedInteger holds a nested list
+ *     int getInteger() const;
+ *
+ *     // Return the nested list that this NestedInteger holds,
+ *     // if it holds a nested list
+ *     // The result is undefined if this NestedInteger holds a single integer
+ *     const vector<NestedInteger> &getList() const;
+ * };
+ */
+class Solution {
+private:
+    int sum=0,depth=1;
+public:
+    int depthSum(const vector<NestedInteger>& nestedList) {
+        for(auto i:nestedList){
+            if(i.isInteger()){
+                sum+=i.getInteger()*depth;
+            }
+            else{
+                depth++;
+                depthSum(i.getList());
+                depth--;
+            }
+        }
+        return sum;
+    }
+};
+```
+
+# 987.  具有交替位的二进制数
+
+描述
+
+给一个正整数，检查它的二进制表示是否具有交替位。即，两个相邻的位总是具有不同的值。
+
+样例
+
+**样例 1:**
+
+```
+输入: 5
+输出: True
+解释:
+5 的二进制表示为: 101
+```
+
+**样例 2:**
+
+```
+输入: 7
+输出: False
+解释:
+7 的二进制表示为: 111.
+```
+
+**样例 3:**
+
+```
+输入: 11
+输出: False
+解释:
+11 的二进制表示为: 1011.
+```
+
+**样例 4:**
+
+```
+输入: 10
+输出: True
+解释:
+10 的二进制表示: 1010.
+```
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: a postive Integer
+     * @return: if two adjacent bits will always have different values
+     */
+    bool hasAlternatingBits(int n) {
+        vector<int>count;
+        while(n!=0){
+            count.push_back(n%2);
+            n/=2;
+        }
+        if(count[0]==0){
+            for(int i=1;1;1){
+                if(i<count.size()){
+                    if(count[i]==1){
+                        i++;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    break;
+                }
+                if(i<count.size()){
+                    if(count[i]==0){
+                        i++;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+            return true;
+        }
+        else{
+            for(int i=1;1;1){
+                if(i<count.size()){
+                    if(count[i]==0){
+                        i++;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    break;
+                }
+                if(i<count.size()){
+                    if(count[i]==1){
+                        i++;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    break;
+                }
+            }
+            return true;
+        }
+    }
+};
+class Solution2 {
+public:
+    /**
+     * @param n: a postive Integer
+     * @return: if two adjacent bits will always have different values
+     */
+    bool hasAlternatingBits(int n) {
+        bool sign;
+        if(n%2==0){
+            sign=true;
+            n/=2;
+            while(n!=0){
+                if(sign==true){
+                    if(n%2!=0){
+                        n/=2;
+                        sign=false;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    if(n%2==0){
+                        n/=2;
+                        sign=true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        else{
+            sign=false;
+            n/=2;
+            while(n!=0){
+                if(sign==false){
+                    if(n%2==0){
+                        n/=2;
+                        sign=true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    if(n%2!=0){
+                        n/=2;
+                        sign=false;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+    }
+};
+```
+
+# 988.  硬币摆放
+
+描述
+
+你有 n 枚硬币，想要摆放成阶梯形状，即第 k 行恰好有 k 枚硬币。
+
+给出 n，找到可以形成的**完整**楼梯行数。
+
+n 是一个非负整数，且在32位有符号整数范围内。
+
+样例
+
+**样例 1:**
+
+```
+输入：n = 5
+输出：2
+解释：
+硬币可以形成以下行：
+¤
+¤ ¤
+¤ ¤
+因为第3行不完整，我们返回2。
+```
+
+**样例 2:**
+
+```
+输入：n = 8
+输出：3
+解释：
+硬币可以形成以下行：
+¤
+¤ ¤
+¤ ¤ ¤
+¤ ¤
+因为第4行不完整，我们返回3。
+```
+
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: a non-negative integer
+     * @return: the total number of full staircase rows that can be formed
+     */
+    int arrangeCoins(int n) {
+        int res=1,sum=0;
+        while(1){
+            sum+=res;
+            if(sum<=n){
+                res++;
+            }
+            else{
+                return res-1;
+            }
+        }
+    }
+};
+```
+
 # 1148. 最长和谐子序列
 
 描述
