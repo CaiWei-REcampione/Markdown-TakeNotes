@@ -242,6 +242,27 @@ vector<string> detachedString(string& str) {
 	}
 	return res;
 }
+// another edition
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
+
+int main () {
+	std::vector<std::string> coll;
+
+	// read all words from the standard input
+	std::copy ( std::istream_iterator<std::string> ( std::cin ) , std::istream_iterator<std::string> () , std::back_inserter ( coll ) );
+
+	// sort elements
+	sort ( coll.begin () , coll.end () );
+
+	// print all elements without duplicates
+	std::unique_copy ( coll.begin () , coll.end () , std::ostream_iterator<std::string> ( std::cout , "\n" ) );
+
+	//exit
+	std::exit ( EXIT_SUCCESS );
+}
 ```
 
 # 计数
