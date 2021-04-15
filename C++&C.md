@@ -1,3 +1,5 @@
+[toc]
+
 # 编程规范
 
 -    边界条件
@@ -115,6 +117,106 @@ typename* name=new <typename>;
 |        void        |
 
 >    C++中各种基本数据类型所占的存储空间所占的存储空间根据C++实现的不同而不同
+
+## 数值极限
+
+```cpp
+#include <climits>
+#include <limits.h>
+```
+
+| 类型        | 最小长度 |
+| ----------- | -------- |
+| char        | 1 byte   |
+| short int   | 2 bytes  |
+| int         | 2 bytes  |
+| long int    | 4 bytes  |
+| float       | 4 bytes  |
+| double      | 8 bytes  |
+| long double | 8 bytes  |
+
+*    通用型template,为所有类型提供缺省极值
+
+```cpp
+namespace std{
+    template<class T>
+    class numeric_limits{
+        public:
+        static const bool is_specialized=false;
+    };
+}
+```
+
+*    各具体类型的极值,由特化版本提供
+
+```cpp
+namespace std{
+    template<>class numeric_limits<int>{
+        public:
+        static T min() throw(){
+            return -2147483648;
+        }
+        static T max() throw(){
+            return 2147483647;
+        }
+        static const int digits=31;
+        ...
+    };
+}
+```
+
+### class numeric_limits<>
+
+std::numeric_limits为模板类，在库编译平台提供基础算术类型的极值等属性信息，取代传统C语言，所采用的预处理常数。比较常用的使用是对于给定的基础类型用来判断在当前系统上的最大值、最小值。若使用此类，需包含\<limits>头文件。
+
+| 成员              | 意义                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| is_specialized    | 类型是否有极值                                               |
+| is_signed         | 类型带有正负号                                               |
+| is_integer        | 计算结果不产生舍入误差                                       |
+| is_bounded        | 数字集的个数有限                                             |
+| is_modulo         | 两政治相加,其结果可能因溢位而回绕为较小的值                  |
+| is_iec559         | 遵从IEC 559及IEEE 754标准                                    |
+| min()             | 最小值                                                       |
+| max()             | 最大值                                                       |
+| digits            | 字符和整数;不带正负号之位个数浮点数;尾数中之radix位个数      |
+| digits10          | 十进制的个数                                                 |
+| radix             | 浮点数,指数表示式的底数(base)                                |
+| min_exponent      | 底数radix的最小负整数指数                                    |
+| max_exponent      | 底数radix的最大正整数指数                                    |
+| min_exponent10    | 底数10的最小负整数指数                                       |
+| max_exponent10    | 底数10的最大正整数指数                                       |
+| epsilon()         | 1和最接近1的值之间的差距                                     |
+| round_style       | 舍入风格                                                     |
+| round_error()     | 最大舍入误差量测                                             |
+| has_infinity      | 有"正无穷大"表示式                                           |
+| infinity()        | "正无穷大"                                                   |
+| has_quiet_NaN     | 本类型有不发信号的"非数值"表述式                             |
+| quiet_NaN         | 如果可以,安静地表述出"这不是个数值"                          |
+| has_signaling_NaN | 如果可以,发出信号表述出"这不是个数值"                        |
+| has_denorm        | 本类型是否允许非标准化数值                                   |
+| has_denorm_loss   | 准确度的遗失是以一个非标准化值而不是以一个不精密的结果被侦测出来 |
+| denorm_min        | 最小的非标准化正值                                           |
+| traps             | 已实作出Trapping                                             |
+| tinyness_before   | 在舍入之前可侦测出tinyness                                   |
+
+#### numeric_limits<>的舍入风格
+
+| 舍入风格                  | 意义                   |
+| ------------------------- | ---------------------- |
+| round_toward_zero         | 向零舍入               |
+| round_to_neearest         | 向最接近的可表示值舍入 |
+| round_toward_infinity     | 向正无限值舍入         |
+| round_toward_neg_infinity | 向负无限值舍入         |
+| round_indeterminate       | 无法确定               |
+
+#### numeric_limits<>的"denormalization style"
+
+| 舍入风格             | 意义                                              |
+| -------------------- | ------------------------------------------------- |
+| denorm_absent        | 此类型不允许"denormalized values"                 |
+| denorm_present       | 此类型允许向最接近的可表示值做denormalized values |
+| denorm_indeterminate | 无法确定                                          |
 
 ## 位域
 
@@ -1002,6 +1104,84 @@ swap包含在命名空间std里面
 
 [为数组vector排序](#vector排序)
 
+### 挑选较小值和较大值min()/max()
+
+```cpp
+namespace std{
+    template <class T>
+        inline const T& min(const T& a,const T& b){
+        return b<a?b:a;
+    }
+    template <class T>
+        inline const T& max(const T&a,const T& b){
+        return a<b?b:a;
+    }
+}
+//another edition
+namespace std{
+    template <class T,class Compare>
+        inline const T& min(const T& a,const T& b,Compare comp){
+		return comp(b,a)?b:a;
+    }
+    template <class T,class Compare>
+        inline const T& max(const T& a,const T& b,Compare comp){
+		return comp(a,b)?b:a;
+    }
+}
+```
+
+### 两值交换swap()
+
+```cpp
+namespace std{
+    template<class T>
+        inline void swap(T& a,T& b){
+        T tmp(a);
+        a=b;
+        b=tmp;
+    }
+}
+```
+
+swap()的最大优势在于,通过模板特化或函数重载,可以为更复杂的类型提供特别的版本
+
+## utility
+
+### 比较符
+
+```cpp
+//相同参数类型定义
+namespace std{
+    namespace rel_ops{
+        template <class  T>
+            inline bool operator!=(const T& x,const T& y){
+            return !(x==y);
+        }
+        template <class T>
+            inline bool operator>(const T&x,const T& y){
+            return y<x;
+        }
+        template <class T>
+            inline bool operator<=(const T&x,const T& y){
+            return !(y<x);
+        }
+        template <class T>
+            inline bool operator>=(const T&x,const T& y){
+            return !(x<y);
+        }
+    }
+}
+
+//两种不同的参数类型定义
+namespace std{
+    template <class T1,class T2>
+        inline bool operator!=(const T1& x,const T2& y){
+        return !(x==y);
+    }
+    ...
+}
+```
+
 ## ctype.h
 
 |           函数            |                   描述                   |
@@ -1019,6 +1199,30 @@ swap包含在命名空间std里面
 |   int isxdigit(char c)    | 该函数检查所传的字符是否是十六进制数字。 |
 | char tolower(char target) |                 返回小写                 |
 | char touppre(char target) |                 返回大写                 |
+
+## cstddef、cstdlib
+
+### cstddef
+
+| 标识符    | 意义                                        |
+| --------- | ------------------------------------------- |
+| NULL      | 指针值,用来表示"未定义"或"无值"             |
+| size_t    | 一种无正负号的类型,用来表示大小             |
+| prtdiff_t | 一种带哟正负号的类型,用来表示指针之间的距离 |
+| offsetof  | 表示一个成员在struct或union中的偏移量       |
+
+### cstdlib
+
+| 定义                         | 意义                      |
+| ---------------------------- | ------------------------- |
+| exit(int status)             | 退出程序,并清理static对象 |
+| EXIT_SUCCESS                 | 程序正常结束              |
+| EXIT_FAILURE                 | 程序不正常结束            |
+| abort()                      | 退出程序                  |
+| atexit(void (* function)() ) | 退出程序时调用某些函数    |
+
+*    exit()会销毁所有static对象,将所有缓冲区清空,关闭所有IO通道,然后终止程序
+*    abort()会立刻终止函数,不做任何清理工作
 
 ## for(:)语句
 
@@ -2274,7 +2478,7 @@ auto_ptr被c++11摒弃，**避免潜在的内存泄漏问题**
 
 auto_ptr指向的对象的拥有者,当省委对象拥有者的auto_ptr被摧毁时,该对象也将遭到摧毁.
 
-**<u>auto_ptr要求一个对象只能有一个拥有者,严谨一物二主.</u>**
+**<u>auto_ptr要求一个对象只能有一个拥有者,严谨一物二主. auto_ptr之间不能共享拥有权</u>**
 
 auto_ptr的接口与一般指针非常相似,operator*用来题领其所指的对象,operator->用来指向对象中的成员.
 
@@ -2305,6 +2509,117 @@ std::auto_ptr<ClassA>f(){
 ```
 
 只要有一个auto_ptr被当做参数,放进函数中,所拥有的对象就一定会被删除.
+
+##### 要点
+
+*    auto_ptr之间不能共享拥有权
+*    并不存在针对array而设计的auto_ptr
+     *    auto_ptr是通过delete而非delete[]来释放其所拥有的对象
+*    auto_ptr并不是万用型指针
+*    auto_ptr不满足STL容器对其元素的要求
+
+```cpp
+template <class _Ty>
+class auto_ptr;
+
+template <class _Ty>
+struct auto_ptr_ref { // proxy reference for auto_ptr copying
+    explicit auto_ptr_ref(_Ty* _Right) : _Ref(_Right) {}
+
+    _Ty* _Ref; // generic pointer to auto_ptr ptr
+};
+
+template <class _Ty>
+class auto_ptr { // wrap an object pointer to ensure destruction
+public:
+    using element_type = _Ty;
+
+    explicit auto_ptr(_Ty* _Ptr = nullptr) noexcept : _Myptr(_Ptr) {}
+
+    auto_ptr(auto_ptr& _Right) noexcept : _Myptr(_Right.release()) {}
+
+    auto_ptr(auto_ptr_ref<_Ty> _Right) noexcept {
+        _Ty* _Ptr   = _Right._Ref;
+        _Right._Ref = nullptr; // release old
+        _Myptr      = _Ptr; // reset this
+    }
+
+    template <class _Other>
+    operator auto_ptr<_Other>() noexcept { // convert to compatible auto_ptr
+        return auto_ptr<_Other>(*this);
+    }
+
+    template <class _Other>
+    operator auto_ptr_ref<_Other>() noexcept { // convert to compatible auto_ptr_ref
+        _Other* _Cvtptr = _Myptr; // test implicit conversion
+        auto_ptr_ref<_Other> _Ans(_Cvtptr);
+        _Myptr = nullptr; // pass ownership to auto_ptr_ref
+        return _Ans;
+    }
+
+    template <class _Other>
+    auto_ptr& operator=(auto_ptr<_Other>& _Right) noexcept {
+        reset(_Right.release());
+        return *this;
+    }
+
+    template <class _Other>
+    auto_ptr(auto_ptr<_Other>& _Right) noexcept : _Myptr(_Right.release()) {}
+
+    auto_ptr& operator=(auto_ptr& _Right) noexcept {
+        reset(_Right.release());
+        return *this;
+    }
+
+    auto_ptr& operator=(auto_ptr_ref<_Ty> _Right) noexcept {
+        _Ty* _Ptr   = _Right._Ref;
+        _Right._Ref = 0; // release old
+        reset(_Ptr); // set new
+        return *this;
+    }
+
+    ~auto_ptr() noexcept {
+        delete _Myptr;
+    }
+
+    _NODISCARD _Ty& operator*() const noexcept {
+#if _ITERATOR_DEBUG_LEVEL == 2
+        _STL_VERIFY(_Myptr, "auto_ptr not dereferenceable");
+#endif // _ITERATOR_DEBUG_LEVEL == 2
+
+        return *get();
+    }
+
+    _NODISCARD _Ty* operator->() const noexcept {
+#if _ITERATOR_DEBUG_LEVEL == 2
+        _STL_VERIFY(_Myptr, "auto_ptr not dereferenceable");
+#endif // _ITERATOR_DEBUG_LEVEL == 2
+
+        return get();
+    }
+
+    _NODISCARD _Ty* get() const noexcept {
+        return _Myptr;
+    }
+
+    _Ty* release() noexcept {
+        _Ty* _Tmp = _Myptr;
+        _Myptr    = nullptr;
+        return _Tmp;
+    }
+
+    void reset(_Ty* _Ptr = nullptr) noexcept { // destroy designated object and store new pointer
+        if (_Ptr != _Myptr) {
+            delete _Myptr;
+        }
+
+        _Myptr = _Ptr;
+    }
+
+private:
+    _Ty* _Myptr; // the wrapped object pointer
+};
+```
 
 #### shared_ptr
 
@@ -2354,6 +2669,8 @@ std::auto_ptr<int>f(){
 
 STL不是面向对象编程，而是泛型编程
 
+STL容器值提供通常具备良好实践效能的成员函数,意味着具有常数复杂度或对数复杂度,防止程序员调用性能很差的函数.
+
 ## 容器
 
 **各种容器的特性**
@@ -2368,6 +2685,14 @@ STL不是面向对象编程，而是泛型编程
 | [multiset](#multiset) | **关联容器**，和set一样，却别是**允许有重复的元素**，具备时间复杂度O(logN)查找功能。 |
 |      [map](#map)      | **关联容器**，按照{键，值}方式组成集合，按照键组织成一棵**红黑树**，查找的时间复杂度O(logN)，其中键不允许重复。 |
 | [multimap](#multimap) | 和map一样，区别是**键可以重复**                              |
+
+*    序列式容器,其中每个元素均有固定位置
+
+vector,deque,list
+
+*    关联式容器,元素位置取决于特定的排列顺序
+
+set,multiset,map,multimap
 
 ### STL中常用的模板
 
@@ -2406,11 +2731,10 @@ for(int x:vec){
 
 ### <span id="vector">vector</span>
 
-#### 前置
+#### 头文件
 
 ```c++
 #include <vector>
-using namespace std;
 ```
 
 #### 声明
@@ -2420,6 +2744,8 @@ vector<type-name>name(length,initialize value);
 ```
 
 vector使用动态内存分配，可以用初始化参数来指出需要多少矢量
+
+vector将元素放置与一个dynamic array中加以管理,允许随机存取,可以利用索引直接存取任何一个元素
 
 #### 大小
 
@@ -2433,7 +2759,7 @@ vector.resize(num, elem); //重新指定容器的长度为num，若容器变长�
 #### 数据存取
 
 ```cpp
-vector.push_back(object);	//原数据不动，增加数据
+vector.push_back(object);	//原数据不动，容器尾部增加数据
 vector.at(idx); //返回索引idx所指的数据，如果idx越界，抛出out_of_range异常。
 vector[idx]; //返回索引idx所指的数据，越界时，运行直接报错
 ```
@@ -2447,6 +2773,8 @@ terator insert( iterator loc, const TYPE &val );
 void insert( iterator loc, size_type num, const TYPE &val );
 void insert( iterator loc, input_iterator start, input_iterator end );
 ```
+
+在array中部或头部安插元素,味蕾保持原本的相对次序,安插点之后的所有元素都必须移动,挪出位子
 
 #### 合并两个vector
 
@@ -2465,8 +2793,6 @@ name_one.insert(name_one.end(),name_two.begin(),name_two.end());
 ```cpp
 vector<vector<type-name>>vector-name(rowNumber,vector<type-name>());
 ```
-
-
 
 -    先定义好二维数组结构，再直接赋值
 
@@ -2512,8 +2838,6 @@ int raws = matrix.size(); //行
 int cols = matrix[0].size(): //列
 ```
 
-
-
 #### <span id=vector排序>排序</span>
 
 ```cpp
@@ -2532,8 +2856,6 @@ int main(){
 }
 }
 ```
-
-
 
 ### stack
 
@@ -2575,8 +2897,6 @@ savename = s.top();
 s.pop();
 ```
 
-
-
 #### 返回栈顶元素
 
 ```cpp
@@ -2590,6 +2910,20 @@ s.size()//返回栈中元素数目；
 ```
 
 ### <span id="deque">deque</span>
+
+deque是"double-ended queue"的缩写,是一个dynamic array,可以向两端发展,不论在尾部或头部安插元素都十分迅速
+
+#### 前端附加元素
+
+```cpp
+deque.push_front([item]);
+```
+
+#### 后端附加元素
+
+```cpp
+deque.push_back([item]);
+```
 
 ### <span id="string">string</span>
 
@@ -2845,10 +3179,16 @@ queue<T> 模板定义了拷贝和移动版的 operator=()，对于所保存元�
 
 ### <span id="list">list</span>
 
-声明一个int型的list：
+#### 头文件
 
 ```cpp
-list<int> a；
+#include <list>
+```
+
+#### 声明
+
+```cpp
+list<[typename]> [name]；
 ```
 
 #### list的构造函数
@@ -2961,8 +3301,6 @@ list.remove_if(isRemove);
 ```cp
 list.remove_if(classname(args));
 ```
-
-
 
 ### priority_queue
 
