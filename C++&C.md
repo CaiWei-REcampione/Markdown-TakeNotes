@@ -3942,8 +3942,6 @@ for_each([].begin(),[].end(),	// range
 	func);						// opearation
 ```
 
-
-
 ## 仿函数
 
 # c++输入和输出
