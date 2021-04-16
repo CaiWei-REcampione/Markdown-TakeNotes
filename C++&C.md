@@ -1,5 +1,3 @@
-[toc]
-
 # 模式
 
 *    面向对象思维模式(OOP paradigm)
@@ -870,7 +868,7 @@ srand(time(NULL));
 double target=rand()/double(RAND_MAX/[a])+[b];//随机数范围[b,a+b)
 ```
 
-# system("")指令
+# system("  ")指令
 
 下面列出常用的DOS命令,都可以用system函数调用:
 
@@ -948,8 +946,6 @@ double target=rand()/double(RAND_MAX/[a])+[b];//随机数范围[b,a+b)
 |VOL|显示磁盘卷标和序列号。|
 |XCOPY|复制文件和目录树。  |
 
-
-
 ## 不同类型转换
 
 ### int to string
@@ -965,8 +961,6 @@ string a = "5";
 int ai = atoi(a.c_str());
 cout << ai;
 ```
-
-
 
 ### char to string
 
@@ -1363,8 +1357,6 @@ private:
 protected:
 };
 ```
-
-
 
 |   权限    |      |
 | :-------: | :--: |
@@ -3425,8 +3417,8 @@ while (it1 != s.end())
 set<int>::reverse_iterator it1 = s.rbegin();
 while (it1 != s.rend())
 {
- cout << *it1 << "";
-++it1;
+	cout << *it1 << "";
+	++it1;
 }
 cout << endl;
 ```
@@ -3439,7 +3431,7 @@ cout << endl;
 set<int>::iterator pos = s.find(10);
 if (pos != s.end())//！=s.end()说明数据存在
 {
- s.erase(pos);
+     s.erase(pos);
 }
 ```
 
@@ -3666,6 +3658,37 @@ for( std::map<int, int>::iterator iter = test_map.begin(); iter != test_map.end(
 
 迭代器以"只读"模式遍历元素
 
+### 使用迭代器打印数据
+
+#### std::cout
+
+```cpp
+vector<int>coll;
+copy(coll.begin(),coll.end(),ostream_iterator<int>(cout," "));
+```
+
+#### std::fstream
+
+```cpp
+std::fstream fout ( "out.txt" , std::ios::out );
+std::vector<int>vec_1 ( 10 );
+
+// initialize
+int i = 0;
+for ( std::vector<int>::iterator iter = vec_1.begin (); iter != vec_1.end (); ++iter , ++i ) {
+    *iter = i;
+}
+
+// function
+std::copy ( vec_1.begin () , vec_1.end () , std::ostream_iterator<int> ( fout , " " ) );
+
+fout << std::endl;
+
+// exit
+fout.close ();
+system ( "PAUSE" );
+```
+
 ### 分类
 
 #### 双向迭代器
@@ -3747,6 +3770,20 @@ Inserters可以使算法以安插方式而非覆写方式运作.
 
 调用istream iterator的默认构造函数,产生一个代表"流结束符号"的迭代器,表示"不能再从中读取任何东西"
 
+#### 逆向迭代器
+
+将increament(递增)运算符转换为decrement(递减)运算符
+
+所有其都能通过成员函数rbegin()和rend()产生出reverse iterators
+
+*    rbegin()
+
+指向群集的结尾位置
+
+*    rend()
+
+指向容器内第一个元素的前一个位置
+
 ## 空间分配器
 
 C++在许多地方采用特殊对象来处理内存配置和寻址,称为配置器(allocator)
@@ -3766,11 +3803,15 @@ namespace std{
 
 ## 算法
 
-### unique
+算法的操作对象不一定是"容器内的全部元素"所形成的区间
+
+### 更易型算法
+
+#### unique
 
 unique函数属于STL中比较常用函数，它的功能是元素去重。即**”删除”序列中所有相邻的重复元素(只保留一个)。此处的删除，并不是真的删除，而是指重复元素的位置被不重复的元素给占领了(详细情况，下面会讲)。由于它”删除”的是相邻的重复元素，所以在使用unique函数之前，一般都会将目标序列进行排序。**
 
-#### 函数原型
+##### 函数原型
 
 unique函数的函数原型如下：
 
@@ -3797,11 +3838,30 @@ iterator unique(iterator it_1,iterator it_2,``bool``MyFunc);
 *    unique函数通常和erase函数一起使用，来达到删除重复元素的目的。(注：此处的删除是真正的删除，即从容器中去除重复的元素，**容器的长度也发生了变换**；而单纯的使用unique函数的话，**容器的长度并没有发生变化**，只是元素的位置发生了变化)关于erase函数的用法。
 
 ```cpp
-auto last = unique(count.begin(), count.end());
-count.erase(last, count.end());
+auto last = unique([].begin(), [].end());
+[].erase(last, count.end());
 ```
 
-### sort
+#### remove()
+
+自某个区间删除元素
+
+remove()并不会改变区间长度,若要真正改变区间长度,使用erase()成员函数
+
+```cpp
+auto end = remove([].begin(),[].end(),value);
+[].erase(end,[].end());
+```
+
+#### distance()
+
+返回距离长度
+
+```cpp
+int distance([pos1],[pos2]);
+```
+
+#### sort()
 
 Sort函数有三个参数：
 
@@ -3816,7 +3876,11 @@ Sort函数有三个参数：
 Sort函数使用模板:
 
 ```cpp
-Sort(start,end,排序方法);//less<typename>() or greater<typename>()
+Sort(start,end,cmp);//less<typename>() or greater<typename>()
+template <typename T>
+bool cmp(T a,T b){
+    return a>b?true:false;
+}
 ```
 
 *    第二种方法：
@@ -3852,7 +3916,7 @@ struct Less
 std::sort(sutVector.begin(), stuVector.end(), Less());
 ```
 
-### generate随机数填充
+#### generate随机数填充
 
 ```cpp
 generate(vec.begin(), vec.end(), rand);
@@ -3862,6 +3926,20 @@ generate(vec.begin(), vec.end(), rand);
 
 ```cpp
 int count = count_if(vec.begin(), vec.end(),[](int x){return x %2 == 0; });
+```
+
+### 使用者自定义泛型函数
+
+#### 以函数作为算法的函数
+
+*    for_each()
+
+针对区间内的每个元素,调用一个由用户指定的函数
+
+```cpp
+void func(int elem);
+for_each([].begin(),[].end(),	// range
+	func);						// opearation
 ```
 
 ## 仿函数
@@ -4910,3 +4988,5 @@ winternl.h头文件包含了大部分Windows内部函数的原型和数据表示
 *    Stephen Prata. C++ Primer Plus（第6版）中文版（异步图书）(C和C++实务精选).人民邮电出版社.
 *    [黑山共和国]米洛斯·留莫维奇（Milos Ljumovic）. C++多线程编程实战(Kindle 位置344-345).人民邮电出版社.
 *    visual C++ 编程实战宝典
+*    C++标准程序库(中文版)
+
