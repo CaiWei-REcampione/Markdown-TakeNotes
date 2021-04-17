@@ -3942,7 +3942,49 @@ for_each([].begin(),[].end(),	// range
 	func);						// opearation
 ```
 
+#### 判断式
+
+返回布尔值的函数，通常被用来指定排序准则和搜寻准则。
+
+STL要求面对相同的值,predictate必须得出相同的结果
+
+*    一元判断式会检查唯一参数的某项特性
+
+```cpp
+bool function([typename] parameter){
+    // to do
+}
+iterator iter=find_if([].begin(),[].end(),function);
+```
+
+*    二元判断式比较两个参数的特定属性
+
+```cpp
+bool cmp([typename] parameter1,[typename] parameter2){
+    // to do
+}
+sort([].begin,[].end(),cmp);
+```
+
 ## 仿函数
+
+传递给算法的"函数型参数",并不一定得是函数,可以是行为类似函数的对象,这种对象称之为function object(函数物件),或称为functor(仿函数).
+
+```cpp
+class X{
+	// define "function call" operator
+    return-value operator() (argument) const;
+    ...
+};
+X fo;
+fo(arg1,arg2);// call operator () for function object fo
+fo.operator() (arg1,arg2);// call operator () for functon object fo
+```
+
+### 优点
+
+*    仿函数是智能型函数
+*    每个仿函数都有自己的类型
 
 # c++输入和输出
 
