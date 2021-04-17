@@ -1197,6 +1197,17 @@ bool cmp(T a,T b){
 reverse([.begin()],[.end()]);
 ```
 
+#### for_each()
+
+对每个数值进行func()处理
+
+```cpp
+void func(...){
+    // to do
+}
+for_each([].begin(),[].end(),func);
+```
+
 ## utility
 
 ### 比较符
@@ -3807,11 +3818,9 @@ namespace std{
 
 ### 更易型算法
 
-#### unique
+#### unique()
 
 unique函数属于STL中比较常用函数，它的功能是元素去重。即**”删除”序列中所有相邻的重复元素(只保留一个)。此处的删除，并不是真的删除，而是指重复元素的位置被不重复的元素给占领了(详细情况，下面会讲)。由于它”删除”的是相邻的重复元素，所以在使用unique函数之前，一般都会将目标序列进行排序。**
-
-##### 函数原型
 
 unique函数的函数原型如下：
 
@@ -3922,6 +3931,20 @@ std::sort(sutVector.begin(), stuVector.end(), Less());
 generate(vec.begin(), vec.end(), rand);
 ```
 
+#### transform()
+
+```cpp
+template <class InputIterator, class OutputIterator, class UnaryOperation>
+  OutputIterator transform (InputIterator first1, InputIterator last1,
+                            OutputIterator result, UnaryOperation op);
+	
+template <class InputIterator1, class InputIterator2,
+          class OutputIterator, class BinaryOperation>
+  OutputIterator transform (InputIterator1 first1, InputIterator1 last1,
+                            InputIterator2 first2, OutputIterator result,
+                            BinaryOperation binary_op);
+```
+
 ### count_if统计
 
 ```cpp
@@ -3985,6 +4008,43 @@ fo.operator() (arg1,arg2);// call operator () for functon object fo
 
 *    仿函数是智能型函数
 *    每个仿函数都有自己的类型
+*    仿函数通常比一般的函数速度快
+
+### 预先定义仿函数
+
+#### less<>()
+
+```cpp
+// STRUCT TEMPLATE less
+template <class _Ty = void>
+struct less {
+    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty _FIRST_ARGUMENT_TYPE_NAME;
+    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty _SECOND_ARGUMENT_TYPE_NAME;
+    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef bool _RESULT_TYPE_NAME;
+
+    _NODISCARD constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const {
+        return _Left < _Right;
+    }
+};
+```
+
+#### greater<>()
+
+```cpp
+// STRUCT TEMPLATE greater
+template <class _Ty = void>
+struct greater {
+    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty _FIRST_ARGUMENT_TYPE_NAME;
+    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty _SECOND_ARGUMENT_TYPE_NAME;
+    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef bool _RESULT_TYPE_NAME;
+
+    _NODISCARD constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const {
+        return _Left > _Right;
+    }
+};
+```
+
+#### nagate<>()
 
 # c++输入和输出
 
