@@ -3075,17 +3075,55 @@ deque是"double-ended queue"的缩写,是一个dynamic array,可以向两端发�
 *    无需引用容器内的元素
 *    要求容器释放不再使用的元素
 
-#### 前端附加元素
+#### deque的构造函数和析构函数
 
-```cpp
-deque.push_front([item]);
-```
+| 构造                    | 效果                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| deque<Elem\> c          | 产生一个空的deque                                            |
+| deque<Elem\> c1(c2)     | 针对某个deque产生同型副本                                    |
+| deque<Elem\> c(n)       | 产生一个deque，含有n个元素，这些元素均已default构造函数产生出来 |
+| deque<Elem\> c(n,Elem)  | 产生一个deque，含有n个元素，这些元素均是elem的副本           |
+| deque<Elem\> c(beg,end) | 产生一个deque，以区间[beg;end]的元素为初始值销毁所有元素，释放内存 |
+| c.~deque<Elem\>()       | 产生一个deque，以区间[beg;end]内的元素为初值销毁所有元素，释放内存 |
 
-#### 后端附加元素
+#### deque的非变动性操作
 
-```cpp
-deque.push_back([item]);
-```
+| 操作                  | 效果                                                   |
+| --------------------- | ------------------------------------------------------ |
+| c.size()              | 返回容器的实际元素个数                                 |
+| c.empty()             | 判断容器大小是否为零，等同于size() == 0                |
+| c.max_size()          | 返回可容纳的最大元素数量                               |
+| c1 == c2              | 判断是否c1等于c2                                       |
+| c1 != c2              | 判断是否c1不等于c2。等同于!(c1 == c2)                  |
+| c1 < c2               | 判断是否c1小于c2。等同于!(c2 < c1)                     |
+| c1 > c2               | 判断是否c1大于c2。等同于!(c1 < c2)                     |
+| c1 <= c2              | 判断是否c1小于等于c2。等同于!(c1 < c2)                 |
+| c1 >= c2              | 判断c1是否大于等于c2。等同于!(c2 < c1)                 |
+| c.at(idx)             | 返回索引idx所标示的元素。如果idx越界，抛出out_of_range |
+| c[idx]                | 返回索引idx所标识的元素，不进行范围检查                |
+| c.front()             | 返回第一个元素。不检查元素是否存在                     |
+| c.back()              | 返回最后一个元素。不检查元素是否存在                   |
+| c.begin()             | 返回一个随机迭代器，指向第一元素                       |
+| c.end()               | 返回一个随机迭代器，指向最后元素的下一位置             |
+| c.rbegin()            | 返回一个逆向迭代器，指向逆向迭代器的第一个元素         |
+| c.rend()              | 返回一个逆向迭代器，指向逆向迭代时的最后元素的下一位置 |
+| c1 = c2               | 将c2的所有元素赋值给c1                                 |
+| c.assign(n,elem)      | 将n个elem副本赋值给c                                   |
+| c.assign(beg,end)     | 将区间[beg;end]中的元素赋值给c                         |
+| c1.swap(c2)           | 将c1和c2的元素互换                                     |
+| swap(c1,c2)           | 将c1和c2的元素互换                                     |
+| c.insert(pos,elem)    | 在pos位置插入一个elem副本，并返回新元素的位置          |
+| c.insert(pos,n,elem)  | 在pos位置插入elem的n个副本，并返回新元素的位置         |
+| c.insert(pos,beg,end) | 在pos位置插入在区间[beg;end)所有元素的副本，无返回值   |
+| c.push_back(elem)     | 在尾部添加elem的一个副本                               |
+| c.pop_back()          | 移除最后一个元素                                       |
+| c.push_front()        | 在头部插入elem的一个副本                               |
+| c.pop_front()         | 移除头部元素                                           |
+| c.erase(pos)          | 移除pos位置上的元素，返回下一元素的位置                |
+| c.erase(beg,end)      | 移除[beg;end)区间内的所有元素，返回下一元素位置        |
+| c.resize(num)         | 将大小改为num                                          |
+| c.resize(num,elem)    | 将大小改为num，size()增长，新增元素是elem的副本        |
+| c.clear()             | 移除所有元素，将容器清空                               |
 
 ### <span id="string">string</span>
 
