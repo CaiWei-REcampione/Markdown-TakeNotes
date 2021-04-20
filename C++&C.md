@@ -3658,6 +3658,10 @@ void insert (InputIterator first, InputIterator last);
 
 判断容器大小是否为零.等同于size()==0
 
+##### max_size()
+
+返回可容纳的最大元素数量
+
 ##### set的遍历
 
 ###### 正向迭代器
@@ -3805,27 +3809,27 @@ map是STL的一个关联容器，提供一对一的数据处理能力
 -    第一个参数称为关键字，每个关键字只能在map中出现一次
 -    第二个参数称为该关键字的值
 
-|      函数       | 含义                            |
-| :-------------: | :------------------------------ |
-|     begin()     | 返回指向map头部的迭代器         |
-|     clear()     | 删除所有元素                    |
-|     count()     | 返回指定元素出现的次数          |
-|     empty()     | 如果map为空则返回true           |
-|      end()      | 返回指向map末尾的迭代器         |
-|  equal_range()  | 返回特殊条目的迭代器对          |
-|     erase()     | 删除一个元素                    |
-|     find()      | 查找一个元素                    |
-| get_allocator() | 返回map的配置器                 |
-|    insert()     | 插入元素                        |
-|   key_comp()    | 返回比较元素key的函数           |
-|  lower_bound()  | 返回键值>=给定元素的第一个位置  |
-|   max_size()    | 返回可以容纳的最大元素个数      |
-|    rbegin()     | 返回一个指向map尾部的逆向迭代器 |
-|     rend()      | 返回一个指向map头部的逆向迭代器 |
-|     size()      | 返回map中元素的个数             |
-|     swap()      | 交换两个map                     |
-|  upper_bound()  | 返回键值>给定元素的第一个位置   |
-|  value_comp()   | 返回比较元素value的函数         |
+|      函数       | 含义                                                         |
+| :-------------: | :----------------------------------------------------------- |
+|     begin()     | 返回指向map头部的迭代器                                      |
+|     clear()     | 删除所有元素                                                 |
+|   count(key)    | 返回指定元素出现的次数                                       |
+|     empty()     | 如果map为空则返回true                                        |
+|      end()      | 返回指向map末尾的迭代器                                      |
+|  equal_range()  | 返回特殊条目的迭代器对,"键值为key"的元素第一个可安插位置和最后一个可安插位置,也就是"键值 == key"的元素区间 |
+|     erase()     | 删除一个元素                                                 |
+|    find(key)    | 返回键值等于key的第一个元素,找不到就返回end()                |
+| get_allocator() | 返回map的配置器                                              |
+|    insert()     | 插入元素                                                     |
+|   key_comp()    | 返回比较元素key的函数                                        |
+|  lower_bound()  | 返回键值>=给定元素的第一个位置                               |
+|   max_size()    | 返回可以容纳的最大元素个数                                   |
+|    rbegin()     | 返回一个指向map尾部的逆向迭代器                              |
+|     rend()      | 返回一个指向map头部的逆向迭代器                              |
+|     size()      | 返回map中元素的个数                                          |
+|     swap()      | 交换两个map                                                  |
+|  upper_bound()  | 返回键值>给定元素的第一个位置                                |
+|  value_comp()   | 返回比较元素value的函数                                      |
 
 #### map构造函数
 
@@ -3853,17 +3857,29 @@ map<int,string> mapname;
 
 #### map数据插入操作
 
+| 操作               | 效果                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| c.insert(elem)     | 安插一份elem副本,返回新元素位置                              |
+| c.insert(pos,elem) | 安插一份elem副本,返回新元素位置(pos是提示,指出安插操作的搜寻起点) |
+| c.insert(beg,end)  | 将区间[beg;end]内的元素的副本安插到c                         |
+
 ##### 使用insert函数插入pair数据
 
 ```cpp
 mapname.insert(pair<int,string>(1,"zhao"));
-mapname.insert(pair<int,string>(2,"qian"));
-mapname.insert(pair<int,string>(3,"sum"));
+mapname.insert(map<string,float>::value_type("otto",22.3));
+mapname.insert(make_pair("otto",22.3));
 ```
 
 ##### 使用数组
 
-Maps允许使用operator[]安插元素
+通常关联式容器并不提供元素的直接存取,必须依靠迭代器.不过map提供下标操作符,支持元素的直接存取.
+
+| 操作   | 效果                                                         |
+| ------ | ------------------------------------------------------------ |
+| m[key] | 返回一个reference,指向键值为key的元素.如果该元素尚未存在,就安插该元素. |
+
+Maps允许使用operator[]安插元素,缺点是可能不小心误置新元素.
 
 ```cpp
 mapname[1]="zhao";
@@ -3912,6 +3928,12 @@ else{
 
 #### map中的删除
 
+| 操作             | 效果                                                   |
+| ---------------- | ------------------------------------------------------ |
+| c.erase(elem)    | 移除value与elem相等的所有元素,返回被移除个数的元素个数 |
+| c.erase(pos)     | 移除迭代器破碎所指位置上的元素,无返回值                |
+| c.erase(beg,end) | 移除区间[beg;end]内的所有元素,无返回值                 |
+
 "自动排序"这一性质使得map和multimap身上有了一条重要的限制:不可以直接改变元素的key
 
 ##### 清空map
@@ -3928,13 +3950,18 @@ iter=mapname.find(2);
 mapname.erase(iter);
 ```
 
-##### 遍历map并删除数据
+##### 遍历multimap并删除数据
 
 ```cpp
-for( std::map<int, int>::iterator iter = test_map.begin(); iter != test_map.end(); ){
- if( iter->first %2 == 0){
- iter = test_map.erase(iter);
-}else iter++;
+multimap<,>coll;
+for(pos=coll.begin();pos!=coll.end();){
+    if(option){
+        coll.erase(pos);
+        pos++;
+    }
+    else{
+        ++pos;
+    }
 }
 ```
 
