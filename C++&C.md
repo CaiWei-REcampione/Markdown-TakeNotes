@@ -3731,41 +3731,54 @@ size_type  count (const value_type& val) const;
 （1）交换两个set,接口及参数如下：void swap (set& x);
 （2）底层是将两个set的根进行交换
 
-### <span id="map">map</span>
+### <span id="map">map</span>/<span id="multimap">multimap</span>
 
->    **需要引入的头文件不同**
 >    map: #include < map >
 >    unordered_map: #include < unordered_map >
->
->    **内部实现机理不同**
+>    
+>**内部实现机理不同**
 >    map： map内部实现了一个<u>红黑树</u>（红黑树是非严格平衡二叉搜索树，而AVL是严格平衡二叉搜索树），<u>红黑树具有自动排序的功能</u>，因此map内部的所有元素都是有序的，红黑树的每一个节点都代表着map的一个元素。因此，对于map进行的查找，删除，添加等一系列的操作都相当于是对红黑树进行的操作。map中的元素是按照二叉搜索树（又名二叉查找树、二叉排序树，特点就是左子树上所有节点的键值都小于根节点的键值，右子树所有节点的键值都大于根节点的键值）存储的，使用中序遍历可将键值按照从小到大遍历出来。
 >    unordered_map: unordered_map内部实现了一个<u>哈希表</u>（也叫散列表，通过把关键码值映射到Hash表中一个位置来访问记录，查找的时间复杂度可达到O(1)，其在海量数据处理中有着广泛应用）。因此，其元素的排列顺序是无序的。哈希表详细介绍
->
->    **优缺点以及适用处**
+>    
+>**优缺点以及适用处**
 >    map：
->
->    优点：
->
->    有序性，这是map结构最大的优点，其元素的有序性在很多应用中都会简化很多的操作
+>    
+>优点：
+>    
+>有序性，这是map结构最大的优点，其元素的有序性在很多应用中都会简化很多的操作
 >    红黑树，内部实现一个红黑书使得map的很多操作在lgn的时间复杂度下就可以实现，因此效率非常的高
 >    缺点：空间占用率高，因为map内部实现了红黑树，虽然提高了运行效率，但是因为每一个节点都需要额外保存父节点、孩子节点和红/黑性质，使得每一个节点都占用大量的空间
->
->    适用处：对于那些有顺序要求的问题，用map会更高效一些
+>    
+>适用处：对于那些有顺序要求的问题，用map会更高效一些
+>    
 >
 >     
->
->    unordered_map：
->
->    优点：因为内部实现了哈希表，因此其<u>查找速度</u>非常的快
+>unordered_map：
+>    
+>优点：因为内部实现了哈希表，因此其<u>查找速度</u>非常的快
 >    缺点：哈希表的建立比较耗费时间
 >    适用处：对于查找问题，unordered_map会更加高效一些，因此遇到查找问题，常会考虑一下用unordered_map
 >    总结：
->
->    内存占有率的问题就转化成红黑树 VS hash表,还是unorder_map占用的内存要高。
+>    
+>内存占有率的问题就转化成红黑树 VS hash表,还是unorder_map占用的内存要高。
 >    但是unordered_map执行效率要比map高很多
 >    对于unordered_map或unordered_set容器，其遍历顺序与创建该容器时输入的顺序不一定相同，因为遍历是按照哈希表从前往后依次遍历的
 >    **map和unordered_map的使用**
 >    unordered_map的用法和map是一样的，提供了 insert，size，count等操作，并且里面的元素也是以pair类型来存贮的。其底层实现是完全不同的，上方已经解释了，但是就外部使用来说却是一致的。
+
+与map类似,但是存在重复键值,并非独一无二
+
+不允许使用subscript(下标)操作符,因为maltimaps允许单一索引对应到多个不同的元素,而下标操作符只能处理单一实值.
+
+```cpp
+#include <map>
+namespace std{
+    template<class Key,class T,class Compare = less<Key>,class Allocator = allocator<pair<const Key,T>>>
+        class map;
+    template <class Key,class T,class Compare = less<key>,class Allocator = allocator<pair<const Key,T>>>
+        class multimap;
+}
+```
 
 #### 键值
 
@@ -3815,6 +3828,24 @@ map是STL的一个关联容器，提供一对一的数据处理能力
 |  value_comp()   | 返回比较元素value的函数         |
 
 #### map构造函数
+
+| 操作              | 效果                                                     |
+| ----------------- | -------------------------------------------------------- |
+| map c             | 产生一个空的map/multimap,其中不含任何元素                |
+| map c(op)         | 以op为排序准则,产生一个空的map/multimap                  |
+| map c1(c2)        | 产生某个map/multimap的副本,所有元素均被复制              |
+| map c(beg,end)    | 以区间[beg;end]内的元素产生一个map/multimap              |
+| map c(beg,end,op) | 以op为排序准则,利用[beg;end]内的元素生成一个map/multimap |
+| c.~map()          | 销毁所有元素,释放内存                                    |
+
+其中,map可为下列形式
+
+| 操作                  | 效果                                       |
+| --------------------- | ------------------------------------------ |
+| map<Key,Elem>         | 一个map,以less<>(operator<)为排序准则      |
+| map<Key,Elem,op>      | 一个map,以op为排序准则                     |
+| multimap<Key,Elem>    | 一个multimap,以less<>(operator<)为排序准则 |
+| multimap<Key,Elem,op> | 一个multimap,以op为排序准则                |
 
 ```cpp
 map<int,string> mapname;
@@ -3866,6 +3897,8 @@ for(std::pair<typename1,typename2> x: [map]){
 
 #### map中的查找
 
+map和multimap根据元素的key自动对元素进行排序.根据已知的key搜寻某个元素时,就能够有很好的性能,而根据已知的value搜寻元素时,性能就很糟糕.
+
 ```cpp
 map<string,int>::iterator iter;
 iter=mapname.find(key);
@@ -3878,6 +3911,8 @@ else{
 ```
 
 #### map中的删除
+
+"自动排序"这一性质使得map和multimap身上有了一条重要的限制:不可以直接改变元素的key
 
 ##### 清空map
 
@@ -3902,12 +3937,6 @@ for( std::map<int, int>::iterator iter = test_map.begin(); iter != test_map.end(
 }else iter++;
 }
 ```
-
-### <span id="multimap">multimap</span>
-
-与map类似,但是存在重复键值,并非独一无二
-
-不允许使用subscript(下标)操作符,因为maltimaps允许单一索引对应到多个不同的元素,而下标操作符只能处理单一实值.
 
 ## 迭代器
 
