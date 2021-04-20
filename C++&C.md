@@ -3369,30 +3369,55 @@ queue<T> 模板定义了拷贝和移动版的 operator=()，对于所保存元�
 
 ### <span id="list">list</span>
 
+*    list不支持随机存取,list不提供at(),也不提供subscript操作符
+*    任何位置上执行元素的安插和移除都非常快，始终都是常数时间内完成
+*    安插和删除操作并不会造成指向其他元素的各个pointers、references、iterators失效
+*    list对于异常,要么操作成功,要么什么都不发生
+*    list提供了不少特殊的成员函数,专门用于移动元素.
+
 #### 头文件
 
 ```cpp
 #include <list>
 ```
 
-#### 声明
+#### 生成
 
-```cpp
-list<[typename]> [name]；
-```
+| 操作                   | 效果                                                    |
+| ---------------------- | ------------------------------------------------------- |
+| list<Elem\> c          | 产生一个空的list                                        |
+| list<Elem\> c1(c2)     | 产生一个与c2同型的list                                  |
+| list<Elem\> c(n)       | 产生拥有n个元素的list,这些元素都以default构造函数初始化 |
+| list<Elem\> c(n,elem)  | 产生拥有n个元素的list,每个元素都是elem的副本            |
+| list<Elem\> c(beg,end) | 产生一个list并以[beg;end]区间内的元素为初值             |
+| c.~list<Elem\> ()      | 销毁所有元素,释放内存                                   |
 
-#### list的构造函数
+#### size()
 
-```cpp
-list<int>a{1,2,3}
-list<int>a(n)//声明一个n个元素的列表，每个元素都是0
-list<int>a(n, m)//声明一个n个元素的列表，每个元素都是m
-list<int>a(first, last)//声明一个列表，其元素的初始值来源于由区间所指定的序列中的元素，first和last是迭代器
-```
+返回元素个数
+
+#### 赋值
+
+| 操作              | 效果                         |
+| ----------------- | ---------------------------- |
+| c1 = c2           | 将c2的全部元素赋值给c1       |
+| c.assign(n,elem)  | 将elem的n个拷贝赋值给c       |
+| c.assign(beg,end) | 将区间[beg;end)的元素赋值给c |
+| c1.swap(c2)       | 将c1和c2的元素互换           |
+| swap(c1,c2)       | 将c1和c2的元素互换           |
 
 #### begin()、end()
 
 通过调用list容器的成员函数begin()得到一个指向容器起始位置的iterator，可以调用list容器的end()函数来得到list末端下一位置
+
+#### rbegin()、rend()
+
+返回逆向迭代器
+
+| 操作       | 效果                                                  |
+| ---------- | ----------------------------------------------------- |
+| c.rbegin() | 返回一个逆向迭代器,指向逆向迭代器的下一个元素         |
+| c.rend()   | 返回一个逆向迭代器,指向逆向迭代器的最后元素的下一位置 |
 
 #### push_back()、push_front()
 
@@ -3451,6 +3476,12 @@ a.merge(b)调用结束后b变为空，a中元素包含原来a和b的元素。
 
 #### insert()
 
+| 操作                  | 效果                                                         |
+| --------------------- | ------------------------------------------------------------ |
+| c.insert(pos,elem)    | 在迭代器pos所指位置上安插一个elem副本,并返回新元素的位置     |
+| c.insert(pos,n,elem)  | 在迭代器pos所指的位置上安插n个elem副本,无返回值              |
+| c.insert(pos,beg,end) | 在迭代器pos所指位置上安插[beg;end]区间内的所有元素的副本,无返回值 |
+
 在指定位置插入一个或多个元素
 
 ```cpp
@@ -3473,6 +3504,12 @@ a.erase(a.begin(),a.end()); //将a的从begin()到end()之间的元素删除。
 从list中删除元素
 
 #### remove_if()函数
+
+```cpp
+remove_if(op);
+```
+
+移除所有"造成op(elem)结果为true"的元素
 
 括号中可以传入
 
@@ -3502,14 +3539,36 @@ list.remove_if(isRemove);
 list.remove_if(classname(args));
 ```
 
+#### list的特殊变动性操作
+
+| 操作                    | 效果                                                         |
+| ----------------------- | ------------------------------------------------------------ |
+| c.unique()              | 如果存在若干相邻而数值相等的元素,就移除重复元素,只留下一个   |
+| c.unique(op)            | 如果存在若干相邻元素,都使op()的结果为true,则移除重复元素,只留下一个 |
+| c1.splice(pos,c2)       | 将c2内的所有元素转移到c1之内、迭代器pos之前                  |
+| c1.splice(pos,c2,c2pos) | 将c2类的[c2beg;c2end]区间内所有元素转移到c1内的pos之前       |
+| c.sort()                | 以operator<为准则,对所有元素排序                             |
+| c.sort(op)              | 以op()为准则,对所有元素排序                                  |
+| c1.merge(c2)            | 假设c1和c2容器都包含已序元素,将c2的全部元素转移到c1,并保证合并后的list仍为已序 |
+| c1.merge(c2,op)         | 假设c1和c2容器都包含op()原则下的已序元素,将c2的全部元素转移到c1,并保证合并后的list在op()原则下仍为已序 |
+| c.reverse()             | 将所有元素反序                                               |
+
 ### priority_queue
 
 ### <span id="set">set</span>/<span id="multiset">multiset</span>
+
+set和multiset会根据特定的排序准则，自动将元素排序。<u>两者不同处在于multiset允许元素元素重复而set不允许。</u>
 
 （1）set是STL中一个很有用的容器，用来存储同一种数据类型的数据结构（可以称之为K的模型），基本功能与数组相似。
 （2）set与数组不同的是，在set中每个元素的值都是唯一的。
 （3）而且set插入数据时，能够根据元素的值自动进行排序。
 （4）set中数元素的值并不能直接被改变。
+
+#### 排序准则
+
+*    必须是”反对称的“
+*    必须是“可传递的”
+*    必须是“非自发的”
 
 #### 概念区别
 
@@ -3532,7 +3591,45 @@ template < class T,//表示set里面存放的数据类型
 >
 ```
 
+##### set和multiset构造函数
+
+| 操作              | 效果                                                     |
+| ----------------- | -------------------------------------------------------- |
+| set c             | 产生一个孔的set/multiset，其中不含任何元素               |
+| set c(op)         | 以op为排序准则,产生一个孔的set/multiset                  |
+| set c1(c2)        | 产生某个set/multiset的副本,所有元素均被复制              |
+| set c1(beg,end)   | 以区间[beg;end]内的元素产生一个set/multiset              |
+| set c(beg,end,op) | 以op为排序准则,利用[beg;end]类的元素生成一个set/multiset |
+| c.~set()          | 销毁所有元素,释放内存                                    |
+
+其中set可以为下列形式
+
+| set               | 效果                                         |
+| ----------------- | -------------------------------------------- |
+| set<Elem\>        | 一个set,以less<>(operator<)为排序准则        |
+| set<Elem,op>      | 一个set,以op为排序准则                       |
+| multiset<Elem\>   | 与IG额multiset,以less<>(operator<)为排序准则 |
+| multiset<Elem,op> | 一个multiset,以op为排序准则                  |
+
+##### 排序准则
+
+```c++
+set<typename,op<typename>> [name];
+```
+
+*    以template参数定义之
+*    以构造函数参数定义之
+     *    秩序穿衣一个参数作为排序准则
+     *    不必针对元素元素类型提供operator==
+     *    可以对"相等性"有截然相反的定义
+
 ##### 插入数据（接口为insert）
+
+| 操作               | 效果                                 |
+| ------------------ | ------------------------------------ |
+| c.insert(elem)     | 安插一份elem副本,返回 新元素位置     |
+| c.insert(pos,elem) | 安插一份elem副本,返回新元素位置      |
+| c.insert(beg,end)  | 将区间[beg;end]类所有元素副本安插到c |
 
 ```cpp
 pair<iterator,bool> insert (const value_type& val);
@@ -3542,6 +3639,24 @@ iterator insert (iterator position, const value_type& val);
 template <class InputIterator> 
 void insert (InputIterator first, InputIterator last);
 ```
+
+##### size()
+
+返回容器的大小
+
+##### 搜寻操作函数
+
+| 操作              | 效果                                                         |
+| ----------------- | ------------------------------------------------------------ |
+| count(elem)       | 返回"元素值为elem"的元素个数                                 |
+| find(elem)        | 返回"元素值为elem"的第一个元素,如果找不到就返回end()         |
+| lower_bound(elem) | 返回"元素值为elem" 第一个元素,也就是"元素值>=elem"的第一个元素位置 |
+| upper_bound(elem) | 返回elem的最后一个可安插位置,也就是"元素值>elem"的第一个元素位置 |
+| equal_range(elem) | 返回elem可安插的第一个位置和最后一个位置,也就是"元素值==elem"的元素区间 |
+
+##### empty()
+
+判断容器大小是否为零.等同于size()==0
 
 ##### set的遍历
 
@@ -3569,6 +3684,13 @@ cout << endl;
 ```
 
 ##### set删除数据（接口为erase)
+
+| 操作             | 效果                                            |
+| ---------------- | ----------------------------------------------- |
+| c.erase(elem)    | 移除"与elem相等"的所有元素,返回被移除的元素个数 |
+| c.erase(pos)     | 移除迭代器pos所指位置上的所有元素,无返回值      |
+| c.erase(beg,end) | 移除区间[beg;end]内的所有元素,无返回值          |
+| c.clear()        | 移除全部元素,将整个容器清空                     |
 
 ###### 删除某个位置
 
