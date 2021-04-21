@@ -2816,6 +2816,60 @@ set,multiset,map,multimap
 | \<utility\>    | 实现常用功能的模板类                                     |
 | \<vector\>     | 实现矢量容器的模板类                                     |
 
+### 实现reference语义
+
+通常STL实现的是value语义而不是reference语义,后者在内部构造了元素副本,二和操作返回的也是这些副本.
+
+对指针所指对象采用reference counting智能型指针
+
+```cpp
+template <class T>
+class CountedPtr{
+private:
+    T*ptr;
+    long*count;
+public:
+    explicit CountedPtr(T*p=0)
+        : ptr(p),count(new long(1)){
+        return;
+    }
+    
+    CountedPtr(const CountedPtr<T>& p)throw()
+        :ptr(p.ptr),count(p.count){
+            ++*count;
+        }
+    
+    ~CountedPtr()throw(){
+        dispose();
+    }
+    
+    CountedPtr<T>& operator=(const CountedPtr<T>&p)throw(){
+        if(this!=&p){
+            dispose();
+            ptr=p.ptr;
+            count=p.count;
+        }
+        return *this;
+    }
+    
+    T& operator*()const throw(){
+        return *ptr;
+    }
+    
+    T* operator->()const throw(){
+        return ptr;
+    }
+    
+private:
+    void dispose(){
+        if(--*count==0){
+            delete count;
+            delete ptr;
+        }
+    }
+}
+```
+
 ### 遍历
 
 ```cpp
@@ -3965,6 +4019,27 @@ for(pos=coll.begin();pos!=coll.end();){
 }
 ```
 
+### 各种容器的的使用时机
+
+*    缺省情况下使用vector.vector内部结构最简单,并允许随机存取,数据的存取十分方便灵活,数据的处理也比较快.
+*    如果经常要在序列头部和尾部安插和移除元素,应使用deque
+*    如果需要经常在容器的中段执行元素的安插、移除和移动，可考虑使用list.但是list不支持随机存取.
+*    如果要根据某个准则来搜寻元素,应当使用set或multiset.
+
+|              | vector        | deque           | list               | set                 | multiset            | map                | multimap           |
+| ------------ | ------------- | --------------- | ------------------ | ------------------- | ------------------- | ------------------ | ------------------ |
+| 典型内部结构 | dynamic array | array of arrays | doubly linked list | binary tree         | binary tree         | binary tree        | binary tree        |
+| 元素可重复   | 是            | 是              | 是                 | 否                  | 是                  | 否                 | 是                 |
+| 元素         | value         | value           | value              | value               | value               | key/value    pair  | key/value    pair  |
+| 可随机存取   | 是            | 是              | 否                 | 否                  | 否                  | 对key而言否        | 否                 |
+| 迭代器类型   | 随机存取      | 随机存取        | 双向               | 双向 元素被视为常数 | 双向 元素被视为常数 | 双向 key被视为常数 | 双向 key被视为常数 |
+| 元素搜寻速度 | 慢            | 慢              | 非常慢             | 快                  | 快                  | 对key而言快        | 对key而言快        |
+| 快速安插移除 | 尾端          | 头尾两端        | 任何位置           | __                  | __                  | __                 | __                 |
+
+*    若想处理key/value  pair,采用map或multimap
+*    如果需要关联式数组,采用map
+*    如果需要字典结构,使用multimap
+
 ## 迭代器
 
 ```cpp
@@ -4356,7 +4431,16 @@ struct greater {
 };
 ```
 
-#### nagate<>()
+#### 自定义仿函数
+
+```cpp
+template <class _Ty = void>
+struct cmp {
+	bool operator()( const _Ty& _Left , const _Ty& _Right ) const {
+		// to do
+	}
+};
+```
 
 # c++输入和输出
 
