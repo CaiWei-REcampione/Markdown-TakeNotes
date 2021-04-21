@@ -2870,6 +2870,139 @@ private:
 }
 ```
 
+### 容器内的类型
+
+#### container::value_type
+
+*    元素型别
+*    用于sets和multisets时是常数
+*    用于maps和multimaps时是pair <const key-type, value-type>
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings之中都有定义
+
+#### container::reference
+
+*    元素的引用型别(reference type)
+*    典型定义: container: :value_type&
+*    在vector<bool\>中其实是个辅助类别 
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container:: const_reference
+
+*    常数元素的引用型别(reference type)
+*    典型定义: const container::value_types&
+*    在vector<bool\>中是bool
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义。
+
+#### container: :iterator
+
+*    迭代器型别
+*    在vectors, deques, list, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::const_iterator
+
+*    常数迭代器的型别
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::revers_iterator
+
+*    反向迭代器型别
+*    在vectors, deques, lists, sets. multisets, maps, multimaps中都有定义
+
+#### container::const_reverse_iterator
+
+*    常数反向迭代器的型别
+*    在vectors, deques, lists. sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::size_type
+
+*    无正负号整数型别,用以定义容器大小
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::difference_type
+
+*    有正负号整数型别,用以定义距离
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::key_type
+
+*    用以定义关联式容器的元素内的key型别
+*    用于sets和multisets时,相当于value_type
+*    在sets, multisets, maps, multimaps中都有定义
+
+#### container::mapped_type
+
+用以定义关联式容器的元素内的value型别.在maps和multinaps中都有定义。
+
+#### container::key_compare
+
+*    关联式容器内的“比较准则”的型别
+*    在sets, multisets, maps, multimaps中都有定义。
+
+#### container::value_compare
+
+*    用于整个元素之“比较准则”的型别
+*    用于sets和multisets时,相当于key_compare
+*    在maps和multimaps中,它是“比较准则”的辅助类别,仅比较两元素的key
+*    在sets, multisets, map, multimap中都有定义
+
+#### container::allocator_type
+
+*    配置器型别
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+### 生成/复制/销毁
+
+#### container:: container ()
+
+*    defaut构造函数
+*    产生一个新的空容器
+*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
+
+#### explicit container::container (const CompFunc& op)
+
+*    以op为排序准则,产生一个空容器
+*    排序准则必须定义一个strict weak ordering
+*    sets, multisets, maps, multimaps支持
+
+#### explicit container::container (const container& c)
+
+*    copy构造函数
+*    产生既有容器的一个副本
+*    针对c中的每一个元素调用copy构造函数
+*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
+
+#### explicit container::container (size_type nun)
+
+*    产生一个容器,可含num个元素
+*    元素由其default构造函数创建
+*    vectors, deques, lists都支持。
+
+#### container::container (size_type num, const T& value)
+
+*    产生一个容器,可含num个元素
+*    所有元素都是value的副本
+*    T是元素型别
+*    对于strings, value并非pass by reference
+*    vectors, deques, lists和strings都支持
+
+#### container::container (InputIterator beg, InputIterator end)
+
+*    产生容器,并以区间[beg; end)内的所有元素为初值
+*    此函数为一个member template。因此只要源区间的元素型别可转换为容器元素型别,此函数即可派上用场
+*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
+
+#### container::container (InputIterator beg, Inputtterator end ,const CompFunc& op)
+
+*    产生一个排序准则为op的容器,并以区间[beg;end)内的所有元素进行初始化
+*    此函数为一个member template 。因此只要源区间的元素型别可转换为容器元素型别,此函数即可派上用场
+*    排序准则必须定义一个strict weak ordering 
+*    sets, multisets, maps和multimaps都支持
+
+#### container::~container ()
+
+*    析构函数
+*    移除所有元素,并释放内存。对每个元素调用其析构函数。vectors, dequcs, lists, sets, multisets, maps, multimaps和strings都支持
+
 ### 遍历
 
 ```cpp
