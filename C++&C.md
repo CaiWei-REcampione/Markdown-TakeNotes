@@ -65,8 +65,7 @@ ptr_//前缀
 ```
 
 ```cpp
-                  //注释对齐
-                  //
+//注释对齐
 ```
 
 ## main()的定义式
@@ -2793,7 +2792,7 @@ vector迭代器是随机存取迭代器，对任何一个STL算法都奏效。
 
 vector将元素放置与一个dynamic array中加以管理,允许随机存取,可以利用索引直接存取任何一个元素
 
-#### 大小
+#### 长度
 
 ```cpp
 vector.size(); //返回容器中元素的个数
@@ -4677,11 +4676,48 @@ private:
 *    对于vectors和deques,只要元素复制操作(copy构造函数和operator=)不抛出异常,此函数就不抛出异常。对于其它容器,此函数不抛出异常。
 *    vectors, deques, lists, sets, multisets, maps, multinaps和strings都支持
 
-## 迭代器
+## 容器异常
 
-```cpp
-[STL]<type>::iterator;
-```
+| 操作                 | 保证                                                         |
+| -------------------- | ------------------------------------------------------------ |
+| vector::push_back()  | 要么成功，要么无任何影响                                     |
+| vector::insert()     | 要么成功，要么无任何影响(前提是元素的复制/赋值操作不抛出异常) |
+| vector::pop_back()   | 不抛出异常                                                   |
+| vector::earse()      | 不抛出异常(前提是元素的复制/赋值操作不抛出异常)              |
+| vector::clear()      | 不抛出异常(前提是元素的复制/赋值操作不抛出异常)              |
+| vector::swap()       | 不抛出异常                                                   |
+| deque::push_back()   | 要么成功，要么无任何影响                                     |
+| deque::push_front()  | 要么成功，要么无任何影响                                     |
+| deque::insert()      | 要么成功，要么无任何影响                                     |
+| deque::pop_back()    | 不抛出异常                                                   |
+| deque::pop_front()   | 不抛出异常                                                   |
+| deque::erase()       | 不抛出异常(前提是元素的复制/赋值操作不抛出异常)              |
+| deque::clear()       | 不抛出异常(前提是元素的复制/赋值操作不抛出异常)              |
+| deque::swap()        | 不抛出异常                                                   |
+| list::push_back()    | 要么成功，要么无任何影响                                     |
+| list::push_front()   | 要么成功，要么无任何影响                                     |
+| list::insert()       | 要么成功，要么无任何影响                                     |
+| list::pop_back()     | 不抛出异常                                                   |
+| list::pop_front()    | 不抛出异常                                                   |
+| list::erase()        | 不抛出异常                                                   |
+| list::clear()        | 不抛出异常                                                   |
+| list::remove()       | 不抛出异常(前提是元素的复制/赋值操作不抛出异常)              |
+| list::remove_if()    | 不抛出异常(前提是元素的复制/赋值操作不抛出异常)              |
+| list::unique()       | 不抛出异常(前提是元素的复制/赋值操作不抛出异常)              |
+| list::splice()       | 不抛出异常                                                   |
+| list::merge()        | 要么成功，要么无任何影响(前提是元素的复制/赋值操作不抛出异常) |
+| list::reverse()      | 不抛出异常                                                   |
+| list::swap()         | 不抛出异常                                                   |
+| [multi]set::insert() | 要么成功，要么无任何影响(对单个元素而言)                     |
+| [multi]set::erase()  | 不抛出异常                                                   |
+| [multi]set::clear()  | 不抛出异常                                                   |
+| [multi]set::swap()   | 不抛出异常(前提是对“比较准则”执行复制/赋值操作时不抛出异常)  |
+| [multi]map::insert() | 要么成功，要么无任何影响(对单个元素而言)                     |
+| [multi]map::erase()  | 不抛出异常                                                   |
+| [multi]map::clear()  | 不抛出异常                                                   |
+| [multi]map::wap      | 不抛出异常(前提是对“比较准则”执行复制/赋值操作时不抛出异常)  |
+
+## 迭代器
 
 ### 类型
 
@@ -4692,6 +4728,14 @@ private:
 *    container::const_iterator
 
 迭代器以"只读"模式遍历元素
+
+| 迭代器类型          | 能力                     | 供应者                             |
+| ------------------- | ------------------------ | ---------------------------------- |
+| input迭代器         | 向前读取                 | istream                            |
+| output迭代器        | 向前写入                 | ostream，inserter                  |
+| forward迭代器       | 向前读取和写入           |                                    |
+| bidlrectional迭代器 | 向前和向后读取和写入     | list，set，multiset，map，multimap |
+| random access迭代器 | 随机存取，可读取也可写入 | vector，deque，string，array       |
 
 ### 使用迭代器打印数据
 
