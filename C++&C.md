@@ -2769,257 +2769,6 @@ set,multiset,map,multimap
 >
 >    map	双变量
 
-### 容器类别的共通操作函数
-
-| 操作                | 效果                                                         |
-| ------------------- | ------------------------------------------------------------ |
-| ContType c          | 产生一个未含有任何元素的空容器                               |
-| ContType c1(c2)     | 产生一个同型容器                                             |
-| ContType c(beg,end) | 复制[beg;end]区间的元素，作为容器初值                        |
-| c.~ContType()       | 删除所有元素，释放内存                                       |
-| c.size()            | 返回容器中的元素数量                                         |
-| c.empty()           | 判断容器是否为空                                             |
-| c.max_size()        | 返回元素的最大可能数量                                       |
-| c1 == c2            | 判断是否c1等于c2                                             |
-| c1 !== c2           | 判断是否c1不等于c2,相当于!(c1==c2)                           |
-| c1 < c2             | 判断是否c1小于c2                                             |
-| c1 > c2             | 判断是否c1大于c2                                             |
-| c1 <= c2            | 判断是否c1小于等于c2，相当于!(c2<c1)                         |
-| c1 >= c2            | 判断是否c1大于等于c2，相当于!(c2>c1)                         |
-| c1 = c2             | 将c2的所有元素赋值给c1                                       |
-| c1.swap(c2)         | 交换c1和c2的数据                                             |
-| swap(c1,c2)         | 全局函数，交换c1和c2的数据                                   |
-| c.begin()           | 返回一个迭代器，指向第一个元素                               |
-| c.end()             | 返回一个迭代器，指向最后元素的下一位置                       |
-| c.rbegin()          | 返回一个逆向迭代器，指向逆向遍历时的第一个元素               |
-| c.rend()            | 返回一个逆向迭代器，指向逆向遍历时的最后一个元素的下一个元素 |
-| c.insert(pos,elem)  | 将elem的一份副本安插于pos处，返回值和pos的意义并不相同       |
-| c.erase(beg,end)    | 移除[beg;end]区间的所有元素                                  |
-| c.clear()           | 移除所有元素，令容器为空                                     |
-| c.get_allocator()   | 返回容器的内存模型(memory model)                             |
-
-### STL中常用的模板
-
-| 模板名称       | 模板功能                                                 |
-| -------------- | -------------------------------------------------------- |
-| \<algorithm\>  | 定义多种模板实现常用的运算法则                           |
-| \<deque\>      | 定义了实现队列容器的模板类                               |
-| \<functional\> | 定义了在\<algorithm\>和\<numeric\>中使用的一些基本模板类 |
-| \<iterator\>   | 实现定义和操作迭代器的模板类                             |
-| \<list\>       | 实现列表容器的模板类                                     |
-| \<map\>        | 实现联合容器的模板类                                     |
-| \<memory\>     | 实现内存管理的模板类                                     |
-| \<numeric\>    | 实现数字函数的模板类                                     |
-| \<queue\>      | 实现队列容器的模板类                                     |
-| \<set\>        | 实现带有索引的联合容器的模板类                           |
-| \<stack\>      | 实现堆栈容器的模板类                                     |
-| \<utility\>    | 实现常用功能的模板类                                     |
-| \<vector\>     | 实现矢量容器的模板类                                     |
-
-### 实现reference语义
-
-通常STL实现的是value语义而不是reference语义,后者在内部构造了元素副本,二和操作返回的也是这些副本.
-
-对指针所指对象采用reference counting智能型指针
-
-```cpp
-template <class T>
-class CountedPtr{
-private:
-    T*ptr;
-    long*count;
-public:
-    explicit CountedPtr(T*p=0)
-        : ptr(p),count(new long(1)){
-        return;
-    }
-    
-    CountedPtr(const CountedPtr<T>& p)throw()
-        :ptr(p.ptr),count(p.count){
-            ++*count;
-        }
-    
-    ~CountedPtr()throw(){
-        dispose();
-    }
-    
-    CountedPtr<T>& operator=(const CountedPtr<T>&p)throw(){
-        if(this!=&p){
-            dispose();
-            ptr=p.ptr;
-            count=p.count;
-        }
-        return *this;
-    }
-    
-    T& operator*()const throw(){
-        return *ptr;
-    }
-    
-    T* operator->()const throw(){
-        return ptr;
-    }
-    
-private:
-    void dispose(){
-        if(--*count==0){
-            delete count;
-            delete ptr;
-        }
-    }
-}
-```
-
-### 容器内的类型
-
-#### container::value_type
-
-*    元素型别
-*    用于sets和multisets时是常数
-*    用于maps和multimaps时是pair <const key-type, value-type>
-*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings之中都有定义
-
-#### container::reference
-
-*    元素的引用型别(reference type)
-*    典型定义: container: :value_type&
-*    在vector<bool\>中其实是个辅助类别 
-*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
-
-#### container:: const_reference
-
-*    常数元素的引用型别(reference type)
-*    典型定义: const container::value_types&
-*    在vector<bool\>中是bool
-*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义。
-
-#### container: :iterator
-
-*    迭代器型别
-*    在vectors, deques, list, sets, multisets, maps, multimaps, strings中都有定义
-
-#### container::const_iterator
-
-*    常数迭代器的型别
-*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
-
-#### container::revers_iterator
-
-*    反向迭代器型别
-*    在vectors, deques, lists, sets. multisets, maps, multimaps中都有定义
-
-#### container::const_reverse_iterator
-
-*    常数反向迭代器的型别
-*    在vectors, deques, lists. sets, multisets, maps, multimaps, strings中都有定义
-
-#### container::size_type
-
-*    无正负号整数型别,用以定义容器大小
-*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
-
-#### container::difference_type
-
-*    有正负号整数型别,用以定义距离
-*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
-
-#### container::key_type
-
-*    用以定义关联式容器的元素内的key型别
-*    用于sets和multisets时,相当于value_type
-*    在sets, multisets, maps, multimaps中都有定义
-
-#### container::mapped_type
-
-用以定义关联式容器的元素内的value型别.在maps和multinaps中都有定义。
-
-#### container::key_compare
-
-*    关联式容器内的“比较准则”的型别
-*    在sets, multisets, maps, multimaps中都有定义。
-
-#### container::value_compare
-
-*    用于整个元素之“比较准则”的型别
-*    用于sets和multisets时,相当于key_compare
-*    在maps和multimaps中,它是“比较准则”的辅助类别,仅比较两元素的key
-*    在sets, multisets, map, multimap中都有定义
-
-#### container::allocator_type
-
-*    配置器型别
-*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
-
-### 生成/复制/销毁
-
-#### container:: container ()
-
-*    defaut构造函数
-*    产生一个新的空容器
-*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
-
-#### explicit container::container (const CompFunc& op)
-
-*    以op为排序准则,产生一个空容器
-*    排序准则必须定义一个strict weak ordering
-*    sets, multisets, maps, multimaps支持
-
-#### explicit container::container (const container& c)
-
-*    copy构造函数
-*    产生既有容器的一个副本
-*    针对c中的每一个元素调用copy构造函数
-*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
-
-#### explicit container::container (size_type nun)
-
-*    产生一个容器,可含num个元素
-*    元素由其default构造函数创建
-*    vectors, deques, lists都支持。
-
-#### container::container (size_type num, const T& value)
-
-*    产生一个容器,可含num个元素
-*    所有元素都是value的副本
-*    T是元素型别
-*    对于strings, value并非pass by reference
-*    vectors, deques, lists和strings都支持
-
-#### container::container (InputIterator beg, InputIterator end)
-
-*    产生容器,并以区间[beg; end)内的所有元素为初值
-*    此函数为一个member template。因此只要源区间的元素型别可转换为容器元素型别,此函数即可派上用场
-*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
-
-#### container::container (InputIterator beg, Inputtterator end ,const CompFunc& op)
-
-*    产生一个排序准则为op的容器,并以区间[beg;end)内的所有元素进行初始化
-*    此函数为一个member template 。因此只要源区间的元素型别可转换为容器元素型别,此函数即可派上用场
-*    排序准则必须定义一个strict weak ordering 
-*    sets, multisets, maps和multimaps都支持
-
-#### container::~container ()
-
-*    析构函数
-*    移除所有元素,并释放内存。对每个元素调用其析构函数。vectors, dequcs, lists, sets, multisets, maps, multimaps和strings都支持
-
-### 遍历
-
-```cpp
-vector<int>vec;
-///迭代器遍历
-for(vector<int>::iterator iter=vec.begin();iter!=vec.end();iter++){
- cout<<setw(4)<<left<<*iter;
-}
-for(int i=0;i<vec.size();i++){
- cout<<setw(4)<<left<<vec[i];
-}
-///基于范围的for循环
-for(int x:vec){
- cout<<setw(4)<<left<<x;
-}
-```
-
 ### <span id="vector">vector</span>
 
 vectors元素之间总是存在某种顺序，vector是一种有序群集。vector支持随机存取，只要知道位置，就可以在常数时间内存取任何一个元素。
@@ -3740,6 +3489,75 @@ list.remove_if(classname(args));
 | c1.merge(c2,op)         | 假设c1和c2容器都包含op()原则下的已序元素,将c2的全部元素转移到c1,并保证合并后的list在op()原则下仍为已序 |
 | c.reverse()             | 将所有元素反序                                               |
 
+##### void list: unique();void Iist::unique (BinaryPredicate op)
+
+*    移除lists之内相邻而重复的元素,使每一个元素都不同于下一个元素
+*    第一形式会将所有“和前一元素相等"的元素移除。第二形式的意义是:任何一个元素elen,如果其前一元素是e,而elem和e造成二元判断式op (elem, e)获得true值,那么就移除elem。换言之,这个判断式并非拿元素和其目前的前一紧临元素比较,而是拿元素和其未被移除的前一元素比较
+*    注意, op不应在函数调用过程中改变状态
+*    被移除元素的析构函数会被调用
+*    如果“无素比较动作”中不抛出异常,则此函数亦不抛出异常
+
+##### void list::splice (iterator pos, list& source)
+
+*    将source的所有元素移动到* this,并安插到选代器pos所指位置
+*    调用之后, source清空
+*    如果source和* this相同,会导致未定义的行为。所以调用端必须确定source和* this是不同的lists。如果要移动同一个lists内的元素,应该使用稍后提及的其它splice()形式
+*    调用者必须确定pos是* this的一个有效位置;否则会导致未定义的行为
+*    本函数不抛出异常
+
+##### void list::splice (iterator pos, list& source, iterator sourcePos)
+
+*    从source list中,将位于sourcePos位置上的元素移动至* this,并安插于迭代器pos所指位置
+*    source和* this可以相同。这种情况下,元素将在lists内部被移动
+*    如果source和* this不是同一个list,在此操作之后,其元素个数少1
+*    调用者必须确保pos是* this的一个有效位置、sourcePos是source的一个有效迭代器,而且sourcePos不是source.end ();否则会导致未定义行为
+*    此函数不抛出异常
+
+##### void list::plice (iterator pos, list& source, iterator sourceBeg, iterator sourceEnd)
+
+*    从source list中,将位于[sourceBeg, sourcend)区间内的所有元素移动到* this,并安插于迭代器pos所指位置
+*    source和* this可以相同。这种情况下, pos不得为被移动序列的一部分,而元素将在lists内部移动
+*    如果source和* this不是同一个list,在此操作之后,其元素个数将减少
+*    调用者必须确保pos是* this的一个有效位置、sourceBeg和sourceEnd形成一个有效区间,该区间是source的一部分;否则会导致未定义的行为
+*    本函数不抛出异常
+
+##### void list::sort ();void list::sort(CompFunc op)
+
+*    对lists内的所有元素进行排序
+
+*    第一型式以operator<对lists中的所有元素进行排序
+
+*    第二型式透过如下的op操作来比较两元素,进而对lists中的所有元素排序
+
+     ```cpp
+     op(eleml,elem2)
+     ```
+
+*    实值相同的元素,其顺序保持不变(除非有异常被丢出)
+
+##### void list::merge (list& source);void list::merge (list& source, CompFunc op)
+
+*    将lists source内的所有元素并入* this
+
+*    调用后source变成空容器
+
+*    如果* this和source在排序准则operator<或op之下已序(sorted) ,则新产生的lists也是已序。严格地说,标准规格书要求两个lists必须已序,但实际上对无序的lists进行合并也是可能的,不过使用前最好先确认一下
+
+*    第一形式采用operator<作为排序准则
+
+*    第二形式采用以下的op操作作为可有可无的排序准则,以此比较两个元素的大小
+
+     ```cpp
+     op (elen, sourceElem)
+     ```
+
+*    只要元素的比较操作不抛出异常,此函数万一失败也不会造成任何影响。
+
+##### void list::reverse ()
+
+*    将lists中的元素颠倒次序
+*    本函数不抛出异常
+
 ### priority_queue
 
 ### <span id="set">set</span>/<span id="multiset">multiset</span>
@@ -4173,6 +3991,692 @@ for(pos=coll.begin();pos!=coll.end();){
 *    如果需要关联式数组,采用map
 *    如果需要字典结构,使用multimap
 
+## 容器操作
+
+### 容器类别的共通操作函数
+
+| 操作                | 效果                                                         |
+| ------------------- | ------------------------------------------------------------ |
+| ContType c          | 产生一个未含有任何元素的空容器                               |
+| ContType c1(c2)     | 产生一个同型容器                                             |
+| ContType c(beg,end) | 复制[beg;end]区间的元素，作为容器初值                        |
+| c.~ContType()       | 删除所有元素，释放内存                                       |
+| c.size()            | 返回容器中的元素数量                                         |
+| c.empty()           | 判断容器是否为空                                             |
+| c.max_size()        | 返回元素的最大可能数量                                       |
+| c1 == c2            | 判断是否c1等于c2                                             |
+| c1 !== c2           | 判断是否c1不等于c2,相当于!(c1==c2)                           |
+| c1 < c2             | 判断是否c1小于c2                                             |
+| c1 > c2             | 判断是否c1大于c2                                             |
+| c1 <= c2            | 判断是否c1小于等于c2，相当于!(c2<c1)                         |
+| c1 >= c2            | 判断是否c1大于等于c2，相当于!(c2>c1)                         |
+| c1 = c2             | 将c2的所有元素赋值给c1                                       |
+| c1.swap(c2)         | 交换c1和c2的数据                                             |
+| swap(c1,c2)         | 全局函数，交换c1和c2的数据                                   |
+| c.begin()           | 返回一个迭代器，指向第一个元素                               |
+| c.end()             | 返回一个迭代器，指向最后元素的下一位置                       |
+| c.rbegin()          | 返回一个逆向迭代器，指向逆向遍历时的第一个元素               |
+| c.rend()            | 返回一个逆向迭代器，指向逆向遍历时的最后一个元素的下一个元素 |
+| c.insert(pos,elem)  | 将elem的一份副本安插于pos处，返回值和pos的意义并不相同       |
+| c.erase(beg,end)    | 移除[beg;end]区间的所有元素                                  |
+| c.clear()           | 移除所有元素，令容器为空                                     |
+| c.get_allocator()   | 返回容器的内存模型(memory model)                             |
+
+### STL中常用的模板
+
+| 模板名称       | 模板功能                                                 |
+| -------------- | -------------------------------------------------------- |
+| \<algorithm\>  | 定义多种模板实现常用的运算法则                           |
+| \<deque\>      | 定义了实现队列容器的模板类                               |
+| \<functional\> | 定义了在\<algorithm\>和\<numeric\>中使用的一些基本模板类 |
+| \<iterator\>   | 实现定义和操作迭代器的模板类                             |
+| \<list\>       | 实现列表容器的模板类                                     |
+| \<map\>        | 实现联合容器的模板类                                     |
+| \<memory\>     | 实现内存管理的模板类                                     |
+| \<numeric\>    | 实现数字函数的模板类                                     |
+| \<queue\>      | 实现队列容器的模板类                                     |
+| \<set\>        | 实现带有索引的联合容器的模板类                           |
+| \<stack\>      | 实现堆栈容器的模板类                                     |
+| \<utility\>    | 实现常用功能的模板类                                     |
+| \<vector\>     | 实现矢量容器的模板类                                     |
+
+### 遍历
+
+#### 迭代器遍历
+
+```cpp
+vector<int>vec;
+for(vector<int>::iterator iter=vec.begin();iter!=vec.end();iter++){
+     cout<<setw(4)<<left<<*iter;
+}
+```
+
+#### 基于范围的for循环
+
+```cpp
+vector<int>vec;
+for(int x:vec){
+     cout<<setw(4)<<left<<x;
+}
+```
+
+#### 随机存取迭代器
+
+```cpp
+vector<int>vec;
+for(int i=0;i<vec.size();i++){
+ cout<<setw(4)<<left<<vec[i];
+}
+```
+
+### 实现reference语义
+
+通常STL实现的是value语义而不是reference语义,后者在内部构造了元素副本,二和操作返回的也是这些副本.
+
+对指针所指对象采用reference counting智能型指针
+
+```cpp
+template <class T>
+class CountedPtr{
+private:
+    T*ptr;
+    long*count;
+public:
+    explicit CountedPtr(T*p=0)
+        : ptr(p),count(new long(1)){
+        return;
+    }
+    
+    CountedPtr(const CountedPtr<T>& p)throw()
+        :ptr(p.ptr),count(p.count){
+            ++*count;
+        }
+    
+    ~CountedPtr()throw(){
+        dispose();
+    }
+    
+    CountedPtr<T>& operator=(const CountedPtr<T>&p)throw(){
+        if(this!=&p){
+            dispose();
+            ptr=p.ptr;
+            count=p.count;
+        }
+        return *this;
+    }
+    
+    T& operator*()const throw(){
+        return *ptr;
+    }
+    
+    T* operator->()const throw(){
+        return ptr;
+    }
+    
+private:
+    void dispose(){
+        if(--*count==0){
+            delete count;
+            delete ptr;
+        }
+    }
+}
+```
+
+### 容器内的类型
+
+#### container::value_type
+
+*    元素型别
+*    用于sets和multisets时是常数
+*    用于maps和multimaps时是pair <const key-type, value-type>
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings之中都有定义
+
+#### container::reference
+
+*    元素的引用型别(reference type)
+*    典型定义: container: :value_type&
+*    在vector<bool\>中其实是个辅助类别 
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container:: const_reference
+
+*    常数元素的引用型别(reference type)
+*    典型定义: const container::value_types&
+*    在vector<bool\>中是bool
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义。
+
+#### container: :iterator
+
+*    迭代器型别
+*    在vectors, deques, list, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::const_iterator
+
+*    常数迭代器的型别
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::revers_iterator
+
+*    反向迭代器型别
+*    在vectors, deques, lists, sets. multisets, maps, multimaps中都有定义
+
+#### container::const_reverse_iterator
+
+*    常数反向迭代器的型别
+*    在vectors, deques, lists. sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::size_type
+
+*    无正负号整数型别,用以定义容器大小
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::difference_type
+
+*    有正负号整数型别,用以定义距离
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+#### container::key_type
+
+*    用以定义关联式容器的元素内的key型别
+*    用于sets和multisets时,相当于value_type
+*    在sets, multisets, maps, multimaps中都有定义
+
+#### container::mapped_type
+
+用以定义关联式容器的元素内的value型别.在maps和multinaps中都有定义。
+
+#### container::key_compare
+
+*    关联式容器内的“比较准则”的型别
+*    在sets, multisets, maps, multimaps中都有定义。
+
+#### container::value_compare
+
+*    用于整个元素之“比较准则”的型别
+*    用于sets和multisets时,相当于key_compare
+*    在maps和multimaps中,它是“比较准则”的辅助类别,仅比较两元素的key
+*    在sets, multisets, map, multimap中都有定义
+
+#### container::allocator_type
+
+*    配置器型别
+*    在vectors, deques, lists, sets, multisets, maps, multimaps, strings中都有定义
+
+### 生成/复制/销毁
+
+#### container:: container ()
+
+*    defaut构造函数
+*    产生一个新的空容器
+*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
+
+#### explicit container::container (const CompFunc& op)
+
+*    以op为排序准则,产生一个空容器
+*    排序准则必须定义一个strict weak ordering
+*    sets, multisets, maps, multimaps支持
+
+#### explicit container::container (const container& c)
+
+*    copy构造函数
+*    产生既有容器的一个副本
+*    针对c中的每一个元素调用copy构造函数
+*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
+
+#### explicit container::container (size_type nun)
+
+*    产生一个容器,可含num个元素
+*    元素由其default构造函数创建
+*    vectors, deques, lists都支持。
+
+#### container::container (size_type num, const T& value)
+
+*    产生一个容器,可含num个元素
+*    所有元素都是value的副本
+*    T是元素型别
+*    对于strings, value并非pass by reference
+*    vectors, deques, lists和strings都支持
+
+#### container::container (InputIterator beg, InputIterator end)
+
+*    产生容器,并以区间[beg; end)内的所有元素为初值
+*    此函数为一个member template。因此只要源区间的元素型别可转换为容器元素型别,此函数即可派上用场
+*    vectors, deques, lists, sets, multisets, maps, multimaps, strings都支持
+
+#### container::container (InputIterator beg, Inputtterator end ,const CompFunc& op)
+
+*    产生一个排序准则为op的容器,并以区间[beg;end)内的所有元素进行初始化
+*    此函数为一个member template 。因此只要源区间的元素型别可转换为容器元素型别,此函数即可派上用场
+*    排序准则必须定义一个strict weak ordering 
+*    sets, multisets, maps和multimaps都支持
+
+#### container::~container ()
+
+*    析构函数
+*    移除所有元素,并释放内存。对每个元素调用其析构函数。vectors, dequcs, lists, sets, multisets, maps, multimaps和strings都支持
+
+### 非变动性操作
+
+#### 大小相关操作
+
+##### size_type container::size () const
+
+*    返回现有元素的数目
+*    欲检查容器是否为空,应使用empty(),因为empty()可能更快
+*    vectors, deques, lists, sets, multisets, maps, multimasp和strings都支持
+
+##### bool container::empty () const
+
+*    检验容器是否为空,并返回检查结果
+*    相当于container::size ()==0,但是可能更快(尤其对lists而言) 
+*    vectors，deques，lists，sets. multisets，maps，multimaps和strings都支持
+
+##### size_type container::max_sixe () const
+
+*    返回容器可包含的最大元素个数
+*    这是一个技术层次的数值,可能取决于容器的内存模型。尤其vectors通常使用一个内存区段(segment) ,所以vector的这个值往往小于其它容器
+*    vectors, deques, lists, sets, multisets, maps, multimaps和strings都支持
+
+#### 容量操作
+
+##### size_type container::capacity() const
+
+*    返国重分配内存之前所能容纳的最多元素个数
+*    vectors和strings都支持
+
+##### void container::reserve (size_type num)
+
+*    在内部保留若干内存,至少能够容纳num个元素
+*    如果num小于实际容量,对vectors无效,对strings则是一个非绑定的缩减请求(nombinding shrink request )
+*    每次重新分配都会耗用相当时间,并造成所有references, pointers, iterators失效。因此reserve()可以提高速度,保持references, pointers, iterators的有效性
+*    vectors和strings都支持
+
+#### 元素之间的比较
+
+##### bool comparison (const container& c1, const container& c2)
+
+*    返回两个同型容器的比较结果
+
+*    comparison可以是下面之一:
+
+     operator ==
+
+     operator !=
+
+     operator \<
+
+     operator >
+
+     operator <=
+
+     operator >=
+
+*    如果两个容器拥有相同数量的元素,且元素顺序相同,而且所有相应元素两两相比之结果为true,我们便说这两个容器相等
+
+*    要检验A容器是否小于B容器,需使用“字典顺序”来比较
+
+*    vectors, deques, lists, sets, mulisets, maps, multimaps, strings都支持
+
+#### 关联式容器特有的非变动性操作
+
+##### size_type container::count (const T& value) const
+
+*    返回与value相等的元素个数
+
+*    T是被排序值的型别
+
+     在sets和multisets中, T是元素型别
+
+     在maps和multimaps中, r是key的型别
+
+*    复杂度:线性
+*    sets, multisets, maps和multimaps都支持
+
+##### iterator container::find (const T& value);const_iterator container::find (const T& value) const
+
+*    返回“实值等于value"的第一个元素位置
+
+*    如果找不到元素就返回end ()
+
+*    T是被排序值的型别:
+
+     在sets和multisets中, T是元素型别
+
+     在maps和multimaps中, 是key的型别
+
+*    复杂度:对数.sets, multisets, maps和multimaps都支持
+
+##### iterator container::lower_bound (const & value);const_iterator container:: lower_bound (const T& value) const
+
+*    返回一个迭代器,指向“根据排序准则,可安插value副本的第一个位置”
+
+*    返回之迭代器指向“实值大于等于value的第一个元素” (有可能是end())
+
+*    如果找不到就返回end()
+
+*    r是被排序值的型别:
+
+     在sets和multisets中, T是元素型别
+
+     在map和multimap中,T是key的型别
+
+*    复杂度:对数
+*    sets, multisets, maps和multimaps都支持
+
+##### iterator container::upper_bound (const & value);const_iterator container::upper_bound (const T& value) const
+
+*    返回一个迭代器,指向“根据排序准则,可安插value副本的最后一个位置
+
+*    返回之迭代器指向“实值大于value的第一个元素” (有可能是end())
+
+*    如果找不到就返回end ()
+
+*    T是被排序值的型别:
+
+     在sets和multisets中, T是元素型别
+
+     在map和multinap中, T是key的型别
+
+*    复杂度:对数
+*    sets, multisets, maps和multimnaps都支持
+
+##### pair<iterator, iterator> container::equal_range (const T& value);pair<const_iterator, const_iterator>container::equal_range (const T& value) const
+
+*    返回一个区间(一对迭代器) ,指向“根据排序准则,可安插value副本的第一个位置和最后一个位置"
+
+*    返回一个区间,其内的元素实值皆等于value
+
+*    相当于:make_pair(lower_bound (value) ,upper_bound (value))
+
+*    T是被排序值的型别:
+
+     在sets和multisets中, T是元素型别
+
+     在map和multimap中, T是key的型别
+
+*    复杂度:对数
+*    sets, multisets, maps和multimaps都支持
+
+##### key_compare container:: key_comp()
+
+*    返回一个“比较准则”
+*    sets, multisets, maps和multimaps都支持
+
+##### value_compare container::value_comp ()
+
+*    返回一个作为比较准则的对象
+*    在sets和multisets中,它相当于key_comp()
+*    在maps和multimaps中,它是一个辅助类别,用来比较两元素的key
+*    sets, multisets, maps和muldimaps都支持
+
+### 赋值
+
+#### container& container::oparator= (const container& c)
+
+*    将c的所有元素赋值给现有容器,亦即以c的元素替换所有现有元素
+*    这个操作符会针对被覆盖的元素调用其asslgnment操作符,针对被附加的元素调用其copy构造函数,针对被移除的元素调用其析构函数
+*    vectors, deques, lists, sets, multisets, maps和multimaps都支持
+
+#### void container::assign (size_type num, const T& value)
+
+*    将num个value赋值给现有容器,亦即以num个value副本替换掉所有现有元素
+*    T必须是元素型别
+*    sets, multisets, maps和multinaps都支持
+
+#### void container::assign (InputIterator beg, InputIterator end)
+
+*    将区间[beg; end)内的所有元素赋值给现有容器,亦即以[beg;end)内的元素副本替换掉所有现有元素
+*    此函数为一个member template。因此只要源区间的元素型别可转换为容器元素型别,此函数即可派上用场
+*    vectors, deques, lists和strings都支持
+
+#### void cantainer:: swap (container& c)
+
+*    和c交换内容
+
+*    两个容器互换
+
+     元素
+
+     排序准则(如果有的话) 
+
+*    此函数拥有常数复杂度。如果不再需要容器中的老旧元素,则应使用本函数来取代赋值动作
+*    对于关联式容器,只要“比较准则”进行复制或赋值时不抛出异常,本函数就不抛出异常。对于其它所有容器,此函数一律不抛出异常
+*    vectors, deques, lists, sets, multisets, maps, multimaps和strings都支持
+
+#### void swap (container& c1, containers c2)
+
+*    相当于c1.swap(2)
+*    对于关联式容器,只要“比较准则”进行复制或赋值时,不抛出异常,本函数就不抛出异常
+*    对于其它所有容器,此函数一律不抛出异常
+*    vectors, deques, lists, sets, muftisets, maps, multimaps和strings都支持
+
+### 直接元素存取
+
+#### reference container::at (size_type idx);const_reference container::at (size_type idx) const
+
+*    二者都返回索引idx所代表的元素(第一个元素的索引为0)
+*    如果传入一个无效索引(<0或>= size()) ,会导致out_of_range异常
+*    续的修改或内存重新分配,可能会导致返回的reference无效
+*    如果调用者保证索引有效,那么最好使用速度更快的operator[ ]
+*    vectors, deques和strings都支持
+
+#### reference container::operator[ ] (size_type idx);const_reference container: :operator[ ] (size_type idx) const
+
+*    二者都返回索引idx所代表的元素(第一个元素的索引为0) 
+*    如果传入一个无效索引(<0或>= size()) ,会导致未定义的行为。所以调用者必须确保索引有效,否则应该使用at()
+*    (1)修改strings或(2)内存重新分配,可能会导致non-const strings返回的reference失效
+*    vectors, deques和strings都支持。
+
+#### T& map::operator[ ] (const key_type& key)
+
+*    关联式数组的operator[]
+*    在map中,会返回key所对应的value
+*    注意:如果不存在“键值为key"的元素,则本操作会自动生成一个新元素,其初值由value型别的defaut构造函数给定。所以不存在所谓的无效索引
+*    T是元素的value型别。相当于:(*( (insert (make_pair(x,T()))). first)).second
+*    只有map支持此一操作。
+
+#### reference container::front ();const_reference container::front () const
+
+*    都返回第一个元素(第一个元素的索引为0) 
+*    调用者必须确保容器内有元素(sizet()>0) ,否则会导致未定义的行为
+*    vectors, deques和lists都支持
+
+#### reference container::back();const_reference container::back () const
+
+*    都返回最后一个元素(索引为size()-1)
+*    调用者必须确保容器内拥有元素(size()>0) ;否则会导致未定义的行为
+*    vectos, deques和lists都支持
+
+### 返回迭代器
+
+| 容器     | 迭代器类型       |
+| -------- | ---------------- |
+| vector   | 随机存取         |
+| deque    | 随机存取         |
+| list     | 双向             |
+| set      | 双向，元素为常量 |
+| multiset | 双向，元素为常量 |
+| map      | 双向，key为常量  |
+| multimap | 双向，key为常量  |
+| string   | 随机存取         |
+
+#### iterator container::begin();const_iterator container::begin () const
+
+*    返回一个迭代器,指向容器起始处(第一元素的位置)
+*    如果容器为空,则此动作相当于container::end())
+*    vectors, deques, lists, sets, multisets, maps, multimaps和strings都支持
+
+#### iterator container::end ();const_iterator container::end() const
+
+*    返回一个选代器,指向容器尾端(最后元素的下一位置)
+*    如果容器为空,则此动作相当于container::begin()
+*    vectors, deques. lists, sets, multisets, maps, multimaps和strings都支持
+
+#### reverse_iterator container: :rbegin();const_reverse_iterator container::rbegin() const
+
+*    返回一个逆向迭代器,指向逆向迭代时遍历的第一个元素
+*    如果容器为空,则此动作相当于container::rend ()
+*    vectors, deques, lists, sets, multisets, maps, multimaps和strings都支持
+
+#### reverse_iterator container::rend ()const;reverse_iterator container::rend () const
+
+*    返回一个逆向迭代器,指向逆向迭代时遍历的最后一个元素的下一位置
+*    如果容器为空,则此操作相当于container::rbegin()
+*    vectors, deques, lists, sets, multisets, maps, multimaps和strings都支持
+
+### 元素的安插和移除
+
+#### 安插
+
+##### iterator container::insert(const T& value);pair<iterator, bool> container::insert (const T& value)
+
+*    安插一个value副本于关联式容器
+*    元素可重复者(multisets和multimap)采用第一形式。返回新无素的位置
+*    元素不可重复者(sets和map)采用第二形式。如果有“具备相同key”的元素已经存在,导致无法安插,会返回现有元素的位置和一个falge。如果安插成功,返回新元素的位置和一个true.T是容器元素的型别,对map和multimap而言那是一个keylvalue pair函数如果不成功,不带来任何影响。sets, multisets, maps, multimaps和strings都支持。
+
+##### iterator container::insert (iterator pos, const T& value)
+
+*    在迭代器pos的位置上安插一个value副本
+*    返回新元素的位置
+*    对于关联式容器(sets, multisets, maps和multimaps) , pos只作为一个提示,指向安插时必要的搜寻操作的起始建议位置。如果value刚好可安插于pas之后,则此函数具有“分期摊还之常数时间”复杂度,否则具有对数复杂度
+*    如果容器是sets或maps,并且已内含一个“实值等于value (意即两者的key相等) ”的元素,则此调用无效,并返回现有元素的位置
+*    对于vectors和deques,这个操作可能导致指向其它元素的某些iterators和references无效
+*    T是容器元素的型别,在maps和multimaps中是一个key/value pair
+*    对于strings, value并不采用pass by reference
+*    对于vectors和deques,如果元素的复制操作(copy构造函数和operator=)不抛出异常,则此函数一旦失败并不会带来任何影响。对于所有其它容器,函数一旦失败并不会带来任何影响
+*    vectors, deques, lists, sets, multisets,maps, mutimaps和strings都支持
+
+##### void container::insert (iterator pos, size_type num, const T& value)
+
+*    在迭代器pos的位置上安插num个value副本
+*    对于vectors和deques,此操作可能导致指向其它元素的iterators和references失效
+*    T是容器元素的型别,在maps和multimaps中是一个key/value pair
+*    对于strings, value并不采用pass by reference
+*    对于vectors和deques,如果元素复制动作(copy构造函数和operator=)不抛出异常,则函数失败亦不会带来任何影响。对于lists,函数若失败不会带来任何影响
+*    vectors, deques. lists和strings都支持
+
+##### void container: :insert (InputIterator beg, InputIterator end)
+
+*    将区间[beg, end)内所有元素的副本安插于关联式容器内
+*    此函数是个member template ,因此只要源区间的元素可转换为容器元素的型别,本函数就可派上用场
+*    sets, multisets, maps, multimaps和strings都支持
+
+##### void container::insert (iterator pos, InputIterator beg,InputIterator end)
+
+*    将区间(beg, end)内所有元素的副本安插于迭代器pos所指的位置上
+*    此函数是个member template,因此只要源区间的元素可转换为容器元素的型别,本函数就可派上用场
+*    对于vectors和deques,此操作可能导致指向其它元素的iterators和references失效
+*    对于lists,此函数若失败不会带来任何影响
+*    vectors, deques, lists和strings都支持
+
+##### void container::push_front (const T& value)
+
+*    安插value的副本,使成为第一个元素
+*    T是容器元素的型别
+*    相当于insert (begin() ,value)
+*    对于deques,此一操作会造成“指向其它元素”的iterators失效,而“指向其它元素”的references仍保持有效
+*    此函数若失败不会带来任何影响
+*    deques和lists都支持
+
+##### void container::push_back (const T& value)
+
+*    安插value的副本,使成为最后一个元素
+*    T是容器元素的型别
+*    相当于insert (end (), value)
+*    对于vectors,如果造成内存重新分配,此操作会造成“指向其它元素"的iteralors和references失效
+*    对于deques,此一操作造成“指向其它元素”的ierators失效,而“指向(或说代表)其它元素”的reference始终有效
+*    此函数若失败不会带来任何影响
+*    vectors, deques, lists和strings都支持
+
+#### 删除
+
+##### void Iist::remove (const& value);void list::remove_if (UnaryPredicate op)remove ()
+
+*    会移除所有“实值等于value"的元素
+*    remove_if()会移除所有“使判断式op(elem)结果为true"的元素
+*    注意在函数调用过程中, op不应改变状态
+*    两者都会调用被移除元素的析构函数
+*    剩余元素的相对次序保持不变(stable)
+*    T是容器元素的型别
+*    只要元素的比较动作不抛出异常,此函数也不抛出异常
+*    只有lists支持这个成员函数
+
+##### size_type container::erase (const T& value)
+
+*    从关联式容器中移除所有和value相等的元素
+
+*    返回被移除的元素个数
+
+*    调用被移除元素的析构函数
+     T是已序(sorted)元素的型别
+
+     在sets和multisets中, T是元素型别
+
+     在map和multimap中, T是key的型别
+
+*    此函数不抛出异常
+*    sets, multisets. maps和multimaps都支持
+
+##### void container::erase(iterator pos);iterator container::erase(iterator pos)
+
+*    将迭代器pos所指位置上的元素移除
+*    序列式容器(vectors, deques, lists和strings)采用第二形式,返回后继元素的位置(或返回end())
+*    关联式容器(sets,multisets, maps和multimaps)采用第一形式,无返回值
+*    两者都调用被移除元素的析构函数
+*    注意,调用者必须确保迭代器pos有效
+*    对于vectors和deques,此操作可能造成“指向其它元素”的iterators和references无效
+*    对于vectors和deques,只要元素复制操作(copy构造函数和operator=)不抛出异常,此函数就不抛出异常
+*    对于其它容器,此函数不抛出异常
+*    vectors, deques, lists, sets, multisets, maps, multimaps和srings都支持
+
+##### void container::erase (iterator beg, iterator end);iterator container::erase (iterator beg, iterator end)
+
+*    移除区间[beg, end)内的所有元素
+*    序列式容器(vectors, deques, lists和strings)采用第二形式,返回被移除的最后一个元素的下一位置(或返回end ())
+*    关联式容器(sets, multisets, maps和multimaps)采用第一形式,无返回值
+*    一如区间惯例,始于beg (含)终于end (不含)的所有元素都被移除
+*    调用被移除元素的析构函数
+*    调用者必须确保beg和end形成一个有效序列,并且该序列是容器的一部分
+*    对于vectors和deques,此操作可能导致“指向其它元素”的iterators和references失效
+*    对于vectors和deques,只要元素复制动作(copy构造函数和operator=)不抛出异常,此函数就不抛出异常
+*    对于其它容器,此函数不抛出异常
+*    vectors, deques, lists, sets, multisets, maps, multimaps和strings都支持
+
+##### void container::pop_front()
+
+*    将容器的第一个元素移除
+*    相当于container.erase (container.begin())
+*    注意:如果容器是空的,会导致未定义行为。因此,调用者必须确保容器至少有一个元素,也就是size()>0
+*    此函数不抛出异常
+*    deques和lists都支持
+
+##### void container::pop_back()
+
+*    将容器的最后一个元素移除
+*    相当于container.erase(container.end()),前提是其中的表达式有效。在vector中此表达式不一定有效
+*    注意,如果容器为空,会导致未定义行为。因此,调用者必须确保容器至少包含一个元素,也就是size ()>0
+*    此函数不抛出异常
+*    vectors, deques和lists都支持
+
+##### void container::resize (size_type num);void container::resize (size_type num, T value)
+
+*    两者都将容器大小改为num
+*    如果size()原本就是num，则两者皆不生效用
+*    如果num大于size(),则在容器尾端产生并附加额外元素。第一形式透过default构造函数来构造新元素,第二形式则以value的副本作为新元素
+*    如num小于size(),则移除尾端元素,直到大小为size()。每个被移除元素的析构函数都会被调用
+*    对于vectors和deques,这些函数可能导致“指向其它元素"的iterators和references失效
+*    对于vectors和deques,只要元素复制操作(copy构造函数和operator=)不抛出异常,这些函数就不抛出异常。对于lists,函如果失败不会带来任何影响
+*    vectors, deques, lists和stings都支持
+
+##### void container::clear ()
+
+*    移除所有元素(将容器清空)
+*    调用被移除元素的析构函数
+*    这一容器的所有iterators和references都将失效
+*    对于vectors和deques,只要元素复制操作(copy构造函数和operator=)不抛出异常,此函数就不抛出异常。对于其它容器,此函数不抛出异常。
+*    vectors, deques, lists, sets, multisets, maps, multinaps和strings都支持
+
 ## 迭代器
 
 ```cpp
@@ -4321,6 +4825,8 @@ C++在许多地方采用特殊对象来处理内存配置和寻址,称为配置�
 
 配置器体现出一种特定的内存模型,称为抽象表征,表现出"内存需求"至"内存低阶调用"的转换
 
+标准容器要求:配置器(型别)的每一个实体都必须是可互换的(interchangeable) ,所以某一容器的空间,可透过另一同型容器释放之。因此,元素(及其储存空间)在同型的两个容器之间移动,并不会出现问题。
+
 ### 缺省配置器
 
 ```cpp
@@ -4330,7 +4836,53 @@ namespace std{
 }
 ```
 
-## 适配器
+### 对配置器的支持
+
+#### 基本的配置器成员
+
+##### container::allocator_type
+
+*    配置器型别
+*    vectors, deques. lists. sets, multisets, maps, multimaps和strings都支持
+
+##### allocator_type cortainer::get.allocator () const
+
+*    返回容器的内存模型(memory model)
+*    vectors, deques, lists, sets, multisets, maps, multimaps和strings都支持
+
+#### 带有“可选择之配置器参数”的构造函数
+
+##### explicit container::container (const Allocator& alloc)
+
+*    产生一个新的空白容器,使用alloc作为内存模型(memory model)
+*    vectors, deques, lists, sets, multisets, maps, multimaps和strings都支持
+
+##### container::container (const CompFunc& op, const Allocator& alloc)
+
+*    产生一个新的空白容器,使用alloc作为内存模型,并以op为排序准则
+*    op排序准则必须定义strict weak ordering 
+*    sets, multisets, maps和multimaps都支持
+
+##### container::container (size_type num, const T& value, conat Allocator& alloc)
+
+*    产生一个拥有num个元素的容器,使用alloc作为内存模型
+*    所生成的元素都是value的副本
+*    T是容器元素的型别。注意,对于strings, value采用by value的型式传递
+*    vectors, deques, lists和strings都支持
+
+##### container::container (InputIterator beg, InputIterator end, const Allocator& alloc)
+
+*    产生一个容器,以区间[beg,end)内的所有元素为初值,并使用alloc作为内存模型
+*    此函数是一个member template
+*    所以只要源序列的元素能够转换为容器元素的型别,此函数就可执行
+*    vectors, deques, lists. sets, multisets, maps, multimaps和strings都支持
+
+##### container::container(InputIterator beg, InputIterator end, const CompFunc& op, const Allocator& alloc)
+
+*    产生一个以op为排序准则的容器,以区间[beg, end)中的所有元素为初值,并使用alloc作为内存模型
+*    本函数是一个member template。所以只要源序列的元素能够转换为容器元素的型别,本函数就可执行
+*    排序准则op必须定义strict weak ordering
+*    sets, multisets map和multimap都支持
 
 ## 算法
 
@@ -4367,8 +4919,7 @@ iterator unique(iterator it_1,iterator it_2,``bool``MyFunc);
 *    unique函数通常和erase函数一起使用，来达到删除重复元素的目的。(注：此处的删除是真正的删除，即从容器中去除重复的元素，**容器的长度也发生了变换**；而单纯的使用unique函数的话，**容器的长度并没有发生变化**，只是元素的位置发生了变化)关于erase函数的用法。
 
 ```cpp
-auto last = unique([].begin(), [].end());
-[].erase(last, count.end());
+vec.erase ( std::unique ( vec.begin () , vec.end () ) , vec.end () );
 ```
 
 #### remove()
