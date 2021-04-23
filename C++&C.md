@@ -4789,6 +4789,64 @@ forward迭代器是input迭代器和output迭代器的结合，具有input迭代
 | iter1 = iter2  | 赋值                          |
 
 *    面对Output迭代器,我们无需检查是否抵达序列尾端,便可直接写入数据。事实上由于Output迭代器不提供比较操作,所以你不能将Output迭代器和尾端迭代器相比较。
+*    对于Forward迭代器,你必须在提领(dereference,或说存取)数据之前确保它有效。因此上述循环对Foward迭代器而言并不正确。这是因为它最终会提领end(),从而引发未定义行为。
+
+### bidrectional迭代器
+
+Bldirectiloncal迭代器在Forward迭代器的基础上增加了回头遍历的能力。换言之,它支持递减运操作符,用以进行一步一步的后退操作。
+
+| 算式   | 效果               |
+| ------ | ------------------ |
+| --iter | 步退（传回新位置） |
+| iter-- | 步退（传回旧位置） |
+
+### random access迭代器
+
+Randorm Access迭代器在Bidirectional迭代器的基础之上再增加随机存取能,力。因此它必须提供“迭代器算术运算” (和一般指针的"指针算术运算"相当).也就是说,它能加减某个偏移量、能处理距离(differences)问题,并运用诸如<和>的相互关系运操作符进行比较。
+
+*    可随机存取的容器(vector, deque)
+*    strings (字符串, string, wstring)
+*    一般array (指针)
+
+| 算式         | 效果                                |
+| ------------ | ----------------------------------- |
+| iter[n]      | 效果存取索引位置为n的元素           |
+| iter+=n      | 向前跳n个元素(如果n是负数,则向后跳) |
+| iter-=n      | 向后跳n个元素(如果r是负数,则向前跳) |
+| iter+n       | 传回iter之后的第n个元素             |
+| n+iter       | 传回iter之后的第n个元素             |
+| iter-n       | 传回iter之前的第n个元素             |
+| iter1-iter2  | 传回iter1和iter2之间的距离          |
+| iter1<iter2  | 判断iter1是否在iter2之前            |
+| iter1>iter2  | 判断iter1是否在iter2之后            |
+| iter1<=iter2 | 判断iter1是否不在iter2之后          |
+| iter1>=iter2 | 判断iter1是否不在iter2之前          |
+
+### 迭代器相关辅助函数
+
+#### advance()
+
+```cpp
+#include <iterator>
+void advance(InputIterator& pos,Dist n);
+```
+
+*    使名为pos的input迭代器步进(或步退) n个元素
+*    对Bidirectional迭代器和Random Acces迭代器而言,n可为负值,表示向后退
+*    Dist是个template型别。通常应该是个整数型别,因为会调用诸如<,++,--等操作,还要和0做比较
+*    advance()并不检查迭代器是否超过序列的end()(因为送代器通常不知道其所操作的容器,因此无从检查)。所以,调用advance()有可能导致未定义行为
+
+#### distance()
+
+```cpp
+#include <iterator>
+Dist distance(InputIterator pos1,InputIterator pos2);
+```
+
+*    传回两个Input迭代器pos1和pos2之间的距离
+*    两个迭代器都必须指向同一个容器
+*    如果不是Random Access 选代器,则从pos1开始往前走必须能够到达pos2,亦即pos2的位置必须与pos1相同或在其后
+*    回返值Dist的型别由迭代器决定 :iterator_traits\<InputIterator>::difference_type
 
 ### 使用迭代器打印数据
 
@@ -5119,6 +5177,15 @@ template <class InputIterator1, class InputIterator2,
 int count = count_if(vec.begin(), vec.end(),[](int x){return x %2 == 0; });
 ```
 
+### find()
+
+```cpp
+#include <algorithm>
+iterator pos=find(coll.begin(),coll.end(),target);
+```
+
+*    返回“= value”的迭代器
+
 ### 使用者自定义泛型函数
 
 #### 以函数作为算法的函数
@@ -5180,6 +5247,15 @@ fo.operator() (arg1,arg2);// call operator () for functon object fo
 
 ### 预先定义仿函数
 
+```cpp
+template <class _Ty = void>
+struct cmp {
+	bool operator()( const _Ty& _Left , const _Ty& _Right ) const {
+		// to do
+	}
+};
+```
+
 #### less<>()
 
 ```cpp
@@ -5209,17 +5285,6 @@ struct greater {
     _NODISCARD constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const {
         return _Left > _Right;
     }
-};
-```
-
-#### 自定义仿函数
-
-```cpp
-template <class _Ty = void>
-struct cmp {
-	bool operator()( const _Ty& _Left , const _Ty& _Right ) const {
-		// to do
-	}
 };
 ```
 
