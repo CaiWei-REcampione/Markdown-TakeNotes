@@ -4737,6 +4737,59 @@ private:
 | bidlrectional迭代器 | 向前和向后读取和写入     | list，set，multiset，map，multimap |
 | random access迭代器 | 随机存取，可读取也可写入 | vector，deque，string，array       |
 
+### Input迭代器
+
+Input迭代器只能一次一个向前读取元素,按此顺序一个个传回元素值。
+
+Input迭代器只能读取元素一次。如果你复制Input迭代器,并使原Input选代器和新产生的副本都向前读取,可能会遍历到不同的值。几乎所有迭代器都具备Input迭代器的能力,而且通常更强。纯粹Input迭代器的一个典型例子就是“从标准输入装置(通常为键盘)读取数据”的迭代器。同一个值不会被读取两次。
+
+一旦从输入流(input stream)读入一个字(离开input缓冲区)后,下次读取时就会传回另一个字。如果两个Input迭代器占用同一个位置,则两者相等。但是,正如上面所说,这并不意味它们存取元素时能够传回相同的值。
+
+| 表达式         | 效果                       |
+| -------------- | -------------------------- |
+| *iter          | 读取实际元素               |
+| iter->member   | 读取实际元素的成员         |
+| ++iter         | 向前步进（传回新位置）     |
+| iter++         | 向前步进（传回旧位置）     |
+| iter1 == iter2 | 判断两个迭代器是否相等     |
+| iter1 != iter2 | 判断两个迭代器是否不相等   |
+| TYPE(iter)     | 复制迭代器（copy构造函数） |
+
+>    尽可能优先选用前置式递增运操作符(++iter)而不是后置式递增运操作符(iter++) ,因为前者性能更好。前置式递增运操作符不需传回旧值,所以也就不必花费一个临时对象来保存旧值。因此,面对任何迭代器(以及任何抽象数据型别) ,应该优先使用前置式
+
+### output迭代器
+
+Output迭代器和input迭代器相反,其作用是将元素值一个个写入。也就是说,你只能一个元素一个元素地赋新值,而且不能使用Output迭代器对同一序列进行两次遍历。
+
+| 表达式        | 效果                       |
+| ------------- | -------------------------- |
+| *iter = value | 将数值写到迭代器所指位置   |
+| ++iter        | 向前步进（传回新位置）     |
+| iter++        | 向前步进（传回旧位置）     |
+| TYPE(iter)    | 复制迭代器（copy构造函数） |
+
+operator*只有在赋值语句的左手边才有效。
+
+output迭代器无需比较
+
+### forward迭代器
+
+forward迭代器是input迭代器和output迭代器的结合，具有input迭代器的全部功能和output迭代器的大部分功能
+
+| 表达式         | 效果                          |
+| -------------- | ----------------------------- |
+| *iter          | 存取实际元素                  |
+| iter->member   | 存取实际元素的成员            |
+| ++iter         | 向前步进（传回新位置）        |
+| iter++         | 向前步进（传回旧位置）        |
+| iter1 == iter2 | 判断两个迭代器是否相等        |
+| iter1 != iter2 | 判断两个迭代式是否不相等      |
+| TYPE(iter)     | 产生迭代器（default构造函数） |
+| iter1 == iter2 | 复制迭代器（copy构造函数）    |
+| iter1 = iter2  | 赋值                          |
+
+*    面对Output迭代器,我们无需检查是否抵达序列尾端,便可直接写入数据。事实上由于Output迭代器不提供比较操作,所以你不能将Output迭代器和尾端迭代器相比较。
+
 ### 使用迭代器打印数据
 
 #### std::cout
@@ -5738,12 +5791,12 @@ int main(int argc, char *argv []){...}
 finout.open(file,ios_base::in|ios_base::out|ios_base::binary);
 ```
 
-| 方法    | 原型                         |
-| ------- | ---------------------------- |
-| seekg() | 将输入指针移到指定的文件位置 |
-| tellg() | 检查输入指针的当前位置       |
-| seekp() | 将输出指针移到指定的文件位置 |
-| tellp() | 检查输出指针的当前位置       |
+| 方法    | 原型                                   |
+| ------- | -------------------------------------- |
+| seekg() | 将输入指针移到指定的文件位置           |
+| tellg() | 检查输入指针的当前位置，返回-1代表错误 |
+| seekp() | 将输出指针移到指定的文件位置           |
+| tellp() | 检查输出指针的当前位置，返回-1代表错误 |
 
 ```c++
 basic_istream<charT, traits>& seekg(off_type, ios_base::seekdir);
@@ -5774,6 +5827,32 @@ streampos类型的值定位到文件中的一个位置。它可以是类,但如�
 streampos值表示文件中的绝对位置(从文件开始处算起)。可以将streampos位置看作是相对于文件开始处的位置(以字节为单位,第一个字节的编号为0)。
 
 ## 文件操作
+
+### 创建文件
+
+```cpp
+#include <fstream>
+std::fstream fout;
+fout.open(FILENAME,OPTION);
+```
+
+### 删除文件
+
+```cpp
+#include <cstdio>
+int remove(const char * filename);// 如果成功返回 0，失败返回“EOF”
+```
+
+```cpp
+#include <io.h>
+_unlink("delete_test.txt"); //删除这个文件
+```
+
+### 对文件重命名
+
+```cpp
+int rename(const char *old_filename, const char *new_filename)
+```
 
 ### 打开文件
 
