@@ -4848,6 +4848,16 @@ Dist distance(InputIterator pos1,InputIterator pos2);
 *    如果不是Random Access 选代器,则从pos1开始往前走必须能够到达pos2,亦即pos2的位置必须与pos1相同或在其后
 *    回返值Dist的型别由迭代器决定 :iterator_traits\<InputIterator>::difference_type
 
+#### iter_swap()
+
+```cpp
+#include <algorithm>
+void iter_swap(ForwardIterator1 pos1,ForwardIterator2 pos2);
+```
+
+*    交换送代器pos1和pos2所指的值
+*    迭代器的型别不必相同,但其所指的两个值必须可以相互赋值
+
 ### 使用迭代器打印数据
 
 #### std::cout
@@ -4968,7 +4978,7 @@ Inserters可以使算法以安插方式而非覆写方式运作.
 
 *    rbegin()
 
-指向群集的结尾位置
+指向群集的结尾位置，也就是实际上最后一个元素的位置
 
 *    rend()
 

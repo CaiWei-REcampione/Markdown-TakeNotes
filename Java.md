@@ -20,7 +20,8 @@
 4.   生成".bat"文件,输入以下代码
 
 ```
-java -jar "<filename>"
-@pause
+java -jar %1
 ```
 
+5.   .jar文件设置打开方式，以bat方式打开
+6.   Windows上就可以运行.jar文件
