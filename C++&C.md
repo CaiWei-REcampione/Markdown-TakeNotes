@@ -4858,7 +4858,7 @@ void iter_swap(ForwardIterator1 pos1,ForwardIterator2 pos2);
 *    交换送代器pos1和pos2所指的值
 *    迭代器的型别不必相同,但其所指的两个值必须可以相互赋值
 
-### 使用迭代器打印数据
+### 使用迭代器输出
 
 #### std::cout
 
@@ -4978,11 +4978,35 @@ Inserters可以使算法以安插方式而非覆写方式运作.
 
 *    rbegin()
 
+```cpp
+container::reverse_iterator(end());
+```
+
 指向群集的结尾位置，也就是实际上最后一个元素的位置
 
 *    rend()
 
+```cpp
+container::reverse_iterator(begin());
+```
+
 指向容器内第一个元素的前一个位置
+
+##### reverse_iterator
+
+```cpp
+container<typename>::reverse_iterator name(target-iterator);
+```
+
+将正向迭代器转换成逆向迭代器
+
+##### base
+
+```cpp
+container::iterator pos = rpos.base();// 成员函数
+```
+
+将逆向迭代器装换成正向迭代器
 
 ## 空间分配器
 
