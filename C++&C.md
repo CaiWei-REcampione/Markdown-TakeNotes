@@ -4942,23 +4942,115 @@ list/set/multiset/map/multimap
 
 ### 迭代器之配接器
 
+```cpp
+std::copy(container.begin(),container.end(),[配接器]);
+```
+
 #### 安插型迭代器(Insert Iterators)
+
+| 算式         | 效果                   |
+| ------------ | ---------------------- |
+| *iter        | 无实际操作             |
+| iter = value | 安插value              |
+| ++iter       | 无实际操作（传回iter） |
+| iter++       | 无实际操作（传回iter） |
 
 Inserters可以使算法以安插方式而非覆写方式运作.
 
 *    如果对某个元素设值,会引发"对其所属群集的安插操作".至于插入位置是在容器的最前或最后,或是于特定位置上,需要考虑三种不同的insert iterators
 
-| 算式                      | Inserter种类                                                 |
-| ------------------------- | ------------------------------------------------------------ |
-| back_inserter(container)  | 使用push_back()在容器尾端安插元素,元素排列次序和安插次序相同 |
-| front_inserter(container) | 使用push_front()在容器前端安插元素,原词排列次序和安插次序相反 |
-| inserter(container,pos)   | 使用insert()在pos位置上安插元素,元素排列次序和安插次序相同 作用是将元素插入"初始化时接收的第二参数"所指位置的前方 Inserters内部调用成员函数insert()成员函数 |
+| 算式                      | Inserter种类                                                 | 所调用函数        | 应用                         |
+| ------------------------- | ------------------------------------------------------------ | ----------------- | ---------------------------- |
+| back_inserter(container)  | 使用push_back()在容器尾端安插元素,元素排列次序和安插次序相同 | push_back(value)  | vectors,deques,lists,strings |
+| front_inserter(container) | 使用push_front()在容器前端安插元素,原词排列次序和安插次序相反 | push_front(value) | deques,lists                 |
+| inserter(container,pos)   | 使用insert()在pos位置上安插元素,元素排列次序和安插次序相同 作用是将元素插入"初始化时接收的第二参数"所指位置的前方 Inserters内部调用成员函数insert()成员函数 | insert(pos,value) |                              |
 
-*    "单步前进"不会造成任何动静
+*    back_inserter
+
+```cpp
+std::vector<int> coll;// declare vector
+std::back_insert_iterator<std::vector<int>>iter ( coll );// create back inserter for coll
+```
+
+*    front_inserter
+
+```cpp
+std::list<int> coll;// declare vector
+std::front_insert_iterator<std::list<int>>iter ( coll );// create back inserter for coll
+```
+
+*    inserter
+
+```cpp
+std::set<int> coll;// declare vector
+std::insert_iterator<std::set<int>>iter ( coll , coll.begin () );// create insert inserter for coll
+```
 
 #### 流迭代器(stream iterators)
 
-##### istream_iterator\<string>(cin)
+##### ostream迭代器
+
+ostream迭代器可以将被赋予的值写入output stream中。它的实作机制与p271所说的insert迭代器概念一致,唯一的区别在于ostream迭代器将赋值操作转化为operator<<。如此一来算法就可以使用一般的迭代器接口直接对stream执行涂写动作。
+
+| 算式                          | 效果                                                    |
+| ----------------------------- | ------------------------------------------------------- |
+| ostream_iterator<T\>(ostream) | 为ostream产生一个ostream迭代器                          |
+| ostream_iterator<T\>          | 为ostream产生一个ostream迭代器，各元素间以delim为分隔符 |
+| *iter                         | 无实际操作（传回iter）                                  |
+| iter = value                  | 将value写到ostream                                      |
+| ++iter                        | 无实际操作（传回iter）                                  |
+| iter++                        | 无实际操作（传回iter）                                  |
+
+```cpp
+std::ostream_iterator<int> intWriter ( [out-object] , "\n" );// create ostream iterator for stream out object
+```
+
+```cpp
+std::copy ( container.begin () , container.end () , std::ostream_iterator<typename> ( [out-object] ) );
+```
+
+##### istream迭代器
+
+istream迭代器是ostream迭代器的拍档.用来从input stream读取元素,透过istream迭代器,算法可以从stream中直接读取数据。
+
+产生istream迭代器时,必须提供一个input stream作为参数,迭代器将从其中读取数据。然后它便经由Input迭代器的一般接口 ,利用operator>>渎取元素。
+
+然而,读取动作有可能失败(可能因为读到文件尾部,或读取错误) ,此外算法也需要知道区间是否已到终点。为了解决这些问题,你可以使用一个end-of-stream迭代器,它可以利用istream选代器的default构造函数生成。
+
+```cpp
+namespace std{
+    template <class T,
+    		  class charT = char,
+    	   	  class traits = char_traits<charT>,
+    		  class Distance = ptrdiff_t>
+        class istrea_iterator;
+}
+```
+
+| 算式                          | 效果                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| istream_iterator<T\>()        | 产生一个end-of-stream迭代器                                  |
+| istream_iterator<T\>(istream) | 为istream产生一个迭代器（可能立刻读取第一个元素）            |
+| *iter                         | 传回先前读取的值（如果构造函数并未立刻读取第一个元素的值，则本式执行读取任务） |
+| iter->member                  | 传回先前读取的元素的成员（如果有的话）                       |
+| ++iter                        | 读取下一个元素，并传回其位置                                 |
+| iter++                        | 读取下一个元素，并传回迭代器指向前一个元素                   |
+| iter1 ==  iter2               | 检查iter1和iter2是否相等                                     |
+| iter1 != iter2                | 检查iter1和iter2是否不相等                                   |
+
+```cpp
+std::istream_iterator<int> intReader ( std::cin );// create istream iterator that reads integers from cin
+std::istream_iterator<int> intReaderEOF;// create end-of-stream iterator
+
+//write them twice
+while ( intReader != intReaderEOF ) {
+	fout << "once: " << *intReader << std::endl;
+	fout << "once again: " << *intReader << std::endl;
+	++intReader;
+}
+```
+
+*    istream_iterator\<typename>(cin)
 
 产生一个可从"标准输入流cin"读取数据的stream iterator.
 
@@ -4966,9 +5058,19 @@ Inserters可以使算法以安插方式而非覆写方式运作.
 
 这些元素通过一般的operator>>被读取出来
 
-##### istream_iterator\<string>()
+```cpp
+std::istream_iterator<std::string> cinPos ( std::cin );
+```
+
+*    istream_iterator\<typename>()
 
 调用istream iterator的默认构造函数,产生一个代表"流结束符号"的迭代器,表示"不能再从中读取任何东西"
+
+```cpp
+while ( cinPos != std::istream_iterator<std::string> () ) {
+    // TODO
+}
+```
 
 #### 逆向迭代器
 
