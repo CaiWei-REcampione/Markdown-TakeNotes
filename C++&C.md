@@ -4737,7 +4737,7 @@ private:
 | bidlrectional迭代器 | 向前和向后读取和写入     | list，set，multiset，map，multimap |
 | random access迭代器 | 随机存取，可读取也可写入 | vector，deque，string，array       |
 
-### Input迭代器
+#### Input迭代器
 
 Input迭代器只能一次一个向前读取元素,按此顺序一个个传回元素值。
 
@@ -4757,7 +4757,7 @@ Input迭代器只能读取元素一次。如果你复制Input迭代器,并使原
 
 >    尽可能优先选用前置式递增运操作符(++iter)而不是后置式递增运操作符(iter++) ,因为前者性能更好。前置式递增运操作符不需传回旧值,所以也就不必花费一个临时对象来保存旧值。因此,面对任何迭代器(以及任何抽象数据型别) ,应该优先使用前置式
 
-### output迭代器
+#### output迭代器
 
 Output迭代器和input迭代器相反,其作用是将元素值一个个写入。也就是说,你只能一个元素一个元素地赋新值,而且不能使用Output迭代器对同一序列进行两次遍历。
 
@@ -4772,7 +4772,7 @@ operator*只有在赋值语句的左手边才有效。
 
 output迭代器无需比较
 
-### forward迭代器
+#### forward迭代器
 
 forward迭代器是input迭代器和output迭代器的结合，具有input迭代器的全部功能和output迭代器的大部分功能
 
@@ -4791,7 +4791,7 @@ forward迭代器是input迭代器和output迭代器的结合，具有input迭代
 *    面对Output迭代器,我们无需检查是否抵达序列尾端,便可直接写入数据。事实上由于Output迭代器不提供比较操作,所以你不能将Output迭代器和尾端迭代器相比较。
 *    对于Forward迭代器,你必须在提领(dereference,或说存取)数据之前确保它有效。因此上述循环对Foward迭代器而言并不正确。这是因为它最终会提领end(),从而引发未定义行为。
 
-### bidrectional迭代器
+#### bidrectional迭代器
 
 Bldirectiloncal迭代器在Forward迭代器的基础上增加了回头遍历的能力。换言之,它支持递减运操作符,用以进行一步一步的后退操作。
 
@@ -4800,7 +4800,7 @@ Bldirectiloncal迭代器在Forward迭代器的基础上增加了回头遍历的�
 | --iter | 步退（传回新位置） |
 | iter-- | 步退（传回旧位置） |
 
-### random access迭代器
+#### random access迭代器
 
 Randorm Access迭代器在Bidirectional迭代器的基础之上再增加随机存取能,力。因此它必须提供“迭代器算术运算” (和一般指针的"指针算术运算"相当).也就是说,它能加减某个偏移量、能处理距离(differences)问题,并运用诸如<和>的相互关系运操作符进行比较。
 
@@ -5110,6 +5110,92 @@ container::iterator pos = rpos.base();// 成员函数
 
 将逆向迭代器装换成正向迭代器
 
+### 迭代器特性
+
+#### 迭代器标志
+
+```cpp
+namespace std{
+	struct output_iterator_tag{
+    };
+    struct input_iterator_tag{
+    };
+    struct forward_iterator_tag:public forward_iterator_tag{
+    };
+    struct random_access_iterator_tag:public bidirectional_iterator_tag{
+    };
+}
+```
+
+Forward迭代器标志只派生自Input迭代器标志，和Output迭代器标志无关。事实上Foward迭代器的某些特性的确不符合Output迭代器的要求
+
+如果撰写泛型程序代码,还需要了解送代器所指元素的型别。C+标准程序库提供了一种特殊的template结构来定义所谓的迭代器特性(iterator traits) ,该结构包含送代器相关的所有信息,为“迭代器应具备的所有型别定义(包括迭代器类型、元素型别等等) ”提供一致的接口:
+
+```cpp
+namespace std{
+    template <class T>
+        struct iterator_traits{
+            typedef typename T::value_type			value_type;
+            typedef typename T::defference_type		difference_type;
+            typedef typename T::iterator_category	iterator_category;
+            typedef typename T::pointer				pointer;
+            typedef typename T::reference			reference;
+        };
+}
+```
+
+T代表迭代器型别。
+
+*    取得迭代器T的元素数字类型
+
+```cpp
+typename std::iterator_traits<T>::value_type;
+```
+
+优点
+
+1.   确保每个迭代器提供所有必要的类型定义
+2.   针对特定的迭代器进行特化（specialization）
+
+#### 为迭代器编写泛型函数
+
+##### 使用迭代器型别
+
+某些算法函数内部需要一个以元素型别为型别的暂时变量,这正是使用“迭代器特性”的一个简单例子。
+
+```cpp
+typename std::iterator_traits<T>::value_type tmp;
+```
+
+##### 使用迭代器类型
+
+1.   让template函数将迭代器类型作为附加参数,调用另一个函数。
+
+     ```cpp
+     template <class iterator>
+         inline void foo(iterator beg,iterator end){
+         foo(beg,end,std::iterator_traits<iterator>::iterator_category());
+     }
+     ```
+
+     
+
+2.   针对不同的选代器类型实作出上述所调用的函数。只有“并非派生自其它选代器类型”的迭代器类型,才需要提供特化版本。
+
+     ```cpp
+     template <class BiIterator>
+         void foo(BiIterator beg,BiIterator end,std::bidirectional_iterator_tag){
+         // TODO
+     }
+     
+     template <class RaIterator>
+         void foo(RaIterator beg,RaIterator end,std::random_access_iterator_tag){
+         // TODO
+     }
+     ```
+
+     其中,针对Random Access迭代器面做的版本,可以使用随机存取操作,针对Bidlrectonal 迭代器而做的版本则不可以。
+
 ## 空间分配器
 
 C++在许多地方采用特殊对象来处理内存配置和寻址,称为配置器(allocator)
@@ -5364,6 +5450,8 @@ sort([].begin,[].end(),cmp);
 
 传递给算法的"函数型参数",并不一定得是函数,可以是行为类似函数的对象,这种对象称之为function object(函数物件),或称为functor(仿函数).
 
+所谓仿函数，是一个定义了operator()的对象
+
 ```cpp
 class X{
 	// define "function call" operator
@@ -5378,8 +5466,9 @@ fo.operator() (arg1,arg2);// call operator () for functon object fo
 ### 优点
 
 *    仿函数是智能型函数
-*    每个仿函数都有自己的类型
+*    每个仿函数都有自己的类型。可以将仿函数的类型当做template参数来传递，从而指定某种行为模式。
 *    仿函数通常比一般的函数速度快
+*    比一般函数更灵活，可以拥有状态
 
 ### 预先定义仿函数
 
