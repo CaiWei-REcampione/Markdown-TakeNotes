@@ -849,6 +849,82 @@ new 元素数据类型[高维数组长度][低维数组长度];
 
 不规则数组访问和遍历可以使用for和for-each循环，但要注意下标越界异常发生。
 
+### 字符串
+
+Java SE提供了三个字符串类：String、StringBuffer和StringBuilder。
+
+String是不可变字符串， StringBuffer和StringBuilder是可变字符串。
+
+空字符串不是null，空字符串是分配内存空间，而null是没有分配内存空间。
+
+#### 不可变字符串
+
+##### String
+
+Java中不可变字符串类是String，属于java.lang包，它也是Java非常重要的类。
+
+###### 构造方法
+
+*    String()：使用空字符串创建并初始化一个新的String对象。
+*    String(String original)：使用另外一个字符串创建并初始化一个新的 String 对象。
+*    String(StringBuffer buffer)：使用可变字符串对象（StringBuffer）创建并初始化一个新的 String对象。
+*    String(StringBuilder builder)：使用可变字符串对象（StringBuilder）创建并初始化一个新的String 对象。
+*    String(byte[] bytes)：使用平台的默认字符集解码指定的byte数组，通过byte数组创建并初始化一个新的 String 对象。
+*    String(char[] value)：通过字符数组创建并初始化一个新的 String 对象。
+*    String(char[] value, int offset, int count)：通过字符数组的子数组创建并初始化一个新的 String 对象；offset参数是子数组第一个字符的索引，count参数指定子数组的长度。
+
+##### 字符串池
+
+==运算符比较的是两个引用是否指向相同的对象
+
+Java中的不可变字符串String常量，采用字符串池（String Pool）管理技术，字符串池是一种字符串驻留技术。
+
+##### 去前后空格
+
+*    String trim()：去前后空格，返回String
+
+##### 字符串拼接
+
+String字符串虽然是不可变字符串，但也可以进行拼接只是会产生一个新的对象。
+
+String字符串拼接可以使用+运算符或String的concat(String str)方法。+运算符优势是可以连接任何类型数据拼接成为字符串，而concat方法只能拼接String类型字符串。
+
+##### 字符串查找
+
+在给定的字符串中查找字符或字符串是比较常见的操作。在String类中提供了indexOf和lastIndexOf方法用于查找字符或字符串，返回值是查找的字符或字符串所在的位置，-1表示没有找到。
+
+*    int indexOf(char ch)：从前往后搜索字符ch，返回第一次找到字符ch所在处的索引。
+*    int indexOf(char ch, int fromIndex)：从指定的索引开始从前往后搜索字符ch，返回第一次找到字符ch所在处的索引。
+*    int indexOf(String str)：从前往后搜索字符串str，返回第一次找到字符串所在处的索引。
+*    int indexOf(String str, int fromIndex)：从指定的索引开始从前往后搜索字符串str，返回第一次找到字符串所在处的索引。
+*    int lastIndexOf(char ch)：从后往前搜索字符ch，返回第一次找到字符ch所在处的索引。
+*    int lastIndexOf(char ch, int fromIndex)：从指定的索引开始从后往前搜索字符ch，返回第一次找到字符ch所在处的索引。
+*    int lastIndexOf(String str)：从后往前搜索字符串str，返回第一次找到字符串所在处的索引。
+*    int lastIndexOf(String str, int fromIndex)：从指定的索引开始从后往前搜索字符串str，返回第一次找到字符串所在处的索引。
+
+##### 字符串比较
+
+###### 比较相等
+
+*    boolean equals(Object anObject)：比较两个字符串中内容是否相等。
+*    boolean equalsIgnoreCase(String anotherString)：类似equals方法，只是忽略大小写。
+
+###### 比较大小
+
+*    int compareTo(String anotherString)：按字典顺序比较两个字符串。如果参数字符串等于此字符串，则返回值 0；如果此字符串小于字符串参数，则返回一个小于 0 的值；如果此字符串大于字符串参数，则返回一个大于 0 的值。
+*    int compareToIgnoreCase(String str)：类似compareTo，只是忽略大小写。
+
+###### 比较前缀和后缀
+
+*    boolean endsWith(String suffix)：测试此字符串是否以指定的后缀结束。 如果字符串以指定的前缀开始，则返回 true；否则返回 false。
+*    boolean startsWith(String prefix)：测试此字符串是否以指定的前缀开始。如果字符串以指定的前缀开始，则返回 true；否则返回 false。
+
+###### 字符串截取
+
+*    String substring(int beginIndex)：从指定索引beginIndex开始截取一直到字符串结束的子字符串。
+*    String substring(int beginIndex, int endIndex)：从指定索引beginIndex开始截取直到索引endIndex -1处的字符，注意包括索引为beginIndex处的字符，但不包括索引为endIndex处的字符。
+*    String[] split(String regex)：根据给定正则表达式的匹配拆分此字符串。该方法的作用就像是使用给定的表达式和限制参数 0 来调用两参数 split方法。所得数组中不包括结尾空字符串。
+
 # 运算符
 
 ## 算术运算符
