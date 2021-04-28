@@ -5448,6 +5448,23 @@ sort([].begin,[].end(),cmp);
 
 ## 仿函数
 
+| 仿函数                 | 效果            |
+| ---------------------- | --------------- |
+| negate<type\>()        | -param          |
+| plus<type\>()          | param1+param2   |
+| minus<type\>()         | param1-param2   |
+| divides<type\>()       | param1/param2   |
+| modulus<type\>()       | param1%param2   |
+| equal_to<type\>()      | param1==param2  |
+| not_equal<type\>()     | param1!=param2  |
+| less<type\>()          | param1<param2   |
+| greater<type\>()       | param1>param2   |
+| less_equal<type\>()    | param1<=param2  |
+| greater_equal<type\>() | param1>=param2  |
+| logical_not<type\>()   | !param          |
+| logical_and<type\>()   | param1&&param2  |
+| logical_or<type\>()    | para1\|\|param2 |
+
 传递给算法的"函数型参数",并不一定得是函数,可以是行为类似函数的对象,这种对象称之为function object(函数物件),或称为functor(仿函数).
 
 所谓仿函数，是一个定义了operator()的对象
@@ -5463,6 +5480,13 @@ fo(arg1,arg2);// call operator () for function object fo
 fo.operator() (arg1,arg2);// call operator () for functon object fo
 ```
 
+*    对对象排序或进行比较时，一般都以less<>为预设准则，所以less<>经常被使用
+*    要使用这些仿函数，必须包含头文件<functional\>
+
+```cpp
+#include <functional>
+```
+
 ### 优点
 
 *    仿函数是智能型函数
@@ -5470,11 +5494,41 @@ fo.operator() (arg1,arg2);// call operator () for functon object fo
 *    仿函数通常比一般的函数速度快
 *    比一般函数更灵活，可以拥有状态
 
+### 拥有内部状态的仿函数
+
+仿函数是传值，不是传址，算法并不会改变随参数而来的仿函数的状态。
+
+从仿函数中获取反馈
+
+*    以传值的方式传递仿函数
+*    运用for_each()算法的回返值
+
+```cpp
+class functor{
+private:
+    typename state;
+public:
+    return-type operator()(typename parametername){
+        // TODO
+    }
+}:
+...
+int main(){
+   	functor func;
+    func=for_each(container.begin(),container.end(),functor());// return functor
+}
+```
+
+### 判断式
+
+返回布尔值的一个函数或者仿函数。
+
 ### 预先定义仿函数
 
 ```cpp
 template <class _Ty = void>
-struct cmp {
+class cmp {
+public:
 	bool operator()( const _Ty& _Left , const _Ty& _Right ) const {
 		// to do
 	}

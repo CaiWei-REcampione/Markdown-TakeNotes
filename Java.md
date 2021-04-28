@@ -925,6 +925,46 @@ String字符串拼接可以使用+运算符或String的concat(String str)方法�
 *    String substring(int beginIndex, int endIndex)：从指定索引beginIndex开始截取直到索引endIndex -1处的字符，注意包括索引为beginIndex处的字符，但不包括索引为endIndex处的字符。
 *    String[] split(String regex)：根据给定正则表达式的匹配拆分此字符串。该方法的作用就像是使用给定的表达式和限制参数 0 来调用两参数 split方法。所得数组中不包括结尾空字符串。
 
+#### 可变字符串
+
+可变字符串在追加、删除、修改、插入和拼接等操作不会产生新的对象。
+
+##### StringBuffer和StringBuilder
+
+Java提供了两个可变字符串类StringBuffer和StringBuilder，中文翻译为“字符串缓冲区”。
+
+StringBuffer是线程安全的，它的方法是支持线程同步 ，线程同步会操作串行顺序执行，在单线程环境
+下会影响效率。StringBuilder是StringBuffer单线程版本，Java 5之后发布的，它不是线程安全的，但它的执行效率很高。
+
+>    线程同步是一个多线程概念，就是当多个线程访问一个方法时，只能由一个优先级别高的线程先访问，在访问期间会锁定该方法，其他线程只能等到它访问完成释放锁，才能访问。
+
+StringBuffer和StringBuilder具有完全相同的API，即构造方法和普通方法等内容一样。
+
+###### 构造方法
+
+*    StringBuilder()：创建字符串内容是空的StringBuilder对象，初始容量默认为16个字符。
+*    StringBuilder(CharSequence seq)：指定CharSequence字符串创建StringBuilder对象。CharSequence接口类型，它的实现类有：String、StringBuffer、StringBuilder等，所以参数seq可以是String、 StringBuffer和StringBuilder等类型。
+*    StringBuilder(int capacity)：创建字符串内容是空的StringBuilder对象，初始容量由参数capacity指定的。
+*    StringBuilder(String str)：指定String字符串创建StringBuilder对象。
+
+>    字符串长度和字符串缓冲区容量区别。字符串长度是指在字符串缓冲区中目前所包含字符串长度，通过length()获得；字符串缓冲区容量是缓冲区中所能容纳的最大字符数，通过capacity()获得。当所容纳的字符超过这个长度时，字符串缓冲区自动扩充容量，但这是以牺牲性能为代价的扩容。
+
+###### 字符串追加
+
+*    append()：StringBuilder的追加法与StringBuffer完全一样。
+
+###### 插入
+
+*    StringBuilder insert(int offset, String str)：在字符串缓冲区中索引为offset的字符位置之前插入str， insert有很多重载方法，可以插入任何类型数据。
+
+###### 删除
+
+*    StringBuffer delete(int start, int end)：在字符串缓冲区中删除子字符串，要删除的子字符串从指定索引start开始直到索引end - 1处的字符。start和end两个参数与substring(int beginIndex, int endIndex)方法中的两个参数含义一样。
+
+###### 替换
+
+*    StringBuffer replace(int start, int end, String str)字符串缓冲区中用str替换子字符串，子字符串从指定索引start开始直到索引end - 1处的字符。start和end同delete(int start, int end)方法。
+
 # 运算符
 
 ## 算术运算符
@@ -1093,3 +1133,181 @@ continue;			// 不带标签
 continue label;		// 带标签
 ```
 
+# 面向对象
+
+面向对象的编程思想：按照真实世界客观事物的自然规律进行分析，客观世界中存在什么样的实体，构建的软件系统就存在什么样的实体。
+
+## 面向对象三个基本特性
+
+面向对象思想有三个基本特性：封装性、继承性和多态性。
+
+### 封装性
+
+封装能够使外部访问者不能随意存取对象的内部数据，隐藏了对象的内部细节，只保留有限的对外接口。
+
+外部访问者不用关心对象的内部细节，使得操作对象变得简单。
+
+### 继承性
+
+在Java语言中一般类称为“父类”，特殊类称为“子类”。
+
+Java语言是单继承的，即只能有一个父类，但Java可以实现多个接口，可以防止多继承所引起的冲突问题。
+
+### 多态性
+
+多态性是指在父类中成员变量和成员方法被子类继承之后，可以具有不同的状态或表现行为。
+
+## 类
+
+类是Java中的一种重要的引用数据类型，是组成Java程序的基本要素。它封装了一类对象的数据和操作。
+
+### 类声明
+
+Java语言中一个类的实现包括：类声明和类体。
+
+```java
+[public][abstract|final] class className [extends superclassName][implements interfaceNameList]{
+    // TODO
+}
+```
+
+*    class是声明类的关键字
+*    className是自定义的类名
+*    class前面的修饰符public、abstract、final用来声明类，它们可以省略
+*    superclassName为父类名，可以省略，如果省略则该类继承Object类，Object类所有类的根类，所有类都直接或间接继承Object
+*    interfaceNameList是该类实现的接口列表，可以省略，接口列表中的多个接口之间用逗号分隔。
+
+### 成员变量
+
+```java
+class className{
+    [public|protected|private][static][final] type variableName;// 成员变量
+}
+```
+
+其中type是成员变量数据类型，variableName是成员变量名。type前的关键字都是成员变量修饰符
+
+*    public、protected和private修饰符用于封装成员变量。
+*    static修饰符用于声明静态变量，所以静态变量也称为“类变量”。
+*    final修饰符用于声明变量，该变量不能被修改。
+
+### 成员方法
+
+```java
+class className{
+     [public | protected | private ] [static] [final | abstract] [native] [synchronized] type methodname([paramList])[throws exceptionList]{
+         // TODO
+     }
+}
+```
+
+其中type是方法返回值数据类型，methodName是方法名。type前的关键字都是方法修饰符
+
+*    public、protected和private修饰符用于封装方法。
+02.	static修饰符用于声明静态方法，所以静态方法也称为“类方法”。
+03.	final | abstract不能同时修饰方法，final修饰的方法不能在子类中被覆盖；abstract用来修饰抽象方法，抽象方法必须在子类中被实现。
+*    native修饰的方法，称为“本地方法”，本地方法调用平台本地代码（如：C或C++编写的代码），不能实现跨平台。
+05.	synchronized修饰的方法是同步的，当多线程方式同步方法时，只能串行地执行，保证是线程安全的。
+
+### 包
+
+#### 包作用
+
+在Java中为了防止类、接口、枚举和注释等命名冲突引用了包（package）概念，包本质上命名空间（namespace）。
+
+在包中可以定义一组相关的类型（类、接口、枚举和注释），并为它们提供访问保护和命名空间管理。
+
+命名空间，也称名字空间、名称空间等，它表示着一个标识符（identifier）的可见范围。一个标识符可在多个命名空间中定义，它在不同命名空间中的含义是互不相干的。这样，在一个新的命名空间中可定义任何标识符，它们不会与任何已有的标识符发生冲突，因为已有的定义都处于其他命名空间中。
+
+#### 包定义
+
+Java中使用package语句定义包，package语句应该放在源文件的第一行，在每个源文件中只能有一个包定义语句，并且package语句适用于所有类型（类、接口、枚举和注释）的文件。
+
+```java
+package pkg1[.pkg2[.pkg3...]];
+```
+
+pkg1~ pkg3都是组成包名一部分，之间用点（.）连接，它们命名应该是合法的标识符，其次应该遵守Java包命名规范，即全部小写字母。
+
+包名一般是公司域名的倒置。
+
+如果在源文件中没有定义包，那么类、接口、枚举和注释类型文件将会被放进一个无名的包中，也称为默认包。
+
+#### 包引入
+
+为了能够使用一个包中类型（类、接口、枚举和注释），需要在Java程序中明确引入该包。使用import语句实现引入包，import语句应位于package语句之后，所有类的定义之前，可以有0~n条import语句。
+
+```java
+ import package1[.package2…].(类型名|*);
+```
+
+“包名.类型名”形式只引入具体类型，“包名.*”采用通配符，表示引入这个包下所有的类型。但从编程规范的角度提倡明确引入类型名，即“包名.类型名”形式可以提高程序的可读性。
+
+当前源文件与要使用的类型（类、接口、枚举和注释）在同一个包中，可以不用引入包。
+
+#### 常用包
+
+##### java.lang包
+
+java.lang包含中包含了Java语言的核心类，如Object、Class、String、包装类和Math等，还有包装类Boolean、Character、Integer、Long、Float和Double。使用java.lang包中的类型，不需要显示使用import语句引入，它是由解释器自动引入。
+
+##### java.io包
+
+java.io包含中提供多种输入/输出流类，如InputStream、OutputStream、Reader和Writer。还有文件管理相关类和接口，如File和FileDescriptor类以及FileFilter接口。
+
+##### java.net包
+
+java.net包含进行网络相关的操作的类，如URL、Socket和ServerSocket等。
+
+##### java.util包
+
+java.util包含一些实用工具类和接口，如集合、日期和日历相关类和接口。
+
+##### java.text包
+
+java.text包中提供文本处理、日期式化和数字格式化等相关类和接口。
+
+##### java.awt和javax.swing包
+
+java.awt和javax.swing包提供了Java图形用户界面开发所需要的各种类和接口。java.awt提供是一些基础类和接口，javax.swing提供了一些高级组件。
+
+## 方法重载（Overload）
+
+这些相同名字的方法之所以能够在一个类中同时存在，是因为它们的方法参数列表，调用时根据参数列表调用相应重载方法。
+
+调用哪一个方法是根据参数列表决定的。如果参数类型不一致，编译器会进行自动类型转换寻找适合版本的方法，如果没有适合方法，则会发生编译错误。
+
+## 封装性与访问控制
+
+|      | 同一个类 | 同一个包 | 不同包的子类 | 不同包非子类 |
+| ---- | -------- | -------- | ------------ | ------------ |
+| 私有 | Y        |          |              |              |
+| 默认 | Y        | Y        |              |              |
+| 保护 | Y        | Y        | Y            |              |
+| 公有 | Y        | Y        | Y            | Y            |
+
+### 私有级别
+
+私有级别的关键字是private，私有级别的成员变量和方法只能在其所在类的内部自由使用，在其他的类中则不允许直接访问。
+
+私有级别限制性最高。
+
+### 默认级别
+
+默认级别没有关键字，也就是没有访问修饰符，默认级别的成员变量和方法，可以在其所在类内部和同一个包的其他类中被直接访问，但在不同包的类中则不允许直接访问。
+
+### 公有级别
+
+公有级别的关键字是public，公有级别的成员变量和方法可以在任何场合被直接访问，是最宽松的一种访问控制等级。
+
+### 保护级别
+
+保护级别的关键字是protected，保护级别在同一包中完全与默认访问级别一样，但是不同包中子类能够继承父类中的protected变量和方法，这就是所谓的保护级别，“保护”就是保护某个类的子类都能继承该类的变量和方法。
+
+>    访问成员有两种方式：一种是调用，即通过类或对象调用它的成员；另一种是继承，即子类继承父类的成员变量和方法。
+
+访问类成员时，在能满足使用的前提下，应尽量限制类中成员的可见性，访问级别顺序是：私有级别→默认级别→保护级别→公有级别。
+
+## 静态变量和静态方法
+
+成员变量与账户个体有关，称为“实例变量”；成员变量与个体无关，或者说是所有个体共享的，这种变量称为“静态变量”或“类变量”。
