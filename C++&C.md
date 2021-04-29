@@ -5535,37 +5535,88 @@ public:
 };
 ```
 
-#### less<>()
+#### 函数配接器
+
+| 表达式            | 效果               |
+| ----------------- | ------------------ |
+| bind1st(op,value) | op(value,param)    |
+| bind2nd(op,value) | op(param,value)    |
+| not1(op)          | !op(param)         |
+| not2(op)          | !op(param1,param2) |
+
+*    通过函数配接器，可以把多个仿函数结合起来，形成强大的表达式，称为functional composition（功能复合、函数复合）
+
+#### 针对成员函数而设计的函数配接器
+
+| 表达式          | 效果                                      |
+| --------------- | ----------------------------------------- |
+| men_fun_ref(op) | 调用op，那是某对象的一个const成员函数     |
+| mem_fun(op)     | 调用op，那是某对象指针的一个const成员函数 |
 
 ```cpp
-// STRUCT TEMPLATE less
-template <class _Ty = void>
-struct less {
-    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty _FIRST_ARGUMENT_TYPE_NAME;
-    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty _SECOND_ARGUMENT_TYPE_NAME;
-    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef bool _RESULT_TYPE_NAME;
-
-    _NODISCARD constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const {
-        return _Left < _Right;
+class Person{
+    private:
+    std::string name;
+    public:
+    void print()const{
+        std::cout<<name<<std::endl;
     }
-};
+}
+
+...
+for_each(container.begin(),container.end(),mem_fun_ref(&Person::print));
+...
 ```
 
-#### greater<>()
+*    配接器mem_fun_ref将会把原本“针对某个元素的函数调用动作”转换为调用“被传递之成员函数”
+*    for_each()会针对第三参数所传过来的指针，调用operator()，而不是调用该指针所指的成员函数。配接器mem_fun_ref将operator()调用动作做了适当转换。
+
+#### 针对一般函数而设计的函数配接器
+
+| 表达式      | 效果              |
+| ----------- | ----------------- |
+| ptr_fun(op) | op(param)         |
+| ptr_fun(op) | op(param1,param2) |
 
 ```cpp
-// STRUCT TEMPLATE greater
-template <class _Ty = void>
-struct greater {
-    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty _FIRST_ARGUMENT_TYPE_NAME;
-    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef _Ty _SECOND_ARGUMENT_TYPE_NAME;
-    _CXX17_DEPRECATE_ADAPTOR_TYPEDEFS typedef bool _RESULT_TYPE_NAME;
-
-    _NODISCARD constexpr bool operator()(const _Ty& _Left, const _Ty& _Right) const {
-        return _Left > _Right;
-    }
-};
+iterator pos=find_if(container.begin(),container.end(),ptr_fun(op));
 ```
+
+#### 让自定义仿函数使用函数配接器
+
+```cpp
+template<class Arg,class Result>
+struct unary_function{
+        typedef Arg argument_type;
+        typedef Result result_type;
+};
+
+template<class Arg1,class Arg2,class Result>
+struct binary_function{
+    typedef Arg1 first_argument_type;
+    typedef Arg2 second_argument_type;
+    typedef Result result_type;
+}
+```
+
+*    只要仿函数集成上述三种形式之一，就可以满足可配接条件
+
+例如
+
+```cpp
+#include <iostream>
+#include <cmath>
+
+template<class T1,class T2>
+struct fopow:public std::binary_function<T1,T2,T1>
+{
+    T1 opeator()(T1 base,T2 exp)const{
+        return std::pow(base,exp);
+    }
+}
+```
+
+*    函数配接器的概念是完全抽象的，任何东西的行为只要像函数配接器，就是一个函数配接器。
 
 # c++输入和输出
 
