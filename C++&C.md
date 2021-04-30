@@ -5263,9 +5263,150 @@ namespace std{
 
 ## 算法
 
-算法的操作对象不一定是"容器内的全部元素"所形成的区间
+要使用C++标准程序库的算法，首先必须含入头文件
 
-### 更易型算法
+```cpp
+#include <algorithm>
+```
+
+某些STL算法用于数值处理，被定义于头文件
+
+```cpp
+#include <numeric>
+```
+
+### 特征
+
+*    所有STL算法被设计用于处理一个或多个迭代器的区间
+*    第一个区间通常以起点和终点表示，至于其他区间，多数情况下只需提供起点，其终点可自动以第一区间的元素数量推导出来。
+*    STL算法采用覆盖模式而非安插模式，调用者必须保证目标区间拥有足够的元素空间。
+*    算法的操作对象不一定是"容器内的全部元素"所形成的区间
+
+*    搜寻算法，一元判断式
+*    排序算法，二元判断式
+
+#### 别类
+
+##### 尾词 _if
+
+如果算法有两种形式,参数个数都相同,但第一形式的参数要求传递一个值,第二形式的参数要求传递一个函数或仿函数,那么尾词_if就派上了用场。
+
+无尾词的那个要求传递数值,有尾词的那个要求传递函数或仿函数。
+
+并非所有“要求传递仿函数”的算法都有尾词_if,如果算法以额外参数来接受这样的函数或仿函数,那么不同版本的算法就可以采用相同命名(重载, overloaded) 。
+
+##### 尾词 _copy
+
+这个尾词用来表示在此算法中,元素不光被操作,还会被复制到目标区间。
+
+### 非变动性算法
+
+| 名称                      | 作用                                           |
+| ------------------------- | ---------------------------------------------- |
+| for_each()                | 对每个元素执行某操作                           |
+| count()                   | 返回元素个数                                   |
+| count_if()                | 返回满足某一准则的元素个数                     |
+| min_element()             | 返回最小值元素                                 |
+| max_element()             | 返回最大值元素                                 |
+| find()                    | 搜寻等于某值的第一个元素                       |
+| find_if()                 | 搜寻满足某个准则的第一个元素                   |
+| search_n()                | 搜寻具有某特性的第一段“n个连续元素”            |
+| search()                  | 搜寻某个子区间第一次出现位置                   |
+| find_end()                | 搜寻某个子区间最后一次出现位置                 |
+| find_first_of()           | 搜寻等于“某数个值之一”的第一个元素             |
+| adjacent_find()           | 搜寻连续两个相等（或者符合特定准则）的元素     |
+| equal()                   | 判断两区间是否相等                             |
+| mismatch()                | 返回两个序列的各组对应元素中，第一对不相等元素 |
+| lexicographical_compare() | 判断某一序列在“字典顺序”下是否小于另一序列     |
+
+#### find()
+
+```
+#include <algorithm>
+iterator pos=find(coll.begin(),coll.end(),target);
+```
+
+返回“= value”的迭代器
+
+#### string搜寻函数和STL搜寻算法区别
+
+| 搜寻                       | String函数      | STL算法                |
+| -------------------------- | --------------- | ---------------------- |
+| 某元素第一次出现位置       | find()          | find()                 |
+| 某元素最后一次出现位置     | rfind()         | find()，采用逆向迭代器 |
+| 某子区间第一次出现位置     | find()          | serach()               |
+| 某子区间最后一次出现位置   | rfind()         | find_end()             |
+| 某数个元素第一次出现位置   | find_first_of() | find_first_of()        |
+| 某数个元素最后一次出现位置 | find_last_of()  | find_first_of()        |
+| n个连续元素第一次出现位置  |                 | search_n()             |
+
+### 变动性算法
+
+| 名称              | 效果                                                   |
+| ----------------- | ------------------------------------------------------ |
+| for_each()        | 针对每个元素执行某项操作                               |
+| copy()            | 从第一个元素开始，复制某段区间                         |
+| copy_backward()   | 从最后一个元素开始，复制某段区间                       |
+| transform()       | 变动（并复制）元素，将两个区间的元素合并               |
+| merge()           | 合并两个区间                                           |
+| swap_ranges()     | 交换两个区间内的元素                                   |
+| fill()            | 以给定值替换每一个元素                                 |
+| fill_n()          | 以给定值替换n个元素                                    |
+| generate()        | 以某项操作的结果替换每个元素                           |
+| generate_n()      | 以某项操作的结果替换n个元素                            |
+| replace()         | 将具有某特定值的元素替换为另一个值                     |
+| replace_if()      | 将符合某准则的元素替换为另一个值                       |
+| replace_copy()    | 复制整个区间，同时并将具有某特定值的元素替换为另一个值 |
+| replace_copy_if() | 复制整个区间，同时并将符合某准则的元素替换为另一个值   |
+
+*    transform()的速度稍许慢些,因为它是将操作返回值赋值给元素,而不是直接变动元素。不过其灵活性比较高,因为它可以把某个序列复制到目标序列中,同时变动元素内容。transform()的第二形式可以将两个源区间的元素的组合结果放到目标区间。
+*    严格地说, merge()不算是变动性算法的一员。因为它要求输入区间必须已序(sorted) ,所以应该归为“作用于已序区间之算法”
+*    注意,关联式容器的元素被视为常数,惟其如此,你才不会在变动元素的时候有任何可能违反整个容器的排序准则。因此,你不可以将关联式容器当做变动性算法的目标区间。
+
+#### for_each
+
+```cpp
+for_each(container.begin(),container.end(),operatorfunction);
+```
+
+*    对每个元素进行operator
+
+#### generate
+
+##### rand
+
+```cpp
+generate(vec.begin(), vec.end(), rand);
+```
+
+#### transform()
+
+```cpp
+template <class InputIterator, class OutputIterator, class UnaryOperation>
+  OutputIterator transform (InputIterator first1, InputIterator last1,
+                            OutputIterator result, UnaryOperation op);
+	
+template <class InputIterator1, class InputIterator2,
+          class OutputIterator, class BinaryOperation>
+  OutputIterator transform (InputIterator1 first1, InputIterator1 last1,
+                            InputIterator2 first2, OutputIterator result,
+                            BinaryOperation binary_op);
+```
+
+### 移除型算法
+
+| 名称             | 效果                                 |
+| ---------------- | ------------------------------------ |
+| remove()         | 将等于某特定值的元素全部移除         |
+| remove_if()      | 将满足于某准则的元素全部移除         |
+| remove_copy()    | 将不等于某特定值的元素全部复制到它处 |
+| remove_copy_if() | 将不满足某准则的元素全部复制到它处   |
+| unique()         | 移除毗邻的重复元素                   |
+| unique_copy()    | 移除毗邻的重复元素，并复制到它处     |
+
+*    注意,移除算法只是在逻辑上移除元素,手段是:将不需被移除的元素往前覆盖(overwrite)应被移除的元素。
+*    它并不改变操作区间内的元素个数,而是返回逻辑上的新终点位置。
+*    至于是否使用这个位置进行诸如“实际移除元素”之类的操作,那是调用者的事情。
 
 #### unique()
 
@@ -5279,7 +5420,7 @@ unique函数的函数原型如下：
 iterator unique(iterator it_1,iterator it_2);
 ```
 
-这种类型的unique函数是我们最常用的形式。其中这两个参数表示对容器中[it_1，it_2)范围的元素进行去重(**注：区间是前闭后开，即不包含it_2所指的元素**),返回值是一个迭代器，**它指向的是去重后容器中不重复序列的最后一个元素的下一个元素**。
+这种类型的unique函数是我们最常用的形式。其中这两个参数表示对容器中[it_1，it_2)范围的元素进行去重(注：区间是前闭后开，即不包含it_2所指的元素),返回值是一个迭代器，它指向的是去重后容器中不重复序列的最后一个元素的下一个元素。
 
 *    有三个参数，且前两个参数类型为迭代器，最后一个参数类型可以看作是bool类型：
 
@@ -5310,15 +5451,39 @@ auto end = remove([].begin(),[].end(),value);
 [].erase(end,[].end());
 ```
 
-#### distance()
+### 变序性算法
 
-返回距离长度
+| 名称               | 效果                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| reverse()          | 将元素的次序逆转                                             |
+| reverse_copy()     | 复制的同时，逆转元素顺序                                     |
+| rotate()           | 旋转元素次序                                                 |
+| rotate_copy()      | 复制同时，旋转元素次序                                       |
+| next_permutation() | 得到元素的下一个排列次序                                     |
+| prev_permutatin()  | 得到元素的上一个排列次序                                     |
+| random_shuffle()   | 将元素的次序随机打乱                                         |
+| partition()        | 改变元素次序，使“符合某准则”者移到前面                       |
+| stable_partition() | 与partition()相似，但保持符合准则与不符合准则之各个元素之间保持相对位置 |
 
-```cpp
-int distance([pos1],[pos2]);
-```
+### 排序算法
+
+| 名称                | 效果                                                         |
+| ------------------- | ------------------------------------------------------------ |
+| sort()              | 对所有元素排序                                               |
+| stable_sort()       | 对所有元素排序，并保持相等元素间的相等次序                   |
+| partial_sort()      | 排序，直到前n个元素就位                                      |
+| partial_sort_copy() | 排序，直到前n个元素就位，结果复制于它处                      |
+| nth_element()       | 根据第n个位置进行排序                                        |
+| partition()         | 改变元素次序，使符合某准则的元素放在前面                     |
+| stable_partition()  | 与partition()相同，但保持符合准则和不符合准则的各个元素之间的相对位置 |
+| make_heap()         | 将一个区间转换成一个heap                                     |
+| push_heap()         | 将元素加入一个heap                                           |
+| pop_heap()          | 从heap移除一个元素                                           |
+| sort_heap()         | 对heap进行排序（执行过后就不再是heap了）                     |
 
 #### sort()
+
+sort()内部采用quicksort算法。因此保证了很好的平均性能,复杂度为n*log(n),但最差情况下也可能具有非常差的性能(二次复杂度)。
 
 Sort函数有三个参数：
 
@@ -5354,7 +5519,7 @@ functional提供了一种基于模板的比较函数对象，equal_to<Type>、no
 ```cpp
 <返回类型说明符> operator <运算符符号>(<参数表>)
 {
-<函数体>
+	// TODO
 }
 ```
 
@@ -5365,48 +5530,34 @@ functional提供了一种基于模板的比较函数对象，equal_to<Type>、no
 ```cpp
 struct Less
 {
- bool operator()(const Student& s1, const Student& s2)
-{
- return s1.name < s2.name; //从小到大排序
-}
+	bool operator()(const Student& s1, const Student& s2){
+		return s1.name < s2.name; //从小到大排序
+	}
 };
+
 std::sort(sutVector.begin(), stuVector.end(), Less());
 ```
 
-#### generate随机数填充
+#### partial_sort()
+
+*    partial_sort()内部采用heapsort算法。因此,它在任何情况下保证n*log(n)复杂度。
+*    大多数情况下heapsort比quicksort慢2-5倍,所以大多数时候虽然partial_sort()具有较佳复杂度,但sort()具有较好的执行效率。
+*    partiai_sort()的优点是它在任何时候都保证n*log(n)复杂度,绝不会变成二次复杂度。
+*    partial_sort()还有一种特殊能力:如果你只需要前n个元素排序,它可以在完成任务后立刻停止。所以如果想对所有元素进行排序,你可以将序列的终点作为第二参数和最后一个参数传进去
+
+#### stable_sort()
+
+*    内部采用mergesort,它对所有元素进行排序
+*    然而只有在具备足够内存时,它才具有n* log(n)复杂度。否则其复杂度为n* log(n)**log(n)。
+*    stable_sort()的优点是会保持相等元素之间的相对次序。
+
+#### distance()
+
+返回距离长度
 
 ```cpp
-generate(vec.begin(), vec.end(), rand);
+int distance([pos1],[pos2]);
 ```
-
-#### transform()
-
-```cpp
-template <class InputIterator, class OutputIterator, class UnaryOperation>
-  OutputIterator transform (InputIterator first1, InputIterator last1,
-                            OutputIterator result, UnaryOperation op);
-	
-template <class InputIterator1, class InputIterator2,
-          class OutputIterator, class BinaryOperation>
-  OutputIterator transform (InputIterator1 first1, InputIterator1 last1,
-                            InputIterator2 first2, OutputIterator result,
-                            BinaryOperation binary_op);
-```
-
-### count_if统计
-
-```cpp
-int count = count_if(vec.begin(), vec.end(),[](int x){return x %2 == 0; });
-```
-
-### find()
-
-```cpp
-#include <algorithm>
-iterator pos=find(coll.begin(),coll.end(),target);
-```
-
-*    返回“= value”的迭代器
 
 ### 使用者自定义泛型函数
 
@@ -5617,6 +5768,31 @@ struct fopow:public std::binary_function<T1,T2,T1>
 ```
 
 *    函数配接器的概念是完全抽象的，任何东西的行为只要像函数配接器，就是一个函数配接器。
+
+### 辅助用仿函数
+
+| 功能                 | 本书采用名称    | SGI STL采用名称 |
+| -------------------- | --------------- | --------------- |
+| f(g(elem))           | compose_f_gx    | compose1        |
+| f(g(elem1,elem2))    | compose_f_gxy   |                 |
+| f(g(elem),h(elem))   | compose_f_gx_hx | compose2        |
+| g(g(elem1),h(elem2)) | compose_f_gx_hy |                 |
+
+*    f(g(elem))
+
+一元判断式被嵌套调用，g()执行结果当做f()参数，整个参数的操作类似于一个一元判断式。
+
+*    f(g(elem1,elem2))
+
+两元素elem1和elem2作为参数传给二元判断式g()，其结果再作为参数传给一元判断式f()。整个表达式的操作类似于一个二元判断式。
+
+*    f(g(elem1),h(elem))
+
+此处elem作为参数被传递给两个不同的一元判断式g()和h(),两者的结果由二元判断式f()处理。这种形式系以某种方法将单一参数“注射(injects) "到一个组合函数中,整个表达式的操作类似一个一元判断式。
+
+*    f(g(elem1),h(elem2))
+
+此处elem1和elem2分别作为唯一参数传给两个不同的一元判断式g()和h(),两个结果共同被二元判断式f()处理。某种程度上这种形式系在两个参数身上分布(distributes)一个组合函数。整个表达式的操作类似一个二元判断式。
 
 # c++输入和输出
 
