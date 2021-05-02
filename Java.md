@@ -1284,6 +1284,570 @@ pkg1~ pkg3都是组成包名一部分，之间用点（.）连接，它们命名
 
 *    java.awt和javax.swing包提供了Java图形用户界面开发所需要的各种类和接口。java.awt提供是一些基础类和接口，javax.swing提供了一些高级组件。
 
+### 抽象类与接口
+
+设计良好的软件系统应该具备“可复用性”和“可扩展性”，能够满足用户需求的不断变更。使用抽象类和接口是实现“可复用性”和“可扩展性”重要的设计手段。
+
+#### 抽象类
+
+##### 抽象类声明和实现
+
+在Java中抽象类和抽象方法的修饰符是abstract
+
+```java
+public abstract class name{
+    
+    // TODO
+}
+```
+
+-    如果一个方法被声明为抽象的，那么这个类也必须声明为抽象的。而一个抽象类中，可以有0~n个抽象方法，以及0~n具体方法。
+-    设计抽象方法目的就是让子类来实现的，否则抽象方法就没有任何意义(override重写)
+-    抽象类不能被实例化,只有具体类才能被实例化。
+
+#### 使用接口
+
+-    比抽象类更加抽象的是接口，在接口中所有的方法都是抽象的。
+-    接口可以有成员变量。
+
+##### 接口声明和实现
+
+-    在Java中接口的声明使用的关键字是interface
+
+```java
+public interface name{
+    // 接口中静态成员变量，省略public static final
+    // 接口中函数，省略public
+}
+```
+
+-    某个类实现接口时，要在声明时使用implements关键字，当实现多个接口之间用逗号（,）分隔。实现接口时要实现接口中声明的所有方法。
+
+```java
+public class name implements interfacename{
+    
+    // override
+}
+```
+
+##### 接口与多继承
+
+-    在Java中只允许继承一个类，但可实现多个接口。通过实现多个接口方式满足多继承的设计需求。如果多个接口中即便有相同方法，它们也都是抽象的，子类实现它们不会有冲突。
+
+```java
+public interface InterfaceA {
+    // TODO
+}
+
+public interface InterfaceB{
+    // TODO
+}
+
+public class name implements InterfaceA,InterfaceB{
+    // TODO
+}
+```
+
+###### 接口继承
+
+-    Java语言中允许接口和接口之间继承。由于接口中的方法都是抽象方法，所以继承之后也不需要做什么，因此接口之间的继承要比类之间的继承简单的多。
+
+```java
+public interface InterfaceA {
+    // TODO
+}
+
+public interface InterfaceB extends InterfaceA{
+    // TODO
+}
+
+public class name implements InterfaceB{
+    // TODO
+}
+```
+
+##### 默认方法和静态方法
+
+###### java 8之前的特性
+
+*    不能可选实现方法，接口的方法全部是抽象的，实现接口时必须全部实现接口中方法，哪怕是有些方法并不需要，也必须实现。
+02.	没有静态方法。
+
+###### Java 8新特性默认方法和静态方法
+
+02.	接口中的默认方法类似于类中具体方法，给出了具体实现，只是方法修饰符是default。接口中静态方法类似于类中静态方法。
+
+```java
+public interface InterfaceA{
+    
+    // 默认方法
+    default type name(){
+        
+        // TODO
+    }
+    
+    // 静态方法
+    static type name1(){
+        
+        // TODO
+    }
+}
+```
+
+02.	默认方法可以根据需要有选择实现（覆盖）。
+02.	静态方法不需要实现，实现类中不能拥有接口中的静态方法。
+
+#### 抽象类与接口区别
+
+*    接口支持多继承，而抽象类（包括具体类）只能继承一个父类。
+*    接口中不能有实例成员变量，接口所声明的成员变量全部是静态常量，即便是变量不加public static final修饰符也是静态常量。抽象类与普通类一样各种形式的成员变量都可以声明。
+*    接口中没有包含构造方法，由于没有实例成员变量，也就不需要构造方法了。抽象类中可以有实例成员变量，也需要构造方法。
+*    抽象类中可以声明抽象方法和具体方法。Java 8之前接口中只有抽象方法，而Java 8之后接口中也可以声明具体方法，具体方法通过声明默认方法实现。
+
+### 枚举类
+
+#### 特性
+
+-    Java枚举类型本质上是一种继承java.lang.Enum类，是引用数据类型，因此也称为“枚举类”。
+-    Java枚举类型是一种类，是引用类型，具有了面向对象特性，可以添加方法和成员变量等。
+02.	Java枚举类型父类是java.lang.Enum，不需要显式声明。
+03.	Java枚举类型可以实现接口，与类实现接口类似。
+04.	Java枚举类型不能被继承，不存在子类。
+
+#### 声明和定义
+
+```java
+public enum name{
+    // 枚举常量表
+    // MONDAY("星期一",0),TUESDAY("星期二",1),...
+    
+    // 实例变量
+    [public|private|protected] type param_name;
+    
+    // 静态变量
+    [public|private|protected] static type param_name;
+    
+    // 构造方法
+    [public|private|protected] name(type param_name){
+        
+        // TODO
+    }
+    
+    @Override
+    public String toString(){
+        
+        // TODO
+    }
+}
+```
+
+#### 枚举方法
+
+所有枚举类都继承java.lang.Enum类，Enum中定义了一些枚举中常用的方法：
+
+*    int ordinal()：返回枚举常量的顺序。这个顺序根据枚举常量声明的顺序而定，顺序从零开始。
+*    枚举类型[] values()：静态方法，返回一个包含全部枚举常量的数组。
+*    枚举类型 valueOf(String str)：静态方法，str是枚举常量对应的字符串，返回一个包含枚举类型实例。
+
+### Java常用类
+
+#### Java根类——Object
+
+-    java.lang.Object类，它是Java所有类的根类，Java所有类都直接或间接继承自Object类，它是所有类的“祖先”。
+-    Object类属于java.lang包中的类型，不需要显示使用import语句引入，它是由解释器自动引入。
+
+##### 方法
+
+###### String toString()
+
+返回该对象的字符串表示。
+
+为了日志输出等处理方便，所有的对象都可以以文本方式表示，需要在该对象所在类中覆盖toString()方法。如果没有覆盖toString()方法，默认的字符串是“类名@对象的十六进制哈希码”。
+
+>    哈希码（hashCode），每个Java对象都有哈希码（hashCode）属性，哈希码可以用来标识对象，提高对象在集合操作中的执行效率。
+
+###### boolean equals(Object obj)
+
+指示其他某个对象是否与此对象“相等”。
+
+```java
+public class Name {
+	
+	// equals override
+    public boolean equals(Object _object){
+
+        [public|protected|private] type value;
+        
+        if(_object instanceof Name){
+
+            Person _otherPerson=(Person)_otherObject;
+            return this.value == _otherPerson.value;
+        }
+
+        return false;
+    }
+}
+```
+
+#### 包装类
+
+*    在Java中8种基本数据类型不属于类，不具备“对象”的特征，没有成员变量和方法，不方便进行面向对象的操作。
+*    Java提供包装类（Wrapper Class）来将基本数据类型包装成类，每个Java基本数据类型在java.lang包中都有一个相应的包装类，每个包装类对象封装一个基本数据类型数值。
+
+| 基本数据类型 | 包装类    |
+| ------------ | --------- |
+| boolean      | Boolean   |
+| byte         | Byte      |
+| char         | Character |
+| short        | Short     |
+| int          | Integer   |
+| long         | Long      |
+| float        | Float     |
+| double       | Double    |
+
+*    包装类都是final的，不能被继承。包装类都是不可变类，类似于String类，一旦创建了对象，其内容就不可以修改。
+
+##### 数值包装类
+
+###### 构造方法类似
+
+*    [包装类] (int value):通过指定一个数值构造包装类对象
+*    [包装类] (String str):通过指定一个字符串str构造对象，s是十进制字符串表示的数值
+
+###### 共同的父类
+
+*    这6个数值包装类有一个共同的父类——Number，Number是一个抽象类，除了这6个子类还有：AtomicInteger、AtomicLong、BigDecimal和BigInteger
+*    Number是抽象类，要求它的子类必须实现如下6个方法
+     *    如果数值本身很大，可以会导致精度的丢失。
+          *    byte byteValue()：将当前包装的对象转换为byte类型的数值。
+          *    double doubleValue()：将当前包装的对象转换为double类型的数值。
+          *    float floatValue()：将当前包装的对象转换为float类型的数值。
+          *    int intValue()：将当前包装的对象转换为int类型的数值。
+          *    long longValue()：将当前包装的对象转换为long类型的数值。
+          *    short shortValue()：将当前包装的对象转换为short类型的数值。
+
+###### compareTo()方法
+
+*    每一个数值包装类都有int compareTo(数值包装类对象)方法，可以进行包装对象的比较。方法返回值是int，如果返回值是0，则相等；如果返回值小于0，则此对象小于参数对象；如果返回值大于0，则此对象大于参数对象。
+
+###### 字符串转换为基本数据类型
+
+*    每一个数值包装类都提供一些静态parseXXX()方法将字符串转换为对应的基本数据类型
+     *    static type parseXXX(String s):将字符串s转换为有符号的十进制
+     *    static int parseInt(String s,int radix):将字符串s转换有符号的整数，radix是指定基数，基数用来指定进制。注意这种指定基数的方法在浮点数包装类（Double和Float）中没有的。
+
+###### 基本数据类型转换为字符串
+
+*    每一个数值包装类都提供一些静态toString()方法实现将基本数据类型数值转换为字符串。
+     *    static String toString(int i)：将该整数i转换为有符号的十进制表示的字符串。
+     *    static String toString(int i, int radix)：将该整数i转换为有符号的特定进制表示的字符串， radix是基数可以指定进制。注意这种指定基数的方法在浮点数包装类（Double和Float）中没有的。
+
+###### 数值转换
+
+*    String 转 int
+
+```java
+int [intname] = Integer.parseInt("[Stringvalue]");
+```
+
+*    int 转 String
+
+```java
+String [stringname] = Integer.toString([intvalue]);
+```
+
+*    int 转 x进制，并返回String对象
+
+```java
+String strname = Integer.toString(int [intvalue], int x);
+```
+
+##### Character类
+
+Character类是char类型的包装类。
+
+###### 方法
+
+*    Character(char value)：构造方法，通过char值创建一个新的Character对象。
+*    char charValue()：返回此Character对象的值。
+*    int compareTo(Character anotherCharacter)：方法返回值是int，如果返回值是0，则相等；如果返回值小于0，则此对象小于参数对象；如果返回值大于0，则此对象大于参数对象。
+
+##### Boolean类
+
+###### 构造方法
+
+*    Boolean(boolean value)：通过一个boolean值创建Boolean对象。
+*    Boolean(String s)：通过字符串创建Boolean对象。s不能为null，s如果是忽略大小写"true"则转换为true对象，其他字符串都转换为false对象。
+
+###### compareTo()
+
+-    Boolean类有int compareTo(Boolean包装类对象)方法，可以进行包装对象的比较。方法返回值是int，如果返回值是0，则相等；如果返回值小于0，则此对象小于参数对象；如果返回值大于0，则此对象大于参数对象。
+
+###### 字符串转换为boolean类型
+
+-    Boolean包装类都提供静态parseBoolean()方法实现将字符串转换为对应的boolean类型
+-    static boolean parseBoolean(String s)：将字符串转换为对应的boolean类。s不能为null，s如果是忽略大小写"true"则转换为true，其他字符串都转换为false。
+
+##### 自动装箱/拆箱
+
+*    ava 5之后提供了拆箱(unboxing )功能，拆箱能够将包装类对象自动转换为基本数据类型的数值，而不需要使用intValue()或doubleValue()等方法。
+*    类似Java 5还提供了相反功能，自动装箱( autoboxing )，装箱能够自动地将基本数据类型的数值自动转换为包装类对象，而不需要使用构造方法。
+
+##### Math类
+
+###### 舍入方法
+
+*    static double ceil(double a)：返回大于或等于a最小整数。 
+*    static double floor(double a)：返回小于或等于a最大整数。 
+*    static int round(float a)：四舍五入方法。
+
+###### 最大值和最小值
+
+*    static int min(int a, int b)：取两个int整数中较小的一个整数。
+*    static int min(long a, long b)：取两个long整数中较小的一个整数。
+*    static int min(float a, float b)：取两个float浮点数中较小的一个浮点数。 
+*    static int min(double a, double b)：取两个double浮点数中较小的一个浮点数。
+
+###### 绝对值
+
+*    static int abs(int a)：取int整数a的绝对值。
+*    static long abs(long a)：取long整数a的绝对值。
+*    static float abs(float a)：取float浮点数a的绝对值。 
+*    static double abs(double a)：取double浮点数a的绝对值。
+
+###### 三角函数
+
+*    static double sin(double a)：返回角的三角正弦。
+*    static double cos(double a)：返回角的三角余弦。 
+*    static double tan(double a)：返回角的三角正切。 
+*    static double asin(double a)：返回一个值的反正弦。 
+*    static double acos(double a)：返回一个值的反余弦。 
+*    static double atan(double a)：返回一个值的反正切。
+*    static double toDegrees(double angrad)：将弧度转换为角度。 
+*    static double toRadians(double angdeg)：将角度转换为弧度。
+
+###### 对数运算
+
+*    static double log(double a)：返回a的自然对数。
+
+###### 平方根
+
+*    static double sqrt(double a)：返回a的正平方根。
+
+###### 幂运算
+
+*    static double pow(double a, double b)：返回第一个参数的第二个参数次幂的值。
+
+###### 计算随机值
+
+-    static double random()：返回大于等于 0.0 且小于 1.0随机数。
+
+###### 常量
+
+*    圆周率PI
+*    自然对数的底数E。
+
+##### 大数值
+
+-    BigInteger和BigDecimal，这里两个类都继承自Number抽象类。
+
+###### BigInteger
+
+-    java.math.BigInteger是不可变的任意精度的大整数。
+-    构造方法
+     -    BigInteger(String val)：将十进制字符串val转换为BigInteger对象。
+     -    BigInteger(String val, int radix)：按照指定基数radix将字符串val转换为BigInteger对象。
+-    int compareTo(BigInteger val)：将当前对象与参数val进行比较，方法返回值是int，如果返回值是0，则相等；如果返回值小于0，则此对象小于参数对象；如果返回值大于0，则此对象大于参数对象。
+-    BigInteger add(BigInteger val)：加运算，当前对象数值加参数val。
+-    BigInteger subtract(BigInteger val)：减运算，当前对象数值减参数val。
+-    BigInteger multiply(BigInteger val)：乘运算，当前对象数值乘参数val。
+-    BigInteger divide(BigInteger val)：除运算，当前对象数值除以参数val。
+
+###### BigDecimal
+
+*    构造方法
+     *    BigDecimal(BigInteger val)：将BigInteger对象val转换为BigDecimal对象。
+     *    BigDecimal(double val)：将double转换为BigDecimal对象，参数val是double类型的二进制浮点值准确的十进制表示形式。
+     *    BigDecimal(int val)：将int转换为BigDecimal对象。
+     *    BigDecimal(long val)：将long转换为BigDecimal对象。
+     *    BigDecimal(String val)：将字符串表示数值形式转换为BigDecimal对象。
+*    int compareTo(BigDecimal val)：将当前对象与参数val进行比较，方法返回值是int，如果返回值是0，则相等；如果返回值小于0，则此对象小于参数对象；如果返回值大于0，则此对象大于参数对象。
+*    BigDecimal add(BigDecimal val)：加运算，当前对象数值加参数val。
+*    BigDecimal subtract(BigDecimal val)：减运算，当前对象数值减参数val。
+*    BigDecimal multiply(BigDecimal val)：乘运算，当前对象数值乘参数val。
+*    BigDecimal divide(BigDecimal val)：除运算，当前对象数值除以参数val。
+*    BigDecimal divide(BigDecimal val, int roundingMode)：除运算，当前对象数值除以参数val。 roundingMode要应用的舍入模式。
+*    
+
+#### 日期时间相关类
+
+##### Date类
+
+###### 构造方法
+
+*    Date()：用当前时间创建Date对象，精确到毫秒。
+*    Date(long date)：指定标准基准时间以来的毫秒数创建Date对象。标准基准时间是格林威治时间1970年1月1日00:00:00。
+
+###### 方法
+
+*    boolean after(Date when)：测试此日期是否在when日期之后。
+*    boolean before(Date when)：测试此日期是否在when日期之前。
+*    int compareTo(Date anotherDate)：比较两个日期的顺序。如果参数日期等于此日期，则返回值0；如果此日期在参数日期之前，则返回小于0的值；如果此日期在参数日期之后，则返回大于0的值。
+*    long getTime()：返回自1970年1月1日00:00:00以来此Date对象表示的毫秒数。
+*    void setTime(long time)：用毫秒数time设置日期对象，time是自1970年1月1日00:00:00以来此Date对象表示的毫秒数。
+
+###### 日期格式化和解析
+
+*    日期格式化类是java.text.DateFormat，DateFormat是抽象类，它的常用具体类是java.text.SimpleDateFormat。
+     *    String format(Date date)：将一个Date格式化为日期/时间字符串。
+     *    Date parse(String source)：从给定字符串的开始解析文本，以生成一个日期对象。如果解析失败则抛出ParseException。
+     *    并不是所有的字符串都能够转换为日期，如果转换失败parse方法会抛出异常ParseException。
+
+```java
+public static void main(String[] args) throws ParseException {...}
+```
+
+*    构造方法
+     *    SimpleDateFormat()：用默认的模式和默认语言环境的日期格式符号构造SimpleDateFormat。
+     *    SimpleDateFormat(String pattern)：用给定的模式和默认语言环境的日期格式符号构造SimpleDateFormat。pattern参数是日期和时间格式模式。
+
+| 字母 | 日期或时间元素  |
+| ---- | --------------- |
+| y    | 年              |
+| M    | 年中的月份      |
+| D    | 年中的天数      |
+| d    | 月份中的天数    |
+| H    | 一天中的小时数  |
+| h    | AM/PM中的小时数 |
+| a    | AM/PM标记       |
+| m    | 小时中的分钟数  |
+| s    | 分钟中的秒数    |
+| S    | 毫秒数          |
+| Z    | 时区            |
+
+##### Calendar类
+
+*    有时为了取得更多的日期时间信息，或对日期时间进行操作，可以使用java.util.Calendar类，Calendar是一个抽象类，不能实例化，但是通过静态工厂方法getInstance()获得Calendar实例。
+
+###### 方法
+
+*    static Calendar getInstance()：使用默认时区和语言环境获得一个日历。
+*    void set(int field, int value)：将给定的日历字段设置为给定值。
+*    void set(int year,int month,int date)：设置日历字段YEAR、MONTH和DAY_OF_MONTH的值。
+*    Date getTime()：返回一个表示此Calendar时间值（从1970年1月1日00:00:00至现在的毫秒数）的Date对象。
+*    boolean after(Object when)：判断此Calendar表示的时间是否在指定时间之后，返回判断结果。 
+*    boolean before(Object when)：判断此Calendar表示的时间是否在指定时间之前，返回判断结果。
+*    int compareTo(Calendar anotherCalendar)：比较两个Calendar对象表示的时间值。
+
+##### LocalDate、LocalTime和LocalDateTime
+
+*    都位于java.time包中，LocalDate表示一个不可变的日期对象；LocalTime表示一个不可变的时间对象；LocalDateTime表示一个不可变的日期和时间。
+
+###### 方法
+
+*    now()
+     *    static LocalDate now()：LocalDate静态工厂方法，该方法使用默认时区获得当前日期，返回LocalDate对象。
+     *    static LocalTime now()：LocalTime静态工厂方法，该方法使用默认时区获得当前时间，返回LocalTime对象。
+     *    static LocalDateTime now()：LocalDateTime静态工厂方法，该方法使用默认时区获得当前日期时间，返回LocalDateTime对象。
+*    of()
+     *    static LocalDateTime of(int year, int month, int dayOfMonth, int hour, int minute, int second)：按照指定的年、月、日、小时、分钟和秒获得LocalDateTime实例，将纳秒设置为零。
+     *    static LocalTime of(int hour, int minute, int second)：按照指定的小时、分钟和秒获取一个LocalTime实例。
+     *    static LocalDate of(int year, int month, int dayOfMonth)：按照指定的年、月和日获得一个LocalDate实例，日期中年、月和日必须有效，否则将抛出异常。
+
+| 参数       | 说明                              |
+| ---------- | --------------------------------- |
+| year       | 从-999,999,999到999,999,999的年份 |
+| month      | 一年中的月份，从1至12             |
+| dayOfMonth | 月中的天，从1至31                 |
+| hour       | 从0到23表示的小时                 |
+| minute     | 从0到59表示的分钟                 |
+| second     | 从0到59表示的秒                   |
+
+###### 日期格式化和解析
+
+-    Java 8提供的日期格式化类是java.time.format.DateTimeFormatter，DateTimeFormatter中本身没有提供日期格式化和日期解析方法，这些方法还是由LocalDate、LocalTime和LocalDateTime提供的。
+-    日期格式化
+     -    日期格式化方法是format，这三个类每一个都有String format(DateTimeFormatter formatter)，参数formatter是DateTimeFormatter类型
+
+```java
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+```
+
+-    日期解析
+     -    static LocalDateTime parse(CharSequence text)：使用默认格式，从一个文本字符串获取一个LocalDateTime实例。
+     -    static LocalDateTime parse(CharSequence text, DateTimeFormatter formatter)：使用指定格式化，从文本字符串获取LocalDateTime实例。
+     -    static LocalDate parse(CharSequence text)：使用默认格式，从一个文本字符串获取一个LocalDate实例。
+     -    static LocalDate parse(CharSequence text, DateTimeFormatter formatter)：使用指定格式化，从文本字符串获取LocalDate实例。
+     -    static LocalTime parse(CharSequence text)：使用默认格式，从一个文本字符串获取一个LocalTime实例。
+     -    static LocalTime parse(CharSequence text, DateTimeFormatter formatter)：使用指定的格式化，从文本字符串获取LocalTime实例。
+
+### 内部类
+
+*    Java中还有一种内部类技术，简单说就是在一个类的内部定义一个类。
+
+>    内部类技术虽然使程序结构变得紧凑，但是却在一定程度上破坏了Java面向对象思想。
+
+#### 概述
+
+*    Java语言中允许在一个类（或方法、代码块）的内部定义另一个类，后者称为“内部类”（Inner Classes），也称为“嵌套类”（Nested Classes），封装它的类称为“外部类”。内部类与外部类之间存在逻辑上的隶属关系，内部类一般只用在封装它的外部类或代码块中使用。
+
+#### 作用
+
+*    封装。将不想公开的实现细节封装到一个内部类中，内部类可以声明为私有的，只能在所在外部类中访问。
+02.	提供命名空间。静态内部类和外部类能够提供有别于包的命名空间。
+03.	便于访问外部类成员。内部类能够很方便访问所在外部类的成员，包括私有成员也能访问。
+
+#### 内部类的分类
+
+*    内部类
+     *    有名内部类
+          *    局部内部类
+          *    成员内部类
+               *    实例成员内部类
+               *    静态成员内部类
+     *    匿名内部类
+
+#### 成员内部类
+
+成员内部类类似于外部类的成员变量，在外边类的内部，且方法体和代码块之外定义的内部类。
+
+##### 实例内部类
+
+*    实例内部类与实例变量类似，可以声明为公有级别、私有级别、默认级别或保护级别，即4种访问级别都可以，而外部类只能声明为公有或默认级别。
+
+```java
+public class name{
+    
+    // TODO
+    
+    // 内部类
+    class name2{
+        
+        // TODO
+    }
+}
+```
+
+##### 静态内部类
+
+*    在静态内部类中可以访问外部类的静态成员，但是不能访问非静态成员。
+*    静态内部类与静态变量类似，在声明的时候使用关键字static修饰，静态内部类只能访问外部类静态成员，所以静态内部类使用的场景不多。但可以提供有别于包的命名空间。
+
+```java
+public class name{
+    
+    // static
+    static [public|protected|private] type value;
+    
+    // 内部类
+    static class name2{
+        
+        // TODO
+        // use outer static v
+    }
+}
+```
+
 ## 方法重载（Overload）
 
 这些相同名字的方法之所以能够在一个类中同时存在，是因为它们的方法参数列表，调用时根据参数列表调用相应重载方法。
