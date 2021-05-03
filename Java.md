@@ -2353,3 +2353,119 @@ try {
 
 *    Exception是程序可以恢复的异常，它是程序员所能掌控的。
 
+##### 受检查异常和运行时异常
+
+###### 受检查异常
+
+*    受检查异常是除RuntimeException以外的异常类。它们的共同特点是：编译器会检查这类异常是否进行了处理，即要么捕获（try-catch语句），要么不抛出（通过在方法后声明throws），否则会发生编译错误。它们种类很多，前面遇到过的日期解析异常ParseException。
+
+###### 运行时异常
+
+*    运行时异常是继承RuntimeException类的直接或间接子类。运行时异常往往是程序员所犯错误导致的，健壮的程序不应该发生运行时异常。它们的共同特点是：编译器不检查这类异常是否进行了处理，也就是对于这类异常不捕获也不抛出，程序也可以编译通过。由于没有进行异常处理，一旦运行时异常发生就会导致程序的终止，这是用户不希望看到的。
+
+## 捕获异常
+
+### try-catch语句
+
+#### 结构
+
+##### 单层
+
+```java
+try{
+    // 可能会发生异常的语句
+}catch(Throwable e){
+    // 处理异常e
+}catch(Throwable e){
+    // 处理异常e
+}catch(Throwable e){
+    // 处理异常e
+}
+```
+
+##### 嵌套
+
+```java
+try{
+    
+    // TODO
+    
+    try{
+        
+        // TODO
+    }catch(Throwable e){
+    	// 处理异常e
+	}catch(Throwable e){
+    	// 处理异常e
+	}
+}catch(Throwable e){
+    // 处理异常e
+}catch(Throwable e){
+    // 处理异常e
+}
+```
+
+##### 多重捕获
+
+```java
+try{
+    
+    // 可能会发生异常的语句
+}catch(Exception1|Exception2){
+    
+    //TODO
+}
+```
+
+#### try代码块
+
+*    try代码块中应该包含执行过程中可能会发生异常的语句。一条语句是否有可能发生异常，这要看语句中调用的方法。
+*    静态方法、实例方法和构造方法都可以声明抛出异常，凡是抛出异常的方法都可以通过try-catch进行捕获，当然运行时异常可以不捕获。
+
+#### catch代码块
+
+*    每个try代码块可以伴随一个或多个catch代码块，用于处理try代码块中所可能发生的多种异常。
+*    在多个catch代码情况下，当一个catch代码块捕获到一个异常时，其他的catch代码块就不再进行匹配。
+
+>    在捕获到异常之后，通过printStackTrace()语句打印异常堆栈跟踪信息，往往只是用于调试，给程序员提示信息。堆栈跟踪信息对最终用户是没有意义的，
+
+## 释放资源
+
+*    有时在try-catch语句中会占用一些非Java资源，需要程序员释放。为了确保这些资源能够被释放可以使用finally代码块或Java 7之后提供自动资源管理（Automatic Resource Management）技术。
+
+### finally代码块
+
+```java
+try{
+    // 可能会生成异常语句
+}catch(Throwable e1){
+    // 处理异常e1
+}catch(Throwable e2){
+    // 处理异常e2
+}catch(Throwable eN){
+    // 处理异常eN
+}finally{
+    // 释放资源
+}
+```
+
+*    无论try正常结束还是catch异常结束都会执行finally代码块
+
+### 自动资源管理
+
+-    使用finally代码块释放资源会导致程序代码大量增加，一个finally代码块往往比正常执行的程序还要多。在Java 7之后提供自动资源管理（Automatic Resource Management）技术，可以替代finally代码块，优化代码结构，提高程序可读性。
+
+```java
+try(声明或初始化资源语句){
+    // 可能会生成异常语句
+}catch(Throwable e1){
+    // 处理异常e1
+}catch(Throwable e2){
+    // 处理异常e2
+}catch(Throwable eN){
+    // 处理异常eN
+}
+```
+
+*    在try语句后面添加一对小括号“()”，其中是声明或初始化资源语句，可以有多条语句语句之间用分号“;”分隔。
+
