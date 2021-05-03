@@ -1843,7 +1843,59 @@ public class name{
     static class name2{
         
         // TODO
-        // use outer static v
+        // use outer static value
+    }
+}
+```
+
+##### 局部内部类
+
+*    局部内部类就是在方法体或代码块中定义的内部类，局部内部类的作用域仅限于方法体或代码块中。
+*    局部内部类访问级别只能是默认的，不能是公有的、私有的和保护的访问级别，即不能使用public、 private和protected修饰。局部内部类也不能是静态，即不能使用static修饰。局部内部类可以访问外部类所有成员。
+
+```java
+public class Outer {
+
+    // TODO
+
+    // 在方法体或代码块中
+    public type function([parameter] value) {
+
+        // TODO
+
+        // 在方法体或代码块中定义的内部类
+        // 局部内部类访问级别只能是默认的
+        class Inner {
+
+            void function_2()) {
+
+                // TODO
+            }
+        }
+
+        new Inner().function_2();
+    }
+}
+```
+
+##### 匿名内部类
+
+-    匿名内部类是没有名字的内部类，本质上是没有名的局部内部类，具有局部内部类所有特征。
+-    匿名内部类可以使你的代码更加简洁，你可以在定义一个类的同时对其进行实例化。它与局部类很相似，不同的是它没有类名，如果某个局部类你只需要用一次，那么你就可以使用匿名内部类
+-    请参考Lambda使用方法
+
+```java
+interface name{
+    
+    public function();
+}
+
+name name_2=new name(){
+    
+    @Override
+    public function(){
+        
+        // TODO
     }
 }
 ```
@@ -2172,3 +2224,132 @@ if(obj instanceof type){
 引用类型可以进行转换，但并不是所有的引用类型都能互相转换，只有属于同一棵继承层次树中的引用类型才可以转换。
 
 引用类型转换也是通过小括号运算符实现，类型转换有两个方向：将父类引用类型变量转换为子类类型，这种转换称为向下转型（downcast）；将子类引用类型变量转换为父类类型，这种转换称为向上转型（upcast）。向下转型需要强制转换，而向上转型是自动的。
+
+# Lambda表达式
+
+*    Lambda表达式是一个匿名函数（方法）代码块，可以作为表达式、方法参数和方法返回值。
+
+## 特点
+
+*    **可选类型声明：**不需要声明参数类型，编译器可以统一识别参数值。
+*    **可选的参数圆括号：**一个参数无需定义圆括号，但多个参数需要定义圆括号。
+*    **可选的大括号：**如果主体包含了一个语句，就不需要使用大括号。
+*    **可选的返回关键字：**如果主体只有一个表达式返回值则编译器会自动返回值，大括号需要指定明表达式返回了一个数值。
+
+## 函数式接口
+
+*    Lambda表达式实现的接口不是普通的接口，称为是函数式接口，这种接口只能有一个方法。如果接口中声明多个抽象方法，那么Lambda表达式会发生编译错误
+
+>    The target type of this expression must be a functional interface
+
+```java
+//可计算接口
+@FunctionalInterface
+public interface interfacename {
+	
+    // 只有一个函数
+    public type function(){
+        
+        // TODO
+    }
+}
+```
+
+```java
+public static function(interfacename inter,[parameter]){
+    
+    // TODO
+    // inter.function([parameter]);
+}
+```
+
+## 语法
+
+```java
+(参数列表)->{
+    
+    // Lambda表达体
+};
+```
+
+```java
+(parameters) -> expression
+```
+
+## Lambda表达式简化形式
+
+### 省略参数类型
+
+*    Lambda表达式可以根据上下文环境推断出参数类型。
+
+### 省略return和大括号
+
+*    如果Lambda表达式体中只有一条语句，那么可以省略return和大括号
+
+## 作为参数使用Lambda表达式
+
+*    Lambda表达式一种常见的用途是作为参数传递给方法。这需要声明参数的类型声明为函数式接口类型。
+
+## 访问变量
+
+-    Lambda表达式可以访问所在外层作用域内定义的变量，包括：成员变量和局部变量。
+
+### 访问成员变量
+
+*    静态方法中不能访问实例成员变量
+*    实例方法中能够访问静态成员变量和实例成员变量
+     *    当访问实例成员变量或实例方法时可以使用this，如果不与局部变量发生冲突情况下可以省略this。
+
+### 捕获局部变量
+
+*    Lambda表达式中捕获变量时，会将变量当成final的，在Lambda表达式中不能修改那些捕获的变量。
+*    不管这个变量是否显式地使用final修饰，它都不能在Lambda表达式中修改变量
+
+## 方法引用
+
+*    Java 8之后增加了双冒号“::”运算符，该运算符用于“方法引用”，注意不是调用方法。“方法引用”虽然没有直接使用Lambda表达式，但也与Lambda表达式有关，与函数式接口有关。
+
+### 语法形式
+
+```java
+类型名::静态方法        // 静态方法的方法引用
+实例名::实例方法        // 实例方法的方法引用
+```
+
+# 异常处理
+
+## Throwable类
+
+*    所有的异常类都直接或间接地继承于java.lang.Throwable类
+
+### 方法
+
+*    String getMessage()：获得发生异常的详细消息。 
+*    void printStackTrace()：打印异常堆栈跟踪信息。 
+*    String toString()：获得异常对象的描述。
+
+```java
+try {
+    
+    // TODO
+} catch (Throwable throwable) {
+
+    System.out.println("getMessage(): " + throwable.getMessage());
+    System.out.println("toString(): " + throwable.toString());
+    System.out.println("printStackTrace()输出信息如下: ");
+    throwable.printStackTrace();
+}
+```
+
+### Error和Exception
+
+*    Throwable有两个直接子类：Error和Exception。
+
+#### Error
+
+*    Error是程序无法恢复的严重错误，程序员根本无能为力，只能让程序终止。
+
+#### Exception
+
+*    Exception是程序可以恢复的异常，它是程序员所能掌控的。
+
