@@ -5319,6 +5319,67 @@ namespace std{
 | mismatch()                | 返回两个序列的各组对应元素中，第一对不相等元素 |
 | lexicographical_compare() | 判断某一序列在“字典顺序”下是否小于另一序列     |
 
+#### for_each()
+
+```cpp
+UnaryProc for_each(InputIterator beg, InputIterator end,UnaryProc op);
+```
+
+*    对区间[beg,end)中的每一个元素调用:op(elem)
+*    返回op(已在算法内部被变动过)的一个副本
+*    op可以变动元素
+*    op的任何返回值都会被忽略
+*    for_each()算法的实作
+*    复杂度:线性。调用op()共numberOfElements次
+
+#### count()
+
+```cpp
+difference_type count(InputIterator beg, InputIterator end, const T& value);
+```
+
+*    计算区间[beg, end)中元素值等于value的元素个数。
+
+*    返回值型别difference_type,是表现迭代器间距的型别
+
+     typename iterator_traits\<InputIterator>::difference_type
+
+*    注意op在函数调用过程中不应改变自身状态。
+*    op不应该改动传进来的参数。
+*    关联式容器(sets, multisets, maps和multimaps)提供了一个等效的成员函数count(),用来计算等于某个value或某个key的元素个数
+*    复杂度:线性。执行比较动作(或调用op())共numberOfElements次。
+
+#### count_if()
+
+```cpp
+difference_type count_if(InputIterator beg, InputIterator end, UnaryPredicate op);
+```
+
+*    计算区间[beg, end)中令op一元判断式结果为true的元素个数:op(elem)
+
+*    返回值型别difference_type,是表现迭代器间距的型别
+
+     typename iterator_traits\<InputIterator>::difference_type
+
+*    注意op在函数调用过程中不应改变自身状态。
+*    op不应该改动传进来的参数。
+
+#### min_element()/max_element()
+
+```cpp
+InputIterator min_element(InputIterator beg, InputIterator end);
+InputIterator min_element(InputIterator beg, InputIterator end, CompFunc op);
+InputIterator max_element(InputIterator beg, InputIterator end);
+InputIterator max_element(InputIterator beg, InputIterator end, CompFunc op);
+```
+
+*    所有这些算法都返问区间[beg, end)中最小或最大元素的位置。
+*    上述无op参数的版本，以operatore < 进行元素的比较。
+*    op用来比较两个元素:op(elem1,elem2),如果第一个元素小于第二个元素，应当返回true。
+*    如果存在多个最小值或最大值，上述算法返回找到的第一个最小或最大值。
+*    op不应该改动传入的参数。
+*    复杂度:线性。执行比较操作(或调用op())共numberOfElements - 1次。
+
 #### find()
 
 ```
@@ -5580,6 +5641,15 @@ std::sort(sutVector.begin(), stuVector.end(), Less());
 | set_difference()                                 | 求位于第一区间但不位于第二区间的所有元素，形成一个已序区间 |
 | set_symmetirc_difference()                       | 找出只出现于两区间之一的所有元素，形成一个已序区间         |
 | inplace_merge()                                  | 将两个连续的已序区间合并                                   |
+
+### 数值算法
+
+| 名字                  | 功能                             |
+| --------------------- | -------------------------------- |
+| accumulate()          | 组合所有元素（求总和、求乘积）   |
+| inner_product()       | 组合两区间内的所有元素           |
+| adjacent_difference() | 将每个元素和前一元素组合         |
+| partial_sum()         | 将每个元素和其先前的所有元素组合 |
 
 ### 使用者自定义泛型函数
 

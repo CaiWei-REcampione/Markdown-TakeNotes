@@ -1084,6 +1084,16 @@ for(Object item:list){
 ```
 
 ```java
+for(Object item:map.entrySet()){
+
+    Map.Entry entry=(Map.Entry)item;
+    int key= (int) entry.getKey();
+    String value=(String)entry.getValue();
+    System.out.println(key+":"+value);
+}
+```
+
+```java
 Iterator pos = list.iterator();
 while (pos.hasNext()) {
 
@@ -1117,6 +1127,23 @@ while (pos.hasNext()) {
 *    keySet()：返回Map中的所有键集合，返回值是Set类型。
 *    values()：返回Map中的所有值集合，返回值是Collection类型。
 *    size()：返回Map集合中键值对数。
+
+#### 遍历
+
+*    Map集合遍历与List和Set集合不同，Map有两个集合，因此遍历时可以只遍历值的集合，也可以只遍历键的集合，也可以同时遍历。这些遍历过程都可以使用for-each循环和迭代器进行遍历。
+
+```java
+Iterator pos=map.entrySet().iterator();
+while(pos.hasNext()){
+    
+    Map.Entry entry=(Map.Entry)pos.next();
+    
+    type key= (type) entry.getKey();
+    type value=(type)entry.getValue();
+    
+    // TODO:System.out.println(key+":"+value);
+}
+```
 
 # 运算符
 
