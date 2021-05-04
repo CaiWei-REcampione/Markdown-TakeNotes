@@ -978,6 +978,86 @@ StringBuffer和StringBuilder具有完全相同的API，即构造方法和普通�
 
 *    StringBuilder toString()：StringBuilder转String
 
+### List
+
+*    List接口继承自Collection接口，List接口中的很多方法都继承自Collection接口的。
+*    List接口的实现类有：ArrayList 和 LinkedList。ArrayList是基于动态数组数据结构的实现，LinkedList是基于链表数据结构的实现。ArrayList访问元素速度优于LinkedList，LinkedList占用的内存空间比较大，但LinkedList在批量插入或删除数据时优于ArrayList。
+
+```java
+List list=new ArrayList();			// ArrayList
+List list=new LinkedList();			// LinkedList
+```
+
+#### 操作元素
+
+*    get(int index)：返回List集合中指定位置的元素。
+*    set(int index, Object element)：用指定元素替换List集合中指定位置的元素。
+*    add(Object element)：在List集合的尾部添加指定的元素。该方法是从Collection集合继承过来的。
+*    add(int index, Object element)：在List集合的指定位置插入指定元素。
+*    remove(int index)：移除List集合中指定位置的元素。
+*    remove(Object element)：如果List集合中存在指定元素，则从List集合中移除第一次出现的指定元素。该方法是从Collection集合继承过来的。
+*    clear()：从List集合中移除所有元素。该方法是从Collection集合继承过来的。
+
+#### 判断元素
+
+*    isEmpty()：判断List集合中是否有元素，没有返回true，有返回false。该方法是从Collection集合继承过来的。
+*    contains(Object element)：判断List集合中是否包含指定元素，包含返回true，不包含返回false。该方法是从Collection集合继承过来的。
+
+#### 查询元素
+
+*    indexOf(Object o)：从前往后查找List集合元素，返回第一次出现指定元素的索引，如果此列表不包含该元素，则返回-1。
+*    lastIndexOf(Object o)：从后往前查找List集合元素，返回第一次出现指定元素的索引，如果此列表不包含该元素，则返回-1。
+
+#### 迭代器
+
+*    iterator()：返回迭代器（Iterator）对象，迭代器对象用于遍历集合。该方法是从Collection集合继承过来的。
+
+#### 元素数
+
+*    size()：返回List集合中的元素数，返回值是int类型。该方法是从Collection集合继承过来的。
+
+#### 子集合
+
+*    subList(int fromIndex, int toIndex)：返回List集合中指定的 fromIndex（包括 ）和toIndex（不包括）之间的元素集合，返回值为List集合。
+
+#### 遍历集合
+
+##### 方法
+
+*    使用for循环遍历：List集合可以使用for循环进行遍历，for循环中有循环变量，通过循环变量可以访问List集合中的元素。
+*    使用for-each循环遍历：for-each循环是针对遍历各种类型集合而推出的，笔者推荐使用这种遍历方法。
+*    使用迭代器遍历：Java提供了多种迭代器，List集合可以使用Iterator和ListIterator迭代器。
+
+### Set集合
+
+>    List集合中的元素是有序的、可重复的，而Set集合中的元素是无序的、不能重复的。List集合强调的是有序，Set集合强调的是不重复。当不考虑顺序，且没有重复元素时，Set集合和List集合可以互相替换的。
+
+*    Set接口也继承自Collection接口，Set接口中大部分都是继承自Collection接口。
+*    Set接口直接实现类主要是HashSet，HashSet是基于散列表数据结构的实现。
+
+```java
+Set set=new HashSet();
+```
+
+#### 操作元素
+
+*    add(Object element)：在Set集合的尾部添加指定的元素。该方法是从Collection集合继承过来的。
+*    remove(Object element)：如果Set集合中存在指定元素，则从Set集合中移除该元素。该方法是从Collection集合继承过来的。
+*    clear()：从Set集合中移除所有元素。该方法是从Collection集合继承过来的。
+
+#### 判断元素
+
+*    isEmpty()：判断Set集合中是否有元素，没有返回true，有返回false。该方法是从Collection集合继承过来的。
+*    contains(Object element)：判断Set集合中是否包含指定元素，包含返回true，不包含返回false。该方法是从Collection集合继承过来的。
+
+#### 迭代器
+
+*    iterator()：返回迭代器（Iterator）对象，迭代器对象用于遍历集合。该方法是从Collection集合继承过来的。
+
+#### 元素数
+
+*    size()：返回Set集合中的元素数，返回值是int类型。该方法是从Collection集合继承过来的。
+
 # 运算符
 
 ## 算术运算符
@@ -2468,4 +2548,44 @@ try(声明或初始化资源语句){
 ```
 
 *    在try语句后面添加一对小括号“()”，其中是声明或初始化资源语句，可以有多条语句语句之间用分号“;”分隔。
+
+## throws与声明方法抛出异常
+
+*    在一个方法中如果能够处理异常，则需要捕获并处理。但是本方法没有能力处理该异常，捕获它没有任何意义，则需要在方法后面声明抛出该异常，通知上层调用者该方法有可以发生异常。
+
+```java
+class className {
+    
+    [public | protected | private ] [static] [final | abstract] [native] [synchronized] type methodName([paramList]) [throws exceptionList] {
+        
+        // TODO
+    }
+}
+```
+
+*    其中参数列表之后的[throws exceptionList]语句是声明抛出异常。方法中可能抛出的异常（除了Error和RuntimeException及其子类外）都必须通过throws语句列出，多个异常之间采用逗号（,）分隔。
+
+### 自定义异常类
+
+```java
+public class MyException extends Exception{
+    public MyException{
+        
+        // TODO
+    }
+    
+    public MyException(String message){
+
+        super(message);
+    }
+}
+```
+
+*    自定义异常类一般需要提供两个构造方法，一个是无参数的默认构造方法，异常描述信息是空的；另一个是字符串参数的构造方法，message是异常描述信息，getMessage()方法可以获得这些信息。
+
+### throw与显式抛出异常
+
+```java
+throw Throwable或其子类的实例
+```
 
