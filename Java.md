@@ -978,7 +978,7 @@ StringBuffer和StringBuilder具有完全相同的API，即构造方法和普通�
 
 *    StringBuilder toString()：StringBuilder转String
 
-### List
+### List集合
 
 *    List接口继承自Collection接口，List接口中的很多方法都继承自Collection接口的。
 *    List接口的实现类有：ArrayList 和 LinkedList。ArrayList是基于动态数组数据结构的实现，LinkedList是基于链表数据结构的实现。ArrayList访问元素速度优于LinkedList，LinkedList占用的内存空间比较大，但LinkedList在批量插入或删除数据时优于ArrayList。
@@ -1028,6 +1028,21 @@ List list=new LinkedList();			// LinkedList
 *    使用for-each循环遍历：for-each循环是针对遍历各种类型集合而推出的，笔者推荐使用这种遍历方法。
 *    使用迭代器遍历：Java提供了多种迭代器，List集合可以使用Iterator和ListIterator迭代器。
 
+```java
+for(Object item:list){
+    type name=(type)item;
+}
+```
+
+```java
+Iterator pos = list.iterator();
+while (pos.hasNext()) {
+
+    type item = (type) pos.next();
+    System.out.println(item);
+}
+```
+
 ### Set集合
 
 >    List集合中的元素是有序的、可重复的，而Set集合中的元素是无序的、不能重复的。List集合强调的是有序，Set集合强调的是不重复。当不考虑顺序，且没有重复元素时，Set集合和List集合可以互相替换的。
@@ -1057,6 +1072,51 @@ Set set=new HashSet();
 #### 元素数
 
 *    size()：返回Set集合中的元素数，返回值是int类型。该方法是从Collection集合继承过来的。
+
+#### 遍历
+
+*    Set集合中的元素由于没有序号，所以不能使用for循环进行遍历，但可以使用for-each循环和迭代器进行遍历。
+
+```java
+for(Object item:list){
+    type name=(type)item;
+}
+```
+
+```java
+Iterator pos = list.iterator();
+while (pos.hasNext()) {
+
+    type item = (type) pos.next();
+    System.out.println(item);
+}
+```
+
+### Map集合
+
+*    Map（映射）集合表示一种非常复杂的集合，允许按照某个键来访问元素。
+*    Map集合是由两个集合构成的，一个是键（key）集合，一个是值（value）集合。
+*    键集合是Set类型，因此不能有重复的元素。而值集合是Collection类型，可以有重复的元素。Map集合中的键和值是成对出现的。
+*    Map接口直接实现类主要是HashMap，HashMap是基于散列表数据结构的实现。
+
+#### 操作元素
+
+*    get(Object key)：返回指定键所对应的值；如果Map集合中不包含该键值对，则返回null。
+*    put(Object key, Object value)：指定键值对添加到集合中。
+*    remove(Object key)：移除键值对。
+*    clear()：移除Map集合中所有键值对。
+
+#### 判断元素
+
+*    isEmpty()：判断Map集合中是否有键值对，没有返回true，有返回false。
+*    containsKey(Object key)：判断键集合中是否包含指定元素，包含返回true，不包含返回false。
+*    containsValue(Object value)：判断值集合中是否包含指定元素，包含返回true，不包含返回false。
+
+#### 查看集合
+
+*    keySet()：返回Map中的所有键集合，返回值是Set类型。
+*    values()：返回Map中的所有值集合，返回值是Collection类型。
+*    size()：返回Map集合中键值对数。
 
 # 运算符
 
