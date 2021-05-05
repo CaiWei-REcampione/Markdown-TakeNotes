@@ -5396,6 +5396,65 @@ InputIterator find_if(InputIterator beg, InputIterator end, UnaryPredicate op)
 *    关联式容器(sets, multisets, maps, multimaps )提供了一个等效的成员函数find(),拥有对数复杂度,而非线性复杂度。
 *    复杂度;线性。最多比较(或调用op())共nunberOfElements次。
 
+#### find_end()
+
+```cpp
+ForwardIterator find_end(ForwardIterator beg, ForwardIterator end, ForwardIterator searchBeg, ForwardIterator searchEnd)
+ForwardIterator find_end(ForwardIterator beg, ForwardIterator end, ForwardIterator searchBeg, ForwardIterator searchEnd, BinaryPredicate op)
+```
+
+*    两种形式都返回区间[beg, end)之中“和区闻[searchBeg, searchEnd)完全吻合”的最后一个子区间内的第一个元素位置。
+*    第一形式中,子区间的元素必须完全等于[searchBeg, searchEnd)的元素。
+*    第二形式中,子区间的元素和[searchBeg, searchEnd)的对应元素必须造成以下二元判断式的结果为true:op(elem, searchElem)
+*    如果没有找到符合条件的子区间,两种形式都返回end。
+*    注意， op在函数调用过程中不应改变自身状态。
+*    op不应改动传入的参数。
+*    这些算法并不是早期STL的一部分。很不幸它们被命名为find_end()而不是search_end(),如果是后者,比较具有一致性,因为用来搜寻第一个子区间的算法名为search()。
+*    复杂度:线性。最多比较(或调用op())共numberOfElements "numberOfSearchElemens次。
+
+#### find_first_of()
+
+```cpp
+ForwardIterator find_first_of(ForwardIterator1 beg, ForwardIterator1 end, ForwardIterator2 searchBeg, ForwardIterator2 searchEnd)
+ForwaraIterator find_first_of(ForwardIteratorl beg, ForwardIteratorl end, ForwardIterator2 searchBeg, ForwardIterator2 searchEnd, BinaryPredicate op)
+```
+
+*    第一形式返回第一个“既在区间[beg, end)中出现,也在区间(searchBeg,searchEnd)中出现”的元素的位置。
+*    第二形式返回区间[beg, end)中第一个这样的元素:它和区间[searchBeg,searchEnd)内每一个元素进行以下动作的结果都是true:op(elem, searchElem)
+*    如果没有找到吻合元素,两种形式都返回end。
+*    注意, op在函数调用过程中不应改变自身状态。
+*    op不应改动传入的参数。
+*    复杂度:线性。最多比较(或调用op())共numberOfElements *nunberOfSearchElements次.
+
+#### search_n()
+
+```cpp
+Input Iterator search_n(InputIterator beg, InputIterator end, Size count, const T& value)
+Input Iterator search_n(InputIterator beg, InputIterator end, Size count, const T& value, BinaryPredicate op)
+```
+
+*    第一形式返回区间[beg, end)中第一组“连续count个元素值全等于value"的元素位置。
+*    第二形式返回区间[beg, end)中第一组“连续count个元素造成以下一元判断式结果为true”的元素位置:op(elem, value)
+*    如果没有找到匹配元素,两种形式都返回end.
+*    注意, op在函数调用过程中不应改变自身状态。
+*    op不应该变动被传进去的参数。
+*    最多比较(或调用op())共numberOfElements *count次。
+
+#### search()
+
+```cpp
+ForwardIterator1 search(ForwardIteratorl beg, ForwardIteratorl end, ForwardIterator2 searchBeg, ForwardIterator2 searchEnd)
+Forwardlteratorl search(Forwarditeratorl beg. Forwardrteratorl end Forwardrterator2 searchBeg. orwardIterator2 searchEnd.BinaryPredicate op)
+```
+
+*    两种形式都返回区间[beg, end)内“和区间[searchBeg,searchEnd)完全吻合"的第一个子区间内的第一个元素位置。
+*    第一形式中,子区间的元素必须完全等于[searchBeg, searchEnd)的元素。
+*    第二形式中,子区间的元素和[searchBeg, searchEnd)的对应元素必须造成以下二元判断式的结果为true:op(elem, searchElem)
+*    如果没有找到符合条件的子区间,两种形式都返回end
+*    注意, op在函数调用过程中不应改变自身状态。
+*    op不应变动传入的参数。
+*    复杂度:线性。最多比较(或调用op())共numberOfElements *numberOfSearchElements次。
+
 #### string搜寻函数和STL搜寻算法区别
 
 | 搜寻                       | String函数      | STL算法                |
