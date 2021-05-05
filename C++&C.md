@@ -5380,14 +5380,21 @@ InputIterator max_element(InputIterator beg, InputIterator end, CompFunc op);
 *    op不应该改动传入的参数。
 *    复杂度:线性。执行比较操作(或调用op())共numberOfElements - 1次。
 
-#### find()
+#### find()/find_if()
 
-```
-#include <algorithm>
-iterator pos=find(coll.begin(),coll.end(),target);
+```cpp
+InputIterator find(InputIterator beg, InputIterator end, const T& value)
+InputIterator find_if(InputIterator beg, InputIterator end, UnaryPredicate op)
 ```
 
-返回“= value”的迭代器
+*    第一形式返回区间[beg, end)中第一个“元素值等于value"的元素位置。
+*    第二形式返回区间[beg, end)中令以下一元判断式结果为tue的第一个元素:op(elem)
+*    如果没有找到匹配元素,两种形式都返回end.
+*    注意op在函数调用过程中不应改变自身状态。
+*    op不应该改动传递来的参数。
+*    如果是已序区间,应使用lower_bound() , upper_bound() , equal_range()或binary_search()算法以获取更高性能
+*    关联式容器(sets, multisets, maps, multimaps )提供了一个等效的成员函数find(),拥有对数复杂度,而非线性复杂度。
+*    复杂度;线性。最多比较(或调用op())共nunberOfElements次。
 
 #### string搜寻函数和STL搜寻算法区别
 
