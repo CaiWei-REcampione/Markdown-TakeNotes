@@ -1084,16 +1084,6 @@ for(Object item:list){
 ```
 
 ```java
-for(Object item:map.entrySet()){
-
-    Map.Entry entry=(Map.Entry)item;
-    int key= (int) entry.getKey();
-    String value=(String)entry.getValue();
-    System.out.println(key+":"+value);
-}
-```
-
-```java
 Iterator pos = list.iterator();
 while (pos.hasNext()) {
 
@@ -1142,6 +1132,16 @@ while(pos.hasNext()){
     type value=(type)entry.getValue();
     
     // TODO:System.out.println(key+":"+value);
+}
+```
+
+```java
+for(Object item:map.entrySet()){
+
+    Map.Entry entry=(Map.Entry)item;
+    int key= (int) entry.getKey();
+    String value=(String)entry.getValue();
+    System.out.println(key+":"+value);
 }
 ```
 
@@ -2674,5 +2674,85 @@ public class MyException extends Exception{
 
 ```java
 throw Throwable或其子类的实例
+```
+
+# 泛型
+
+-    使用泛型可以最大限度地重用代码、保护类型的安全以及提高性能。泛型特性对Java影响最大是集合框架的使用。
+-    强制类型转换是有风险的，如果不进行判断就臆断进行类型转换会发生ClassCastException异常。
+-    在集合中如果没有使用泛型，Eclipse等IDE工具都会警告。
+
+## 使用泛型
+
+*    泛型对于Java影响最大就是集合了，Java 5之后所有的集合类型都可以有泛型类型，可以限定存放到集合中的类型。
+
+### LIst
+
+#### 声明
+
+```java
+List<type> container = new ArrayList<type>();
+```
+
+#### 迭代器
+
+```java
+Iterator<type> iter = container.iterator();
+while(iter.hasNext()){
+    // TODO
+}
+```
+
+#### for-each
+
+```java
+for(type item:container){
+    // TODO
+}
+```
+
+### Map
+
+#### 声明
+
+```java
+Map<type1,type2> container = new HashMap<type1,type2>();
+```
+
+#### 迭代器
+
+```java
+Iterator<Map.Entry<type1,type2>> iter = container.entrySet().iterator();
+while(iter.hasNext()){
+    
+    Map.Entry<type1,type2> entry = iter.next();
+    // TODO
+}
+```
+
+#### for-each
+
+```java
+for (Map.Entry<type1, type2> entry : container.entrySet()) {
+    // TODO
+}
+```
+
+## 自定义泛型类
+
+```java
+public class name<T>{
+    
+    // TODO
+}
+```
+
+## 泛型方法
+
+```java
+[public|protected|private] [static] <T> [void|type] functionname([parameter]){
+    
+    // TODO
+}
 ```
 

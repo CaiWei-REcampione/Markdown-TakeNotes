@@ -5455,6 +5455,34 @@ Forwardlteratorl search(Forwarditeratorl beg. Forwardrteratorl end Forwardrterat
 *    op不应变动传入的参数。
 *    复杂度:线性。最多比较(或调用op())共numberOfElements *numberOfSearchElements次。
 
+#### adjacent_find()
+
+```cpp
+InputIterator adjacent_flnd(InputIterator beg, InputIterator end)
+InputIterator adjacent_find(InputIterator beg, InputIterator end, Binarypredicate op)
+```
+
+*    第一形式返回区间[beg, end)中第一对“连续两个相等元素”之中的第一元素位置。
+*    第二形式返回区间[beg, end)中第一对“连续两个元素均使以下二元判断式的结果为true"的其中第一元素位置:op(elem, nextElem)
+*    如果没有找到吻合元素,两者都返回end。
+*    注意, op在函数调用过程中不应改变自身状态。
+*    op不应改动传入的参数。
+*    复杂度:线性。最多比较(或调用op())共numberOfElements 次。
+
+#### equal()
+
+```cpp
+bool equal(InputIterator1 beg, InputIterator1 end, InputIterator2 cmpBeg)
+bool equal(InputIterator1 beg, InputIteratorl end, InputIterator2 cmpBeg, BinaryPredicate op)
+```
+
+*    第一形式判断区间[beg, end)内的元素是否都和“以cmpBeg开头的区间"内的元素相等。
+*    第二形式判断区间[beg, end)内的元素和“以cmpBeg开头的区间”内的对应元素”是否都能够使以下二元判断式得到true:op(elem, cmpElem)
+*    注意, op在函数调用过程中不应改变自身状态。
+*    op不应改动传入的参数
+*    调用者必须确保“以cmpBeg开头的区间”内含足够元素。
+*    复杂度:线性。最多比较(或调用op())共numberOfElements次。
+
 #### string搜寻函数和STL搜寻算法区别
 
 | 搜寻                       | String函数      | STL算法                |
