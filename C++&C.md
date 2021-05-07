@@ -5483,6 +5483,39 @@ bool equal(InputIterator1 beg, InputIteratorl end, InputIterator2 cmpBeg, Binary
 *    调用者必须确保“以cmpBeg开头的区间”内含足够元素。
 *    复杂度:线性。最多比较(或调用op())共numberOfElements次。
 
+#### mismatch()
+
+```cpp
+pair<InputIterator1, InputIterator2> mismatch(InputIterator1 beg, Inputiterator1 end, InputIterator2 cmpBeg)
+Pair<InputIteratorl, InputIterator2> mlsmatch(InputIterator1 beg, Inputiterator1 end, InputIterator2 cmpBeg, BinaryPredicate op)
+```
+
+*    第一形式返回区间[beg,end)和“以cmpBeg开头的区间”之中第一组两两相异的对应元素。
+*    第二形式返回区间[beg, end)和“以cnpBeg开头的区间”之中第一组“使以下二元判断式获得false"的对应元素:op(eiem, cmpElem)
+*    如果没有找到相异点,就返回一个pair,以end和第二序列的对应元素组成。"这并不意味两个序列相等,因为第二序列有可能包含比较多的元素。
+*    注意, op在函数调用过程中不应改变自身状态。
+*    op不应改动传入的参数。
+*    调用者必须确保“以cmpBeg开头的区间”内含足够元素。如果想知道两个序列是否相等,应当使用equal()
+*    复杂度:线性。最多比较(或调用op())共numberOfElemens次。
+
+#### lexicographical_compare()
+
+```cpp
+bool lexicographical_compare(InputIterator1 beg1, InputIterator1 end1, InputIterator2 beg2, InputIterator2 end2)
+boo1 lexicographical_compaze(Inputrteratorl beg1, InputIteratorl endl, InputIterator2 beg2, InputIterator2 end2, CompFunc op)
+```
+
+*    两种形式都用来判断区间[beg1, end1)的元素是否小于区间[beg2, end2)的元素。所谓“小于”是指本着“字典(lexicographical)次序”的意义。
+*    第一形式以operator<来比较元素。
+*    第二形式以二元判断式op(elem1, elem2)比较元素。如果elem1小于elem2,则判断式应当返回true.
+*    “字典次序”意味两个序列中的元素一一比较,直到以下情况发生:
+     *    如果两元素不相等,则这两个元素的比较结果就是整个两序列的比较结果。
+     *    如果两序列中的元素数量不同,则元素较少的那个序列小于另一序列。所以.如果第一序列的元素数量较少,比较结果是true.
+     *    如果两序列都没有更多的元素可作比较,则这两个序列相等,整个比较结果是false
+*    注意, op在函数调用过程中不应改变自身状态。
+*    op不应改动传入的参数。
+     *    复杂度:线性。最多比较(或调用op())共2*min(numberOfElements1, numberOfElements2)次。
+
 #### string搜寻函数和STL搜寻算法区别
 
 | 搜寻                       | String函数      | STL算法                |
@@ -5517,6 +5550,41 @@ bool equal(InputIterator1 beg, InputIteratorl end, InputIterator2 cmpBeg, Binary
 *    transform()的速度稍许慢些,因为它是将操作返回值赋值给元素,而不是直接变动元素。不过其灵活性比较高,因为它可以把某个序列复制到目标序列中,同时变动元素内容。transform()的第二形式可以将两个源区间的元素的组合结果放到目标区间。
 *    严格地说, merge()不算是变动性算法的一员。因为它要求输入区间必须已序(sorted) ,所以应该归为“作用于已序区间之算法”
 *    注意,关联式容器的元素被视为常数,惟其如此,你才不会在变动元素的时候有任何可能违反整个容器的排序准则。因此,你不可以将关联式容器当做变动性算法的目标区间。
+
+#### copy()/copy_backward()
+
+```cpp
+outputIterator copy(InputIterator sourceBeg, Inputrterator sourceEnd, OutputIterator destBeg)
+BidirectionalIteratorl copy_backward(BidirectionalIterator1 sourceBeg, Bidirectionallterator1 sourceEnd, Bidirectionalrterator2 destEnd)
+```
+
+*    这两个算法都将源区间[sourceBeg, sourceEnd)中的所有元素复制到以destBeg为起点或以destEnd为终点的目标区间去。
+*    返回目标区间内最后一个被复制元素的下一位置,也就是第一个未被覆盖(overwritten)的元素的位置。
+*    destBeg或destEnd不可处于[sourceBeg, sourceEnd)区间内。
+*    copy()正向遍历序列,而copy_backward()逆向遍历序列。只有在源区间和目标区间存在重复区域时,这个不同点才会导致一些问题:
+     *    如果要把一个区间复制到前端,应使用copy()。所以destBeg的位置应该在sourceBeg之前。
+     *    如果要把一个区间复制到后端,应使用copy_backward()。所以destEnd的位置应该在sourceEnd之后。
+     *    所以,只要第三参数位于由前两个参数所确定下来的源区间中,你就应该使用另一形式。注意,如果转而使用另一形式,就意味你原本应传递目标区间的起点,现在要转而传递终点了。
+*    STL并没有所谓copy_if ()算法,所以如果要复制符合某特定准则的元素,请使用remove_copy_if()
+*    如果希望在复制过程中逆转元素次序,应使用reverse_copy()。
+*    调用者必须确保目标区间有足够空间,要不就得使用Insert迭代器。
+*    如果想把容器内的所有元素赋值(assign)给另一个容器,应当使用assagnment运操作符(当两个容器的型别相同时才能这么做)或使用容器的assign()成员函数。
+*    如果希望在复制过程中删除某些元素,应使用算法remove_copy()和remove_copy_if()。
+*    如果希望在复制过程中改变元素,请使用算法transform()或replace_copy
+*    复杂度:线性,执行numberOfElements次赋值(assign)动作。
+
+#### transform()
+
+```cpp
+OutputIterator transform(InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg, UnaryFunc op)
+```
+
+*    针对源区间[sourceBeg, sourceEnd)中的每一个元素调用:op (elem)并将结果写到以destBeg起始的目标区间内。
+*    返回目标区间内“最后一个被转换元素”的下一位置,也就是第一个未被覆(overwriten)的元素的位置。
+*    调用者必须确保目标区间有足够空间,要不就得使用插入型迭代器。
+*    sourceBeg与destBeg可以相同,所以,和for_each()算法一样,你可以使用这个算法来变动某一序列内的元素。
+*    如果想以某值替换符合某一准则的元素,应使用replace()算法。
+*    复杂度:线性,对op()执行numberOfElements次调用。
 
 #### for_each
 

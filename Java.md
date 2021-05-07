@@ -2756,3 +2756,52 @@ public class name<T>{
 }
 ```
 
+# 文件管理
+
+*    Java语言使用File类对文件和目录进行操作，查找文件时需要实现FilenameFilter或FileFilter接口。另外，读写文件内容可以通过FileInputStream、FileOutputStream、FileReader和FileWriter类实现，它们属于I/O流
+
+## File类
+
+### 构造方法
+
+*    File(String path)：如果path是实际存在的路径，则该File对象表示的是目录；如果path是文件名，则该File对象表示的是文件。
+*    File(String path, String name)：path是路径名，name是文件名。
+*    File(File dir, String name)：dir是路径对象，name是文件名。
+
+### 获得文件名
+
+*    String getName( )：获得文件的名称，不包括路径。
+*    String getPath( )：获得文件的路径。
+*    String getAbsolutePath( )：获得文件的绝对路径。
+*    String getParent( )：获得文件的上一级目录名。
+
+### 文件属性测试
+
+*    boolean exists( )：测试当前File对象所表示的文件是否存在。 
+*    boolean canWrite( )：测试当前文件是否可写。
+*    boolean canRead( )：测试当前文件是否可读。
+*    boolean isFile( )：测试当前文件是否是文件。
+*    boolean isDirectory( )：测试当前文件是否是目录。
+
+### 文件操作
+
+*    long lastModified( )：获得文件最近一次修改的时间。
+*    long length( )：获得文件的长度，以字节为单位。
+*    boolean delete( )：删除当前文件。成功返回 true，否则返回false。
+*    boolean renameTo(File dest)：将重新命名当前File对象所表示的文件。成功返回 true，否则返回false。
+
+### 目录操作
+
+*    boolean mkdir( )：创建当前File对象指定的目录。
+*    String[] list()：返回当前目录下的文件和目录，返回值是字符串数组。
+*    String[] list(FilenameFilter filter)：返回当前目录下满足指定过滤器的文件和目录，参数是实现FilenameFilter接口对象，返回值是字符串数组。
+*    File[] listFiles()：返回当前目录下的文件和目录，返回值是File数组。
+*    File[] listFiles(FilenameFilter filter)：返回当前目录下满足指定过滤器的文件和目录，参数是实现FilenameFilter接口对象，返回值是File数组。
+*    File[] listFiles(FileFilter filter)：返回当前目录下满足指定过滤器的文件和目录，参数是实现FileFilter接口对象，返回值是File数组。
+
+对目录操作有两个过滤器接口：FilenameFilter和FileFilter。它们都只有一个抽象方法accept， 
+
+*    FilenameFilter接口中的accept方法如下：
+     *    boolean accept(File dir, String name)：测试指定dir目录中是否包含文件名为name的文件。
+*    FileFilter接口中的accept方法如下：
+     *    boolean accept(File pathname)：测试指定路径名是否应该包含在某个路径名列表中。
