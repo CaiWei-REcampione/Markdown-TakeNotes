@@ -5626,6 +5626,43 @@ void fill_n(OutputIterator beg, Size num,const T& newValue)
 *    调用者必须确保目标区间有足够空间,要不就得使用插入型迭代器。
 *    复杂度:线性,分别进行numberOfElements次或num次赋值(assign)操作。
 
+#### generate()/genrate_n()
+
+```cpp
+void generate(ForwardIterator beg, ForwardIterator end, Func op)
+void generate_n(OutputIterator beg, Size num, Func op)
+```
+
+*    generate()会调用以下动作:op()产生新值,并赋值给区间[beg, end)内的每个元素。
+*    generate_n()会调用以下动作:op(),产生新值,并赋值给“以beg起始的区间”内的前num个元素。
+*    调用者必须确保目标区间有足够空间,要不就得使用插入型迭代器。
+*    复杂度:线性,分别进行numberOfElements次或num次赋值(assign)操作。
+
+#### replace()/replace_if()
+
+```cpp
+void replace(ForwardIterator beg, ForwardIterator end, const T& oldValue, const T& newValue)
+void replace_if(ForwardIterator beg, ForwardIterator end, UnaryPredicate op, const T& newValue)
+```
+
+*    replace()将区间[beg, end)之内每一个“与oldValue相等”的元素替换为newValue.
+*    replace_if()将区间[beg, end)之内每一个令以下一元判断式:op(elem)获得true的元素替换为newValue.
+*    op不应该在函数调用过程中改变自身状态。
+*    复杂度:线性,执行比较操作(或调用op()) numberOfElemens次.
+
+#### replace_copy()
+
+```cpp
+OutputIterator replace_copy(InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg, const T& oldValue, const T& newValue)
+outputIterator replace_copy_if(InputIterator sourceBeg, InputIterator sourceEnd OutputIterator destBeg, Unarypredicate op, const T& newValue)
+```
+
+*    replace_copy()是copy()和replace()的组合。它将源区间[beg, end)中的元素复制到“以destBeg为起点”的目标区间去,同时将其中“与oldValue相等”的所有元素替换为newValue.
+*    replace_copy_if()是copy()和replace_if()的组合。[beg, end)中的元素被复制到“以destBeg为起点”的目标区间,同时将其中“令以下一元判断式:op(elem)结果为true"的所有元素替换为newValue.
+*    两个算法都返回目标区间中“最后一个被复制元素”的下一位置,也就是第一个未被覆盖(overwritten)的元素位置。
+*    op不应该在函数调用过程中改变自身状态。
+*    复杂度:线性,执行比较动作(或调用op()) numberOfElements次。
+
 #### for_each
 
 ```cpp
