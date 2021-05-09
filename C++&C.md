@@ -5575,6 +5575,8 @@ BidirectionalIteratorl copy_backward(BidirectionalIterator1 sourceBeg, Bidirecti
 
 #### transform()
 
+##### 转换元素
+
 ```cpp
 OutputIterator transform(InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg, UnaryFunc op)
 ```
@@ -5585,6 +5587,44 @@ OutputIterator transform(InputIterator sourceBeg, InputIterator sourceEnd, Outpu
 *    sourceBeg与destBeg可以相同,所以,和for_each()算法一样,你可以使用这个算法来变动某一序列内的元素。
 *    如果想以某值替换符合某一准则的元素,应使用replace()算法。
 *    复杂度:线性,对op()执行numberOfElements次调用。
+
+##### 结合元素
+
+```cpp
+OutputIterator transform(InputIteratorl source1Beg, InputIterator1 source1End, InputIterator2 source2Beg, OutputIterator destBeg, BinaryFunc op)
+```
+
+*    针对第一个源区间[source1Beg,source1End)以及“从source2Beg开始的第二个源区间”的对应元素,调用:op(source1Elem, source2Elem)并将结果写入以destBeg起始的目标区间内。
+*    返问目标区间内的“最后一个被转换元素”的下一位置,就是第一个未被覆盖(overwritten)的元素的位置。
+*    调用者必须保证第二源区间有足够空间(至少拥有和第一源区间相同的空间大小）。
+*    调用者必须确保目标区间有足够空间,要不就得使用插入型迭代器。
+*    source1Beg, source2Beg, destBeg可以相同,所以,你可以让元素自己和自己结合,然后将结果覆盖(overwritten)至某个序列。
+*    复杂度:线性,对op()执行numberOfElements次调用。
+
+#### swap_ranges()
+
+```cpp
+ForwardIteracor2 swap_ranges(ForwardIterator1 beg1, ForwardIterator1 end1, ForwardIterator2 beg2)
+```
+
+*    将区间[beg1, end1)内的元素和“从beg2开始的区间”内的对应元素互换。
+*    返回第二区间中“最后一个被交换元素”的下一位置。
+*    调用者必须确保目标区间有足够空间。
+*    两区间不得重迭。
+*    如果要将相同型别的两个容器内的全部元素互换,应使用swap()成员函数,因为该成员函数通常具有常数复杂度
+*    复杂度:线性,执行numberOFlements次交换操作。
+
+#### fill()/fill_n()
+
+```cpp
+void fil1(ForwardIterator beg, ForwardIterator end, const T& newValue)
+void fill_n(OutputIterator beg, Size num,const T& newValue)
+```
+
+*    fill()将区间[beg, end)内的每一个元素都赋予新值newValue。
+*    fill_n()将"从beg开始的前num个元素”赋予新值newValue。
+*    调用者必须确保目标区间有足够空间,要不就得使用插入型迭代器。
+*    复杂度:线性,分别进行numberOfElements次或num次赋值(assign)操作。
 
 #### for_each
 

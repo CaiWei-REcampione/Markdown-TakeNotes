@@ -2805,3 +2805,174 @@ public class name<T>{
      *    boolean accept(File dir, String name)：测试指定dir目录中是否包含文件名为name的文件。
 *    FileFilter接口中的accept方法如下：
      *    boolean accept(File pathname)：测试指定路径名是否应该包含在某个路径名列表中。
+
+# I/O流概述
+
+*    Java将数据的输入输出（I/O）操作当作“流”来处理，“流”是一组有序的数据序列。“流”分为两种形式：输入流和输出流，从数据源中读取数据是输入流，将数据写入到目的地是输出流。
+*    以CPU为中心，从外部设备读取数据到内存，进而再读入到CPU，这是输入（Input，缩写I）过程；将内存中的数据写入到外部设备，这是输出（Output，缩写O）过程。所以输入输出简称为I/O。
+*    所有的输入形式都抽象为输入流，所有的输出形式都抽象为输出流，它们与设备无关。
+
+## 字节流
+
+### 字节输入流
+
+| 类                   | 描述                                      |
+| -------------------- | ----------------------------------------- |
+| FileInputStream      | 文件输入流                                |
+| ByteArrayInputStream | 面向字节数组的输入流                      |
+| PipedInputStream     | 管道输入流，用于两个线程之间的数据传递    |
+| FilterInputStream    | 过滤输入流，它是一个装饰器扩展其他输入流  |
+| BufferedInputStream  | 缓冲区输入流，它是FilterInputStream的子类 |
+| DataInputStream      | 面向基本数据类型的输入流                  |
+
+### 字节输出流
+
+| 类                    | 描述                                       |
+| --------------------- | ------------------------------------------ |
+| FileOutputStream      | 文件输出流                                 |
+| ByteArrayOutputStream | 面向字节数组的输出流                       |
+| PipedOutputStream     | 管道输入流，用于两个线程之间的数据传递     |
+| FilterOutputStream    | 过滤输出流，它是一个装饰器扩展其他输出流   |
+| BufferedOutputStream  | 缓冲区输出流，它是FilterOutputStream的子类 |
+| DataOutputStream      | 面向基本数据类型的输出流                   |
+
+### InputStream抽象类
+
+*    InputStream是字节输入流的根类，它定义了很多方法，影响着字节输入流的行为。
+*    int read()：读取一个字节，返回0到255范围内的int字节值。如果已经到达流末尾，而且没有可用的字节，则返回值-1。
+*    int read(byte b[] )：读取多个字节，数据放到字节数组b中，返回值为实际读取的字节的数量，如果已经到达流末尾，而且没有可用的字节，则返回值-1。
+*    int read(byte b[ ], int off, int len)：最多读取len个字节，数据放到以下标off开始字节数组b中，将读取的第一个字节存储在元素b[off]中，下一个存储在b[off+1]中，依次类推。返回值为实际读取的字节的数量，如果已经到达流末尾，而且没有可用的字节，则返回值-1。
+*    void close()：流操作完毕后必须关闭。
+
+#### FileInputStream
+
+##### 构造方法
+
+*    FileInputStream(String name)：创建FileInputStream对象，name是文件名。如果文件不存在则抛出FileNotFoundException异常。
+*    FileInputStream(File file)：通过File对象创建FileInputStream对象。如果文件不存在则抛出FileNotFoundException异常。
+
+### OutputStream抽象类
+
+*    OutputStream是字节输出流的根类，它定义了很多方法，影响着字节输出流的行为。
+*    void write(int b)：将b写入到输出流，b是int类型占有32位，写入过程是写入b 的8个低位，b的24个高位将被忽略。
+*    void write(byte b[ ])：将b.length个字节从指定字节数组b写入到输出流。
+*    void write(byte b[ ], int off, int len)：把字节数组b中从下标off开始，长度为len的字节写入到输出流。
+*    void flush()：刷空输出流，并输出所有被缓存的字节。由于某些流支持缓存功能，该方法将把缓存中所有内容强制输出到流中。
+*    void close( )：流操作完毕后必须关闭。
+
+#### FileOutputStream
+
+##### 构造方法
+
+*    FileOutputStream(String name)：通过指定name文件名创建FileOutputStream对象。如果name文件存在，但如果是一个目录或文件无法打开则抛出FileNotFoundException异常。
+*    FileOutputStream(String name, boolean append)：通过指定name文件名创建FileOutputStream对象，append参数如果为 true，则将字节写入文件末尾处，而不是写入文件开始处。如果name文件存在，但如果是一个目录或文件无法打开则抛FileNotFoundException异常。
+*    FileOutputStream(File file)：通过File对象创建FileOutputStream对象。如果file文件存在，但如果是一个目录或文件无法打开则抛出FileNotFoundException异常。
+*    FileOutputStream(File file, boolean append)：通过File对象创建FileOutputStream对象，append参数如果为 true，则将字节写入文件末尾处，而不是写入文件开始处。如果file文件存在，但如果是一个目录或文件无法打开则抛出FileNotFoundException异常。
+
+## 字符流
+
+### 字符输入流
+
+| 类                | 描述                                                       |
+| ----------------- | ---------------------------------------------------------- |
+| FileReader        | 文件输入流                                                 |
+| CharArrayReader   | 面向字符数组的输入流                                       |
+| PipedReader       | 管道输入流，用于两个线程之间的数据传输                     |
+| FilterReader      | 过滤输入流，它是装饰器扩展其他输入流                       |
+| BufferedReader    | 缓冲区输入流，它也是装饰器，它不是FilterReader的子类       |
+| InputStreamReader | 把字节流转换为字符流，它也是一个装饰器，是FileReader的父类 |
+
+### 字符输出流
+
+| 类                | 描述                                                       |
+| ----------------- | ---------------------------------------------------------- |
+| FileWriter        | 文件输出流                                                 |
+| CharArrayWriter   | 面向字符数组的输出流                                       |
+| PipedWriter       | 管道输出流，用于两个线程之间的数据传输                     |
+| FilterWriter      | 过滤输出流，它是装饰器扩展其他输入流                       |
+| BufferedWriter    | 缓冲区输出流，它也是装饰器，它不是FilterWriter的子类       |
+| InputStreamWriter | 把字节流转换为字符流，它也是一个装饰器，是FileWriter的父类 |
+
+### BufferedInputStream
+
+#### 构造方法
+
+*    BufferedInputStream(InputStream in)：通过一个底层输入流in对象创建缓冲流对象，缓冲区大小是默认的，默认值8192。
+*    BufferedInputStream(InputStream in, int size)：通过一个底层输入流in对象创建缓冲流对象，size指定的缓冲区大小，缓冲区大小应该是2的n次幂，这样可提供缓冲区的利用率。
+
+### BufferedOutputStream
+
+#### 构造方法
+
+*    BufferedOutputStream(OutputStream out)：通过一个底层输出流out 对象创建缓冲流对象，缓冲区大小是默认的，默认值8192。
+*    BufferedOutputStream(OutputStream out, int size)：通过一个底层输出流out对象创建缓冲流对象， size指定的缓冲区大小，缓冲区大小应该是2的n次幂，这样可提高缓冲区的利用率。
+
+## 字节流转换字符流
+
+### InputStreamReader
+
+*    InputStreamReader(InputStream in)：将字节流in转换为字符流对象，字符流使用默认字符集。
+*    InputStreamReader(InputStream in, String charsetName)：将字节流in转换为字符流对象， charsetName指定字符流的字符集，字符集主要有：US-ASCII、ISO-8859-1、UTF-8和UTF-16。如果指定的字符集不支持会抛出UnsupportedEncodingException异常。
+
+### OutputStreamWriter
+
+*    OutputStreamWriter(OutputStream out)：将字节流out转换为字符流对象，字符流使用默认字符集。
+*    OutputStreamWriter(OutputStream out,String charsetName)：将字节流out转换为字符流对象， charsetName指定字符流的字符集，如果指定的字符集不支持会抛出UnsupportedEncodingException异常。
+
+## 文件复制
+
+```java
+try (FileInputStream in = new FileInputStream("./TestDir/build.txt");
+     BufferedInputStream bis = new BufferedInputStream(in);
+     FileOutputStream out = new FileOutputStream("./TestDir/subDir/build.txt");
+     BufferedOutputStream bos = new BufferedOutputStream(out)) {
+
+    long startTime = System.nanoTime();
+    byte[] buffer = new byte[1024];
+    int len = bis.read(buffer);
+    while (len != -1) {
+
+        bos.write(buffer, 0, len);
+        len = bis.read(buffer);
+    }
+
+    long elapsedTime = System.nanoTime() - startTime;
+    System.out.println("耗时: " + (elapsedTime / 1000000.0) + "毫秒");
+} catch (IOException e) {
+
+    e.printStackTrace();
+}
+```
+
+# 多线程编程
+
+## 进程
+
+*    一个进程就是一个执行中的程序，而每一个进程都有自己独立的一块内存空间、一组系统资源。在进程的概念中，每一个进程的内部数据和状态都是完全独立的。
+
+## 线程
+
+*    线程与进程相似，是一段完成某个特定功能的代码，是程序中单个顺序控制的流程，但与进程不同的是，同类的多个线程是共享一块内存空间和一组系统资源。所以系统在各个线程之间切换时，开销要比进程小的多，正因如此，线程被称为轻量级进程。一个进程中可以包含多个线程。
+
+### 主线程
+
+*    Java程序至少会有一个线程，这就是主线程，程序启动后是由JVM创建主线程，程序结束时由JVM停止主线程。主线程它负责管理子线程，即子线程的启动、挂起、停止等等操作。
+
+### 子线程
+
+*    Java中创建一个子线程涉及到：java.lang.Thread类和java.lang.Runnable接口。
+*    Thread是线程类，创建一个Thread对象就会产生一个新的线程。而线程执行的程序代码是在实现Runnable接口对象的run()方法中编写的，实现Runnable接口对象是线程执行对象。
+*    Thread.currentThread()可以获得当前线程对象。
+*    getName()是Thread类的实例方法，可以获得线程的名。
+*    Thread.sleep(sleepTime)是休眠当前线程
+     *    static void sleep(long millis)：在指定的毫秒数内让当前正在执行的线程休眠。
+     *    static void sleep(long millis, int nanos) 在指定的毫秒数加指定的纳秒数内让当前正在执行的线程休眠。
+*    线程创建完成还需要调用start()方法才能执行。start()方法一旦调用线程进入可以执行状态，可以执行状态下的线程等待CPU调度执行，CPU调用后线程进行执行状态，运行run()方法。
+*    但是实际上一台PC通常就只有一颗CPU，在某个时刻只能是一个线程在运行，而Java语言在设计时就充分考虑到线程的并发调度执行。对于程序员来说，在编程时要注意给每个线程执行的时间和机会，主要是通过让线程休眠的办法（调用sleep()方法）来让当前线程暂停执行，然后由其他线程来争夺执行的机会。
+
+### 实现Runnable接口
+
+*    使用Thread类如下两个构造方法
+*    Thread(Runnable target, String name)：target是线程执行对象，实现Runnable接口。name为线程指定一个名字。
+*    Thread(Runnable target)：target是线程执行对象，实现Runnable接口。线程名字是由JVM分配的。
+
