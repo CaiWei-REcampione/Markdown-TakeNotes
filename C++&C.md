@@ -5740,16 +5740,37 @@ iterator unique(iterator it_1,iterator it_2,``bool``MyFunc);
 vec.erase ( std::unique ( vec.begin () , vec.end () ) , vec.end () );
 ```
 
-#### remove()
-
-自某个区间删除元素
-
-remove()并不会改变区间长度,若要真正改变区间长度,使用erase()成员函数
+#### remove()/remove_if()
 
 ```cpp
-auto end = remove([].begin(),[].end(),value);
-[].erase(end,[].end());
+ForwardIterator remove(ForwardIterator beg, ForwardIterator end, const T& vaiue)
+ForwardIterator remove_if(ForwardIterator beg, ForwardIterator end, UnaryPredicate op)
 ```
+
+*    remove()会移除区间[beg,end)中每一个"与value相等"的元素。
+*    remove_if()会移除区间[beg, end)中每一个“令以下一元判断式:op(elem)获得true"的元素。
+*    两个算法都返回变动后的序列的新逻辑终点(也就是最后一个未被移除元素的"下一位置) 。
+*    这些算法会把原本置于后面的未移除元素向前移动,覆盖被移除元素。
+*    未被移除的元素在相对次序上保持不变。
+*    调用者在调用此算法之后,应保证从此采用返回的新逻辑终点,而不再使用原始终点end 。
+*    op不应该在函数调用过程中改变自身状态。
+*    注意, remove_if ()通常会在内部复制它所获得的那个一元判断式,然后两次运用它。如果该一元判断式在函数调用过程中改变状态,就可能导致问题。
+*    由于会发生元素变动,所以这些算法不可用于关联式容器。关联式容器提供了功能相似的成员函数erasa() 。
+*    Lists提供了一个等效成员函数remove():不是重新赋值元素,而是重新安排指针,因此具有更佳性能。
+*    复杂度:线性,执行比较动作(或调用op() ) numberOfElemens次。
+
+#### remove_copy()/remove_copy_if()
+
+```cpp
+OutputIterator remove_copy(InputIterator sourceBeg, InputIterator sourceEnd, outputIterator destBeg, const T& value)
+OutputIterator remove_copy_if(InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg, UnaryPredicate op)
+```
+
+*    remove_copy()是copy()和remove()的组合,它将源区间[beg, end)内的所有元素复制到“以destBeg为起点”的目标区间去,并在复制过程中移除“与value相等”的所有元素。
+*    remove_copy_if()是copy ()和remove_if()的组合。它将源区间[beg, end)内的元素复制到“以destBeg为起点"的目标区间去,并在复制过程中移除“造成以下一元判断式:op(elem)结果为true"的所有元素。
+*    两个算法都返回目标区间中最后一个被复制元素的下一位置(也就是第一个未被覆盖的元素)op不应该在函数调用过程中改变自身状态。
+*    调用者必须确保目标区间够大,要不就得使用插入型送代器。
+*    复杂度:线性,执行比较动作(或调用op()) numberOfElements次。
 
 ### 变序性算法
 
