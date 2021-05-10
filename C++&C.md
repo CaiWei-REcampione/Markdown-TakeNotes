@@ -5710,6 +5710,23 @@ template <class InputIterator1, class InputIterator2,
 
 #### unique()
 
+```cpp
+ForwardIterator unique(ForwardIterator beg, ForwardIterator end)
+ForwardIterator unique(ForwardIterator beg, ForwardIterator end, BinaryPredicate op)
+```
+
+*    以上两种形式都会移除连续重复元素中的多余元素。
+*    "第一形式将区间[beg, end)内所有“与前一元素相等”的元素移除。所以,源序列必须先经过排序,才能使用这个算法移除所有重复元素。
+*    第二形式将每一个“位于元素e之后并且造成以下二元判断式:op(elem, e)结果为true"的所有elem元素移除。换言之此一判断式并非用来将元素和其原本的前一元素比较,而是将它和未被移除的前一元素比较
+*    两种形式都返问被变动后的序列新终点(逻辑终点,也就是最后一个“末被移除的元素”的下一个位置)。
+*    这两个算法将“原本位置在后”的未移除元素向前移动,覆盖(overwrite)被移除元素。
+*    未被移除的元素在相对次序上保持不变。
+*    调用者在调用这些算法之后,应保证从此使用返回的新逻辑终点,不再使用原始终点end。
+*    op不应该在函数调用过程中改变自身状态。
+*    由于会造成元素变动,所以这些算法不可用于关联式容器。
+*    Lists提供了一个等效成员函数unique(),不是重新赋值元素,而是重新安排指针,因此具有更佳性能。
+*    复杂度:线性,执行比较操作(或调用op()) numberOfElenents次。
+
 unique函数属于STL中比较常用函数，它的功能是元素去重。即**”删除”序列中所有相邻的重复元素(只保留一个)。此处的删除，并不是真的删除，而是指重复元素的位置被不重复的元素给占领了(详细情况，下面会讲)。由于它”删除”的是相邻的重复元素，所以在使用unique函数之前，一般都会将目标序列进行排序。**
 
 unique函数的函数原型如下：
@@ -5739,6 +5756,19 @@ iterator unique(iterator it_1,iterator it_2,``bool``MyFunc);
 ```cpp
 vec.erase ( std::unique ( vec.begin () , vec.end () ) , vec.end () );
 ```
+
+#### unique_copy
+
+```cpp
+Output_Iterator unlque_copy(InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg)
+OutputIterator unlque_copy(InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg, BinaryPredicate op)
+```
+
+*    两种形式都是copy()和unique()的组合。
+*    两者都将源区间[sourceBeg, sourceEnd)内的元素复制到“以destBeg起始的目标区间" ，并移除重复元素。
+*    两个算法都返回目标区间内“最后一个被复制的元素”的下一位置(也就是第一个未被覆盖的元素) 。
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    复杂度:线性,执行比较动作(或调用op() ) numberOfElements次。
 
 #### remove()/remove_if()
 
@@ -5785,6 +5815,20 @@ OutputIterator remove_copy_if(InputIterator sourceBeg, InputIterator sourceEnd, 
 | random_shuffle()   | 将元素的次序随机打乱                                         |
 | partition()        | 改变元素次序，使“符合某准则”者移到前面                       |
 | stable_partition() | 与partition()相似，但保持符合准则与不符合准则之各个元素之间保持相对位置 |
+
+#### reverse()
+
+```cpp
+void reverse(BidirectionalIterator beg, BidirectionalIterator end)
+OutputIterator reverse_copy(BidirectionalIterator sourceBeg, BidirectionalIterator sourceEnd, OutputIterator destBeg)
+```
+
+*    reverse()会将区间[beg, end)内的元素全部逆序。
+*    reverse_copy ()会将源区间[sourceBeg, sourceEnd)内的元素复制到“以destBeg起始的目标区间” ,并在复制过程中颠倒安置次序。
+*    reverse_copy()返回目标区间内最后一个被复制元素的下一位置,也就是第一个未被覆盖(overwritten)的元素。
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    Lists提供了一个等效成员函数reverse(),不是重新赋值元素,而是重新安排指针,因此具有更佳性能。
+*    复杂度:线性,分别进行numberOElements /2次交换操作或numberOjElements次赋值(assign)操作。
 
 ### 排序算法
 
