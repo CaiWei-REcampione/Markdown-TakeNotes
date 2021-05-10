@@ -2976,3 +2976,355 @@ try (FileInputStream in = new FileInputStream("./TestDir/build.txt");
 *    Thread(Runnable target, String name)：target是线程执行对象，实现Runnable接口。name为线程指定一个名字。
 *    Thread(Runnable target)：target是线程执行对象，实现Runnable接口。线程名字是由JVM分配的。
 
+### 使用匿名内部类和Lambda表达式实现线程体
+
+*    如果线程体使用的地方不是很多，可以不用单独定义一个类。可以使用匿名内部类或Lambda表达式直接实现Runnable接口。
+*    Runnable中只有一个方法是函数式接口，可以使用Lambda表达式。
+
+## 线程的状态
+
+### 新建状态
+
+*    新建状态（New）是通过new等方式创建线程对象，它仅仅是一个空的线程对象。
+
+### 就绪状态
+
+*    当主线程调用新建线程的start()方法后，它就进入就绪状态（Runnable）。此时的线程尚未真正开始执行run()方法，它必须等待CPU的调度。
+
+### 运行状态
+
+*    CPU的调度就绪状态的线程，线程进入运行状态（Running），处于运行状态的线程独占CPU，执行run()方法。
+
+### 阻塞状态
+
+*    因为某种原因运行状态的线程会进入不可运行状态，即阻塞状态（Blocked），处于阻塞状态的线程JVM系统不能执行该线程，即使CPU空闲，也不能执行该线程。
+
+#### 进入阻塞状态方法
+
+*    当前线程调用sleep()方法，进入休眠状态。
+*    被其他线程调用了join()方法，等待其他线程结束。
+*    发出I/O请求，等待I/O操作完成期间。
+*    当前线程调用wait()方法。
+
+*    处于阻塞状态可以重新回到就绪状态
+
+### 死亡状态
+
+*    线程退出run()方法后，就会进入死亡状态（Dead），线程进入死亡状态有可以是正常实现完成run()方法进入，也可能是由于发生异常而进入的。
+
+## 线程管理
+
+### 线程优先级
+
+*    线程的调度程序根据线程决定每次线程应当何时运行，Java提供了10种优先级，分别用1~10整数表示，最高优先级是10用常量MAX_PRIORITY表示；最低优先级是1用常量MIN_PRIORITY；默认优先级是5用常量NORM_PRIORITY表示。
+*    Thread类提供了setPriority(int newPriority)方法可以设置线程优先级，通过getPriority()方法获得线程优先级。
+
+### 等待线程结束
+
+*    当前线程调用t1线程的join()方法，则阻塞当前线程，等待t1线程结束，如果t1线程结束或等待超时，则当前线程回到就绪状态。
+
+#### join()
+
+*    void join()：等待该线程结束。
+*    void join(long millis)：等待该线程结束的时间最长为millis毫秒。如果超时为0意味着要一直等下去。
+*    void join(long millis, int nanos)：等待该线程结束的时间最长为millis毫秒加nanos纳秒。
+
+## 线程让步
+
+*    静态方法yield()，调用yield()方法能够使当前线程给其他线程让步。它类似于sleep()方法，能够使运行状态的线程放弃CPU使用权，暂停片刻，然后重新回到就绪状态。
+*    与sleep()方法不同的是，sleep()方法是线程进行休眠，能够给其他线程运行的机会，无论线程优先级高低都有机会运行。而yield()方法只给相同优先级或更高优先级线程机会。
+
+## 线程停止
+
+*    线程体中的run()方法结束，线程进入死亡状态，线程就停止了。
+
+## 线程安全
+
+*    在多线程环境下，访问相同的资源，有可以会引发线程不安全问题。
+
+### 临界资源问题
+
+*    多个线程间共享的数据称为共享资源或临界资源，由于是CPU负责线程的调度，程序员无法精确控制多线程的交替顺序。这种情况下，多线程对临界资源的访问有时会导致数据的不一致性。
+
+### 多线程同步
+
+*    可以通过两种方式实现线程同步，两种方式都涉及到使用synchronized关键字，一种是synchronized方法，使用synchronized关键字修饰方法，对方法进行同步；另一种是synchronized语句，使用synchronized关键字放在对象前面限制一段代码的执行。
+
+#### synchronized方法
+
+*    synchronized关键字修饰方法实现线程同步，方法所在的对象被锁定
+
+#### synchronized语句
+
+*    synchronized语句方式主要用于第三方类，不方便修改它的代码情况。
+
+## 线程间通信
+
+*    如果两个线程之间有依赖关系，线程之间必须进行通信，互相协调才能完成工作。
+
+### 方法
+
+*    void wait()：使当前线程释放对象锁，然后当前线程处于对象等待队列中阻塞状态。
+*    void wait(long timeout)：同wait()方法，等待timeout毫秒时间。
+*    void wait(long timeout, int nanos)：同wait()方法，等待timeout毫秒加nanos纳秒时间。
+*    void notify()：当前线程唤醒此对象等待队列中的一个线程，如图23-7所示该线程将进入就绪状态。
+*    void notifyAll()：当前线程唤醒此对象等待队列中的所有线程，如图23-7所示这些线程将进入就绪状态。
+
+# 网络编程
+
+*    Java SE提供java.net包，其中包含了网络编程所需要的最基础一些类和接口。这些类和接口面向两个不同的层次：基于Socket的低层次网络编程和基于URL的高层次网络编程。
+*    所谓高低层次就是通信协议的高低层次，Socket采用TCP、UDP等协议，这些协议属于低层次的通信协议。
+*    URL采用HTTP和HTTPS这些属于高层次的通信协议。低层次网络编程，因为它面向底层，比较复杂，但是“低层次网络编程”并不等于它功能不强大。恰恰相反，正因为层次低，Socket编程与基于URL的高层次网络编程比较，能够提供更强大的功能和更灵活的控制，但是要更复杂一些。
+
+## TCP/IP协议
+
+*    TCP/IP协议是由IP和TCP两个协议构成的， IP（Internet Protocol）协议是一种低级的路由协议，它将数据拆分成许多小的数据包中，并通过网络将它们发送到某一特定地址，但无法保证都所有包都抵达目的地，也不能保证包的顺序。
+*    由于IP协议传输数据的不安全性，网络通信时还需要TCP协议，传输控制协议（Transmission Control Protocol，TCP）是一种高层次的协议，面向连接的可靠数据传输协议，如果有些数据包没有收到会重发，并对数据包内容准确性检查并保证数据包顺序，所以该协议保证数据包能够安全地按照发送时顺序送达目的地。
+
+## HTTP/HTTPS协议
+
+### HTTP协议
+
+*    HTTP是Hypertext Transfer Protocol的缩写，即超文本传输协议。HTTP是一个属于应用层的面向对象的协议，其简捷、快速的方式适用于分布式超文本信息的传输。它于1990年提出，经过多年的使用与发展，得到不断完善和扩展。HTTP协议支持C/S网络结构，是无连接协议，即每一次请求时建立连接，服务器处理完客户端的请求后，应答给客户端然后断开连接，不会一直占用网络资源。
+
+#### 方法
+
+*    HTTP/1.1协议共定义了8种请求方法：OPTIONS、HEAD、GET、POST、PUT、DELETE、 TRACE和CONNECT。在HTTP访问中，一般使用GET和HEAD方法。
+     *    GET方法：是向指定的资源发出请求，发送的信息“显式”地跟在URL后面。GET方法应该只用在读取数据，例如静态图片等。GET方法有点像使用明信片给别人写信，“信内容”写在外面，接触到的人都可以看到，因此是不安全的。
+     *    POST方法：是向指定资源提交数据，请求服务器进行处理，例如提交表单或者上传文件等。数据被包含在请求体中。POST方法像是把“信内容”装入信封中，接触到的人都看不到，因此是安全的。
+
+### HTTPS协议
+
+*    HTTPS是Hypertext Transfer Protocol Secure，即超文本传输安全协议，是超文本传输协议和SSL的组合，用以提供加密通信及对网络服务器身份的鉴定。
+*    简单地说，HTTPS是HTTP的升级版，HTTPS与HTTP的区别是：HTTPS使用https://代替http://， HTTPS使用端口443，而HTTP使用端口80来与TCP/IP进行通信。SSL使用40位关键字作为RC4流加密算法，这对于商业信息的加密是合适的。HTTPS和SSL支持使用X.509数字认证，如果需要的话，用户可以确认发送者是谁。
+
+### URL类
+
+*    URL是Uniform Resource Locator简称，翻译过来是“一致资源定位器”，但人们都习惯URL简称。
+*    格式
+     *    协议名://资源名
+*    “协议名”指明获取资源所使用的传输协议，如http、ftp、gopher和file等，“资源名”则应该是资源的完整地址，包括主机名、端口号、文件名或文件内部的一个引用。
+*    Java 的java.net.URL类用于请求互联网上的资源，采用HTTP/HTTPS协议，请求方法是GET方法，一般是请求静态的、少量的服务器端数据。
+
+#### 构造方法
+
+*    URL(String spec)：根据字符串表示形式创建URL对象。
+*    URL(String protocol, String host, String file)：根据指定的协议名、主机名和文件名称创建URL对象。
+*    URL(String protocol, String host, int port, String file)：根据指定的协议名、主机名、端口号和文件名称创建URL对象。
+
+#### 方法
+
+*    InputStream openStream()：打开到此URL的连接，并返回一个输入流。
+*    URLConnection openConnection()：打开到此URL的新连接，返回一个URLConnection对象。
+
+## IP地址
+
+*    为实现网络中不同计算机之间的通信，每台计算机都必须有一个与众不同的标识，这就是IP地址， TCP/IP使用IP地址来标识源地址和目的地址。
+*    在IPv4地址模式中IP地址分为A、B、C、D和E等5类。
+     *    A类地址用于大型网络，地址范围：1.0.0.1~126.155.255.254。 
+     *    B类地址用于中型网络，地址范围：128.0.0.1~191.255.255.254。 
+     *    C类地址用于小规模网络，192.0.0.1~223.255.255.254。
+     *    D类地址用于多目的地信息的传输和作为备用。
+     *    E类地址保留仅作实验和开发用。
+
+## 端口
+
+*    一个IP地址标识这一台计算机，每一台计算机又有很多网络通信程序在运行，提供网络服务或进行通信，这就需要不同的端口进行通信。
+*    TCP/IP系统中的端口号是一个16位的数字，它的范围是0~65535。小于1024的端口号保留给预定义的服务
+
+## TCP Socket通信
+
+*    Socket是网络上的两个程序，通过一个双向的通信连接，实现数据的交换。
+
+### Socket类
+
+*    表示双向连接的客户端。
+
+#### 构造方法
+
+*    Socket(InetAddress address, int port) ：创建Socket对象，并指定远程主机IP地址和端口号。
+*    Socket(InetAddress address, int port, InetAddress localAddr, int localPort)：创建Socket对象，并指定远程主机IP地址和端口号，以及本机的IP地址（localAddr）和端口号（localPort）。
+*    Socket(String host, int port)：创建Socket对象，并指定远程主机名和端口号，IP地址为null，null表示回送地址，即127.0.0.1。
+*    Socket(String host, int port, InetAddress localAddr, int localPort)：创建Socket对象，并指定远程主机和端口号，以及本机的IP地址（localAddr）和端口号（localPort）。host主机名，IP地址为null，null表示回送地址，即127.0.0.1。
+
+#### 方法
+
+*    InputStream getInputStream()：通过此Socket返回输入流对象。 
+*    OutputStream getOutputStream()：通过此Socket返回输出流对象。 
+*    int getPort()：返回Socket连接到的远程端口。
+*    int getLocalPort()：返回Socket绑定到的本地端口。
+*    InetAddress getInetAddress()：返回Socket连接的地址。 
+*    InetAddress getLocalAddress()：返回Socket绑定的本地地址。 
+*    boolean isClosed()：返回Socket是否处于关闭状态。
+*    boolean isConnected()：返回Socket是否处于连接状态。
+*    void close()：关闭Socket。
+
+### ServerSocket类
+
+*    表示双向连接的服务器端。
+
+#### 构造方法
+
+*    ServerSocket(int port, int maxQueue)：创建绑定到特定端口的服务器Socket。
+*    maxQueue设置连接的请求最大队列长度，如果队列满时，则拒绝该连接。默认值是50。
+*    ServerSocket(int port)：创建绑定到特定端口的服务器Socket。最大队列长度是50。
+
+#### 方法
+
+*    InputStream getInputStream()：通过此Socket返回输入流对象。 
+*    OutputStream getOutputStream()：通过此Socket返回输出流对象。 
+*    boolean isClosed()：返回Socket是否处于关闭状态。
+*    Socket accept()：侦听并接收到Socket的连接。此方法在建立连接之前一直阻塞。
+*    void close()：关闭Socket。
+
+## UDP Socket通信
+
+### DatagramSocket类
+
+*    DatagramSocket用于在程序之间建立传送数据报的通信连接。
+
+#### 构造方法
+
+*    DatagramSocket()：创建数据报DatagramSocket对象，并将其绑定到本地主机上任何可用的端口。
+*    DatagramSocket(int port)：创建数据报DatagramSocket对象，并将其绑定到本地主机上的指定端口。
+*    DatagramSocket(int port, InetAddress laddr)：创建数据报DatagramSocket对象，并将其绑定到指定的本地地址。
+
+#### 方法
+
+*    void send(DatagramPacket p)：从发送数据报包。
+*    void receive(DatagramPacket p)：接收数据报包。
+*    int getPort()：返回DatagramSocket连接到的远程端口。
+*    int getLocalPort()：返回DatagramSocket绑定到的本地端口。 InetAddress getInetAddress()：返回DatagramSocket连接的地址。 
+*    InetAddress getLocalAddress()：返回DatagramSocket绑定的本地地址。 boolean isClosed()：返回DatagramSocket是否处于关闭状态。 boolean isConnected()：返回DatagramSocket是否处于连接状态。 void close()：关闭DatagramSocket。
+
+### DatagramPacket类
+
+*    DatagramPacket用来表示数据报包，是数据传输的载体。DatagramPacket实现无连接数据包投递服务，每投递数据包仅根据该包中信息从一台机器路由到另一台机器。从一台机器发送到另一台机器的多个
+     包可能选择不同的路由，也可能按不同的顺序到达，不保证包都能到达目的。
+
+#### 构造方法
+
+*    DatagramPacket(byte[] buf, int length)：构造数据报包，buf包数据，length是接收包数据的长度。
+*    DatagramPacket(byte[] buf, int length, InetAddress address, int port)：构造数据报包，包发送到指定主机上的指定端口号。
+*    DatagramPacket(byte[] buf, int offset, int length)：构造数据报包，offset是buf字节数组的偏移量。
+*    DatagramPacket(byte[] buf, int offset, int length, InetAddress address, int port)：构造数据报包，包发送到指定主机上的指定端口号。
+
+#### 方法
+
+*    InetAddress getAddress()：返回发往或接收该数据报包相关的主机的IP地址。 
+*    byte[] getData()：返回数据报包中的数据。
+*    int getLength()：返回发送或接收到的数据（byte[]）的长度。
+*    int getOffset()：返回发送或接收到的数据（byte[]）的偏移量。
+*    int getPort()：返回发往或接收该数据报包相关的主机的端口号。
+
+# 图形界面编程
+
+## AWT
+
+*    AWT（Abstract Window Toolkit）是抽象窗口工具包，AWT是Java 程序提供的建立图形用户界面最基础的工具集。AWT支持图形用户界面编程的功能包括：用户界面组件（控件）、事件处理模型、图形图像处理（形状和颜色）、字体、布局管理器和本地平台的剪贴板来进行剪切和粘贴等。AWT是Applet和Swing技术的基础。
+
+## Applet
+
+*    Applet称为Java小应用程序，Applet基础是AWT，但它主要嵌入到HTML代码中，由浏览器加载和运行，由于存在安全隐患和运行速度慢等问题，已经很少使用了。
+
+## Swing
+
+*    Swing是Java主要的图形用户界面技术，Swing提供跨平台的界面风格，用户可以自定义Swing的界面风格。
+*    Swing提供了比AWT更完整的组件，引入了许多新的特性。Swing API是围绕着实现AWT各个部分的API构筑的。Swing是由100%纯Java实现的，Swing组件没有本地代码，不依赖操作系统的支持，这是它与AWT组件的最大区别。
+*    图形用户界面主要是由窗口以及窗口中的组件构成的，编写Swing程序主要就是创建窗口和添加组件过程。
+
+### Swing程序结构
+
+*    构建Swing程序主要有两种方式：创建JFrame或继承JFrame。
+*    图形用户界面主要是由窗口以及窗口中的组件构成的，编写Swing程序主要就是创建窗口和添加组件过程。
+*    JFrame有标题、边框、菜单、大小和窗口管理按钮等窗口要素，而JWindow没有标题栏和窗口管理按钮。
+
+#### 构建Swing程序方式
+
+*    创建JFrame方式适合于小项目，代码量少、窗口不多、组件少的情况。继承JFrame
+     方式，适合于大项目，可以针对不同界面自定义一个Frame类，属性可以在构造方法中进行设置；缺点是有很多类文件需要有效地管理。
+
+##### 创建JFrame
+
+*    直接实例化JFrame对象，然后设置JFrame属性，添加窗口所需要的组件。
+*    默认情况下JFrame是没有大小且不可见的，因此创建JFrame对象后还需要设置大小和可见
+*    设置JFrame窗口大小和可见这两条语句，应该在添加完成所有组件之后调用。否则在多个组件情况下，会导致有些组件没有显示。
+*    在Swing中添加到JFrame上的所有可见组件，除菜单栏外，全部添加到内容面板上，而不要直接添加到JFrame上，这是Swing绘制系统所要求的。
+
+```java
+JFrame name = new JFrame("Framename");
+Container contentPane=frame.getContentPane();
+contentPane.add();
+```
+
+##### 继承JFrame方式
+
+*    继承JFrame方式就是编写一个继承JFrame的子类，在构造方法中初始化窗口，添加窗口所需要的组件。
+
+```java
+public class name extends JFrame{
+    
+    public name(String title){
+        
+        super(title);
+    }
+}
+```
+
+#### 事件处理模型
+
+*    事件：是用户对界面的操作，在Java中事件被封装称为事件类java.awt.AWTEvent及其子类，例如按钮单击事件类是java.awt.event.ActionEvent。
+02.	事件源：是事件发生的场所，就是各个组件。
+*    事件处理者：是事件处理程序，在Java中事件处理者是实现特定接口的事件对象。
+
+##### 事件类型和事件监听器接口
+
+<table>
+	<tr>
+			<th>事件类型</th>
+            <th>相应监听器接口</th>
+            <th>监听器接口中的方法</th>
+		</tr>
+		<tr>
+			<th>Action</th>
+			<th>ActionListener</th>
+            <th> actionPerformed(ActionEvent)</th>
+		</tr>
+		<tr>
+			<th rowspan="5">Mouse</th>
+			<th rowspan="5">MouseListener</th>
+			<th>mousePressed(MouseEvent)</th>
+		</tr>
+    <tr><th>mouseReleased(MouseEvent)</th></tr>
+    <tr><th>mouseEntered(MouseEvent)</th></tr>
+    <tr><th>mouseExited(MouseEvent)</th></tr>
+    <tr><th>mouseClicked(MouseEvent)</th></tr>
+    <tr><th rowspan="2">Mouse Motion</th><th rowspan="2">MouseMotionListener</th><th>mouseDragged</th></tr>
+    <tr><th>mouseMoved(MouseEvent)</th></tr>
+    <tr><th rowspan="3">Key</th><th rowspan="3">KeyListener</th><th>keyPressed(KeyEvent)</th></tr>
+    <tr><th>keyReleased(KeyEvent)</th></tr>
+    <tr><th>keyTyped(KeyEvent)</th></tr>
+    <tr><th rowspan="2">Focus</th><th rowspan="2">FocusListener</th><th>focusGained(FocusEvent)</th></tr>
+    <tr><th>focusLost(FocusEvent)</th></tr>
+    <tr><th>Adjustment</th><th>AdjustmentListener</th><th>adjustmentValueChanged(AdjustmentEvent)</th></tr>
+    <tr><th rowspan="4">Componet</th><th rowspan="4">ComponentListener</th><th>componentMoved(ComponentEvent)</th></tr>
+    <tr><th>componentHidden(ComponentEvent)</th></tr>
+    <tr><th>componentShown(ComponentEvent)</th></tr>
+    <tr><th>componentShown(ComponentEvent)</th></tr>
+    <tr><th rowspan="7">Window</th><th rowspan="7">WindowListener</th><th>windowClosing(WindowEvent)</th></tr>
+    <tr><th>windowOpened(WindowEvent)</th></tr>
+    <tr><th>windowIconified(WindowEvent)</th></tr>
+    <tr><th>windowDeiconified(WindowEvent)</th></tr>
+    <tr><th>windowClosed(WindowEvent)</th></tr>
+    <tr><th>windowActivated(WindowEvent)</th></tr>
+    <tr><th>windowDeactivated(WindowEvent)</th></tr>
+    <tr><th rowspan="2">Container</th><th rowspan="2">ContainerListener</th><th>componentAdded(ContainerEvent)</th></tr>
+    <tr><th>componentRemoved(ContainerEvent)</th></tr>
+    <tr><th>Text</th><th>TextListener</th><th>textValueChanged(TextEvent)</th></tr>
+</table>
+
+## JavaFX
+
+*    JavaFX是开发丰富互联网应用程序（Rich Internet Application，缩写RIA）的图形用户界面技术，JavaFX期望能够在桌面应用的开发领域与Adobe公司的AIR、微软公司的Silverlight相竞争。
+*    传统的互联网应用程序基于Web的，客户端是浏览器。而丰富互联网应用程序试图打造自己的客户端，替代浏览器。
+

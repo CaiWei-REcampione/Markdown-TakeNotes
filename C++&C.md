@@ -2437,17 +2437,17 @@ typeid运算符使能够确定两个对象是否为同种类型，与sizeof有�
 ```
 class type_info {
 public:
- virtual ~type_info();
- int operator==(const type_info& rhs) const;
- int operator!=(const type_info& rhs) const;
- int before(const type_info& rhs) const;
- const char* name() const;
- const char* raw_name() const;
+     virtual ~type_info();
+     int operator==(const type_info& rhs) const;
+     int operator!=(const type_info& rhs) const;
+     int before(const type_info& rhs) const;
+     const char* name() const;
+     const char* raw_name() const;
 private:
- void *_m_data;
- char _m_d_name[1];
- type_info(const type_info& rhs);
- type_info& operator=(const type_info& rhs);
+     void *_m_data;
+     char _m_d_name[1];
+     type_info(const type_info& rhs);
+     type_info& operator=(const type_info& rhs);
 };
 ```
 
