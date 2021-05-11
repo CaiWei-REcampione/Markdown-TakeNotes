@@ -4276,6 +4276,94 @@ public:
 };
 ```
 
+# 165. 合并两个排序链表
+
+描述
+
+将两个排序（升序）链表合并为一个新的升序排序链表
+
+样例
+
+```
+样例 1:
+	输入: list1 = null, list2 = 0->3->3->null
+	输出: 0->3->3->null
+
+
+样例2:
+	输入:  list1 =  1->3->8->11->15->null, list2 = 2->null
+	输出: 1->2->3->8->11->15->null
+```
+
+```cpp
+/**
+ * Definition of singly-linked-list:
+ * class ListNode {
+ * public:
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int val) {
+ *        this->val = val;
+ *        this->next = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param l1: ListNode l1 is the head of the linked list
+     * @param l2: ListNode l2 is the head of the linked list
+     * @return: ListNode head of linked list
+     */
+    ListNode * mergeTwoLists(ListNode * l1, ListNode * l2) {
+        if(l1==NULL){
+            return l2;
+        }
+        if(l2==NULL){
+            return l1;
+        }
+        if(l1->val<l2->val){
+            return sort(l1,l2);
+        }
+        else{
+            return sort(l2,l1);
+        }
+    }
+
+    ListNode * sort(ListNode * l1, ListNode * l2){
+        ListNode*res=l1;
+        ListNode*run=l1;
+        l1=l1->next;
+        do{
+            if(l1->val<l2->val){
+                run->next=l1;
+                run=run->next;
+                if(l1->next!=NULL){
+                    l1=l1->next;
+                }
+                else{
+                    run->next=l2;
+                    break;
+                }
+            }
+            else{
+                run->next=l2;
+                run=run->next;
+                if(l2->next!=NULL){
+                    l2=l2->next;
+                }
+                else{
+                    run->next=l1;
+                    break;
+                }
+            }   
+        }while(1);
+        return res;
+    }
+};
+```
+
 
 
 # 167. 链表求和

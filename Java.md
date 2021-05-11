@@ -3271,13 +3271,13 @@ public class name extends JFrame{
 }
 ```
 
-#### 事件处理模型
+### 事件处理模型
 
 *    事件：是用户对界面的操作，在Java中事件被封装称为事件类java.awt.AWTEvent及其子类，例如按钮单击事件类是java.awt.event.ActionEvent。
 02.	事件源：是事件发生的场所，就是各个组件。
 *    事件处理者：是事件处理程序，在Java中事件处理者是实现特定接口的事件对象。
 
-##### 事件类型和事件监听器接口
+#### 事件类型和事件监听器接口
 
 <table>
 	<tr>
@@ -3322,6 +3322,208 @@ public class name extends JFrame{
     <tr><th>componentRemoved(ContainerEvent)</th></tr>
     <tr><th>Text</th><th>TextListener</th><th>textValueChanged(TextEvent)</th></tr>
 </table>
+#### 采用内部类处理事件
+
+```java
+public class name extends JFrame{ 
+    
+    public name(title){
+        
+        super(title);
+        button1.addActionListener(new ActionEventHandler());
+        button2.addActionListener(new ActionListener(){
+            
+            // TODO
+        )};
+    }
+    
+    class  ActionEventHandler implements ActionListener{
+        
+        public void actionPerformed(ActionEvent e){
+            
+            // TODO
+        }
+    }
+}
+```
+
+#### 采用Lambda表达式处理事件
+
+```java
+public class name extends JFrame{ 
+    
+    public name(title){
+        
+        super(title);
+        button1.addActionListener((event)-{// TODO});
+    }
+}
+```
+
+#### 使用适配器
+
+*    事件监听器都是接口，在Java中接口中定义的抽象方法必须全部是实现，哪怕你对某些方法并不关心，你也要给一对空的大括号表示实现。
+*    在使用时通过继承事件所对应的适配器类，覆盖所需要的方法，无关方法不用实现。
+
+```java
+this.addWindowListener(new WindowAdapter(){
+    
+    public void windowClosing(WindowEvent e){
+        // TODO
+    }
+})
+```
+
+*    事件适配器提供了一种简单的实现监听器的手段，可以缩短程序代码。但是，由于Java的单一继承机制，当需要多种监听器或此类已有父类时，就无法采用事件适配器了。
+
+##### 适配器种类
+
+*    ComponentAdapter：组件适配器。
+*    ContainerAdapter：容器适配器。
+*    FocusAdapter：焦点适配器。
+*    KeyAdapter：键盘适配器。
+*    MouseAdapter：鼠标适配器。
+*    MouseMotionAdapter：鼠标运动适配器。
+*    WindowAdapter：窗口适配器。
+
+### 布局管理
+
+*    Java为了实现图形用户界面的跨平台，并实现动态布局等效果，Java将容器内的所有组件布局交给布局管理器管理。布局管理器负责，如组件的排列顺序、大小、位置，当窗口移动或调整大小后组件如何
+     变化等。
+
+#### FlowLayout布局
+
+*    FlowLayout布局摆放组件的规律是：从上到下、从左到右进行摆放，如果容器足够宽，第一个组件先添加到容器中第一行的最左边，后续的组件依次添加到上一个组件的右边，如果当前行已摆放不下该
+     组件，则摆放到下一行的最左边。
+
+##### 构造方法
+
+*    FlowLayout(int align, int hgap, int vgap)：创建一个FlowLayout对象，它具有指定的对齐方式以及指定的水平和垂直间隙，hgap参数是组件之间的水平间隙，vgap参数是组件之间的垂直间隙，单位是像素。
+*    FlowLayout(int align)：创建一个FlowLayout对象，指定的对齐方式，默认的水平和垂直间隙是5个单位。
+*    FlowLayout()：创建一个FlowLayout对象，它是居中对齐的，默认的水平和垂直间隙是5个单位。
+
+##### 对齐方式align
+
+*    FlowLayout.CENTER：指示每一行组件都应该是居中的。
+*    FlowLayout.LEADING：指示每一行组件都应该与容器方向的开始边对齐，例如，对于从左到右的方向，则与左边对齐。
+*    FlowLayout.LEFT：指示每一行组件都应该是左对齐的。
+*    FlowLayout.RIGHT：指示每一行组件都应该是右对齐的。
+*    FlowLayout.TRAILING：指示每行组件都应该与容器方向的结束边对齐，例如，对于从左到右的方向，则与右边对齐。
+
+#### BorderLayout布局
+
+*    BorderLayout布局是窗口的默认布局管理器
+*    orderLayout布局管理器把容器分成5个区域：North、South、East、West和Center
+
+##### 构造方法
+
+*    BorderLayout(int hgap, int vgap)：创建一个BorderLayout对象，指定水平和垂直间隙，hgap参数是组件之间的水平间隙，vgap参数是组件之间的垂直间隙，单位是像素。
+*    BorderLayout()：创建一个BorderLayout对象，组件之间没有间隙。
+
+##### 对齐方式align
+
+*    BorderLayout.CENTER：中间区域的布局约束（容器中央）。 
+*    BorderLayout.EAST：东区域的布局约束（容器右边）。
+*    BorderLayout.NORTH：北区域的布局约束（容器顶部）。 
+*    BorderLayout.SOUTH：南区域的布局约束（容器底部）。
+*    BorderLayout.WEST：西区域的布局约束（容器左边）。
+*    在5个区域中不一定都放置了组件，如果某个区域缺少组件，界面布局会有比较大的影响
+
+#### GridLayout布局
+
+*    GridLayout布局以网格形式对组件进行摆放，容器被分成大小相等的矩形，一个矩形中放置一个组件。
+
+##### 构造方法
+
+*    GridLayout()：创建具有默认值的GridLayout对象，即每个组件占据一行一列。
+
+*    GridLayout(int rows, int cols)：创建具有指定行数和列数的GridLayout对象。
+
+*    GridLayout(int rows, int cols, int hgap, int vgap)：创建具有指定行数和列数的
+
+     GridLayout对象，并指定水平和垂直间隙。
+
+#### 不使用布局管理器
+
+*    如果要开发的图形用户界面应用不考虑跨平台，不考虑动态布局，窗口大小不变的，那么布局管理器就失去使用的意义。容器也可以不设置布局管理器，那么此时的布局是由开发人员自己管理的。
+
+##### 方法
+
+*    void setLocation(int x, int y)：方法是设置组件的位置。
+*    void setSize(int width, int height)：方法是设置组件的大小。
+*    void setBounds(int x, int y, int width, int height)：方法是设置组件的大小和位置。
+
+### JLabel
+
+*    Swing中标签类是JLabel，它不仅可以显示文本还可以显示图标
+
+#### 构造方法
+
+*    JLabel()：创建一个无图标无标题标签对象。
+*    JLabel(Icon image)：创建一个具有图标的标签对象。
+*    JLabel(Icon image, int horizontalAlignment)：通过指定图标和水平对齐方式创建标签对象。 JLabel(String text)：创建一个标签对象，并指定显示的文本。
+*    JLabel(String text, Icon icon, int horizontalAlignment)：通过指定显示的文本、图标和水平对齐方式创建标签对象。
+*    JLabel(String text, int horizontalAlignment)：通过指定显示的文本和水平对齐方式创建标签对象。
+
+### JButton
+
+*    Swing中的按钮类是JButton，JButton不仅可以显示文本还可以显示图标。
+
+#### 构造方法
+
+*    JButton()：创建不带文本或图标的按钮对象。
+*    JButton(Icon icon)：创建一个带图标的按钮对象。
+*    JButton(String text)：创建一个带文本的按钮对象。
+*    JButton(String text, Icon icon)：创建一个带初始文本和图标的按钮对象。
+
+### JTextField
+
+#### 构造方法
+
+*    JTextField()：创建一个空的文本框对象。
+*    JTextField(int columns)：指定列数，创建一个空的文本框对象，列数是文本框显示的宽度，列数主要用于FlowLayout布局。
+*    JTextField(String text)：创建文本框对象，并指定初始化文本。
+*    JTextField(String text, int columns)：创建文本框对象，并指定初始化文本和列数。
+
+### JTextArea
+
+#### 构造方法
+
+*    JTextArea()：创建一个空的文本区对象。
+*    JTextArea(int rows, int columns)：创建文本区对象，并指定行数和列数。
+*    JTextArea(String text)：创建文本区对象，并指定初始化文本。
+*    JTextArea(String text, int rows, int columns)：创建文本区对象，并指定初始化文本、行数和列数。
+
+### JCheckBox/JCheckBox
+
+*    多选组件是复选框（JCheckBox），复选框（JCheckBox）有时也单独使用，能提供两种状态的开和关。
+
+#### JCheckBox
+
+*    单选组件是单选按钮（JRadioButton），同一组的多个单选按钮应该具有互斥特性，这也是为什么单选按钮也叫做收音机按钮（RadioButton），就是当一个按钮按下时，其他按钮一定抬起。
+*    同一组多个单选按钮应该放到同一个ButtonGroup对象，ButtonGroup对象不属于容器，它会创建一个互斥作用范围。
+
+```cpp
+ButtonGroup buttonGroup = new ButtonGroup();
+buttonGrop.add(r);
+```
+
+##### 构造方法
+
+*    JCheckBox()：创建一个没有文本、没有图标并且最初未被选定的复选框对象。
+*    JCheckBox(Icon icon)：创建有一个图标、最初未被选定的复选框对象。
+*    JCheckBox(Icon icon, boolean selected)：创建一个带图标的复选框对象，并指定其最初是否处于选定状态。
+*    JCheckBox(String text)：创建一个带文本的、最初未被选定的复选框对象。
+*    JCheckBox(String text, boolean selected)：创建一个带文本的复选框对象，并指定其最初是否处于选定状态。
+*    JCheckBox(String text, Icon icon)：创建带有指定文本和图标的、最初未被选定的复选框对象。
+*    JCheckBox(String text, Icon icon, boolean selected)：创建一个带文本和图标的复选框对象，并指定其最初是否处于选定状态。
+
+### JComboBox
+
+#### 构造方法
+
+*    JComboBox()：创建一个下拉列表对象。
+*    JComboBox(Object [] items)：创建一个下拉列表对象，items设置下拉列表中选项。下拉列表中选项内容可以是任意类，而不再局限于String。
 
 ## JavaFX
 
