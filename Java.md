@@ -3525,8 +3525,163 @@ buttonGrop.add(r);
 *    JComboBox()：创建一个下拉列表对象。
 *    JComboBox(Object [] items)：创建一个下拉列表对象，items设置下拉列表中选项。下拉列表中选项内容可以是任意类，而不再局限于String。
 
+### JList
+
+*    Swing中提供了列表（JList）组件，可以单选或多选。
+
+#### 构造方法
+
+*    JList()：创建一个列表对象。
+*    JList(Object [] listData)：创建一个列表对象，listData设置列表中选项。列表中选项内容可以是任意类，而不再局限于String。
+
+### JSplitPane
+
+*    Swing中提供了一种分隔面板（JSplitPane）组件，可以将屏幕分成左右或上下两部分。
+
+#### 构造方法
+
+*    JSplitPane(int newOrientation)：创建一个分隔面板，参数newOrientation指定布局方向，newOrientation取值是JSplitPane.HORIZONTAL_SPLIT水平或JSplitPane.VERTICAL_SPLIT垂直。
+*    JSplitPane(int newOrientation, Component newLeftComponent, Component newRightComponent)：创建一个分隔面板，参数newOrientation指定布局方向，newLeftComponent左侧面板组件， newRightComponent右侧面板组件。
+
+### JTable
+
+*    Swing提供了表格组件JTable类，但是表格组件比较复杂，它的表现形式与数据分离的。
+
+#### 构造方法
+
+*    JTable(TableModel dm) ：通过模型创建表格，dm是模型对象，其中包含了表格要显示的数据。
+*    JTable(Object[][] rowData, Object[] columnNames)：通过二维数组和指定列名，创建一个表格对象，rowData是表格中的数据，columnNames是列名。
+*    JTable(int numRows, int numColumns)：指定行和列数创建一个空的表格对象。
+
 ## JavaFX
 
 *    JavaFX是开发丰富互联网应用程序（Rich Internet Application，缩写RIA）的图形用户界面技术，JavaFX期望能够在桌面应用的开发领域与Adobe公司的AIR、微软公司的Silverlight相竞争。
 *    传统的互联网应用程序基于Web的，客户端是浏览器。而丰富互联网应用程序试图打造自己的客户端，替代浏览器。
+
+# 注解
+
+*    Java 5之后可以在源代码中嵌入一些补充信息，这种补充信息称为注解（Annotation），例如在方法覆盖中使用过的@Override注解，注解都是@符号开头的
+*    注解并不能改变程序运行的结果，不会影响程序运行的性能。有些注解可以在编译时给用户提示或警告，有的注解可以在运行时读写字节码文件信息。
+
+
+
+## 基本注解
+
+### @Override
+
+*    @Override只能用于方法，子类覆盖父类方法（或者实现接口的方法）时可以@Override注解。编译器会检查被@Override注解的方法，确保该方法父类中存在的方法，否则会有编译错误。
+*    当然如果该方法前面不加@Override注解，即便是方法写错误了，也不会有编译错误，但是Object父类的toString()方法并没有被覆盖。这会引起程序出现Bug（缺陷）。
+
+### @Deprecated
+
+*    @Deprecated用来指示API已经过时了，@Deprecated可以用来注解类、接口、成员方法和成员变量。
+*    在Eclipse中这些被注解的API都画上删除线。
+
+### @SuppressWarnings
+
+*    @SuppressWarnings注解用来抑制编译器警告，如果你确认程序中的警告没有问题，可以不用理会。但是就是不想看到这些警告，可以使用@SuppressWarnings注解消除这些警告。
+
+### @SafeVarargs
+
+*    抑制编译器警告将非泛型变量赋值给泛型变量
+
+### @FunctionalInterface
+
+*    @FunctionalInterface注解是Java 8增加的，用于接口的注解，声明接口是函数式接口。
+
+## 元注解
+
+### @Documented
+
+*    如果在一个自定义注解中引用@Documented注解，那么该注解可以修饰代码元素（类、接口、成员变量和成员方法等），javadoc等工具可以提取这些注解信息。
+
+### @Target
+
+*    @Target注解用来指定一个新注解的适用目标。@Target注解有一个成员（value）用来设置适用目标，value是java.lang.annotation.ElementType枚举类型的数组，ElementType描述Java程序元素类型，它有10个枚举常量。
+
+#### ElementType枚举类型中的枚举常量
+
+<table>
+    <tr><th>枚举常量</th><th>说明</th></tr>
+    <tr><th>ANNOTATION_TYPE</th><th>其他注解类型声明</th></tr>
+    <tr><th>CONSTRUCTOR</th><th>构造方法声明</th></tr>
+    <tr><th>FIELD</th><th>成员变量或常量声明</th></tr>
+    <tr><th>LOCAL_VATIABLE</th><th>局部变量声明</th></tr>
+    <tr><th>METHOD</th><th>方法声明</th></tr>
+    <tr><th>PACKAGE</th><th>包声明</th></tr>
+    <tr><th>PARAMETER</th><th>参数声明</th></tr>
+    <tr><th>TYPE</th><th>类、接口声明</th></tr>
+    <tr><th>TYPE_PARAMETER</th><th>用于泛型中类型参数声明</th></tr>
+    <tr><th>TYPE_USE</th><th>用于任何类型的声明</th></tr>
+</table>
+
+### @Retention
+
+*    @Retention注解用来指定一个新注解的有效范围，@Retention注解有一个成员（value）用来设置保留策略，value是java.lang.annotation.RetentionPolicy枚举类型，RetentionPolicy描述注解保留策略，它有3个枚举常量。
+
+#### 枚举常量
+
+<table>
+    <tr><th>枚举常量</th><th>说明</th></tr>
+    <tr><th>SOURCE</th><th>只适用于java源代码文件中，此范围最小</th></tr>
+    <tr><th>CLASS</th><th>编译器把注解信息记录在字节码文件中，此范围居中</th></tr>
+    <tr><th>RUNTIME</th><th>编译器把注解信息记录在字节码文件中，并在运行时可以读取这些信息，此范围最大</th></tr>
+</table>
+
+#### @Inherited
+
+*    @Inherited注解用来指定一个新注解可以被继承。假定一个类A被该新注解修饰，那么这个A类的子类会继承该新注解。
+
+#### @Repeatable
+
+*    @Repeatable注解是Java 8新增加的，它允许在相同的程序元素中重复注释，可重复的注释必须使用@Repeatable进行注释。
+
+#### @Native
+
+*    @Native注解一个成员变量，指示这个变量可以被本地代码引用。常常被代码生成工具使用。
+
+## 自定义注解
+
+*    如果前面的Java SE提供的11内置注解不能满足你的需求，可以自定义注解，注解本质是一种接口，它是java.lang.annotation.Annotation接口的子接口，是引用数据类型。
+
+### 声明注解
+
+*    声明自定义注解可以使用@interface关键字实现
+
+```java
+// Marker.java文件
+public @interface Marker{
+    // TODO
+}
+```
+
+*    @interface声明一个注解类型，它前面的访问限定修饰符与类一样有两种：公有访问权限和默认访问权限。
+
+# 数据库
+
+*    数据必须以某种方式来存储才可以有用，数据库实际上是一组相关数据的集合。
+
+## 数据持久技术
+
+*    把数据保存到数据库中只是一种数据持久化方式。凡是将数据保存到存储介质中，需要的时候能够找到它们，并能够对数据进行修改，这些就属于数据持久化。
+
+### 技术
+
+#### 文本文件
+
+*    通过Java I/O流技术将数据保存到文本文件中，然后进行读写操作，这些文件一般是结构化的文档，如XML、JSON和CSV等文件。结构化文档就是文件内部采取某种方式将数据组织起来。
+
+#### 对象序列化
+
+*    序列化用于将某个对象以及它的状态写到文件中，它保证了被写入的对象之间的关系，当需要这个对象时，可以完整地从文件重新构造出来，并保持原来的状态。在Java中实现
+     java.io.Serilizable接口的对象才能被序列化和反序列化。Java还提供了两个流：ObjectInputStream和ObjectOutputStream。但序列化不支持事务处理、查询或者向不同的用户共享数据。序列化只适用于最简单的应用，或者在某些无法有效地支持数据库的嵌入式系统中。
+
+#### 数据库
+
+*    将数据保存数据库中是不错的选择，数据库的后面是一个数据库管理系统，它支持事务处理、并发 问、高级查询和SQL语言。Java对象保存到数据库中主要的技术有：JDBC1、EJB2和ORM框架等。
+*    
+
+# 参考
+
+*    java从小白到大牛 关东升
 
