@@ -3679,7 +3679,10 @@ public @interface Marker{
 #### 数据库
 
 *    将数据保存数据库中是不错的选择，数据库的后面是一个数据库管理系统，它支持事务处理、并发 问、高级查询和SQL语言。Java对象保存到数据库中主要的技术有：JDBC1、EJB2和ORM框架等。
-*    
+
+https://dev.mysql.com/downloads/
+
+
 
 # 参考
 
