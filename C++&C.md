@@ -5830,6 +5830,19 @@ OutputIterator reverse_copy(BidirectionalIterator sourceBeg, BidirectionalIterat
 *    Lists提供了一个等效成员函数reverse(),不是重新赋值元素,而是重新安排指针,因此具有更佳性能。
 *    复杂度:线性,分别进行numberOElements /2次交换操作或numberOjElements次赋值(assign)操作。
 
+#### rotate()
+
+```cpp
+void rotate(ForwardIterator beg, ForwardIterator newBeg, ForwardIterator end) 
+```
+
+*    将区间[beg，end)内的元素进行旋转，执行后*newBeg成为新的第一元素。
+
+*    调用者必须确保 newBeg是区间[beg，end)内的一个有效位置，否则会引发未定
+     义的行为。
+
+*    复杂度;线性，最多进行 numberOfElements次交换动作。
+
 ### 排序算法
 
 | 名称                | 效果                                                         |
