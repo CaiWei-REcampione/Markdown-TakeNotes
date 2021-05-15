@@ -5837,11 +5837,23 @@ void rotate(ForwardIterator beg, ForwardIterator newBeg, ForwardIterator end)
 ```
 
 *    将区间[beg，end)内的元素进行旋转，执行后*newBeg成为新的第一元素。
-
 *    调用者必须确保 newBeg是区间[beg，end)内的一个有效位置，否则会引发未定
      义的行为。
-
 *    复杂度;线性，最多进行 numberOfElements次交换动作。
+
+#### rotate_copy()
+
+```cpp
+OutputIterator rotate_copy(ForwardIterator sourceBeg, ForwardIterator newBeg, ForwardIterator sourceEnd, OutputIterator destBeg)
+```
+
+*    这是copy()和rotate()的组合。
+*    将源区间[sourceBeg, sourceEnd)内的元素复制到“以destBeg起始的目标区间”中,同时旋转元素,使newBeg成为新的第一元素。
+*    返问目标区间内最后一个被复制元素的下一位置。
+*    调用者必须确保newBeg是区间[beg, end)内的一个有效位置,否则会引发未定义的行为。
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    源区间和目标区间两者不可重迭。
+*    复杂度:线性,执行numberOdElements次赋值(assign)操作。
 
 ### 排序算法
 
