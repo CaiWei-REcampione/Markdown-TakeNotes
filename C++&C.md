@@ -5855,6 +5855,45 @@ OutputIterator rotate_copy(ForwardIterator sourceBeg, ForwardIterator newBeg, Fo
 *    源区间和目标区间两者不可重迭。
 *    复杂度:线性,执行numberOdElements次赋值(assign)操作。
 
+#### next_permutation()/prev_permutation
+
+```cpp
+bool next_permutation(BidirectionalIterator beg, BidirectionalIterator end)
+boo1 prev_permutatlon(BidirectionalIterator beg, Bidirectionaliterator end)
+```
+
+*    next_permutation ()会改变区间[beg, end)内的元素次序,使它们符合“下一个排列次序”
+*    prev-permutation()会改变区间[beg, end)内的元素次序,使它们符合“上一个排列次序"
+*    如果元素得以排列成〈就字典顺序而言的) “正规(normal) "次序,则两个算法都返回true,所谓正规次序,对next-permutation()而言为升序,对prev-permutation ()而言为降序。因此,如果要走遍所有排列,你必须先将所有元素(按升序或降序)排序,然后开始以循环方式调用next_permutation或prev_permutation,直到算法返回false.
+*    复杂度:线性,最多执行numberOfElements /2次交换操作。
+
+#### random_shuffle()
+
+```cpp
+void random_shuffle(RandomAccessIterator beg, RandomAccessIterator end)
+void random_shuffle(RandomAccessIterator beg, RandomAccessIterator end, RandomFunc& op)
+```
+
+*    第一形式使用一个均匀分布随机数产生器(uniform distribution random number generator)来打乱区间[beg, end)内的元素次序。
+*    第二形式使用op打乱区间[beg, end)内的元素次序。算法内部会使用一个整数值(其型别为“迭代器所提供之difference_type" )来调用op:ср(max)它应该返回一个大于零而小于max的随机数,不包括max本身。
+*    注意,op是一个non-const reference。所以你不可以将暂时数值或一般函数传进去。
+*    复杂度;线性,执行nmberoElements-1次交换动作
+
+#### partition()/stable_partition()
+
+```cpp
+BidirectionalIterator partition(BidirectionalIterator beg, BidirectionalIterator end, Unarypredicate op)
+BidirectionalIterator stable_partition(BidirectionalIterator beg, BidirectionalIterator end, Unarypredicate op)
+```
+
+*    这两种算法将区间[beg, end)中“造成以下一元判断式:op(elem)结果为true"的元素向前端移动。
+*    这两种算法都返回“令opt()结果为false"的第一个元素位置。
+*    两者差别是,无论元素是否符合给定的准则, stable_partition()会保持它们之间的相对次序。
+*    op不应该在函数调用过程中改变自身状态。
+*    复杂度:
+     *    -partition ():线性,总共执行op()操作numberOfElements次,以及最多numberOfElements/2次的交换操作。
+     *    -stablepartition ():如果系统拥有足够的内存,那么就是线性复杂度,执行op(操作及交换操作共numberOfElements次:如果没有足够内存,则是n-log-n,执行op()操作numberOjfilements*1og(numberOfElements)次。
+
 ### 排序算法
 
 | 名称                | 效果                                                         |
@@ -5873,7 +5912,7 @@ OutputIterator rotate_copy(ForwardIterator sourceBeg, ForwardIterator newBeg, Fo
 
 *    你永远可以把排序准则当做可有可无的参数,传给所有排序算法。缺省的排序准则是仿函数less<>,所以元素按升序排列。
 
-#### sort()
+#### sort()/stable_sort()
 
 sort()内部采用quicksort算法。因此保证了很好的平均性能,复杂度为n*log(n),但最差情况下也可能具有非常差的性能(二次复杂度)。
 
@@ -5932,10 +5971,35 @@ std::sort(sutVector.begin(), stuVector.end(), Less());
 
 #### partial_sort()
 
+```cpp
+void partial_sort (RandomAccessIterator beg, RandomAccessIterator sortEnd, RandomAccessIterator end)
+void partlal_sort (RandomAccessIterator beg, RandomAccessIterator sortEnd, RandomAccessIterator end, BinaryPredicate op)
+```
+
 *    partial_sort()内部采用heapsort算法。因此,它在任何情况下保证n*log(n)复杂度。
 *    大多数情况下heapsort比quicksort慢2-5倍,所以大多数时候虽然partial_sort()具有较佳复杂度,但sort()具有较好的执行效率。
 *    partiai_sort()的优点是它在任何时候都保证n*log(n)复杂度,绝不会变成二次复杂度。
 *    partial_sort()还有一种特殊能力:如果你只需要前n个元素排序,它可以在完成任务后立刻停止。所以如果想对所有元素进行排序,你可以将序列的终点作为第二参数和最后一个参数传进去
+*    以上第一形式,以operacor < 对区间[beg, end)内的元素进行排序,使区间[beg, sortEnd)内的元素处于有序状态(sorted order)
+*    以上第二形式,运用二元判断式:op(elem1,elem2)对区间[beg, end)内的元素进行排序,使区间[beg, sortEnd)内的元素处于有序状态(sorted order)
+*    op不应该在函数调用过程中改变自身状态。
+*    不同的是, partial_sort()并不对全部元素排序:一旦第一个元素至sortEnd之间的所有元素都排妥次序,就立刻停止。所以如果你只需要前3个已序元素,可以使用partial_sort()来节省时间,因为它不会对剩余的元素进行非必要的排序
+*    如果sortEnd和end相等,那么partial_sort()会对整个序列进行排序。平均而言其效率不及sort(),不过以最差情况而论则优于sort()。
+*    复杂度;在线性和n-log-n之间,大约执行numberOfElements *log(numberof-SortedElements)次比较操作。
+
+#### partial_sort_copy()
+
+```cpp
+RandonAccessIterator partial_sort_copy (InputIterator sourceBeg, InputIterator sourceEnd, RandomAccessIterator destBeg, RandomAccessIterator destEnd)
+RandomAccessIterator partial_sort_copy (InputIterator sourceBeg, InputIterator sourceEnd, RandomAccessIterator destBeg, RandomAccessIterator destEnd, BinaryPredicate op)
+```
+
+*    两者都是copy ()和partial_sort()的组合。
+*    它们将元素从源区间[sourceBeg, sourceEnd)复制到目标区间[destBeg,destBnd),同时进行排序。
+*    “被排序(被复制)的元素数量”是源区间和目标区间两者所含元素数量的较小值.
+*    两者都返回目标区间内“最后一个被复制元素”的下一位置(也就是第一个未被覆盖的元素)
+*    如果目标区间[destBeg, destEnd)内的元素数量大于或等于源区间[sourceBeg,sourceEnd)内的元素数量,则所有元素都会被排序并复制,整个行为就相当于copy ()和sort ()的组合。
+*    复杂度:在线性和n-log-n之间,大约执行numberOfElements * log(numberOf-SortedElements)次比较操作。
 
 #### stable_sort()
 
