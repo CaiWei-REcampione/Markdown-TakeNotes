@@ -2199,6 +2199,20 @@ void f()
 }
 ```
 
+### 抛出字符串异常
+
+```cpp
+throw "[字符串]";
+```
+
+```cpp
+try{
+	// 语句体
+}catch(const char* argc){// const char argc[]
+    // 处理语句
+}
+```
+
 ## 栈解退
 
 c++通常通过将信息放在栈中来处理函数调用
@@ -6001,6 +6015,20 @@ RandomAccessIterator partial_sort_copy (InputIterator sourceBeg, InputIterator s
 *    如果目标区间[destBeg, destEnd)内的元素数量大于或等于源区间[sourceBeg,sourceEnd)内的元素数量,则所有元素都会被排序并复制,整个行为就相当于copy ()和sort ()的组合。
 *    复杂度:在线性和n-log-n之间,大约执行numberOfElements * log(numberOf-SortedElements)次比较操作。
 
+#### nth_element()
+
+```cpp
+void nth_element (RandomAccessIterator beg, RandomAccessIterator nth, RandonAccessIterator end)
+void nth_element (RandomAccessIterator beg, RandomAccessIterator nth, RandonAccessIterator end, BinaryPredicate op)
+```
+
+*    两种形式都对区间[beg, end)内的元素进行排序,使第n个位置上的元素就位,也就是说,所有在位置n之前的元素都小于等于它,所有在位置n之后的元素都大于等于它。这样,你就得到了“根据n位置上的元素”分割开来的两个子序列,第一子序列的元素统统小于第二子序列的元素。如果你只需要n个最大或最小元素,但不要求它们必须已序(sorted) ,那么这个算法就很有用。
+*    上述第一形式使用operator<作为排序准则。
+*    上述第二形式使用以下二元判断式作为排序准则:op(elem1, elem2)
+*    op不应该在函数调用过程中改变自身状态。
+*    也可以根据某个排序准则,将序列中的元素分割成两部分。
+*    复杂度:平均而言为线性。
+
 #### stable_sort()
 
 *    内部采用mergesort,它对所有元素进行排序
@@ -6018,6 +6046,57 @@ RandomAccessIterator partial_sort_copy (InputIterator sourceBeg, InputIterator s
 #### stable_partition()
 
 *    行为类似partition(),不过更具额外能力,保证两个子集内的元素的相对次序保持不变。
+
+#### heap算法
+
+##### make_heap()
+
+```cpp
+void make_heap (RandomAccesIterator beg, RandomAccesIterator end)
+void make_heap (RandomAccesIterator beg, RandomAccesIterator end, BinaryPredicate op)
+```
+
+*    两种形式都将区间[beg, end)内的元素转化为heap.
+*    op是一个可有可无的(可选的)二元判断式,被视为排序准则:op(elem1,elem2)
+*    只有在多于一个元素的情况下,才有必要使用这些函数来处理heap,如果只有单一元素,那么它自动就形成一个heap。
+*    复杂度:线性,最多执行3*numberOfElements次比较动作。
+
+##### push_heap()
+
+```cpp
+void push_heap (RandomAccesIterator beg, RandomAccesIterator end)
+void push_heap (RandomAccesIterator beg, RandonAccesIterator end, BinaryPredicate op)
+```
+
+*    两种形式都将end之前的最后一个元素加入原本就是个heap的[beg, end-1)区间内,使整个区间[beg, end)成为一个heap.
+*    op是一个可有可无的(可选的)二元判断式,被视为排序准则:op(elem1,elem2)
+*    调用者必须保证,进入函数时,区间[beg. end-1)内的元素原本便已形成一个heap (在相同的排序准则下) ,而新元素紧跟其后。
+*    复杂度:对数,最多执行1og(nunberOfElements)次比较操作。
+
+##### pop_heap()
+
+```cpp
+void pop_heap (RandomAccesIterator beg, RandomAccesIterator end)
+void pop_heap (RandomAccesIterator beg, RandomAccesIterator end, BinaryPredicate op)
+```
+
+*    以上两种形式都将heap [beg, end)内的最高元素,也就是第一个元素,移到最后位置,并将剩余区间[beg, end-1)内的元素组织起来,成为一个新的heap.
+*    op是个可有可无的(可选的)二元判断式,被当做排序准则:op(elem1, elem2)
+*    调用者必须保证,进入函数时,区间[beg,end)内的元素原本便已形成一个heap(在相同的排序准则下)。
+*    复杂度:对数,最多执行2*log(numberOfElements)次比较操作。
+
+##### sort_heap()
+
+```cpp
+void sort_heap (RandomAccesIterator beg, RandomAccesIterator end)
+void sort_heap (RandomAccesIterator beg, RandomAccesIterator end, BiraryPredicate op)
+```
+
+*    以上两种形式都可以将heap[beg, end)转换为一个已序(sorted)序列。
+*    op是个可有可无的二元判断式,被视为排序准则:op(elem1, elem2)
+*    注意,此算法一旦结束,该区间就不再是个heap了。
+*    调用者必须保证,进入函数时,区间[beg,end)内的元素原本便已形成一个heap(在相同的排序准则下)。
+*    复杂度: n-log-n,最多执行numberOfElements * log(numberOfElements)次比较动作。
 
 ### 已序区间算法
 

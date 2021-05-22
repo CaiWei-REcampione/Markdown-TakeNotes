@@ -1064,23 +1064,23 @@ String是不可变字符串， StringBuffer和StringBuilder是可变字符串。
 
 ##### String
 
-<table>
-    <tr><th>方法</th><th>说明</th></tr>
-    <tr><th>char charAt(int index)</th><th>返回指定位置的字符</th></tr>
-    <tr><th>int compareTo(String anotherString)</th><th>比较本字符串与anotherString中的字符串是否相等</th></tr>
-    <tr><th>int compareToIgnoreCase(String str)</th><th>同上，但忽略大小写</th></tr>
-    <tr><th>String concat(String str)</th><th>将str加到本字符串的后面，返回新生成的字符串(本字符串并没有改变)</th></tr>
-    <tr><th>static String copyValueOf(char[] data)</th><th>用字符型数组data的值生成一个String对象，并返回</th></tr>
-    <tr><th>int indexOf(int ch)</th><th>返回字符ch在本字符串中出现的位置</th></tr>
-    <tr><th>int indexOf(String str)</th><th>返回字符串str在本字符串中出现的位置</th></tr>
-    <tr><th>int length()</th><th>返回本字符串的长度</th></tr>
-    <tr><th>String replace(char oldChar, char newChar)</th><th>将本字符串的oldChar字符用newChar字符替代，返回新生成的字符串(本字符串并没有改变)</th></tr>
-    <tr><th>String substring(int beginIndex, int endIndex)</th><th>从本字符串的beginIndex位置开始到endIndex-1位置结束，截取一个子串，并返回该子串</th></tr>
-    <tr><th>char[] toCharArray()</th><th>用本字符串生成一个字符型数组并返回</th></tr>
-    <tr><th>String toLowerCase()</th><th>将本字符串中的字符转换成小写，返回新生成的字符串(本字符串并没有改变)</th></tr>
-    <tr><th>String toUpperCase()</th><th>将本字符串中的字符转换成大写，返回新生成的字符串(本字符串并没有改变)</th></tr>
-    <tr><th>String trim()</th><th>将本字符串的头、尾空格去掉，返回新生成的字符串</th></tr>
-</table>
+| 方法                                            | 说明                                                         |
+| ----------------------------------------------- | ------------------------------------------------------------ |
+| char  charAt(int index)                         | 返回指定位置的字符                                           |
+| int  compareTo(String anotherString)            | 比较本字符串与anotherString中的字符串是否相等                |
+| int  compareToIgnoreCase(String str)            | 同上，但忽略大小写                                           |
+| String  concat(String str)                      | 将str加到本字符串的后面，返回新生成的字符串(本字符串并没有改变) |
+| static  String copyValueOf(char[] data)         | 用字符型数组data的值生成一个String对象，并返回               |
+| int  indexOf(int ch)                            | 返回字符ch在本字符串中出现的位置                             |
+| int  indexOf(String str)                        | 返回字符串str在本字符串中出现的位置                          |
+| int  length()                                   | 返回本字符串的长度                                           |
+| String  replace(char oldChar, char newChar)     | 将本字符串的oldChar字符用newChar字符替代，返回新生成的字符串(本字符串并没有改变) |
+| String  substring(int beginIndex, int endIndex) | 从本字符串的beginIndex位置开始到endIndex-1位置结束，截取一个子串，并返回该子串 |
+| char[]  toCharArray()                           | 用本字符串生成一个字符型数组并返回                           |
+| String  toLowerCase()                           | 将本字符串中的字符转换成小写，返回新生成的字符串(本字符串并没有改变) |
+| String  toUpperCase()                           | 将本字符串中的字符转换成大写，返回新生成的字符串(本字符串并没有改变) |
+| String  trim()                                  | 将本字符串的头、尾空格去掉，返回新生成的字符串               |
+
 
 Java中不可变字符串类是String，属于java.lang包，它也是Java非常重要的类。
 
@@ -1193,18 +1193,18 @@ String字符串拼接可以使用+运算符或String的concat(String str)方法�
 
 ##### StringBuffer和StringBuilder
 
-<table>
-    <tr><th>方法</th><th>说明</th></tr>
-    <tr><th>StringBuffer insert(int offset, String str)</th><th>将字符串str插入到本字符串指定的位置</th></tr>
-    <tr><th>StringBuffer append(String str)</th><th>将字符串str追加到本字符串的末尾</th></tr>
-    <tr><th>int capacity()</th><th>返回本对象可以容纳的字符数目</th></tr>
-    <tr><th>char charAt(int index)</th><th>返回index位置的字符</th></tr>
-    <tr><th>StringBuffer delete(int start, int end)</th><th>删除掉从start到end位置的子字符串</th></tr>
-    <tr><th>StringBuffer deleteCharAt(int index)</th><th>删除掉index位置的字符</th></tr>
-    <tr><th>int length()</th><th> 返回本对象中实际存储的字符数目</th></tr>
-    <tr><th>StringBuffer replace(int start, int end, String str)</th><th>将从start到end位置的子字符串同str代替</th></tr>
-    <tr><th>void setCharAt(int index, char ch)</th><th>将字符char填充到index位置</th></tr>
-</table>
+| 方法                                                  | 说明                                  |
+| ----------------------------------------------------- | ------------------------------------- |
+| StringBuffer  insert(int offset, String str)          | 将字符串str插入到本字符串指定的位置   |
+| StringBuffer  append(String str)                      | 将字符串str追加到本字符串的末尾       |
+| int  capacity()                                       | 返回本对象可以容纳的字符数目          |
+| char  charAt(int index)                               | 返回index位置的字符                   |
+| StringBuffer  delete(int start, int end)              | 删除掉从start到end位置的子字符串      |
+| StringBuffer  deleteCharAt(int index)                 | 删除掉index位置的字符                 |
+| int  length()                                         | 返回本对象中实际存储的字符数目        |
+| StringBuffer  replace(int start, int end, String str) | 将从start到end位置的子字符串同str代替 |
+| void  setCharAt(int index, char ch)                   | 将字符char填充到index位置             |
+
 
 Java提供了两个可变字符串类StringBuffer和StringBuilder，中文翻译为“字符串缓冲区”。
 
@@ -3425,6 +3425,59 @@ public static function(interfacename inter,[parameter]){
 
 # 异常处理
 
+所谓异常处理机制,是指当程序出现错误后,程序如何处理。具体来说,异常·机制提供了程序退出的安全通道。当出现错误后,程序执行的流程发生改变,程序的控制权转移到异常处理器,在编程语言中引入这种机制,可大大简化程序员的工作量,使得程序更加易读、易懂、易维护。
+
+## 特点
+
+*    在应用程序遇到异常情况时,就会产生异常
+*    发生异常时,控制流立即跳转到关联的异常处理程序(如果存在)
+*    如果给定异常没有异常处理程序,则程序将停止执行,并显示一条错误信息
+*    可能导致异常的操作通过try关键字来执行。异常处理程序是在异常发生时执行的代码块。在C#、Java等编程语言中,用catch关键字来定义异常处理程序
+*    程序可以使用throw关键字显式地引发异常
+*    异常对象包含有关错误的详细信息,其中包括调用堆栈的状态以及有关错误的文本说明。
+*    即使引发了异常, finally块中的代码也会执行,从而使程序可以释放资源。
+
+## 异常处理的两种模型
+
+### 终止模型
+
+在应用程序中,对异常进行处理一般有两种模型,一种称为“终止模型”,此模型也是Java与C语言所支持的模型。在这种模型中,将假设错误非常关键,此错误将导致程序无法返回到异常发生的地方继续向下执行,一旦这类异常被抛出,就表明程序错误已无法挽回,不能再回来继续执行代码。
+
+### 恢复模型
+
+另一种模型称为“恢复模型” ,意思是异常处理程序的工作是修正错误,然后重新尝试调用出问题的方法,尽可能地保证程序的后续执行。对于恢复模型,指的是当程序中有异常发生时,对异常情况进行处理并且保证程序的异常处理之后能继续执行。在这种情况下,抛出异常的过程也是异常处理方法被调用并执行的过程,在Java编程语言中,通过配置异常处理方法,可以使异常的程序得以恢复,也就是保证程序不因异常终止,而是调用异常处理方法来修正程序运行错误。
+
+## 异常处理在编程中的优点
+
+在编程语言中使用异常处理机制,至少在3个方面具有优势。
+
+*    在用传统的语言编程时,程序员只能通过函数的返回值来知道错误信息。为了保证程序的健壮性,程序员不得不写下大量的if-else之类的判断语句,而且这些判断语句往往是嵌套的,导致程序的可读性降低,代码也难于维护。引入异常处理机制之后,程序员写程序时完全可以认为不会发生异常,一直按照正常的程序处理流程写下去,直到正常流程写完,之后再写捕获异常并进行相应的处理程序段就可以了。这就避免了书写大量if~else嵌套的麻烦。
+*    由于函数只能有一个返回值,所以在很多情况下,难以区分返回的到底是正常值还是错误信息的代码。一种变通的处理方式是用全局变量errno来存储错误类型(在Windows API中,存在大量这样的函数) ,这要求程序员自己主动去查找此全局变量。这不仅增加了编程的负担,而且一旦程序员忘记做这项工作,就会导致一些意想不到的错误。采用异常处理机制后,则不会发生这种情况。一旦有错误发生,被调用的方法会抛出异常。无论调用者是否记得处理这个异常,正常的程序流程都会被终止。
+*    在传统语言中,错误代码需要调用链上的函数一层一层返回。比如,有这样一个调用链: A-B-C-D,如果在D中发生错误,将返回一个错误代码,如果C和B不处理这个错误,就必须将这个错误代码返回给上一级。如果其中有一个函数的编写者忘记这项工作,函数A将得不到有关的错误信息。采用异常处理机制后,则不存在这个问题,在D中抛出的异常会存放在异常栈中,如果B和C不处理,仍然会传递给A。极端情况下,即使A不处理它,系统也会处理。
+
+## Java异常的分类
+
+#### 运行时异常
+
+运行时异常也叫非检查型异常,此类异常不遵循处理或声明规则,大多数是由于程序设计不当而引发的错误,但这种错误要在运行期间才会发生和被发现。
+
+#### 检查型异常
+
+除了运行时异常外,其余的异常均为检查型异常,所以也称为“非运行时异常”。此类异常经编译器验证,对于声明抛出异常的任何方法,编译器将强制执行处理或声明规则,这类异常真正的发生仍然是在运行时,不过编译器在编译时会进行检查,一旦发现某些语句使得此类异常有产生的“可能”,就强制要求用户处理这类异常,否则不能通过编译。
+
+#### 自定义异常
+
+如果系统定义的异常不能满足用户需要,用户也可以自己定义异常。自定义异常是为了表示应用程序的一些错误类型,为代码可能发生的一个或多个问题提供新含义。可以显示代码多个位置之间的错误的相似性,也可以区分代码运行时可能出现的相似问题的一个或者多个错误,或给出应用程序中一组错误的特定含义。它们必须是Throwable的直接或间接子类,在实际编程中,多数程序员会将自定义异常写成Exception的直接子类。
+
+## Java异常处理的原则
+
+*    尽可能地处理异常:要尽可能地处理异常,如果条件确实不允许,无法在自己的代码中完成处理,就考虑声明异常。如果人为避免在代码中处理异常,仅作声明,则是一种错误和依赖的实践。
+*    具体问题具体解决:异常的部分优点在于能为不同类型的问题提供不同的处理操作。有效异常处理的关键是识别特定故障场景,并开发解决此场景的特定相应行为。为了充分利用异常处理能力,需要为特定类型的问题构建特定的处理器块。
+*    记录可能影响应用程序运行的异常:至少要采取一些永久的方式,记录下可能影响应用程序操作的异常。理想情况下,当然是在第一时间解决引发异常的基本问题。不过,无论采用哪种处理操作,一般总应记录下潜在的关键问题。别看这个操作很简单,但它可以帮助您用很少的时间来跟踪应用程序中复杂问题的起因。
+*    根据情形将异常转化为业务上下文:若要通知一个应用程序特有的问题,有必要将应用程序转换为不同形式。若用业务特定状态表示异常,则代码更易维护。从某种意义上讲,无论何时将异常传到不同的上下文(即另一技术层) ,都应将异常转换为对新上下文有意义的形式。
+
+
+
 ## Throwable类
 
 *    所有的异常类都直接或间接地继承于java.lang.Throwable类
@@ -3470,7 +3523,28 @@ try {
 
 *    运行时异常是继承RuntimeException类的直接或间接子类。运行时异常往往是程序员所犯错误导致的，健壮的程序不应该发生运行时异常。它们的共同特点是：编译器不检查这类异常是否进行了处理，也就是对于这类异常不捕获也不抛出，程序也可以编译通过。由于没有进行异常处理，一旦运行时异常发生就会导致程序的终止，这是用户不希望看到的。
 
+## 抛出异常
+
+```java
+throw 异常对象名;
+```
+
+```cpp
+throw new 异常类名();
+```
+
+也就是说,一个方法中如果使用throw语句来抛出异常,要么自己捕获它,要么声明抛出了一个异常。声明抛出了异常,需要用throws关键字在方法的头部声明需要用throws关键字在方法的头部声明,格式如下
+
+```java
+[修饰符] [返回类型] 方法名 (参数表) throws 异常类名1[,异常类名2[, ...1]
+```
+
 ## 捕获异常
+
+*    try语句是必须的,它中间的语句序列一旦发生异常,将有可能被捕获。
+*    catch语句是可选的,可以有0个或多个。括号中的异常类型必须各不相同。一旦try中发生了异常,系统将从上往下依次查找catch语句中是否有异常类型与其匹配,匹配成功就进入到该catch语句块中。
+*    finally语句是资源保护块,也是可选的,可以有0个或1个。无论是否发生了异常,也无论异常是否被catch语句捕获, finally语句都会保证在最后被执行。
+*    catch和finally语句至少要存在其中的一条。
 
 ### try-catch语句
 
@@ -3512,6 +3586,40 @@ try{
 }
 ```
 
+```java
+try{
+    
+    // 语句块
+    try{
+        
+        // 语句块
+    }catch([异常类型] e){
+        
+        // 处理
+    }
+}catch([异常类型] e){
+    
+    // 处理
+}
+```
+
+```cpp
+try{
+    
+    // 语句块
+}catch([异常类型] e){
+    
+    try{
+        
+        // 处理        
+        // 语句块
+    }catch([异常类型] e){
+        
+        // 处理
+    }
+}
+```
+
 ##### 多重捕获
 
 ```java
@@ -3535,6 +3643,31 @@ try{
 *    在多个catch代码情况下，当一个catch代码块捕获到一个异常时，其他的catch代码块就不再进行匹配。
 
 >    在捕获到异常之后，通过printStackTrace()语句打印异常堆栈跟踪信息，往往只是用于调试，给程序员提示信息。堆栈跟踪信息对最终用户是没有意义的，
+
+*    在try-catch-finally语句中, catch可以出现多次,但异常类型必须互不相同,如果这些异常没有继承关系,则其顺序可以任意。但如果这些异常类有继承关系,则需要遵循子类,在前、父类在后的规则。这是由于在Java中,父类的变量可以指向子类的对象,而系统在查找匹配的异常类型时,是从上往下依次查找的,所以父类的异常类型必须写在后面。
+*    一条throw语句一旦被执行,程序立即转入相应的异常处理程序段,它后面的语句就不再执行了(这一点类似于return语句) ,而且它所在的方法也不再返回有意义的值。一个方法中, throw语句可以有多条,但每一次最多只能执行其中的一条。一般情况下, throw语句写在判断语句块中,以避免每次重复执行该语句。
+
+## 处理字符串异常
+
+### 声明
+
+```cpp
+[修饰符] 函数名 ([参数列表]) throws [异常类]{
+	
+    throw new [异常类];
+}
+```
+
+### 处理
+
+```java
+try{
+	
+}catch([异常类]){
+
+    System.out.println([异常类].getMessage())
+}
+```
 
 ## 释放资源
 
@@ -3704,40 +3837,70 @@ public class name<T>{
 
 ### 构造方法
 
-*    File(String path)：如果path是实际存在的路径，则该File对象表示的是目录；如果path是文件名，则该File对象表示的是文件。
-*    File(String path, String name)：path是路径名，name是文件名。
-*    File(File dir, String name)：dir是路径对象，name是文件名。
+| 方法                             | 说明                                                         |
+| :------------------------------- | ------------------------------------------------------------ |
+| File(File parent, String child)  | 创建一个File对象,以parent的绝对路径加上child成为新的目录或文件 |
+| File(String pathname)            | 创建一个File对象,将pathname指定路径转换为绝对路径            |
+| File(String parent,String child) | 创建一个File对象,以parent的绝对路径加上child成为新的目录或文件 |
+| File(URI uri)                    | 创建一个File对象,将URI转换为绝对路径                         |
 
-### 获得文件名
+### 获得文件信息
 
-*    String getName( )：获得文件的名称，不包括路径。
-*    String getPath( )：获得文件的路径。
-*    String getAbsolutePath( )：获得文件的绝对路径。
-*    String getParent( )：获得文件的上一级目录名。
+| 方法                      | 说明                         |
+| ------------------------- | ---------------------------- |
+| String getName( )         | 获得文件的名称，不包括路径   |
+| String getPath( )         | 获得文件的路径               |
+| String getAbsolutePath( ) | 获得文件的绝对路径           |
+| String getParent( )       | 获得文件的上一级目录名       |
+| long lastModified( )      | 获得文件最近一次修改的时间   |
+| long length( )            | 获得文件的长度，以字节为单位 |
+| boolean isHidden( )       | 测试文件是否为隐藏属性       |
 
-### 文件属性测试
+#### 文件创建时间
 
-*    boolean exists( )：测试当前File对象所表示的文件是否存在。 
-*    boolean canWrite( )：测试当前文件是否可写。
-*    boolean canRead( )：测试当前文件是否可读。
-*    boolean isFile( )：测试当前文件是否是文件。
-*    boolean isDirectory( )：测试当前文件是否是目录。
+```java
+File file = new File(pathname);
+Date date=new Date(file.lastModified());
+SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss ");
+System.out.println(simpleDateFormat.format(date));
+```
+
+### 文件属性
+
+| 方法                         | 说明                                 |
+| ---------------------------- | ------------------------------------ |
+| boolean exists( )            | 测试当前File对象所表示的文件是否存在 |
+| boolean canWrite( )          | 测试当前文件是否可写                 |
+| boolean canRead( )           | 测试当前文件是否可读                 |
+| boolean isFile( )            | 测试当前文件是否是文件               |
+| boolean isDirectory( )       | 测试当前文件是否是目录               |
+| int compareTo(File pathname) | 按字典值比较两个File对象的绝对路径   |
+
+
 
 ### 文件操作
 
-*    long lastModified( )：获得文件最近一次修改的时间。
-*    long length( )：获得文件的长度，以字节为单位。
-*    boolean delete( )：删除当前文件。成功返回 true，否则返回false。
-*    boolean renameTo(File dest)：将重新命名当前File对象所表示的文件。成功返回 true，否则返回false。
+| 方法                        | 说明                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| boolean delete( )           | 删除当前文件。成功返回 true，否则返回false                   |
+| boolean renameTo(File dest) | 将重新命名当前File对象所表示的文件。成功返回 true，否则返回false |
+| boolean createNewFile( )    | 创建一个空文件                                               |
+| boolean delete( )           | 删除文件或目录                                               |
+
+
 
 ### 目录操作
 
-*    boolean mkdir( )：创建当前File对象指定的目录。
-*    String[] list()：返回当前目录下的文件和目录，返回值是字符串数组。
-*    String[] list(FilenameFilter filter)：返回当前目录下满足指定过滤器的文件和目录，参数是实现FilenameFilter接口对象，返回值是字符串数组。
-*    File[] listFiles()：返回当前目录下的文件和目录，返回值是File数组。
-*    File[] listFiles(FilenameFilter filter)：返回当前目录下满足指定过滤器的文件和目录，参数是实现FilenameFilter接口对象，返回值是File数组。
-*    File[] listFiles(FileFilter filter)：返回当前目录下满足指定过滤器的文件和目录，参数是实现FileFilter接口对象，返回值是File数组。
+| 方法                                    | 说明                                                         |
+| --------------------------------------- | ------------------------------------------------------------ |
+| boolean mkdir( )                        | 创建当前File对象指定的目录                                   |
+| String[] list()                         | 返回当前目录下的文件和目录，返回值是字符串数组               |
+| String[] list(FilenameFilter filter)    | 返回当前目录下满足指定过滤器的文件和目录，参数是实现FilenameFilter接口对象，返回值是字符串数组 |
+| File[] listFiles()                      | 返回当前目录下的文件和目录，返回值是File数组                 |
+| File[] listFiles(FilenameFilter filter) | 返回当前目录下满足指定过滤器的文件和目录，参数是实现FilenameFilter接口对象，返回值是File数组 |
+| boolean renameTo(File dest)             | 将文件改名成dest对象所指示的名字                             |
+| boolean setLastModified(long time)      | 设置文件或目录的时间                                         |
+| boolean setReadOnly()                   | 将文件或目录设置为只读                                       |
 
 对目录操作有两个过滤器接口：FilenameFilter和FileFilter。它们都只有一个抽象方法accept， 
 
@@ -3746,11 +3909,62 @@ public class name<T>{
 *    FileFilter接口中的accept方法如下：
      *    boolean accept(File pathname)：测试指定路径名是否应该包含在某个路径名列表中。
 
+## RandomAccessFile文件随机访问
+
+| 方法                                        | 说明                                                         |
+| ------------------------------------------- | ------------------------------------------------------------ |
+| void close()                                | 关闭此随机访问文件流并释放与流相关联的任何系统资源。         |
+| FileChannel getChannel()                    | 返回与此文件关联的唯一的FileChannel对象。                    |
+| FileDescriptor getFD()                      | 返回与此流关联的不透明文件描述符对象。                       |
+| long getFilePointer()                       | 返回此文件中的当前偏移量。                                   |
+| long length()                               | 返回此文件的长度。                                           |
+| int read()                                  | 从该文件读取一个字节的数据。                                 |
+| int read(byte[] b)                          | 从该文件读取最多 b.length字节的数据到字节数组。              |
+| int read(byte[] b, int off,  int len)       | 从该文件读取最多 len个字节的数据到字节数组。                 |
+| boolean readBoolean()                       | 从此文件读取一个 boolean 。                                  |
+| byte readByte()                             | 从此文件中读取一个带符号的八位值。                           |
+| char readChar()                             | 从此文件中读取一个字符。                                     |
+| double readDouble()                         | 从此文件读取 double 。                                       |
+| float readFloat()                           | 从此文件读取一个 float 。                                    |
+| void readFully(byte[] b)                    | 从此文件读取 b.length字节到字节数组，从当前文件指针开始。    |
+| void readFully(byte[] b,  int off, int len) | 从此文件中读取 len个字节到字节数组，从当前文件指针开始。     |
+| int readInt()                               | 从该文件读取一个带符号的32位整数。                           |
+| String readLine()                           | 从此文件中读取下一行文本。                                   |
+| long readLong()                             | 从该文件中读取一个带符号的64位整数。                         |
+| short readShort()                           | 从此文件中读取一个已签名的16位数字。                         |
+| int readUnsignedByte()                      | 从此文件中读取一个无符号的八位数字。                         |
+| int readUnsignedShort()                     | 从该文件中读取一个无符号的16位数字。                         |
+| String readUTF()                            | 从该文件读取字符串。                                         |
+| void seek(long pos)                         | 设置文件指针偏移，从该文件的开头测量，发生下一次读取或写入。 |
+| void setLength(long newLength)              | 设置此文件的长度。                                           |
+| int skipBytes(int n)                        | 尝试跳过 n字节的输入丢弃跳过的字节。                         |
+| void write(byte[] b)                        | 从指定的字节数组写入 b.length个字节到该文件，从当前文件指针开始。 |
+| void write(byte[] b, int off,  int len)     | 从指定的字节数组写入 len个字节，从偏移量 off开始写入此文件。 |
+| void write(int b)                           | 将指定的字节写入此文件。                                     |
+| void writeBoolean(boolean v)                | 将 boolean写入文件作为一个字节值。                           |
+| void writeByte(int v)                       | 将 byte写入文件作为单字节值。                                |
+| void writeBytes(String s)                   | 将字符串作为字节序列写入文件。                               |
+| void writeChar(int v)                       | 将 char写入文件作为两字节值，高字节为先。                    |
+| void writeChars(String s)                   | 将一个字符串作为字符序列写入文件。                           |
+| void writeDouble(double v)                  | 双参数传递给转换 long使用 doubleToLongBits方法在类 Double ，然后写入该 long值到该文件作为一个八字节的数量，高字节。 |
+| void writeFloat(float v)                    | 浮子参数的转换 int使用 floatToIntBits方法在类 Float ，然后写入该 int值到该文件作为一个四字节数量，高字节。 |
+| void writeInt(int v)                        | 将 int写入文件为四个字节，高字节 int 。                      |
+| void writeLong(long v)                      | 将 long写入文件为八个字节，高字节为先。                      |
+| void writeShort(int v)                      | 将 short写入文件作为两个字节，高字节优先。                   |
+| void writeUTF(String str)                   | 以机器无关的方式使用 modified UTF-8编码将字符串写入文件。    |
+
 # I/O流概述
 
 *    Java将数据的输入输出（I/O）操作当作“流”来处理，“流”是一组有序的数据序列。“流”分为两种形式：输入流和输出流，从数据源中读取数据是输入流，将数据写入到目的地是输出流。
 *    以CPU为中心，从外部设备读取数据到内存，进而再读入到CPU，这是输入（Input，缩写I）过程；将内存中的数据写入到外部设备，这是输出（Output，缩写O）过程。所以输入输出简称为I/O。
 *    所有的输入形式都抽象为输入流，所有的输出形式都抽象为输出流，它们与设备无关。
+
+## Java I/O体系
+
+*    基于字节操作的IO接口: InputStream和OutputStream
+*    基于字符操作的IO接口: Writer和Reader
+*    基于磁盘操作的IO接口: File
+*    基于网络操作的IO接口; Socket
 
 ## 字节流
 
@@ -3776,38 +3990,65 @@ public class name<T>{
 | BufferedOutputStream  | 缓冲区输出流，它是FilterOutputStream的子类 |
 | DataOutputStream      | 面向基本数据类型的输出流                   |
 
-### InputStream抽象类
+### InputStream
 
-*    InputStream是字节输入流的根类，它定义了很多方法，影响着字节输入流的行为。
-*    int read()：读取一个字节，返回0到255范围内的int字节值。如果已经到达流末尾，而且没有可用的字节，则返回值-1。
-*    int read(byte b[] )：读取多个字节，数据放到字节数组b中，返回值为实际读取的字节的数量，如果已经到达流末尾，而且没有可用的字节，则返回值-1。
-*    int read(byte b[ ], int off, int len)：最多读取len个字节，数据放到以下标off开始字节数组b中，将读取的第一个字节存储在元素b[off]中，下一个存储在b[off+1]中，依次类推。返回值为实际读取的字节的数量，如果已经到达流末尾，而且没有可用的字节，则返回值-1。
-*    void close()：流操作完毕后必须关闭。
+| 方法                                  | 说明                                                  |
+| ------------------------------------- | ----------------------------------------------------- |
+| int  available()                      | 返回流中可供读入(或跳过)的字节数目                    |
+| void  close()                         | 关闭输入流，释放相关资源                              |
+| void  mark(int readlimit)             | 标记输入流中目前的位置                                |
+| boolean  markSupported()              | 测试输入流是否支持mark和reset方法                     |
+| abstract  int read()                  | 从流中读入一个字节的数据                              |
+| int  read(byte[] b)                   | 从流中读入最多b.length大小的数据，并存储到b中         |
+| int  read(byte[] b, int off, int len) | 读入最多len个数据存储到b中，off指示开始存放的偏移位置 |
+| void  reset()                         | 将流重新置位到mark方法最后一次执行的位置              |
+| long  skip(long n)                    | 跳过并抛弃n个流中的数据                               |
 
-#### FileInputStream
 
-##### 构造方法
 
-*    FileInputStream(String name)：创建FileInputStream对象，name是文件名。如果文件不存在则抛出FileNotFoundException异常。
-*    FileInputStream(File file)：通过File对象创建FileInputStream对象。如果文件不存在则抛出FileNotFoundException异常。
+### OutputStream
 
-### OutputStream抽象类
+<table>
+    <tr><th>方法</th><th>声明</th></tr>
+    <tr><th>void close()</th><th>关闭输出流并释放相关资源</th></tr>
+    <tr><th>void flush()</th><th>清空缓冲区并强制缓冲区中的数据写出去</th></tr>
+    <tr><th>void write(byte[] b)</th><th>将数据b中所有数据写出到流中</th></tr>
+    <tr><th>void write(byte[] b,int off,int len)</th><th>将数据b中从off位置起的n个数据写出到流中</th></tr>
+    <tr><th>Abstract void write(int b)</th><th>将指定数据b写入到流中</th></tr>
+</table>
 
-*    OutputStream是字节输出流的根类，它定义了很多方法，影响着字节输出流的行为。
-*    void write(int b)：将b写入到输出流，b是int类型占有32位，写入过程是写入b 的8个低位，b的24个高位将被忽略。
-*    void write(byte b[ ])：将b.length个字节从指定字节数组b写入到输出流。
-*    void write(byte b[ ], int off, int len)：把字节数组b中从下标off开始，长度为len的字节写入到输出流。
-*    void flush()：刷空输出流，并输出所有被缓存的字节。由于某些流支持缓存功能，该方法将把缓存中所有内容强制输出到流中。
-*    void close( )：流操作完毕后必须关闭。
 
-#### FileOutputStream
 
-##### 构造方法
+### FileInputStream
 
-*    FileOutputStream(String name)：通过指定name文件名创建FileOutputStream对象。如果name文件存在，但如果是一个目录或文件无法打开则抛出FileNotFoundException异常。
-*    FileOutputStream(String name, boolean append)：通过指定name文件名创建FileOutputStream对象，append参数如果为 true，则将字节写入文件末尾处，而不是写入文件开始处。如果name文件存在，但如果是一个目录或文件无法打开则抛FileNotFoundException异常。
-*    FileOutputStream(File file)：通过File对象创建FileOutputStream对象。如果file文件存在，但如果是一个目录或文件无法打开则抛出FileNotFoundException异常。
-*    FileOutputStream(File file, boolean append)：通过File对象创建FileOutputStream对象，append参数如果为 true，则将字节写入文件末尾处，而不是写入文件开始处。如果file文件存在，但如果是一个目录或文件无法打开则抛出FileNotFoundException异常。
+| 构造方法                               | 说明                                           |
+| -------------------------------------- | ---------------------------------------------- |
+| FileInputStream(File  file)            | 以指定名字的文件对象为数据源建立一个文件输入流 |
+| FileInputStream(FileDescriptor  fdObj) | 根据文件描述符对象建立一个文件输入流           |
+| FileInputStream(String  name)          | 以指定名字的文件尾数据源建立一个文件输入流     |
+
+#### 控制台上输入
+
+```java
+FileInputStream fileInputStream=new FileInputStream(FileDescriptor.in);// FileDescriptor.in表示系统标准输入设备
+```
+
+### FileOutputStream
+
+| 方法                                           | 说明                                                         |
+| ---------------------------------------------- | ------------------------------------------------------------ |
+| FileOutputStream(File  file)                   | 以指定名字的文件对象为接收端建立文件输入流                   |
+| FileOutputStream(File  file, boolean append)   | 以指定名字的文件对象为接收端建立文件输入流，append为真时，输出的数据将被追加到文件尾，否则将以覆盖的方式写入文件 |
+| FileOutputStream(FileDescriptor  fdObj)        | 根据文件描述符对象建立一个文件输出流                         |
+| FileOutputStream(String  name)                 | 以指定名字的文件为接收接收端建立文件输出流                   |
+| FileOutputStream(String  name, boolean append) | 以指定名字的文件尾接收端建立文件输出流，append为真时，输出的数据将被追加到文件尾，否则将以覆盖的方式写入文件 |
+
+
+#### 控制台上输出
+
+```java
+FileOutputStream fileOutputStream =new FileOutputStream(FileDescriptor.out);
+```
 
 ## 字符流
 
@@ -3832,6 +4073,38 @@ public class name<T>{
 | FilterWriter      | 过滤输出流，它是装饰器扩展其他输入流                       |
 | BufferedWriter    | 缓冲区输出流，它也是装饰器，它不是FilterWriter的子类       |
 | InputStreamWriter | 把字节流转换为字符流，它也是一个装饰器，是FileWriter的父类 |
+
+### InputStreamReader
+
+| 构造方法                                               | 说明                                                     |
+| ------------------------------------------------------ | -------------------------------------------------------- |
+| InputStreamReader(InputStream  in)                     | 创建一个建立在输入流in之上的对象，采用系统默认的编码方式 |
+| InputStreamReader(InputStrea  in, Charset cs)          | 创建一个建立在输入流in之上的对象，采用cs对象指定的字符集 |
+| InputStreamReader(InputStream  in, CharsetDecoder dec) | 创建一个建立在输入流in之上的对象，采用dec指定的解码方式  |
+| InputStreamReader(InputStream  in, Stream charsetName) | 创建一个建立在输入流in之上的对象，采用指定名称的字符集   |
+
+
+#### 控制台上输入
+
+```java
+InputStreamReader inputStreamReader = new InputStreamReader(System.in);
+```
+
+### OutputStreamWriter
+
+| 构造方法                                                  | 说明                                                      |
+| --------------------------------------------------------- | --------------------------------------------------------- |
+| OutputStreamWriter(OutputStream  out)                     | 创建一个建立在输出流out之上的对象，采用系统默认的编码方式 |
+| OutputStreamWriter(OutputStream  out, Charset cs)         | 创建一个建立在输出流out之上的对象，采用cs对象指定的字符集 |
+| OutputStreamWriter(OutputStream  out, CharsetEncoder enc) | 创建一个建立在输出流out之上的对象，采用enc指定的编码方式  |
+| OutputStreamWriter(OutputStream  out, String charsetName) | 创建一个建立在输出流out之上的对象，采用指定名称的字符集   |
+
+
+#### 控制台上输出
+
+```java
+OutputStreamWriter outputStreamWriter = new OutputStreamWriter(System.out);
+```
 
 ### BufferedInputStream
 
@@ -3859,28 +4132,275 @@ public class name<T>{
 *    OutputStreamWriter(OutputStream out)：将字节流out转换为字符流对象，字符流使用默认字符集。
 *    OutputStreamWriter(OutputStream out,String charsetName)：将字节流out转换为字符流对象， charsetName指定字符流的字符集，如果指定的字符集不支持会抛出UnsupportedEncodingException异常。
 
-## 文件复制
+## 顺序输入流
+
+$File\longrightarrow InputStream\longrightarrow SequenceInputStream$
+
+顺序输入流( SequencelnputStream)可以将多个输入流顺序连接在一起。在进行输入时,顺序输入流依次打开每个输入流并读取数据,在读取完毕后将该流关闭,然后自动切换到下一个输入流。它的构造方法如下。
+
+*    SequencelnputStream(Enumeration e):创建一个串行输入流,连接枚举对象e中的所有输入流。
+*    SequencelnputStream(InputStream s1,InputStream s2):创建一个串行输入流,连接流s1和s2
+
+## 管道输入输出流
+
+管道输入输出流(PipedInputStream和PipedOutputStream)可以实现程序内部线程间的通信或不同程序间的通信。
+
+*    PipedInputStream是一个通信管道的接收端,它必须与一个作为发送端的PipedOutputStream对象相连。
+*    PipedOutputStream是通信管道的发送端,它必须与PipedInputStream对象相连。
+
+### 连接方法
+
+*    PipedInputStream (PipedOutputStream src) :创建一个管道输入流,并将其连接到src指定的管道输出流。
+*    PipedOutputStream (PipedInputStream src) :创建一个管道输出流,并将其连接到src指定的管道输入流。
+
+## 过滤输入输出流
+
+$File\longrightarrow FileInputStream/FileOutputStream\longrightarrow DataInputStream/DataOutputStream$
+
+过滤输入输出流( FilterlnputStream和FilterOutputStream)是两个抽象类,它们又分别派生出DatalnputStream和DataOutputStream等子类。
+
+过滤输入输出流的主要特点是,其建立在基本输入输出流之上,能够对基本输入输出流所传输的数据进行指定类型或格式的转换,即可实现对二进制字节数据的理解和编码转换,常用的过滤流是数据输入输出流DatalnputStream和DataOutputStream,它们可用于对不同类型数据的读写
+
+其构造方法如下。
+
+*    DatalnputStream(InputStream in):建立一个新的数据输入流,从指定的输入流in中读数据。
+*    DataOutputStream(OutputStream out):建立一个新的数据输出流,向指定的输出流out中写数据。
+
+DatalnputStream中定义了多个针对不同类型数据的读方法,如readByte()、readBoolean(), readChar(), readInt(), readFloat()和readDouble()等。同样, DataOutputStream也定义了对应的针对不同类型数据的输出方法,如writeByte(), writeChar(),writelnt()writeFloat()和writeDouble()等。
+
+## 控制台IO处理
+
+### 控制台输入类Scanner
+
+| 方法                         | 说明                                                       |
+| ---------------------------- | ---------------------------------------------------------- |
+| boolean  hasNext()           | 测试是否还有下一个输入项                                   |
+| boolean  hasNextByte()       | 测试下一个输入项是否能按照默认的进制被解释成为一个byte数据 |
+| boolean  hasNextDouble()     | 测试下一个输入项是否能被解释成为一个double数据             |
+| boolean  hasNextInt()        | 测试下一个输入是否能被解释成为一个int数据                  |
+| byte  nextByte()             | 以byte类型获取下一个输入项                                 |
+| double  nextDouble()         | 以double类型获取下一个输入项                               |
+| int  nexInt()                | 以int类型获取下一个输入项                                  |
+| String  nextLine()           | 读到本行末尾                                               |
+| Scanner  useRadix(int radix) | 设置本对象的默认进制                                       |
+
+
+#### 控制台上输入
 
 ```java
-try (FileInputStream in = new FileInputStream("./TestDir/build.txt");
-     BufferedInputStream bis = new BufferedInputStream(in);
-     FileOutputStream out = new FileOutputStream("./TestDir/subDir/build.txt");
-     BufferedOutputStream bos = new BufferedOutputStream(out)) {
+Scanner scanner = new Scanner(System.in);
+```
 
-    long startTime = System.nanoTime();
-    byte[] buffer = new byte[1024];
-    int len = bis.read(buffer);
-    while (len != -1) {
+## 格式化输出printf
 
-        bos.write(buffer, 0, len);
-        len = bis.read(buffer);
-    }
+#### 格式转换符
 
-    long elapsedTime = System.nanoTime() - startTime;
-    System.out.println("耗时: " + (elapsedTime / 1000000.0) + "毫秒");
-} catch (IOException e) {
+| 格式转换符 | 作用                                                 |
+| ---------- | ---------------------------------------------------- |
+| d          | 以十进制形式输出整数(以实际长度输出,正数不输出符号)  |
+| o          | 以无符号八进制形式输出整数(不输出前导0)              |
+| x或X       | 以无符号十六进制形式输出整数(不输出前导0x)           |
+| a或A       | 以十六进制形式输出浮点数                             |
+| c或C       | 以字符形式输出,只输出一个字符                        |
+| s或S       | 输出字符串                                           |
+| f          | 以小数形式输出单、双精度数,隐含输出6位小数           |
+| e或E       | 以标准指数形式输出单、双精度数,数字部分小数位数为6位 |
+| g或G       | 选用%f或%e输出宽度较短的一种格式,不输出无意义的0     |
+| h或H       | 输出哈希码                                           |
+| b或B       | 输出布尔值                                           |
+| tx         | 输出日期时间(x可用其他符号替换)                      |
+| n          | 输出与平台有关的行分隔符                             |
+| %          | 输出%本身                                            |
 
-    e.printStackTrace();
+
+#### 格式修饰符
+
+| 格式修饰符 | 作用                                                         |
+| ---------- | ------------------------------------------------------------ |
+| +          | 输出正数和负数前面的符号                                     |
+| 空格       | 在正数之前添加空格                                           |
+| m.n        | 输出项总共占m位,小数部分占n位,  m和n都必须是正整数常量。默认为右对齐 |
+| 0          | 数字前面补0,凑齐指定宽度                                     |
+| -          | 左对齐,后面补空格                                            |
+| (          | 将负数输出在括号内                                           |
+| ,          | 数字每3位添加一个“, ”号作为分隔符                            |
+| #          | 如果是f格式,输出小数点,即便小数部分为0                       |
+| #          | 如果是x或0格式,添加前缀0x或o                                 |
+| ^          | 十六进制数以大写形式输出                                     |
+| $          | 指定将被格式化的参数索引                                     |
+| <          | 格式化前面说明的数值                                         |
+
+## Java序列化技术
+
+要让一个类能够序列化,首先,这个类要实现Serializable接口。
+
+```java
+class [类名] implements Serializable{ ....}
+```
+
+由于Serializable接口中没有任何方法,所以不需要对自己的类进行任何修改。随后要做的事情,是需要打开一个ObjectOutputStream对象
+
+```java
+FileOutputStream fileOutputStream = new FileOutputStream("[文件名]");
+ObjectOutputStream out = new ObjectOutputStream (fileOutputStream);
+```
+
+随后只需要使用ObjectOutputStream类中的writeObject方法
+
+```java
+// 初始化类
+out.writeObject ([类名]);
+```
+
+要读取对象,首先要取得一个ObjectInputStream对象:
+
+```java
+ObjectInputStream in = new objectInputstream (new FileInputstream("[文件名]"));
+```
+
+然后,按照当初写入对象的顺序,用readObject方法读取对象
+
+```java
+[类型] [类名] = ([类型])in.readobject();
+```
+
+### serializable接口
+
+protected transient int serializable
+
+可序列化的数量  BeanContextServceProvider
+
+### ObjectOutputStream
+
+$File\longrightarrow FileOutputStream\longrightarrow ObjectOutputStream$
+
+ObjectOutputStream将Java对象的原始数据类型和图形写入OutputStream。 可以使用ObjectInputStream读取（重构）对象。 可以通过使用流的文件来实现对象的持久存储。 如果流是网络套接字流，则可以在另一个主机上或另一个进程中重构对象。
+
+只有支持java.io.Serializable接口的对象才能写入流中。 每个可序列化对象的类被编码，包括类的类名和签名，对象的字段和数组的值以及从初始对象引用的任何其他对象的关闭。
+
+方法writeObject用于将一个对象写入流中。 任何对象，包括字符串和数组，都是用writeObject编写的。 多个对象或原语可以写入流。 必须从对应的ObjectInputstream读取对象，其类型和写入次序相同。
+
+原始数据类型也可以使用DataOutput中的适当方法写入流中。 字符串也可以使用writeUTF方法写入。
+
+对象的默认序列化机制写入对象的类，类签名以及所有非瞬态和非静态字段的值。 引用其他对象（除了在瞬态或静态字段中）也会导致这些对象被写入。 使用引用共享机制对单个对象的多个引用进行编码，以便可以将对象的图形恢复为与原始文件相同的形状。
+
+```java
+File file = new File("[路径]");
+FileOutputStream fileOutputStream = new FileOutputStream(file);
+ObjectOutputStream objectOutputStream=new ObjectOutputStream(fileOutputStream);
+```
+
+#### 方法
+
+| 方法                                                         | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| protected void  annotateClass(类<?> cl)                      | 子类可以实现此方法，以允许类数据存储在流中。                 |
+| protected void  annotateProxyClass(类<?> cl)                 | 子类可以实现这种方法来存储流中的自定义数据以及动态代理类的描述符。 |
+| void close()                                                 | 关闭流。                                                     |
+| void defaultWriteObject()                                    | 将当前类的非静态和非瞬态字段写入此流。                       |
+| protected void drain()                                       | 排除ObjectOutputStream中的缓冲数据。                         |
+| protected boolean  enableReplaceObject(boolean enable)       | 启用流来替换流中的对象。                                     |
+| void flush()                                                 | 刷新流。                                                     |
+| ObjectOutputStream.PutField putFields()                      | 检索用于缓冲要写入流的持久性字段的对象。                     |
+| protected Object  replaceObject(Object obj)                  | 该方法将允许ObjectOutputStream的可信子类在序列化期间将一个对象替换为另一个对象。 |
+| void reset()                                                 | 复位将忽略已写入流的任何对象的状态。                         |
+| void useProtocolVersion(int version)                         | 指定在编写流时使用的流协议版本。                             |
+| void write(byte[] buf)                                       | 写入一个字节数组。                                           |
+| void write(byte[] buf, int off,  int len)                    | 写入一个子字节数组。                                         |
+| void write(int val)                                          | 写一个字节。                                                 |
+| void writeBoolean(boolean val)                               | 写一个布尔值。                                               |
+| void writeByte(int val)                                      | 写入一个8位字节。                                            |
+| void writeBytes(String str)                                  | 写一个字符串作为字节序列。                                   |
+| void writeChar(int val)                                      | 写一个16位的字符。                                           |
+| void writeChars(String str)                                  | 写一个字符串作为一系列的字符。                               |
+| protected void  writeClassDescriptor(ObjectStreamClass desc) | 将指定的类描述符写入ObjectOutputStream。                     |
+| void writeDouble(double val)                                 | 写一个64位的双倍。                                           |
+| void writeFields()                                           | 将缓冲的字段写入流。                                         |
+| void writeFloat(float val)                                   | 写一个32位浮点数。                                           |
+| void writeInt(int val)                                       | 写一个32位int。                                              |
+| void writeLong(long val)                                     | 写一个64位长                                                 |
+| void writeObject(Object obj)                                 | 将指定的对象写入ObjectOutputStream。                         |
+| protected void  writeObjectOverride(Object obj)              | 子类使用的方法来覆盖默认的writeObject方法。                  |
+| void writeShort(int val)                                     | 写一个16位短。                                               |
+| protected void writeStreamHeader()                           | 提供了writeStreamHeader方法，因此子类可以在流中附加或预先添加自己的头。 |
+| void writeUnshared(Object obj)                               | 将“非共享”对象写入ObjectOutputStream。                       |
+| void writeUTF(String str)                                    | 此字符串的原始数据写入格式为 modified UTF-8 。               |
+
+### ObjectInputStream
+
+ObjectInputStream反序列化先前使用ObjectOutputStream编写的原始数据和对象。
+
+ObjectOutputStream和ObjectInputStream可以分别为与FileOutputStream和FileInputStream一起使用的对象图提供持久性存储的应用程序。 ObjectInputStream用于恢复先前序列化的对象。 其他用途包括使用套接字流在主机之间传递对象，或者在远程通信系统中进行封送和解组参数和参数。
+
+ObjectInputStream确保从流中创建的图中的所有对象的类型与Java虚拟机中存在的类匹配。 根据需要使用标准机制加载类。
+
+只能从流中读取支持java.io.Serializable或java.io.Externalizable接口的对象。
+
+方法readObject用于从流中读取对象。 应使用Java的安全铸造来获得所需的类型。 在Java中，字符串和数组是对象，在序列化过程中被视为对象。 读取时，需要将其转换为预期类型。
+
+可以使用DataInput上的适当方法从流中读取原始数据类型。
+
+对象的默认反序列化机制将每个字段的内容恢复为写入时的值和类型。 声明为瞬态或静态的字段被反序列化过程忽略。 对其他对象的引用导致根据需要从流中读取这些对象。 使用参考共享机制正确恢复对象的图形。 反序列化时总是分配新对象，这样可以防止现有对象被覆盖。
+
+读取对象类似于运行新对象的构造函数。 为对象分配内存，并初始化为零（NULL）。 对非可序列化类调用无索引构造函数，然后从最接近java.lang.object的可序列化类开始，从串中还原可序列化类的字段，并使用对象的最特定类完成。
+
+$File\longrightarrow FileInputStream\longrightarrow ObjectInputStream$
+
+```java
+File file = new File("[路径]");
+FileInputStream fileInputStream = new FileInputStream(file);
+ObjectInputStream objectInputStream=new ObjectInputStream(fileInputStream);
+```
+
+>    readObject()没有像read()独到末尾返回-1，也没有像readline()独到末尾返回null。他就是返回对象，读完了就异常。
+
+#### 方法
+
+| int available()                                              | 返回可以读取而不阻塞的字节数。                               |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| void close()                                                 | 关闭输入流。                                                 |
+| void defaultReadObject()                                     | 从此流读取当前类的非静态和非瞬态字段。                       |
+| protected boolean  enableResolveObject(boolean enable)       | 启用流以允许从流中读取的对象被替换。                         |
+| int read()                                                   | 读取一个字节的数据。                                         |
+| int read(byte[] buf, int off,  int len)                      | 读入一个字节数组。                                           |
+| boolean readBoolean()                                        | 读取布尔值。                                                 |
+| byte readByte()                                              | 读取一个8位字节。                                            |
+| char readChar()                                              | 读一个16位字符。                                             |
+| protected ObjectStreamClass  readClassDescriptor()           | 从序列化流读取类描述符。                                     |
+| double readDouble()                                          | 读64位双倍。                                                 |
+| ObjectInputStream.GetField readFields()                      | 从流中读取持久性字段，并通过名称获取它们。                   |
+| float readFloat()                                            | 读32位浮点数。                                               |
+| void readFully(byte[] buf)                                   | 读取字节，阻塞直到读取所有字节。                             |
+| void readFully(byte[] buf,  int off, int len)                | 读取字节，阻塞直到读取所有字节。                             |
+| int readInt()                                                | 读取一个32位int。                                            |
+| String readLine()                                            | 已弃用                                                       |
+| long readLong()                                              | 读64位长。                                                   |
+| Object readObject()                                          | 从ObjectInputStream读取一个对象。                            |
+| protected Object  readObjectOverride()                       | 此方法由ObjectOutputStream的受信任子类调用，该子类使用受保护的无参构造函数构造ObjectOutputStream。 |
+| short readShort()                                            | 读取16位短。                                                 |
+| protected void readStreamHeader()                            | 提供了readStreamHeader方法来允许子类读取和验证自己的流标题。 |
+| Object readUnshared()                                        | 从ObjectInputStream读取一个“非共享”对象。                    |
+| int readUnsignedByte()                                       | 读取一个无符号的8位字节。                                    |
+| int readUnsignedShort()                                      | 读取无符号16位短。                                           |
+| String readUTF()                                             | 以 modified UTF-8格式读取字符串。                            |
+| void  registerValidation(ObjectInputValidation obj, int prio) | 在返回图之前注册要验证的对象。                               |
+| protected 类<?>  resolveClass(ObjectStreamClass desc)        | 加载本地类等效的指定流类描述。                               |
+| protected Object  resolveObject(Object obj)                  | 此方法将允许ObjectInputStream的受信任子类在反序列化期间将一个对象替换为另一个对象。 |
+| protected 类<?>  resolveProxyClass(String[] interfaces)      | 返回一个代理类，它实现代理类描述符中命名的接口; 子类可以实现此方法从流中读取自定义数据以及动态代理类的描述符，从而允许它们为接口和代理类使用备用加载机制。 |
+| int skipBytes(int len)                                       | 跳过字节。                                                   |
+
+#### 从文件读取对象
+
+```java
+[Class] tmp = new [Class]();
+try {
+
+	while ((tmp = (Student) objectInputStream.readObject()) != null) {
+
+		// TODO
+	}
+} catch (IOException | ClassNotFoundException ignored) {
+
 }
 ```
 
@@ -4262,6 +4782,7 @@ public class name extends JFrame{
     <tr><th>componentRemoved(ContainerEvent)</th></tr>
     <tr><th>Text</th><th>TextListener</th><th>textValueChanged(TextEvent)</th></tr>
 </table>
+
 #### 采用内部类处理事件
 
 ```java
