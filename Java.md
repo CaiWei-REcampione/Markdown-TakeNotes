@@ -1624,6 +1624,74 @@ Java语言是单继承的，即只能有一个父类，但Java可以实现多个
 
 类是Java中的一种重要的引用数据类型，是组成Java程序的基本要素。它封装了一类对象的数据和操作。
 
+### Class
+
+| <U> 类<?  extends U> asSubclass(类<U> clazz)                 | 类这个 类对象来表示由指定的类对象表示的类的子类。            |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| T cast(Object obj)                                           | 施放一个目的是通过本表示的类或接口 类对象。                  |
+| boolean desiredAssertionStatus()                             | 如果要在调用此方法时初始化该类，则返回将分配给此类的断言状态。 |
+| static 类<?>  forName(String className)                      | 返回与给定字符串名称的类或接口相关联的 类对象。              |
+| static 类<?>  forName(String name,  boolean initialize, ClassLoader loader) | 使用给定的类加载器返回与给定字符串名称的类或接口相关联的 类对象。 |
+| AnnotatedType[] getAnnotatedInterfaces()                     | 返回一个 AnnotatedType对象的数组， AnnotatedType使用类型指定由此 AnnotatedType对象表示的实体的超级 类 。 |
+| AnnotatedType getAnnotatedSuperclass()                       | 返回一个 AnnotatedType对象，该对象表示使用类型来指定由此 类对象表示的实体的 类类。 |
+| <A extends Annotation>  getAnnotation(类<A> annotationClass) | 返回该元素的，如果这样的注释 ，否则返回null指定类型的注释。  |
+| Annotation[] getAnnotations()                                | 返回此元素上 存在的注释。                                    |
+| <A extends Annotation>  getAnnotationsByType(类<A> annotationClass) | 返回与此元素相关 联的注释 。                                 |
+| String getCanonicalName()                                    | 返回由Java语言规范定义的基础类的规范名称。                   |
+| 类<?>[] getClasses()                                         | 返回包含一个数组 类表示所有的公共类和由此表示的类的成员接口的对象 类对象。 |
+| ClassLoader getClassLoader()                                 | 返回类的类加载器。                                           |
+| 类<?> getComponentType()                                     | 返回 类数组的组件类型的Class。                               |
+| Constructor<T>  getConstructor(类<?>... parameterTypes)      | 返回一个 Constructor对象，该对象反映 Constructor对象表示的类的指定的公共 类函数。 |
+| Constructor<?>[] getConstructors()                           | 返回包含一个数组 Constructor对象反射由此表示的类的所有公共构造 类对象。 |
+| <A extends Annotation>  getDeclaredAnnotation(类<A> annotationClass) | 如果这样的注释 直接存在 ，则返回指定类型的元素注释，否则返回null。 |
+| Annotation[] getDeclaredAnnotations()                        | 返回 直接存在于此元素上的注释。                              |
+| <A extends Annotation>  getDeclaredAnnotationsByType(类<A> annotationClass) | 如果此类注释 直接存在或 间接存在，则返回该元素的注释（指定类型）。 |
+| 类<?>[] getDeclaredClasses()                                 | 返回一个反映所有被这个 类对象表示的类的成员声明的类和 类对象的数组。 |
+| Constructor<T>  getDeclaredConstructor(类<?>... parameterTypes) | 返回一个 Constructor对象，该对象反映 Constructor对象表示的类或接口的指定 类函数。 |
+| Constructor<?>[]  getDeclaredConstructors()                  | 返回一个反映 Constructor对象表示的类声明的所有 Constructor对象的数组 类 。 |
+| Field getDeclaredField(String name)                          | 返回一个 Field对象，它反映此表示的类或接口的指定已声明字段 类对象。 |
+| Field[] getDeclaredFields()                                  | 返回的数组 Field对象反映此表示的类或接口声明的所有字段 类对象。 |
+| 方法  getDeclaredMethod(String name, 类<?>... parameterTypes) | 返回一个 方法对象，它反映此表示的类或接口的指定声明的方法 类对象。 |
+| 方法[] getDeclaredMethods()                                  | 返回包含一个数组 方法对象反射的类或接口的所有声明的方法，通过此表示 类对象，包括公共，保护，默认（包）访问和私有方法，但不包括继承的方法。 |
+| 类<?> getDeclaringClass()                                    | 如果由此 类对象表示的类或接口是另一个类的成员，则返回表示其声明的类的 类对象。 |
+| 类<?> getEnclosingClass()                                    | 返回底层类的即时封闭类。                                     |
+| Constructor<?>  getEnclosingConstructor()                    | 如果此类对象表示构造函数中的本地或匿名类，则返回表示底层类的立即封闭构造函数的Constructor对象。 |
+| 方法 getEnclosingMethod()                                    | 如果此类对象表示方法中的本地或匿名类，则返回表示基础类的即时封闭方法的方法对象。 |
+| T[] getEnumConstants()                                       | 返回此枚举类的元素，如果此Class对象不表示枚举类型，则返回null。 |
+| Field getField(String name)                                  | 返回一个 Field对象，它反映此表示的类或接口的指定公共成员字段 类对象。 |
+| Field[] getFields()                                          | 返回包含一个数组 Field对象反射由此表示的类或接口的所有可访问的公共字段 类对象。 |
+| Type[] getGenericInterfaces()                                | 返回 Type表示通过由该对象所表示的类或接口直接实现的接口秒。  |
+| Type getGenericSuperclass()                                  | 返回 Type表示此所表示的实体（类，接口，基本类型或void）的直接超类 类 。 |
+| 类<?>[] getInterfaces()                                      | 确定由该对象表示的类或接口实现的接口。                       |
+| 方法  getMethod(String name, 类<?>... parameterTypes)        | 返回一个 方法对象，它反映此表示的类或接口的指定公共成员方法 类对象。 |
+| 方法[] getMethods()                                          | 返回包含一个数组 方法对象反射由此表示的类或接口的所有公共方法 类对象，包括那些由类或接口和那些从超类和超接口继承的声明。 |
+| int getModifiers()                                           | 返回此类或接口的Java语言修饰符，以整数编码。                 |
+| String getName()                                             | 返回由 类对象表示的实体（类，接口，数组类，原始类型或空白）的名称，作为 String 。 |
+| 软件包 getPackage()                                          | 获取此类的包。                                               |
+| ProtectionDomain getProtectionDomain()                       | 返回 ProtectionDomain 。                                     |
+| URL getResource(String name)                                 | 查找具有给定名称的资源。                                     |
+| InputStream  getResourceAsStream(String name)                | 查找具有给定名称的资源。                                     |
+| Object[] getSigners()                                        | 获得这个类的签名者。                                         |
+| String getSimpleName()                                       | 返回源代码中给出的基础类的简单名称。                         |
+| 类<? super T> getSuperclass()                                | 返回 类表示此所表示的实体（类，接口，基本类型或void）的超类 类 。 |
+| String getTypeName()                                         | 为此类型的名称返回一个内容丰富的字符串。                     |
+| TypeVariable<类<T>>[]  getTypeParameters()                   | 返回一个 TypeVariable对象的数组，它们以声明顺序表示由此 GenericDeclaration对象表示的通用声明声明的类型变量。 |
+| boolean isAnnotation()                                       | 如果此 类对象表示注释类型，则返回true。                      |
+| boolean isAnnotationPresent(类<?  extends Annotation> annotationClass) | 如果此元素上 存在指定类型的注释，则返回true，否则返回false。 |
+| boolean isAnonymousClass()                                   | 返回 true当且仅当基础类是匿名类时。                          |
+| boolean isArray()                                            | 确定此 类对象是否表示数组类。                                |
+| boolean  isAssignableFrom(类<?> cls)                         | 确定由此 类对象表示的类或接口是否与由指定的Class 类表示的类或接口相同或是超类或 类接口。 |
+| boolean isEnum()                                             | 当且仅当该类在源代码中被声明为枚举时才返回true。             |
+| boolean isInstance(Object obj)                               | 确定指定的Object是否与此 Object表示的对象分配 类 。          |
+| boolean isInterface()                                        | 确定指定 类对象表示接口类型。                                |
+| boolean isLocalClass()                                       | 返回 true当且仅当基础类是本地类时。                          |
+| boolean isMemberClass()                                      | 返回 true当且仅当基础类是成员类时。                          |
+| boolean isPrimitive()                                        | 确定指定 类对象表示一个基本类型。                            |
+| boolean isSynthetic()                                        | 如果这个类是一个合成类，返回true ; 返回false其他。           |
+| T newInstance()                                              | 创建由此 类对象表示的类的新实例。                            |
+| String toGenericString()                                     | 返回描述此 类的字符串，包括有关修饰符和类型参数的信息。      |
+| String toString()                                            | 将对象转换为字符串。                                         |
+
 ### 类声明
 
 Java语言中一个类的实现包括：类声明和类体。
@@ -3778,6 +3846,12 @@ throw Throwable或其子类的实例
 -    强制类型转换是有风险的，如果不进行判断就臆断进行类型转换会发生ClassCastException异常。
 -    在集合中如果没有使用泛型，Eclipse等IDE工具都会警告。
 
+## 泛型的本质
+
+泛型在本质上是指类型参数化。所谓类型参数化,是指用来声明数据的类型本身,也是可以改变的,它由实际参数来决定。在一般情况下,实际参数决定了形式参数的值。而类型参数化,则是实际参数的类型决定了形式参数的类型。
+
+在泛型出现之前, Java的程序员可以采用一种变通的办法:将参数的类型均声明为, Object 类型。由于Object类是所有类的父类,所以它可以指向任何类对象,但这样做不能保证类型安全。
+
 ## 使用泛型
 
 *    泛型对于Java影响最大就是集合了，Java 5之后所有的集合类型都可以有泛型类型，可以限定存放到集合中的类型。
@@ -4678,7 +4752,49 @@ synchronized (对象名) { }
 
 # 运行时类型识别RTTI
 
+## RTTI的工作原理
 
+任何一个作为程序一部分的类,都有一个Class对象。换言之,每次写一个新类时,同时也会创建一个Class对象(更恰当地说,是保存在一个完全同名的.class文件中)。在运行期,一旦程序员想生成某个类的一个对象,用于执行程序的Java虚拟机(JVM)首先就会检查该类型的Class对象是否已经载入。若尚未载入,JVM就会查找同名的.class文件,并将其载入。所以, Java程序启动时并不是完全载入的,这一点与许多传统语言都不同。一旦该类型的Class对象进入内存,就用它创建该类型的所有对象。
+
+Class类中间提供了很多有用的方法,其中, forName()方法用来加载一个对象。使用它,可以不必用关键字new来创建对象。
+
+```cpp
+Class.forName("类名");
+```
+
+new 是静态加载，forName 是动态加载
+
+## Java类识别
+
+### 获取类信息
+
+```cpp
+public final Class<? extends Object> getClass()
+```
+
+所以所有类都可以直接使用它,但不能覆盖它。
+
+$类\longrightarrow Class$
+
+获得返回值之后,可以利用Class类的各种方法对对象进行处理
+
+### 类标记
+
+如果T是任意的Java类型,那么, T.class就代表匹配的类对象。
+
+```java
+类.class
+```
+
+### 关键字instanceof
+
+Java提供了一个关键字instanceof,用于帮助程序员判断一个对象真正所属的类。它是一个二元运算符,一般形式如下
+
+```java
+objectName instanceof className
+```
+
+其中,左侧的操作数是一个对象名,右侧的操作数是类名,计算结果为true或false
 
 # 网络编程
 

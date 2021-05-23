@@ -2966,46 +2966,82 @@ using namespace std;
 
 #### 构造函数
 
+##### default
+
 ```cpp
 stack<typename> name;
 ```
 
+*    default构造函数
+*    产生一个空的stack
+
+##### 初值
+
+```cpp
+explicit stack::stack (const container& cont)
+```
+
+*    产生一个stack,并以容器cont内的元素为初值。
+*    cont内的所有元素均被复制。
+
 #### 判断是否为空
 
 ```cpp
-s.empty()//判断堆栈元素是否为空，true表示栈元素为空；
+bool stack::empty() const
 ```
 
-#### 出栈
-
-```cpp
-s.pop()//移除栈顶元素；
-```
-
-#### 入栈
-
-```cpp
-s.push()//栈顶添加元素；
-```
-
-#### 出栈并返回栈顶数据
-
-```cpp
-savename = s.top();
-s.pop();
-```
+*    判断stack是否为空(亦即不含任何元素)
+*    与stack::size () == 0等效,但可能更快。
 
 #### 返回栈顶元素
 
 ```cpp
-s.top()//返回栈顶元素；
+value_type& stack::top ()
+const value_type& stack::top () const
 ```
 
-#### 返回长度
+*    以上两种形式都返回stack的下一个元素。
+*    所谓“下一个元素”是指最后一个(亦即在其它所有元素之后)被插入的元素。
+*    调用者必须确保stack不为空(size()>0) ,否则可能导致未定义的行为。
+*    第一种形式是针对non-const stacks设计的,返回一个reference.所以你可以就地( in place)修改stack内的元素。
+
+#### 入栈
 
 ```cpp
-s.size()//返回栈中元素数目；
+void stack::push (const value type& elem)
 ```
+
+*    将elem的副本安插到stack内,并成为其新的第一元素。
+
+#### 出栈
+
+```cpp
+void stack::pop ()
+```
+
+*    移除stack内的下一个元素。
+*    所谓“下一个元素”是指最后一个(亦即在其它所有元素之后)被插入的元素。
+*    此函数没有回返值。如果想处理被移那个元素,你必须先调用top()。
+*    调用者必须确保stack不为空，否则可能导致未定义的行为。
+
+#### 返回元素个数
+
+```cpp
+size_type stack::size () const
+```
+
+*    返回元素个数。
+*    如果要检验容器是否为空(亦即不含任何元素),应使用empty (),因为它可能更快。
+
+#### 比较
+
+```cpp
+bool comparision (const stack& stack1, const stack& stack2)
+```
+
+*    返回两个同型stack的结果
+*    如果两个stacks的元素个数相等,且相同次序上的元素值也相等(也就是说所有对应元素之间的比较都得到true) ,则这两个容器相等。
+*    stack之间的大小比较是以“字典顺序”而定。
 
 ### <span id="deque">deque</span>
 
@@ -3050,10 +3086,10 @@ deque是"double-ended queue"的缩写,是一个dynamic array,可以向两端发�
 | c1 >= c2              | 判断c1是否大于等于c2。等同于!(c2 < c1)                 |
 | c.at(idx)             | 返回索引idx所标示的元素。如果idx越界，抛出out_of_range |
 | c[idx]                | 返回索引idx所标识的元素，不进行范围检查                |
-| c.front()             | 返回第一个元素。不检查元素是否存在                     |
-| c.back()              | 返回最后一个元素。不检查元素是否存在                   |
-| c.begin()             | 返回一个随机迭代器，指向第一元素                       |
-| c.end()               | 返回一个随机迭代器，指向最后元素的下一位置             |
+| **c.front()**         | **返回第一个元素。不检查元素是否存在**                 |
+| **c.back()**          | **返回最后一个元素。不检查元素是否存在**               |
+| **c.begin()**         | **返回一个随机迭代器，指向第一元素**                   |
+| **c.end()**           | **返回一个随机迭代器，指向最后元素的下一位置**         |
 | c.rbegin()            | 返回一个逆向迭代器，指向逆向迭代器的第一个元素         |
 | c.rend()              | 返回一个逆向迭代器，指向逆向迭代时的最后元素的下一位置 |
 | c1 = c2               | 将c2的所有元素赋值给c1                                 |
@@ -3064,7 +3100,7 @@ deque是"double-ended queue"的缩写,是一个dynamic array,可以向两端发�
 | c.insert(pos,elem)    | 在pos位置插入一个elem副本，并返回新元素的位置          |
 | c.insert(pos,n,elem)  | 在pos位置插入elem的n个副本，并返回新元素的位置         |
 | c.insert(pos,beg,end) | 在pos位置插入在区间[beg;end)所有元素的副本，无返回值   |
-| c.push_back(elem)     | 在尾部添加elem的一个副本                               |
+| **c.push_back(elem)** | **在尾部添加elem的一个副本**                           |
 | c.pop_back()          | 移除最后一个元素                                       |
 | c.push_front()        | 在头部插入elem的一个副本                               |
 | c.pop_front()         | 移除头部元素                                           |
