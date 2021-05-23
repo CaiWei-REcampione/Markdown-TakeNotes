@@ -6100,19 +6100,178 @@ void sort_heap (RandomAccesIterator beg, RandomAccesIterator end, BiraryPredicat
 
 ### 已序区间算法
 
-| 名字                                             | 效果                                                       |
-| ------------------------------------------------ | ---------------------------------------------------------- |
-| binary_search()                                  | 判断某区间内是否包含某个元素                               |
-| includes()                                       | 判断第二个区间内的每个元素是否都涵盖于第一区间中           |
-| lower_bound()                                    | 搜寻第一个“大于等于给定值”的元素                           |
-| upper_bound()                                    | 搜寻第一个“大于给定值”的元素                               |
-| equal_range()                                    | 返回”等于给定值“的所有元素构成的区间                       |
-| merge(first1,last1,first2,last2,result,compare); | 将两个区间的元素合并                                       |
-| set_union()                                      | 求两个区间的并集                                           |
-| set_intersection()                               | 求两个区间的交集                                           |
-| set_difference()                                 | 求位于第一区间但不位于第二区间的所有元素，形成一个已序区间 |
-| set_symmetirc_difference()                       | 找出只出现于两区间之一的所有元素，形成一个已序区间         |
-| inplace_merge()                                  | 将两个连续的已序区间合并                                   |
+| 名字                       | 效果                                                       |
+| -------------------------- | ---------------------------------------------------------- |
+| binary_search()            | 判断某区间内是否包含某个元素                               |
+| includes()                 | 判断第二个区间内的每个元素是否都涵盖于第一区间中           |
+| lower_bound()              | 搜寻第一个“大于等于给定值”的元素                           |
+| upper_bound()              | 搜寻第一个“大于给定值”的元素                               |
+| equal_range()              | 返回”等于给定值“的所有元素构成的区间                       |
+| merge()                    | 将两个区间的元素合并                                       |
+| set_union()                | 求两个区间的并集                                           |
+| set_intersection()         | 求两个区间的交集                                           |
+| set_difference()           | 求位于第一区间但不位于第二区间的所有元素，形成一个已序区间 |
+| set_symmetirc_difference() | 找出只出现于两区间之一的所有元素，形成一个已序区间         |
+| inplace_merge()            | 将两个连续的已序区间合并                                   |
+
+#### binary_search()
+
+```cpp
+bool binary_search (ForwardIterator beg, ForwardIterator end, const T& value)
+bool binary_search (ForwardIterator beg, ForwardIterator end, const T& value, BinaryPredicate op)
+```
+
+*    两种形式都用来判断已序区间[beg, end)中是否包含“和value等值”的元素。
+*    op是一个可有可无的(可选的)二元判断式,用来作为排序准则:op(elem1, elem2)
+*    如果想要获得被搜寻元素的位置,应使用lower-bound () , upper-bourd ()或equal_range ()
+*    调用者必须确保进入算法之际,该区间已序(在指定的排序准则作用下)。
+*    复杂度:如果搭配随机存取迭代器,则为对数复杂度,否则为线性复杂度(这些算法最多执行log(numberOElements)+2次比较操作,但若不是随机存取迭代器,迭代器在元素身上移动的复杂度是线性,于是整体复杂度就是线性了).
+
+#### includes()
+
+```java
+bool includes (InputIterator1 beg, InputIteratorl end, InputIterator2 searchBeg, InputIterator2 searchEnd)
+bool includes (InputIteratorl beg, InputIteratorl end, InputIterator2 searchBeg, InputIterator2 searchEnd, Binarypredicate op)
+```
+
+*    两种形式都用来判断已序区间[beg, end)是否包含另一个已序区间[searchBeg, searchEnd)的全部元素。也就是说对于[searchBeg, searchEnd)中的每一个元素,如果[beg, end)必有一个对应的相等元素,那么[searchBeg, seazchEnd)肯定是[beg, end)的子集。
+*    op是一个可有可无的(可选的)二元判断式,被用来作为排序准则:. op(elem1, elem2)
+*    调用者必须确保在进入算法之际,两区间都应该已经按照相同的排序准则排好序了。
+*    复杂度:线性,最多执行2 * (numberOfElements+searchElements)-1次比较操作。
+
+#### lower_bound()/upper_bound()
+
+```cpp
+ForwardIterator lower_bound (ForwardIterator beg, ForwardIterator end, const T& value)
+ForwardIterator lower_bound (ForwardIteratar beg, ForwardIterator end, const T& value, BinaryPredicate op)
+ForwardIterator upper_bound (ForwardIterator beg, ForwardIterator end, const T& value)
+ForwardIterator upper_bound (ForwardIterator beg, ForwardIterator end, const T& value, BinaryPredicate op)
+```
+
+*    lower_bound ()返回第一个“大于等于vaiue"的元素位置。这是可插入“元素值为value"且“不破坏区间[beg, ena)已序性”的第一个位置。
+*    lower-bound ( )返回第一个“大于value"的元素位置。这是可插入“元素值为value"且“不破坏区间[beg, end)已序性”的最后一个位置。
+*    如果不存在“其值为value"的元素,上述所有算法都返回end
+*    op是个可有可无的(可选的)二元判断式,被当做排序准则:op(elem1, elem2)
+*    调用者必须确保进入算法之际,所有区间都已按照排序准则排好序了。
+*    如要同时获得lower_bound () 和upper_bound ()的结果,请使用equal_range()
+*    关联式容器(set, multiset, map, mulimap)分别提供等效成员函数,性能更佳。
+*    复杂度:如果搭配随机存取迭代器,则为对数复杂度,否则为线性复杂度(这些算法最多执行1og(numberofElements)+ )次比较动作,但若不是随机存取迭代器,送代器在元素身上移动的复杂度是线性的,于是整体复杂度就是线性的了)。
+
+#### equal_range()
+
+```cpp
+pair<ForwardIterator, ForwardIterator> equal_range (ForwardIterator beg, ForwardIterator end, const T& value)
+pair<ForwardIterator, ForwardIterator> equal_range (ForwardIterator beg, ForwardIterator end, const T& value, Binarypredicate op)
+```
+
+*    两种形式都返回“与value相等”的元素所形成的区间。在此区间内插入“其值为value"的元素,并不会破坏区间[beg, end)的已序性。
+*    和下式等效;make_pair (lower_bound(...),upper_bound(...))
+*    op是个可有可无的(可选的)二元判断式,被当做排序准则:op(elem1, elem2)
+*    调用者必须确保在进入算法之际,区间已按照排序准则排好序了。
+*    关联式容器(set, multiset, map, multimap)都提供有等效成员函数,性能更佳。
+*    复杂度:如果搭配随机存取迭代器,则为对数复杂度,否则为线性复杂度(这些算法最多执行2* 1og(numberOfElements) +1次比较动作,但若不是随机存取迭代器,迭代器在元素身上移动的复杂度是线性的,于是整体复杂度就是线性的了)
+
+#### merge()
+
+```cpp
+OutputIterator merge (InputIterator source1Beg, InputIterator source1End, InputIterator source2Beg, InputIterator source2End, OutputIterator destBeg)
+OutputIterator merge (InputIterator source1Beg, InputIterator source1End, InputIterator source2Beg, InputIterator source2End, OutputIterator destBeg, BinaryPredicate op)
+```
+
+*    两者都是将源区间[source1Beg, source1End)和[source2Beg, source2End)内的元素合并,使得“以destBeg起始的目标区间”内含两个源区间的所有元素。
+*    目标区间内的所有元素都将按顺序排列
+*    两者都返回目标区间内“最后一个被复制元素”的下一位置(也就是第一个未被覆盖的元素位置)。
+*    op是个可有可无的(可选的)二元判断式,被当做排序准则:op(elem1,elem2)源区间没有任何变化。
+*    根据标准,调用者应当确保两个源区间一开始都已序。然而在大部分实作版本中,上述算法可以将两个无序的源区间内的元素合并到一个无序的目标区间中。不过如果考虑移植性,这种情况下你应该调用copy()两次,而不是使用merge()
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    目标区间和源区间不得重复。
+*    lists提供了一个特殊成员函数merge(),用来合并两个lists。
+*    如果你要确保“两个源区间中都存在的元素”在目标区间中只出现一次,请使用set_union ()
+*    如果你只想获得“同时存在于两个源区间内”的所有元素,请使用set_intersection()
+*    复杂度:线性,最多执行numberOfElements + numberOfElements2-1次比较。
+
+#### set_union()
+
+```cpp
+OutputIterator set_union (InputIterator source1Beg, InputIterator source1End, InputIterator source2Beg, InputIterator source2End, OutputIterator destBeg)
+OutputIterator set_union (InputIterator sourcelBeg, InputIterator sourcelEnd, InputIterator source2Beg, InputIterator source2End, OutputIterator destBeg, BinaryPredicate op)
+```
+
+*    以上两者都是将已序的源区间[source1Beg, source1End)和[source2Beg,source2End)内的元素合并,得到“以destBeg起始”的目标区间--这个区间内含的元素要不来自第一源区间,要不就来自第二源区间,或是同时来自两个源区间。
+*    目标区间内的所有元素都按顺序排列。
+*    同时出现于两个源区间内的元素,在并集区间中将只出现一次。不过如果原来的某个源区间内原本就存在重复元素,则目标区间内也会有重复元素-重复的个数是两个源区间内的重复个数的较大值
+*    两者都返回目标区间内“最后一个被复制元素”的下一位置(也就是第一个未被覆盖的元素位置)
+*    op是个可有可无的(可选的)二元判断式,被当做排序准则:op(elem1, elem2)
+*    源区间没有任何变化。
+*    调用者应当确保两个源区间一开始都已序(sorted) 。
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    目标区间和源区间不得重迭。
+*    若想得到两个源区间的全部元素,请用merge() 
+*    复杂度:线性,最多执行2* (numberOfElements1+numberOfElements2)-1次比较操作。
+
+#### set_intersection()
+
+```cpp
+outputIterator set_intersection (InputIterator source1Beg, InputIterator source1End, InputIterator source2Beg, InputIterator source2End, outputIterator destBeg)
+OutputIterator set_intersection (InputIterator source1Beg, InputIterator source1End, InputIterator source2Beg, InputIterator source2End, outputIterator destBeg, BinaryPredicate op)
+```
+
+*    以上两者都是将已序源区间[source1Beg, source1End)和[source2Beg, source2End)的元素合并,得到“以destBeg起始”的目标区间-这个区间内含的元素不但存在于第一源区间,也存在于第二源区间。
+*    目标区间内的所有元素都按顺序排列。
+*    如果某个源区间内原就存在有重复元素,则目标区间内也会有重复元素-重复的个数是两个源区间内的重复个数的较小值
+*    两者都返回目标区间内“最后一个被合并元素”的下一位置。
+*    op是个可有可无的二元判断式,被当做排序准则.op(elem1, elem2)
+*    源区间没有任何变化
+*    调用者应当确保两个源区间一开始都已序
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    目标区间和源区间不得重叠。
+*    复杂度:线性,最多执行2* (numberOfElements1+numberOfElemens2)-1次比较动作。
+
+#### set_difference()
+
+```cpp
+OutputIterator set_difference (InputIterator source1Beg, InputIterator source1End, InputIterator source2Beg, InputIterator source2End, output Iterator destBeg)
+OutputIterator set_difference (Inputrterator source1Beg, InputIterator sourcelEnd, InputIterator source2Beg, InputIterator source2End, OutputIterator destBeg, BinaryPredicate op)
+```
+
+*    以上两者都是将已序源区间[source1Beg, source1End)和[source2Beg,souzce2end)的元素合并,得到“以destBeg起始”的目标区间-这个区间内含的元素只存在于第一源区间,不存在于第二源区间。
+*    目标区间内的所有元素都按顺序排列。
+*    如果某个源区间内原就存在有重复元素,则目标区间内也会有重复元素-重复的个数是第一源区间内的重复个数减去第二源区间内的相应重复个数,如果第二源区间内的重复个数大于第一源区间内的相应重复个数,目标区间内的对应重复个数将会是零
+*    两者都返同目标区间内“最后一个被合并元素”的下一位置。
+*    op是个可有可无的(可选的)二元判断式,被当做排序准则:op(elem1, elem2)
+*    源区间没有任何变化。
+*    调用者应当确保两个源区间一开始都已序(sorted)。
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    目标区间和源区间不得重迭。
+*    复杂度:线性,最多执行2* (numberOfElemens1+numberOfElements2)-1次比较。
+
+#### set_symmetric_difference()
+
+```cpp
+OutputIterator set_symmetric_difference (InputIterator source1Beg, InputIterator source1End, InputIterator source2Beg, InputIteretor source2End, OutputIterator destBeg)
+OutputIterator set_symmetric_difference (InputIterator source1Beg, InputIterator source1End, InputIterator source2Beg, InputIterator source2End, OutputIterator destBeg, BinaryPredicate op)
+```
+
+*    两者都是将已序源区间[sourcelBeg, sourcelEnd)和[source2Beg,source2End)的元素合并,得到“以destBeg起始”的目标区间-这个区间内含的元素或存在于第一源区间,或存在于第二源区间,但不同时存在于两源区间内。
+*    目标区间内的所有元素都按顺序排列。
+*    如果某个源区间内原就存在有重复元素,则目标区间内也会有重复元素-重复的个数是两个源区间内的对应重复元素的个数差额
+*    两者都返回目标区间内“最后一个被合并元素”的下一位置。
+*    op是个可有可无的(可选的)二元判断式,被当做排序准则:op(elem1, elem2)
+*    源区间没有任何变化。
+*    调用者应当确保两个源区间一开始都已序(sorted)
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    目标区间和源区间不得重叠。
+*    复杂度:线性,最多执行2* (numberOfElements1+numberOfElements2)-1次比较动作。
+
+#### inplace_merge()
+
+```cpp
+void inplace_merge (BidirectionalIterator beg1, BidirectionalIterator end1beg2, BidirectionalIterator end2)
+void inplace_merge (BidirectionalIterator beg1, BidirectionalIterator end1beg2, BidirectionalIterator end2, BinaryPedicate op)
+```
+
+*    两者都是将已序源区间[beg1, end1beg2)和[end1beg2, end2)的元素合并,使区间[beg1, end2)成为两者之总和(且形成已序)。
+*    复杂度:如有足够的内存则为线性,执行numberOfElements-1次比较操作,否则为n-log-n,执行numberOfElements*log(numberOfElemens)次比较操作。
 
 ### 数值算法
 
@@ -6122,6 +6281,77 @@ void sort_heap (RandomAccesIterator beg, RandomAccesIterator end, BiraryPredicat
 | inner_product()       | 组合两区间内的所有元素           |
 | adjacent_difference() | 将每个元素和前一元素组合         |
 | partial_sum()         | 将每个元素和其先前的所有元素组合 |
+
+运用数值算法之前必须先含入头文件
+
+```cpp
+#include <numeric>
+```
+
+#### accumulate()
+
+```cpp
+T accumulate (InputIterator beg, InputIterator end, T initValue)
+T accumulate (InputIterator beg, InputIterator end, T initvalue, BinaryFunc op)
+```
+
+*    以上第一种形式计算initVaiue和区间[beg, end)内的所有元素的总和,更具体地说,它针对每一个元素调用以下表达式:initValue = initValue +elem
+*    以上第二种形式计算initValue和区间[beg, end)内每一个元素进行op运算的结果,更具体地说,它针对每一个元素调用以下表达式;initValue =op(initValue, elem)
+*    如果序列为空(beg=end) ,则两者都返回initValue
+*    复杂度:线性,上述两式分别调用operator+或op()各numberOfElemens次。
+
+#### inner_product()
+
+```cpp
+T inner_product (InputIterator1 beg1, InputIterator1 end1, InputIterator2 beg2, T initValue)
+T inner_product (InputIterator1 beg1, InputIterator1 end1, InputIterator2 beg2, T initValue, BinaryFunc opi, BinaryFunc op2)
+```
+
+*    以上第一种形式计算并返回[beg, end)区间和“以beg2为起始的区间”的对应元素组(再加上initvalue)的内积。具体地说也就是针对“两区间内的每一组对应元素”调用以下表达式:
+
+<center>initValue = initValue+elem1*elem2</center>
+
+*    以上第二种形式将[beg, end)区间和“以beg2为起始的区间”内的对应元素组进行op2运算,然后再和initvalue进行op1运算,并将结果返回。具体地说也就是针对“两区间内的每一组对应元素”调用以下表达式:
+
+<center>initValue = op1(initValue, op2 (elem1, elem2))</center>
+
+*    如果第一区间为空(beg==end1) ,则两者都返回initValue
+*    调用者必须确保“以beg2为起始的区间”内含足够元素空间
+*    op1和op2都不得变动(修改)其参数内容.
+*    复杂度:线性,调用operator+和operator*各numberOfElement次,或是调用op1()和op2()各numberOfElement次。
+
+#### partial_sum()
+
+```cpp
+OutputIterator partial_sun (InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg)
+OutputIterator partial_sum (InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg, BinaryFunc op)
+```
+
+*    第一形式计算源区间[sourceBeg,sourcEnd)中每个元素的部分和,然后将结果写入以destBeg为起点的目标区间。
+*    第二形式将源区间[sourceBeg, sourceEnd)中的每个元素和其先前所有元素进行op运算,并将结果写入以desBeg为起点的目标区间。
+*    两种形式都返回目标区间内“最后一个被写入的值”的下一位置(也就是第一个未被覆盖的元素的位置)
+*    第一形式相当于把一个相对值序列转换为一个绝对值序列。就此而言,partial_sum()正好和adjacent_aifference()互补。
+*    源区间和目标区间可以相同。
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    op不得变动(更改)传入的参数。
+*    复杂度:线性,分别调用operator+或op() numberOfElemens次。
+
+#### adjacent_difference()
+
+```cpp
+OutputIterator adjacent_difference (InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg)
+OutputIterator adjacent_ditference (InputIterator sourceBeg, InputIterator sourceEnd, OutputIterator destBeg, BinaryFunc op)
+```
+
+*    第一种形式计算区间[sourceBeg, sourceEnd)中每一个元素和其紧邻前趋元素的差额,并将结果写入以destBeg为起点的目标区间。
+*    第二种形式针对区间[sourceBeg,sourceEnd)中的每一个元素和其紧邻前趋无素调用op操作,并将结果写入以desBeg为起点的目标区间。
+*    第一个元素只是被很单纯地加以复制。
+*    两种形式都返回目标区间内“最后一个被写入的值”的下一位置(也就是第一个未被覆盖的元素的位置)
+*    第一形式相当于把一个绝对值序列转换为一个相对值序列。就此而言,adjacent_difference ()正好与patial_sum()互补。
+*    源区间和目标区间可以相同。
+*    调用者必须确保目标区间够大,要不就得使用插入型迭代器。
+*    op不得变动(更改)传入的参数。
+*    复杂度:线性,分别调用operator-或op() numberOfElemens-1次。
 
 ### 使用者自定义泛型函数
 
@@ -7430,3 +7660,4 @@ winternl.h头文件包含了大部分Windows内部函数的原型和数据表示
 *    visual C++ 编程实战宝典
 *    C++标准程序库(中文版)
 
+-

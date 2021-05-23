@@ -151,29 +151,29 @@ java -jar "[程序名称]"
 
 ## javac命令编译选项
 
-<table>
-    <tr><th>选项</th><th>含义</th></tr>
-    <tr><th>-g</th><th>生成所有调试信息</th></tr>
-    <tr><th>-g:none</th><th>不生成任何调试信息</th></tr>
-    <tr><th>-g:{line,vars,source}</th><th>只生成某些调试信息</th></tr>
-    <tr><th>-nowarn</th><th>不生成任何警告</th></tr>
-    <tr><th>-verbose</th><th>输出有关编译器正在执行的操作的信息</th></tr>
-    <tr><th>-deprecation</th><th>输出使用已过时的API的源位置</th></tr>
-    <tr><th>-classpath</th><th>指定查找用户类文件的位置</th></tr>
-    <tr><th>-cp</th><th>指定查找用户类文件的位置</th></tr>
-    <tr><th>-sourcepath</th><th>指定查找输入源文件的位置</th></tr>
-    <tr><th>-bootclasspath</th><th>覆盖引导类文件的位置</th></tr>
-    <tr><th>-extdirs</th><th>覆盖安装的扩展目录的位置</th></tr>
-    <tr><th>endorseddirs</th><th>覆盖签名的标准路径的位置</th></tr>
-    <tr><th>-d</th><th>指定存放生成的类文件的位置</th></tr>
-    <tr><th>-encoding</th><th>指定源文件使用的字符编码</th></tr>
-    <tr><th>-source</th><th>提供与指定版本的源兼容性</th></tr>
-    <tr><th>-target</th><th>生成指定VM版本的类文件</th></tr>
-    <tr><th>-version</th><th>版本信息</th></tr>
-    <tr><th>-help</th><th>输出标准选项的提要</th></tr>
-    <tr><th>-X</th><th>输出非标准选项的提要</th></tr>
-    <tr><th>-J</th><th>直接将标志传递给运行时的系统</th></tr>
-</table>
+| 选项                  | 含义                               |
+| --------------------- | ---------------------------------- |
+| -g                    | 生成所有调试信息                   |
+| -g:none               | 不生成任何调试信息                 |
+| -g:{line,vars,source} | 只生成某些调试信息                 |
+| -nowarn               | 不生成任何警告                     |
+| -verbose              | 输出有关编译器正在执行的操作的信息 |
+| -deprecation          | 输出使用已过时的API的源位置        |
+| -classpath            | 指定查找用户类文件的位置           |
+| -cp                   | 指定查找用户类文件的位置           |
+| -sourcepath           | 指定查找输入源文件的位置           |
+| -bootclasspath        | 覆盖引导类文件的位置               |
+| -extdirs              | 覆盖安装的扩展目录的位置           |
+| endorseddirs          | 覆盖签名的标准路径的位置           |
+| -d                    | 指定存放生成的类文件的位置         |
+| -encoding             | 指定源文件使用的字符编码           |
+| -source               | 提供与指定版本的源兼容性           |
+| -target               | 生成指定VM版本的类文件             |
+| -version              | 版本信息                           |
+| -help                 | 输出标准选项的提要                 |
+| -X                    | 输出非标准选项的提要               |
+| -J                    | 直接将标志传递给运行时的系统       |
+
 
 # 标识符
 
@@ -3647,6 +3647,29 @@ try{
 *    在try-catch-finally语句中, catch可以出现多次,但异常类型必须互不相同,如果这些异常没有继承关系,则其顺序可以任意。但如果这些异常类有继承关系,则需要遵循子类,在前、父类在后的规则。这是由于在Java中,父类的变量可以指向子类的对象,而系统在查找匹配的异常类型时,是从上往下依次查找的,所以父类的异常类型必须写在后面。
 *    一条throw语句一旦被执行,程序立即转入相应的异常处理程序段,它后面的语句就不再执行了(这一点类似于return语句) ,而且它所在的方法也不再返回有意义的值。一个方法中, throw语句可以有多条,但每一次最多只能执行其中的一条。一般情况下, throw语句写在判断语句块中,以避免每次重复执行该语句。
 
+### 捕获多个异常
+
+```java
+try{
+    
+    // TODO
+}catch([异常类型1]|[异常类型2] e){
+    
+    //TODO
+}
+```
+
+### 忽略异常
+
+```java
+try{
+    
+    // TODO
+}catch([异常类型] ignored){
+    
+}
+```
+
 ## 处理字符串异常
 
 ### 声明
@@ -3820,7 +3843,7 @@ public class name<T>{
 }
 ```
 
-## 泛型方法
+## 自定义泛型方法
 
 ```java
 [public|protected|private] [static] <T> [void|type] functionname([parameter]){
@@ -3876,24 +3899,20 @@ System.out.println(simpleDateFormat.format(date));
 | boolean isDirectory( )       | 测试当前文件是否是目录               |
 | int compareTo(File pathname) | 按字典值比较两个File对象的绝对路径   |
 
-
-
 ### 文件操作
 
-| 方法                        | 说明                                                         |
-| --------------------------- | ------------------------------------------------------------ |
-| boolean delete( )           | 删除当前文件。成功返回 true，否则返回false                   |
-| boolean renameTo(File dest) | 将重新命名当前File对象所表示的文件。成功返回 true，否则返回false |
-| boolean createNewFile( )    | 创建一个空文件                                               |
-| boolean delete( )           | 删除文件或目录                                               |
-
-
+| 方法                         | 说明                                                         |
+| ---------------------------- | ------------------------------------------------------------ |
+| boolean delete( )            | 删除当前文件。成功返回 true，否则返回false                   |
+| boolean renameTo(File dest)  | 将重新命名当前File对象所表示的文件。成功返回 true，否则返回false |
+| **boolean createNewFile( )** | **创建一个空文件**                                           |
+| boolean delete( )            | 删除文件或目录                                               |
 
 ### 目录操作
 
 | 方法                                    | 说明                                                         |
 | --------------------------------------- | ------------------------------------------------------------ |
-| boolean mkdir( )                        | 创建当前File对象指定的目录                                   |
+| **boolean mkdir( )**                    | **创建当前File对象指定的目录**                               |
 | String[] list()                         | 返回当前目录下的文件和目录，返回值是字符串数组               |
 | String[] list(FilenameFilter filter)    | 返回当前目录下满足指定过滤器的文件和目录，参数是实现FilenameFilter接口对象，返回值是字符串数组 |
 | File[] listFiles()                      | 返回当前目录下的文件和目录，返回值是File数组                 |
@@ -3952,6 +3971,38 @@ System.out.println(simpleDateFormat.format(date));
 | void writeLong(long v)                      | 将 long写入文件为八个字节，高字节为先。                      |
 | void writeShort(int v)                      | 将 short写入文件作为两个字节，高字节优先。                   |
 | void writeUTF(String str)                   | 以机器无关的方式使用 modified UTF-8编码将字符串写入文件。    |
+
+## 文件的访问
+
+*    在访问目录中的条目之前调用FileVisitResult preVisitDirectory(T dir),它返回一个FileVisitResult枚举值,来告诉文件访问程序API下一步做什么。
+*    当目录由于某些原因无法访问时,调用FileVisitResult preVisitDirectoryFailed(T dir,IOException exception)。在第二个参数中指出了导致访问失败的异常
+*    在当前目录中有文件被访问时,调用FileVisitResult visitFile(T file, BasicFileAttributes attribs)。该文件的属性传递给第二个参数。
+*    当访问文件失败时,调用FileVisitResult visitFileFailed(T file, IOExceptionexception)。第二个参数指明导致访问失败的异常。
+*    完成对目录及其子目录的访问后,调用FileVisitResult postVisitDirectory(T dir,IOException exception),当目录访问成功时,异常参数为空,或者包含导致目录访问过早结束的异常。
+
+```java
+FileVisitor<Path> myFileVisitor = new SimpleFileVisitor<Path>() {
+	// 需要传入参数Path和BasicFileAttributes，分别表示路径和属性对象
+	public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+
+		// 输出想要访问的目录名称
+		System.out.println("将要访问的目录为: " + dir);
+		return FileVisitResult.CONTINUE;
+	}
+
+	public FileVisitResult visitFile(Path file, BasicFileAttributes attributes) {
+
+		System.out.println("正在访问的文件为: " + file + ",此文件的大小为: " + attributes.size());
+		return FileVisitResult.CONTINUE;
+	}
+};
+
+// 获取一个将要访问的目录路径的Path实例
+Path headDir = Paths.get("Dir1");
+
+// 通过walkFileTree方法，实现目录的遍历
+Files.walkFileTree(headDir, myFileVisitor);
+```
 
 # I/O流概述
 
@@ -4406,13 +4457,20 @@ try {
 
 # 多线程编程
 
+Java编写的程序都运行在Java虚拟机(JVM)中,在JVM的内部,程序的多任务是通过线程来实现的。每当使用Java命令启动一个Java应用程序,就会启动一个JVM进程。在同一个JVM进程中,有且只有一个进程,就是它自己。在这个JVM环境中,所有程序代码的运行都是以线程来运行的。
+
+JVM找到程序的入口点main(),然后运行main()方法,这样就产生了一个线程,这个线程称之为主线程。当main()方法结束后,主线程运行完成。JVM进程也随即退出。对于多个线程来说,多个线程共享JVM进程的内在块,当新的线程产生的时候,操作系统不分配新的内存,而是让新线程共享原有的进程块的内存。JVM负责对进程、线程进行管理,轮流(没有固定的顺序)分配每个进程很短的一段CPU时间(不一定是均分),然后在每个进程内部,程序代码自己处理该进程内部线程的时间分配,多个线程之间相互地切换去执行,这个切换时间也是非常短的。
+
+进程和线程最大的区别在于,进程是由操作系统来控制的,而线程是由进程来控制的。
+
 ## 进程
 
 *    一个进程就是一个执行中的程序，而每一个进程都有自己独立的一块内存空间、一组系统资源。在进程的概念中，每一个进程的内部数据和状态都是完全独立的。
 
-## 线程
+## 线程创建
 
 *    线程与进程相似，是一段完成某个特定功能的代码，是程序中单个顺序控制的流程，但与进程不同的是，同类的多个线程是共享一块内存空间和一组系统资源。所以系统在各个线程之间切换时，开销要比进程小的多，正因如此，线程被称为轻量级进程。一个进程中可以包含多个线程。
+*    线程(thread)是“进程”中某个单一顺序的控制流,也被称为轻量进程(lightweightprocesses),它是一个比进程更小的执行单位,是程序执行流的最小单元。一个标准的线程由线程ID、当前指令指针(PC) 、寄存器集合和堆栈组成。另外,线程是进程中的一个实体,是被系统独立调度和分派的基本单位,线程自己不拥有系统资源,只拥有一点在运行中必不可少的资源,但它可与同属一个进程的其他线程共享进程所拥有的全部资源。一个线程可以创建和撤销另一个线程,同一进程中的多个线程之间可以并发执行。由于线程之间的相互制约,致使线程在运行中呈现出间断性。
 
 ### 主线程
 
@@ -4420,44 +4478,108 @@ try {
 
 ### 子线程
 
-*    Java中创建一个子线程涉及到：java.lang.Thread类和java.lang.Runnable接口。
-*    Thread是线程类，创建一个Thread对象就会产生一个新的线程。而线程执行的程序代码是在实现Runnable接口对象的run()方法中编写的，实现Runnable接口对象是线程执行对象。
-*    Thread.currentThread()可以获得当前线程对象。
-*    getName()是Thread类的实例方法，可以获得线程的名。
-*    Thread.sleep(sleepTime)是休眠当前线程
-     *    static void sleep(long millis)：在指定的毫秒数内让当前正在执行的线程休眠。
-     *    static void sleep(long millis, int nanos) 在指定的毫秒数加指定的纳秒数内让当前正在执行的线程休眠。
-*    线程创建完成还需要调用start()方法才能执行。start()方法一旦调用线程进入可以执行状态，可以执行状态下的线程等待CPU调度执行，CPU调用后线程进行执行状态，运行run()方法。
-*    但是实际上一台PC通常就只有一颗CPU，在某个时刻只能是一个线程在运行，而Java语言在设计时就充分考虑到线程的并发调度执行。对于程序员来说，在编程时要注意给每个线程执行的时间和机会，主要是通过让线程休眠的办法（调用sleep()方法）来让当前线程暂停执行，然后由其他线程来争夺执行的机会。
+Java中创建一个子线程涉及到：java.lang.Thread类和java.lang.Runnable接口。
+
+Thread是线程类，创建一个Thread对象就会产生一个新的线程。而线程执行的程序代码是在实现Runnable接口对象的run()方法中编写的，实现Runnable接口对象是线程执行对象。
+
+Thread.currentThread()可以获得当前线程对象。
+
+getName()是Thread类的实例方法，可以获得线程的名。
+
+Thread.sleep(sleepTime)是休眠当前线程
+*    static void sleep(long millis)：在指定的毫秒数内让当前正在执行的线程休眠。
+*    static void sleep(long millis, int nanos) 在指定的毫秒数加指定的纳秒数内让当前正在执行的线程休眠。
+
+线程创建完成还需要调用start()方法才能执行。start()方法一旦调用线程进入可以执行状态，可以执行状态下的线程等待CPU调度执行，CPU调用后线程进行执行状态，运行run()方法。
+
+但是实际上一台PC通常就只有一颗CPU，在某个时刻只能是一个线程在运行，而Java语言在设计时就充分考虑到线程的并发调度执行。对于程序员来说，在编程时要注意给每个线程执行的时间和机会，主要是通过让线程休眠的办法（调用sleep()方法）来让当前线程暂停执行，然后由其他线程来争夺执行的机会。
+
+### Thread类
+
+线程是程序中执行的线程。 Java虚拟机允许应用程序同时执行多个执行线程。
+
+每个线程都有优先权。 具有较高优先级的线程优先于优先级较低的线程执行。 每个线程可能也可能不会被标记为守护程序。 当在某个线程中运行的代码创建一个新的`Thread`对象时，新线程的优先级最初设置为等于创建线程的优先级，并且当且仅当创建线程是守护进程时才是守护线程。
+
+#### 方法
+
+| 方法                                                         | 说明                                                         |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+| boolean isAlive()                                            | 测试这个线程是否活着。                                       |
+| boolean isDaemon()                                           | 测试这个线程是否是守护线程。                                 |
+| boolean isInterrupted()                                      | 测试这个线程是否被中断。                                     |
+| ClassLoader getContextClassLoader()                          | 返回此Thread的上下文ClassLoader。                            |
+| int getPriority()                                            | 返回此线程的优先级。                                         |
+| long getId()                                                 | 返回此线程的标识符。                                         |
+| protected Object clone()                                     | 将CloneNotSupportedException作为线程抛出无法有意义地克隆。   |
+| StackTraceElement[] getStackTrace()                          | 返回表示此线程的堆栈转储的堆栈跟踪元素数组。                 |
+| static boolean holdsLock(Object obj)                         | 返回 true当且仅当当前线程在指定的对象上保持监视器锁。        |
+| static boolean interrupted()                                 | 测试当前线程是否中断。                                       |
+| static int activeCount()                                     | 返回当前线程的thread group及其子组中活动线程数的估计。       |
+| static int  enumerate(Thread[] tarray)                       | 将当前线程的线程组及其子组中的每个活动线程复制到指定的数组中。 |
+| static void dumpStack()                                      | 将当前线程的堆栈跟踪打印到标准错误流。                       |
+| static void  setDefaultUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh) | 设置当线程由于未捕获的异常突然终止而调用的默认处理程序，并且没有为该线程定义其他处理程序。 |
+| static void sleep(long millis)                               | 使当前正在执行的线程以指定的毫秒数暂停（暂时停止执行），具体取决于系统定时器和调度程序的精度和准确性。 |
+| static void sleep(long millis,  int nanos)                   | 导致正在执行的线程以指定的毫秒数加上指定的纳秒数来暂停（临时停止执行），这取决于系统定时器和调度器的精度和准确性。 |
+| static void yield()                                          | 对调度程序的一个暗示，即当前线程愿意产生当前使用的处理器。   |
+| static Map<Thread,StackTraceElement[]>  getAllStackTraces()  | 返回所有活动线程的堆栈跟踪图。                               |
+| static Thread currentThread()                                | 返回对当前正在执行的线程对象的引用。                         |
+| static Thread.UncaughtExceptionHandler  getDefaultUncaughtExceptionHandler() | 返回当线程由于未捕获异常突然终止而调用的默认处理程序。       |
+| String getName()                                             | 返回此线程的名称。                                           |
+| String toString()                                            | 返回此线程的字符串表示，包括线程的名称，优先级和线程组。     |
+| Thread.State getState()                                      | 返回此线程的状态。                                           |
+| Thread.UncaughtExceptionHandler  getUncaughtExceptionHandler() | 返回由于未捕获的异常，此线程突然终止时调用的处理程序。       |
+| ThreadGroup getThreadGroup()                                 | 返回此线程所属的线程组。                                     |
+| void checkAccess()                                           | 确定当前正在运行的线程是否有权限修改此线程。                 |
+| void interrupt()                                             | 中断这个线程。                                               |
+| void join()                                                  | 等待这个线程死亡。                                           |
+| void join(long millis)                                       | 等待这个线程死亡最多 millis毫秒。                            |
+| void join(long millis,  int nanos)                           | 等待最多 millis毫秒加上 nanos纳秒这个线程死亡。              |
+| void run()                                                   | 如果这个线程使用单独的Runnable运行对象构造，则调用该Runnable对象的run方法; 否则，此方法不执行任何操作并返回。 |
+| void  setContextClassLoader(ClassLoader cl)                  | 设置此线程的上下文ClassLoader。                              |
+| void setDaemon(boolean on)                                   | 将此线程标记为 daemon线程或用户线程。                        |
+| void setName(String name)                                    | 将此线程的名称更改为等于参数 name 。                         |
+| void setPriority(int newPriority)                            | 更改此线程的优先级。                                         |
+| void  setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh) | 设置当该线程由于未捕获的异常而突然终止时调用的处理程序。     |
+| void start()                                                 | 导致此线程开始执行; Java虚拟机调用此线程的run方法。          |
 
 ### 实现Runnable接口
 
-*    使用Thread类如下两个构造方法
+使用Thread类如下两个构造方法
+
 *    Thread(Runnable target, String name)：target是线程执行对象，实现Runnable接口。name为线程指定一个名字。
 *    Thread(Runnable target)：target是线程执行对象，实现Runnable接口。线程名字是由JVM分配的。
 
+在实际编程中,实现Runnable的子类中,通常都会定义一个Thread类的对象,然后利用Thread的构造方法:Thread (Runnable target)或Thread (Runnable target, string name)将本类作为参数传递给Thread对象,这样就可以指定要运行的run)方法。
+
+同时,还可以使用Thread类中定义好的其他辅助方法。除此之外,为了启动这个线程,还需要定义一个start()方法,以启动内部的Thread对象。
+
 ### 使用匿名内部类和Lambda表达式实现线程体
 
-*    如果线程体使用的地方不是很多，可以不用单独定义一个类。可以使用匿名内部类或Lambda表达式直接实现Runnable接口。
-*    Runnable中只有一个方法是函数式接口，可以使用Lambda表达式。
+如果线程体使用的地方不是很多，可以不用单独定义一个类。可以使用匿名内部类或Lambda表达式直接实现Runnable接口。
+
+Runnable中只有一个方法是函数式接口，可以使用Lambda表达式。
+
+>    在实际的Java程序开发中,我们更倾向于通过实现Runnable接口的方式实现多线程,因为实现Runnable接口相比继承Thread类而言,既可以避免单继承的局限,也可以避免类层次的加深,同时更适合于资源的共享。
 
 ## 线程的状态
 
 ### 新建状态
 
-*    新建状态（New）是通过new等方式创建线程对象，它仅仅是一个空的线程对象。
+新建状态（New）是通过new等方式创建线程对象，它仅仅是一个空的线程对象。
 
 ### 就绪状态
 
-*    当主线程调用新建线程的start()方法后，它就进入就绪状态（Runnable）。此时的线程尚未真正开始执行run()方法，它必须等待CPU的调度。
+当主线程调用新建线程的start()方法后，它就进入就绪状态（Runnable）。此时的线程尚未真正开始执行run()方法，它必须等待CPU的调度。一旦获得CPU资源,就可以脱离创建它的主线程独立运行了。另外,原来处于阻塞状态的线程结束阻塞状态后,也将进入就绪状态。
 
 ### 运行状态
 
-*    CPU的调度就绪状态的线程，线程进入运行状态（Running），处于运行状态的线程独占CPU，执行run()方法。
+CPU的调度就绪状态的线程，线程进入运行状态（Running），处于运行状态的线程独占CPU，执行run()方法。
+
+当一个就绪状态的线程获得CPU时,就进入了运行状态。每个Thread类及其子类对象都有一个run()方法,一旦线程开始运行,就会自动运行该方法。在run()方法中定义了线程所有的操作。
 
 ### 阻塞状态
 
-*    因为某种原因运行状态的线程会进入不可运行状态，即阻塞状态（Blocked），处于阻塞状态的线程JVM系统不能执行该线程，即使CPU空闲，也不能执行该线程。
+因为某种原因运行状态的线程会进入不可运行状态，即阻塞状态（Blocked），处于阻塞状态的线程JVM系统不能执行该线程，即使CPU空闲，也不能执行该线程。
 
 #### 进入阻塞状态方法
 
@@ -4476,6 +4598,8 @@ try {
 
 ### 线程优先级
 
+*    默认情况下,所有的线程都按照正常的优先级来运行及分配CPU资源。JVM允许程序员自行设置线程优先级。理论上,优先级高的线程比优先级低的线程获得更多的CPU时间。
+*    实际上,线程获得的CPU时间通常由包括优先级在内的多个因素决定,一个优先级高的线程自然比优先级低的线程优先。举例来说,当低优先级线程正在运行,而一个高优先级的线程被恢复(例如,从沉睡中或等待1/0中) ,它将抢占低优先级线程所使用的CPU,理论上,等优先级线程有同等的权力使用CPU,但由于Java是被设计成能在很多环境下工作的,一些环境下实现多任务处理从本质上与其他环境不同。为安全起见,等优先级线程偶尔也受控制。这保证了所有线程,在无优先级的操作系统下都有机会运行。实际上,在无优先级的环境下,多数线程仍然有机会运行,因为很多线程不可避免地会遭遇阻塞,例如,等待输入输出。遇到这种情形,阻塞的线程被挂起,其他线程运行。
 *    线程的调度程序根据线程决定每次线程应当何时运行，Java提供了10种优先级，分别用1~10整数表示，最高优先级是10用常量MAX_PRIORITY表示；最低优先级是1用常量MIN_PRIORITY；默认优先级是5用常量NORM_PRIORITY表示。
 *    Thread类提供了setPriority(int newPriority)方法可以设置线程优先级，通过getPriority()方法获得线程优先级。
 
@@ -4484,6 +4608,8 @@ try {
 *    当前线程调用t1线程的join()方法，则阻塞当前线程，等待t1线程结束，如果t1线程结束或等待超时，则当前线程回到就绪状态。
 
 #### join()
+
+throws InterruptedException
 
 *    void join()：等待该线程结束。
 *    void join(long millis)：等待该线程结束的时间最长为millis毫秒。如果超时为0意味着要一直等下去。
@@ -4514,6 +4640,18 @@ try {
 
 *    synchronized关键字修饰方法实现线程同步，方法所在的对象被锁定
 
+synchronized的使用形式有两种,一种是保护整个方法
+
+```java
+访问类型 synchronized 返回值方法名([参数表]){...}
+```
+
+另外一种是保护某个指定的对象以及随后的代码块:
+
+```java
+synchronized (对象名) { }
+```
+
 #### synchronized语句
 
 *    synchronized语句方式主要用于第三方类，不方便修改它的代码情况。
@@ -4522,13 +4660,25 @@ try {
 
 *    如果两个线程之间有依赖关系，线程之间必须进行通信，互相协调才能完成工作。
 
+### 概念
+
+*    互斥:当多个线程需要访问同一资源,而这一资源在某一时刻只允许一个线程访问,那么这些线程就是互斥的。
+*    同步:多个线程需要访问同一资源,而且需要相互配合才能正常工作,那么这些线程运行时就是一种同步关系。
+*    临界区:为了实现线程间的互斥和同步,需要将共享资源放入一个区域,该区域一次只允许一个线程进入,该区域被称为临界资源。线程在访问共享资源前需要进行检查,看自己能否对该资源访问。如果有权访问,还需要阻止其他线程进入该区域。该代码段就是临界区。
+*    死锁:若有多个线程相互等待其他线程释放资源,且所有线程都不释放自己所占有的资源,从而导致相关线程处于永远等待的状态,这种现象称为线程的死锁。
+
 ### 方法
 
 *    void wait()：使当前线程释放对象锁，然后当前线程处于对象等待队列中阻塞状态。
 *    void wait(long timeout)：同wait()方法，等待timeout毫秒时间。
 *    void wait(long timeout, int nanos)：同wait()方法，等待timeout毫秒加nanos纳秒时间。
-*    void notify()：当前线程唤醒此对象等待队列中的一个线程，如图23-7所示该线程将进入就绪状态。
-*    void notifyAll()：当前线程唤醒此对象等待队列中的所有线程，如图23-7所示这些线程将进入就绪状态。
+*    void notify()：当前线程唤醒此对象等待队列中的一个线程
+*    void notifyAll()：当前线程唤醒此对象等待队列中的所有线程
+*    synehronized关键字则用来标志被同步使用的资源。这里的资源既可以是数据,也可以是方法,甚至是一段代码。凡是被synchronized修饰的资源,系统都会为它分配一个管程,这样就能保证在某一时间内,只有一个线程对象在享有这一资源。所以synchronized也被称为“对象锁”。而且,上面提到的3个方法,都只能使用在由synchronized控制的代码块中。
+
+# 运行时类型识别RTTI
+
+
 
 # 网络编程
 
