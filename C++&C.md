@@ -2806,14 +2806,35 @@ vector迭代器是随机存取迭代器，对任何一个STL算法都奏效。
 
 vector将元素放置与一个dynamic array中加以管理,允许随机存取,可以利用索引直接存取任何一个元素
 
-#### 长度
+#### size()
 
 ```cpp
-vector.size(); //返回容器中元素的个数
-vector.empty(); //判断容器是否为空
-vector.resize(num); //重新指定容器的长度为num，若容器变长，则以默认值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
-vector.resize(num, elem); //重新指定容器的长度为num，若容器变长，则以elem值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
+vector.size();
 ```
+
+*    返回容器中元素的个数
+
+#### empty()
+
+```cpp
+vector.empty();
+```
+
+*    判断容器是否为空
+
+#### resize()
+
+```cpp
+vector.resize(num);
+```
+
+*    重新指定容器的长度为num，若容器变长，则以默认值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
+
+```cpp
+vector.resize(num, elem);
+```
+
+*    重新指定容器的长度为num，若容器变长，则以elem值填充新位置。如果容器变短，则末尾超出容器长度的元素被删除。
 
 #### 数据存取
 
@@ -2957,13 +2978,6 @@ int main(){
 
 ### <span id=stack>stack</span>
 
-#### 前置
-
-```c++
-#include <stack>
-using namespace std;
-```
-
 #### 构造函数
 
 ##### default
@@ -2984,7 +2998,7 @@ explicit stack::stack (const container& cont)
 *    产生一个stack,并以容器cont内的元素为初值。
 *    cont内的所有元素均被复制。
 
-#### 判断是否为空
+#### empty()
 
 ```cpp
 bool stack::empty() const
@@ -2993,7 +3007,7 @@ bool stack::empty() const
 *    判断stack是否为空(亦即不含任何元素)
 *    与stack::size () == 0等效,但可能更快。
 
-#### 返回栈顶元素
+#### top()
 
 ```cpp
 value_type& stack::top ()
@@ -3005,7 +3019,7 @@ const value_type& stack::top () const
 *    调用者必须确保stack不为空(size()>0) ,否则可能导致未定义的行为。
 *    第一种形式是针对non-const stacks设计的,返回一个reference.所以你可以就地( in place)修改stack内的元素。
 
-#### 入栈
+#### push()
 
 ```cpp
 void stack::push (const value type& elem)
@@ -3013,7 +3027,7 @@ void stack::push (const value type& elem)
 
 *    将elem的副本安插到stack内,并成为其新的第一元素。
 
-#### 出栈
+#### pop()
 
 ```cpp
 void stack::pop ()
@@ -3024,7 +3038,7 @@ void stack::pop ()
 *    此函数没有回返值。如果想处理被移那个元素,你必须先调用top()。
 *    调用者必须确保stack不为空，否则可能导致未定义的行为。
 
-#### 返回元素个数
+#### size()
 
 ```cpp
 size_type stack::size () const
@@ -3033,7 +3047,7 @@ size_type stack::size () const
 *    返回元素个数。
 *    如果要检验容器是否为空(亦即不含任何元素),应使用empty (),因为它可能更快。
 
-#### 比较
+#### comparision()
 
 ```cpp
 bool comparision (const stack& stack1, const stack& stack2)
@@ -3352,6 +3366,417 @@ queue<T> 模板定义了拷贝和移动版的 operator=()，对于所保存元�
 
 和 stack 一样，queue 也没有迭代器。访问元素的唯一方式是遍历容器内容，并移除访问过的每一个元素。
 
+### priority_queue
+
+#### 构造函数
+
+##### 默认构造函数
+
+```cpp
+priority_queue::priority_queue()
+```
+
+*    default构造函数
+*    产生一个空的priority queue.
+
+##### 设置排序准则
+
+```cpp
+explicit priority_queue::priority_queue (const CompFunc& op)
+```
+
+*    产生一个priority queue,以op为排序准则。
+
+```cpp
+priority_queue::priority_queue (const CompFunc& op, const Container& cont)
+```
+
+*    产生一个priority queue,以op为排序准则,并以容器cont内的元素为初值。
+*    cont中的所有元素都会被复制。
+
+```cpp
+priority_queue::priority_queue (InputIterator beg, InputIterator end)
+```
+
+*    产生一个priority queue,以区间[beg, end]内的元素为初值。
+*    此构造函数是一个template member,也就是说只要源区间内的元素型别可以转化为本容器内的元素型别,此构造函数即可运行。
+
+```cpp
+priority_queue::priority_queue (InputIterator beg, InputIterator end, const CompFunc& op)
+```
+
+*    产生一个priority queue,以op为排序准则,并以区间(beg. ena)内的元素为初值。
+*    此构造函数是一个termplate member,也就是说只要源区间内的元素型别可以转化为本容器内的元素型别,此构造函数即可运作。
+
+```cpp
+priority_queue::priority_queue (InputIterator beg, InputIterator end, const CompFunc& op, const Container& cont)
+```
+
+*    产生一个priority queue,以op为排序准则,并以区间[beg, end)内的元素以及容器cont内的元素为初值。
+*    此构造函数是一个template member,也就是说只要源区间内的元素型别可以转化为本容器内的元素型别,此一构造函数即可运作。
+
+#### size()
+
+```cpp
+size_type priority_queue::size () const
+```
+
+*    返回元素数量。
+*    如果要检验容器是否为空 (亦即不含任何元素) ,应使用empty(),因为它可能更快。
+
+#### empty()
+
+```cpp
+bool priority_queue::empty () const
+```
+
+*    判断priority queue是否为空(亦即不含任何元素).
+*    与priority_queue::size ()x==0等效,但可能更快。
+
+#### push()
+
+```cpp
+void priority_queue::push (const value_type& elem)
+```
+
+*    将elem的副本安插到priority queue内。
+
+#### top()
+
+```cpp
+const value_type& priority_queue::top () const
+```
+
+*    返回priority queue内的“下一个元素”,所谓下一个元素是指所有元素中数值,最大的那个。
+*    如果同时存在若干相等的最大元素,则无法确知会返回哪一个。
+*    调用者必须确保priority queue不为空(size()>o) ,否则导致未定义行为。
+
+#### pop()
+
+```cpp
+void priority_queue::pop ()
+```
+
+*    移除priority queue内的“下一个元素”。
+*    所谓下一个元素是指所有元素中数值最大的那个。
+*    如果同时存在若干相等的最大元素,则无法确知会返回哪一个。
+*    这个函数无回返值。
+*    如果想处理“下一个元素”,必须先调用top()。
+*    调用者必须确保priority queue不为空(size1)>0) ,否则导致未定义行为。
+
+### Bitsets
+
+Bitsets造出一个内含位(bits)或布尔(boolean)值且大小固定的array。当你需要管理各式标志(flags) ,并以标志的任意组合来表现变量时,就可运用bitsets.C程序和传统C++程序通常使用型别1ong来作为bits aray,再通过&,|,~等位操作符(bit operators)操作各个位。Class bitset的优点在于可容纳任意个数的位(译注:但不能动态改变) ,并提供各项操作。
+
+#### 构造函数
+
+##### default
+
+```cpp
+bitset<bits>::bitset()
+```
+
+*    defaut构造函数。
+*    生成一个bitset,所有位均初始化为零。
+
+#### 初值
+
+```cpp
+bitset<bits>::bitset (unsigned long value)
+```
+
+*    产生一个bitset,以整数值value的位作为初值。
+*    如果value的值太小,前面不足的位被设为0。
+
+```cpp
+explicit bitset<bits>::bitset (const string& str)
+bitset<bits>::bitset (const string& str, string::size_type str_idx)
+bitset<bits>::bitset (const string& str, string::size_type str_idx, string::size_type str_num)
+```
+
+*    所有形式都用来产生bitset,以字符串str或其子字符申加以初始化。
+*    该字符串或子字符串中只能包含字符"0"和"1".
+*    str_idx是str中用于初始化的第一个字符。
+*    如果省略str_num,从str_idx开始到str结束的所有字符都将用于初始化。
+*    如果该字符串或子字符串中的字符数量少于所需,则前面多余的位将设初值0.
+*    如果该字符串的子字符串中的字符数量多于所需,则多出来的字符会被忽略。
+*    如果str_idx > str.size(),抛出out_of_ronge异常。
+*    如果有个字符既不是"0"也不是"1",抛出invalid_argument异常。这个构造函数是个template member。因此就第一参数而言,不会发生从const char*向string的隐式型别转换。
+
+#### size()
+
+```cpp
+size_t bitset<bits>::size () const
+```
+
+*    返回位的个数。
+
+#### count()
+
+```cpp
+size_t bitset<bits>::count () const
+```
+
+*    返回位值为“1”的位个数
+
+#### any()
+
+```cpp
+bool bitset<bits>::any () const
+```
+
+*    判断是否有任何位被设立(数值为1)
+
+#### none()
+
+```cpp
+bool bitset<bits>::none () const
+```
+
+*    判断是否没有任何一个位被设立(亦即所有的位值皆为0)
+
+#### test()
+
+```cpp
+bool bitset<bits>::test (size_t idx) const
+```
+
+*    判断idx位置上的位是否被设立(数值为1)
+*    如果idx >=size()则抛出out_of_range异常。
+
+#### operator==
+
+```cpp
+bool bitset<bits>::operator== (const bitset<bits>& bits) const
+```
+
+*    判断*this和bits的所有位是否都相等。
+
+#### operator!=
+
+```cpp
+bool bitset<bits>::operator!= (const bitset<bits>& bits) const
+```
+
+*    判断*this和bits之中是否有些位不相等。
+
+#### set()
+
+```cpp
+bitset<bits>& bitset<bits>::set ()
+```
+
+*    将所有位设为true (1)
+*    返回更动后的bitset
+
+```cpp
+bitset<bits>& bitset<bits>::set (size_t idx)
+```
+
+*    将位置idx上的位设为true (1)
+*    返回更动后的bitset
+*    如果idx >= size()则抛出out_of_range异常
+
+```
+bitset<bits>& bitset<bits>::set (size_t idx, int value)
+```
+
+*    根据value上的值设定idx位置的位值
+*    返回更动后的bitset
+*    value将被当做boolean值处理
+*    如果value等于0,则idx位置上的位值被设为false:其它的value值都会使该位被设为true
+*    如果idx >= size ()则抛出out_of_range异常。
+
+#### reset()
+
+```cpp
+bitset<bits>& bitset<bits>::reset ()
+```
+
+*    将所有位设为false (0) 
+*    返回更动后的bitset
+
+```cpp
+bitset<bits>& bitset<bits>::reset (size_t idx)
+```
+
+*    将位置idx上的位设为false (0)
+*    返回更动后的bitset
+*    如果idx >=size()则抛出out_of_range异常。
+
+#### flip()
+
+```cpp
+bitset<bits>& bitset<bits>::fllp ()
+```
+
+*    反转所有位(原本1者转为0,原本0者转为1)
+*    返回更动后的bitset
+
+```cpp
+bitset<bits>& bitset<bits>::flip (size_t idx)
+```
+
+*    反转idx位置上的位
+*    返回更动后的bitset
+*    如果idx >= size ()则抛出out_of_range异常。
+
+#### operator^=
+
+```cpp
+bitset<bits>& bitset<bits>::operator^= (const bitset<bits>& bits)
+```
+
+*    对每个位逐一进行exclusive-or运算
+*    将*this之中所有和"bits内数值为1的位”的对应位都翻转,其它位保持不动。
+*    返回更动后的bitset
+
+#### operator|=
+
+```cpp
+bitset<bits>& bitset<bits>::operator|= (const bitset<bits>& bits)
+```
+
+*    位逐一进行or运算。
+*    将*this之中所有和“bits内数值为1的位”的对应位都设为1,其它位保持不动。
+*    返回更动后的bitset.
+
+#### operator&=
+
+```cpp
+bitset<bits>& bitset<bits>::operator&= (const bitset<bits>& bits)
+```
+
+*    位逐一进行and运算。
+*    将*this之中所有和"bits内数值为0的位”的对应位都设为0,其它位保持不动。
+*    返回更动后的bitset
+
+#### operator <<=
+
+```cpp
+bitset <bits>& bitset<bits>::operator<<= (size_t num)
+```
+
+*    将所有位向左移动num个位置
+*    返回更动后的biset
+*    空出来的位设为false (0) 
+
+```cpp
+bitset <bits>& bitset<bits>::operator>>= (size_t num)
+```
+
+*    将所有位向右移动num个位置
+*    返问变动后的bitset
+*    空出来的位设为false (0) 
+
+#### operator[]
+
+```cpp
+bitset<bits>::reference bitset<bits>::operator[] (size_t idx)
+bool bitset<bits>::operator[] (size_t idx) const
+```
+
+*    这两种形式都返回idx位置上的位值
+*    第一种形式针对non-const bitsets,使用了一个proxy (代理人、替身)型别.使得回返值成为一个可被更动的值(左值, Ivalue)
+*    调用者必须确保idx有效,否则会导致未定义的行为
+
+#### operator-
+
+```cpp
+bitset<bits> bitset<bits>::operator- () const
+```
+
+*    产生一个新的bitset并返回;以+this的位翻转值作为初值。
+
+#### operator<<
+
+```cpp
+bitset<bits> bitset<bits>::operator<< (size_t nun) const
+```
+
+* 产生一个新的bitset并返回:以*this的位向左移动nun个位置作为初值。
+
+#### operator>>
+
+```cpp
+bitset<bits> bitset<bits>::operator>> (size_t nun) const
+```
+
+*    ,产生一个新的bitset并返回:以*this的位向右移动nun个位置作为初值。
+
+#### operator&
+
+```cpp
+bitset<bits> operator& (const bitset<bits>& bits1, const bitset<bits>& bits2)
+```
+
+*    对bits1和bits2两者进行“各位逐一and运算”并返回结果。
+*    返回的新bitset中,只有"bits1和bits2的位值都为1”的那些位才会被设为1
+
+#### operator|
+
+```
+bitset<bits> operator| (const bitset<bits>& bits1, const bitset<bits>& bits2)
+```
+
+*    对bits1和bits2两者进行“各位逐一or运算”并返回结果
+*    返回的新bitset中,只有"bits1或bits2的位值为1"的那些位才会被设为1
+
+#### operator^
+
+```cpp
+bitset<bits> operator^ (const bitset<bits>& bitsl, const bitset<bits>& bits2)
+```
+
+*    对bits1和biet2两者进行“各位逐一exclusive or运算”并返回结果
+*    返回的新biset中,只有"bits1或bits2的位值相异”的那些位才会被设为1
+
+#### to_ulong()
+
+```cpp
+unsigned long bitset<bits>::to_ulong () const
+```
+
+*    返回bitset所有位所代表的整数
+*    如果unsigned long不足以表现这个整数,抛出overfiow_emor异常
+
+#### to_string()
+
+```cpp
+string bitset<bits>::to_string () const
+```
+
+*    返回一个string,以字符串形式表现该bitset的二进制值(不是0就是1)
+*    字符顺序按照bitset的索引高低摔列
+*    这是一个template函数,其回返值型别被参数化了。
+
+#### I/O操作
+
+##### operator>>
+
+```cpp
+istream& operator>> (istream& strm, bitset<bits>& bits)
+```
+
+*    将一个包含'0'和'1'的字符序列转换为对应位,读入bits
+*    读取行为一直进行下去,直到发生以下数种情况之一:
+     *    读取结束(多半是这种情况)。
+     *    strm中出现end_of_file符号
+     *    下一个字符既不是'0'也不是'1'.
+*    返回strm
+*    如果读入的位少于bitset的位数量,前面不足的位填0.
+*    如果此一操作无法读取任何字符,则strm的ios: :failbit会被设立,导致相关异常被抛出来
+
+##### operator<<
+
+```cpp
+ostream& operator<< (ostream& strm, const bitset<bits>& bits)
+```
+
+*    将bits的二进制形式转换为字符串(成为一个包含'0'和'1'的序列)
+*    使用to_string()来产生输出字符
+*    返回strm
+
 ### <span id="list">list</span>
 
 *    list不支持随机存取,list不提供at(),也不提供subscript操作符
@@ -3606,8 +4031,6 @@ list.remove_if(classname(args));
 
 *    将lists中的元素颠倒次序
 *    本函数不抛出异常
-
-### priority_queue
 
 ### <span id="set">set</span>/<span id="multiset">multiset</span>
 
