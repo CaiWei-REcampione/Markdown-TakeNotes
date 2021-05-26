@@ -4451,6 +4451,232 @@ C++标准程序库对于string的设计思维就是,让它的行为尽可能像�
 *    素引值必须合法。该值必须小于字符串的字符个数(第一字符的索引是0).最后一个字符的下一个位置(的索引值)可用来标明结束位置。大部分情况下,如果你指定的索引超过实际字符数,会引发out_of_range异常。不过,用以搜寻单一字符成某个位置的所有搜寻函数,均可接受任意索引.如果索引超过实际字符数,这些函数会返回string: :npos (表示没找到)。
 *    字符数量(长度)可为任意值。如果其值大于实际剩余的字符数,则这些剩余字符都会被用到。如果使用string::npos,相当于指明“剩余所有字符”。
 
+#### string型别和wstring型别
+
+*    string是针对char而预先定义的特化版本
+
+```cpp
+namespace std {
+    
+    typedef basic_string<char> string;
+}
+```
+
+*    wstring是针对wchar_t而预先定义的特化版本
+
+```cpp
+namespace std {
+    typedef basic_string<wchar_t> wstring;
+}
+```
+
+#### 方法
+
+| 操作函数                         | 效果                               |
+| -------------------------------- | ---------------------------------- |
+| 构造函数                         | 产生或复制字符串                   |
+| 析构函数                         | 销毁字符串                         |
+| =, assign()                      | 赋以新值                           |
+| swap()                           | 交换两个字符串的内容               |
+| +=, append(), push_back()        | 添加字符                           |
+| insert()                         | 插入字符                           |
+| erase()                          | 删除字符                           |
+| clear()                          | 移除全部字符                       |
+| resize()                         | 改变字符数量                       |
+| replace()                        | 替换字符                           |
+| +                                | 串联字符串                         |
+| ==, !=, <, <=, >, >=,  compare() | 比较字符串内容                     |
+| size(), length()                 | 返回字符数量                       |
+| max_size()                       | 返回字符的最大可能个数             |
+| empty()                          | 判断字符串是否为空                 |
+| capacity()                       | 返回重新分配之前的字符容量         |
+| reserve()                        | 保留一定量内存以容纳一定数量的字符 |
+| [ ], at()                        | 存取单一字符                       |
+| >>, getline()                    | 从stream中读取某值                 |
+| <<                               | 将某值写入stream                   |
+| copy()                           | 将内容复制为一个C-string           |
+| c_str()                          | 将内容以C-string形式返回           |
+| data()                           | 将内容以字符数组形式返回           |
+| substr()                         | 返回某个子字符串                   |
+| 搜寻函数                         | 搜寻某个子字符串或字符             |
+| begin(), end()                   | 提供正常的(正向)迭代器支持         |
+| rbegin(), rend()                 | 提供逆向迭代器支持                 |
+| get_allocator()                  | 返回配置器(allocator)              |
+
+#### 构造函数
+
+| 表达式                      | 效果                                                         |
+| --------------------------- | ------------------------------------------------------------ |
+| strings                     | 生成一个空字符串                                             |
+| string s(str)               | copy构造函数，生成字符串str的一个复制品                      |
+| string s(str,stridx)        | 将字符串str内“始于位置stridx”的部分，当做字符串s的初值       |
+| string s(str,stridx,strlen) | 将字符串str内“始于位置stridx且长度顶多strlen”的部分，当做字符串s的初值 |
+| string s(cstr)              | 以C-string cstr作为字符串s的初值                             |
+| string s(chars,chars_len)   | 以C-string cstr的前chars_len个字符作为字符串s的初值          |
+| string s(num,c)             | 生成一个字符串，包含num个c字符                               |
+| string s(beg,end)           | 以区间[beg;end]内的字符作为字符串s的初值                     |
+| s.~string()                 | 销毁所有字符，释放内存                                       |
+
+#### Strings和C-Strings
+
+有三个函数可以将字符串内容转换为字符数组或C-String:
+
+*    data() 以字符数组的形式返回字符串内容。由于并未追加'\0'字符,所以返回型别并非有效的C-string
+*    c_str() 以C-string形式返回字符串内容,也就是在尾端添加'\0'字符。
+*    copy () 将字符串内容复制到“调用者提供的字符数组”中。不添加'\0'字符。
+
+#### 大小、容量
+
+##### size()和lengtht
+
+返回string中现有的字符个数。
+
+成员函数empty ()用来检验字符数是否为0,亦即字符串是否为空。
+
+##### max_size()
+
+此函数返回一个string最多能够包含的字符数。一个string通常包含一块单独内存区块内的所有字符,所以可能跟PC机器本身的限制有关系。返回值一般而言,是索引型别的最大值减1。之所以“减1”有两个原因: (a)最大值本身是npos;(b)具体实作中,可因此轻易在内部缓冲区之后添加一个'\0',以便将这个string当做C-string使用。一旦某个操作函数使用一个长度大于max_size ()的string, length_error异常就会被抛出来。
+
+##### capacity ()
+
+重新分配内存之前, string所能包含的最大字符数。
+
+*    重新分配会造成所有指向string的references、pointers和iterators失效。
+*    重新分配(reallocation)很耗时间。
+
+>    容量概念应用于string和应用于vector是相同的，但有一个显著差异:面对string你可以调月reserve ()来缩减实际容量,而vector的renerve()却没有这项功能。
+>
+>    拿一个“小于现有容量”的参数来调用reserve(实际上就是一种*非强制性缩减请求*(nonbinding shrink request)如果参数小于现有字符数,则这项请求被视为*非强制性适度缩减请求*(nonbinding shrink-to-fitrequest) 。
+>
+>    也就是说你可能想要缩减容量至某个目标,但不保证你一定可以如愿。String的reserve()参数默认值为0,所以调用reserve()并且不给参数,就是一种“非强制性适度缩减请求”
+
+#### 元素存取(Element Access)
+
+*    operator []并不检查索引是否有效, at ()则会检查。如果调用at ()时指定的索引无效,系统会抛出out_of_range异常。如果调用operator []时指定的索引无效,其行为未有定义-可能存取非法内存,因面引起某些讨厌的边缘效应或甚至崩溃.
+*    对于operator[]的const版本,最后一个字符的后面位置也是有效的。此时的实际字符数是有效索引。在此情况下operator []的返回值是“由char型别之defaut构造函数所产生”的字符。因此,对于型别为string的对象,返回值为'\0'字符。
+*    其它任何情况(包括成员函数at()和operator1]的non-const版本) ,实际字符数都是个无效素引。如果使用该索引,会引发异常,或导致未定义行为。
+
+以下操作可能导致指向字符的references和pointers失效:
+
+*    以swap()交换两值
+*    以operator>> ()或getline ()读入新值
+*    以data ()或c-str ()输出内容
+*    调用operator[], at(), begin(), rbegin(), end()或rend()之外的任何non-const成员函数
+*    调用任何函数并于其后跟着operator [], at (), begin(), rbegin(), end ()或rend()
+
+#### 比较(Comparisons)
+
+Strings支持常见的比较(compartson)操作符,操作数可以是strings或C-strings
+
+```cpp
+string1 比较符 string2
+```
+
+#### 更改内容(Modifiers)
+
+如果需要多个参数来描述新值,可采用成员函数assign()。
+
+#### 交换(Swapping Values)
+
+和许多“非寻常的(nontrivial) "型别一样, string型别提供了一个特殊的swap()函数,用来交换两字符申内容。保证常数复杂度,所以如果赋值之后不再需要旧值,你应该利用它进行交换,从而达成赋新值的目的。
+
+#### 令Strings成空
+
+```cpp
+str="";
+str.clear();
+str.erase();
+```
+
+#### 安插(Inserting)和移除(Removing)字符
+
+Strings提供许多成员函数用于安插(insert)、移除(remove)、替换(replace)擦除(erase)字符。另有operator+, append()和push_back()可添加字符。
+
+#### 子串和字符串接合(concatenation)
+
+使用成员函数substr()从string身上提取出子字符串。
+
+#### I/O操作符
+
+Strings定义了常用的IO操作符
+
+| 操作符       | 含义                             |
+| ------------ | -------------------------------- |
+| operator  >> | 从input stream读取一个string     |
+| operator  << | 把一个string写到output  stream中 |
+
+如果设置了skipws标志,则跳过开头空格。
+
+持续读取所有字符,直到发生以下情形之一;
+
+*    下个字符为空格符(whitespace)
+*    stream不再处于good状态(例如遇到end-of-file)
+*    stream widch() 设为0
+
+#### 搜索和查找(Searching and Finding)
+
+*    搜寻单一字符、字符区间(子字符串)、或若干字符中的一个
+*    前向搜寻和后向搜寻
+*    从字符串头部或内部任何地方开始搜寻
+
+| string函数          | 效果                                        |
+| ------------------- | ------------------------------------------- |
+| find()              | 搜寻第一个与value相等的字符                 |
+| rfind()             | 搜寻最后一个与value相等的字符               |
+| find_first_of()     | 搜寻第一个“与value中的某值相等”的字符       |
+| find_last_of()      | 搜寻最后一个“与value中的某值相等”的字符     |
+| find_first_not_of() | 搜寻第一个“与value中任何值都不相等”的字符   |
+| find_last_not_of()  | 搜寻最后一个“与value中任何值都不想等”的字符 |
+
+*    第一参数总是被搜寻的对象。
+*    第二参数(可有可无)指出string内的搜寻起点(索引) 。
+*    第三参数(可有可无)指出搜寻的字符个数。
+
+##### 参数重载
+
+| const  string& value                                 | 搜寻对象为value（一个string)                                 |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| const string&  value,size_type idx                   | 从*this的it索引位置开始,搜寻value (一个string)               |
+| const char* value                                    | 搜寻value (一个C-string)                                     |
+| const char* value,size_type  idx                     | 从*this的i索引位置开始,搜寻value (一个C-string) 。           |
+| const char* value,size_type  idx,size_type value_len | 从*this的idr索引位置开始,搜索walue (一个C-string)内的前value_len个字符所组成的字符区间。value内的null字符('\0')将不复特殊意义。 |
+| const char value                                     | 搜寻value (一个字符).                                        |
+| const char value,size_type idx                       | 从*this的id索引位置开始,搜寻value (一个字符) 。              |
+
+##### string::npos
+
+如果搜寻函数失败,就会返回string::npos
+
+```cpp
+if(字符串.find(子字符串)!=string::npos)
+```
+
+#### Strings迭代器
+
+String迭代器是randcom access (随机存取)迭代器。也就是说它支持随机存取,所以任何一个STL算法都可与它搭配。
+
+对迭代器而言,如果发生重分配(reallocation) ,或其所指值发生某些变化,选代器就会失效。
+
+| 表达式                         | 效果                                                         |
+| ------------------------------ | ------------------------------------------------------------ |
+| begin()                        | 返回一个随机存取迭代器,指向第一字符                          |
+| end()                          | 返回一个随机存取迭代器,指向最后一个字符的下一个位置          |
+| rbegin()                       | 返回一个逆向迭代器,指向倒数第一个字符(亦即最后一个字符)      |
+| rend()                         | 返回一个逆向迭代器,指向倒数最后一个字符的下一位置(亦即第一字符的前一位置) |
+| string  s(beg,end)             | 以区间[beg; end]内的所有字符作为srring s的初值               |
+| append(beg,end)                | 将区间[beg;end]内的所有字符添加于s尾部                       |
+| assign(beg,end)                | 将区间[beg;end]内的所有字符赋值给s                           |
+| insert(pos,c)                  | 在迭代器pos所指之处插入字符c,并返回新字符的选代器位置        |
+| insert(pos,num,c)              | 在迭代器pos所指之处插入num个字符c,并返回第一个新字符的选代器位置 |
+| insert(pos,beg,end)            | 在迭代器pos所指之处插入区间[beg;end]内的所有字符             |
+| erase(pos)                     | 删除迭代器pos所指字符,并返回下一个字符位置                   |
+| erase(beg,end)                 | 删除区间[beg:end]内的所有字符,并返回下一个字符的下一位置     |
+| replace(beg,end,str)           | 以string  str内的字符替代[beg;end]区间内的所有字符           |
+| replace(beg,end,cstr)          | 以C-string  cstr内的字符替代[beg;end]区间内的所有字符        |
+| replace(beg,end,cstr,len)      | 以字符数组str的前1en个字符替代[beg;end]区间内的所有字符      |
+| replace(beg,end,num,c)         | 以num个字符c替代[beg;end]区间内的所有字符                    |
+| replace(beg,end,newBeg,newEnd) | 以[newBeg;newEnd)区间内的所有字符替代[beg;end)区间内的所有字符 |
+
 ### 各种容器的的使用时机
 
 *    缺省情况下使用vector.vector内部结构最简单,并允许随机存取,数据的存取十分方便灵活,数据的处理也比较快.
@@ -8127,5 +8353,15 @@ winternl.h头文件包含了大部分Windows内部函数的原型和数据表示
 *    [黑山共和国]米洛斯·留莫维奇（Milos Ljumovic）. C++多线程编程实战(Kindle 位置344-345).人民邮电出版社.
 *    visual C++ 编程实战宝典
 *    C++标准程序库(中文版)
+
+# 附录
+
+## 使用CMake缺少libstdc++-6.dl
+
+在CMakeLists.txt中加入 
+
+```cpp
+set(CMAKE_EXE_LINKER_FLAGS "-static")
+```
 
 -
