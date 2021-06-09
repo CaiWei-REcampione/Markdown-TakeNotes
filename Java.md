@@ -1253,10 +1253,47 @@ StringBuffer和StringBuilder具有完全相同的API，即构造方法和普通�
 
 *    StringBuilder toString()：StringBuilder转String
 
+### Collection接口
+
+Java库中用于集合类的基本接口是Collection接口,该接口用于表示任何对象或元素组。想要尽可能以常规方式处理一组元素时,就使用这一接口。Collection支持如添加和移除等基本操作。设法除去一个元素时,如果这个元素存在,除去的仅仅是集合中此元素的个实例。两个基本操作方法为:
+
+*    boolean add(Object element):添加元素到集合中
+*    boolean remove(Object element):从集合中删除元素
+*    int size():返回集合中元素的数目
+*    boolean isEmpty):判断集合是否为空
+*    boolean contains(Object obj):如果集合中包含了一个obj对象,则返回true
+*    boolean containsAll(Collection c):如果集合中包含了c中所有的元素,则返回true
+*    boolean equals(Object other):如果集合相等则返回true
+*    boolean addAll(Collection from):将from中的所有元素添加到集合中,成功则返回true
+*    boolean remove(Object obj):删除元素obj,成功则返回true
+*    boolean removeAll(Collection c):删除集合中所有与c中相同的元素,只要集合发生变化则返回true
+*    void clear():将本集合清空
+*    boolean retainAll(Collection c):删除集合中所有不在c中的元素,只要集合发生变化则返回true
+*    Object [] toArray[]:返回集合中所有元素组成的数组
+
+不过,如果实现Collection的每个类都要提供这么多方法,那将是一件很麻烦的事情。为了减轻程序员的工作量,系统用一个AbstractCollection类来实现这个接口,程序员可以直接继承这个类。由于接口中的方法都已经实现,只有少数几个可能要根据需要来修改,这样就大大减少了重复劳动。
+
+*    Iterator iterator():该方法用于返回一个能够实现Iterator接口的对象,此对象也被称为迭代器。程序员可以使用这个迭代对象,逐个访问集合中的各个元素。它有下面3个基本方法:
+     *    Object next();通过反复调用next()方法,可以逐个访问集合中的各个元素。但是如果到了集合的末尾,那么next()方法将抛出一个NoSuchElementException异常。因此,在调用next()方法之前,必须先调用hasNext()方法进行测试。如果测试的对象仍然拥有可供访问的元素,那么hasNext()将返回true
+     *    boolean hasNext();
+     *    void remove();使用remove()方法必须要小心。在调用remove()方法时,删除的是上次调用next()返回的元素。如果你要删除某个位置上的元素,首先要跳过这个元素
+
+```java
+Iterator it = c.iterator();
+it.next ();//越过第一个元素
+it.remove (); //删除它
+```
+
+>    由于remove()和next()方法是互相关联的,在调用remove()方法之前,至少要保证调用了一次next()方法,否则将会抛出一个IlegalStateException异常。
+
 ### List集合
 
 *    List接口继承自Collection接口，List接口中的很多方法都继承自Collection接口的。
 *    List接口的实现类有：ArrayList 和 LinkedList。ArrayList是基于动态数组数据结构的实现，LinkedList是基于链表数据结构的实现。ArrayList访问元素速度优于LinkedList，LinkedList占用的内存空间比较大，但LinkedList在批量插入或删除数据时优于ArrayList。
+     *    ArrayList:一个用数组实现的List。能进行快速的随机访问,但是往列表中间插入和删除元素的时候比较慢。Listlterator只能用在反向遍历ArrayList的场合,不要用它来插入和删除元素,因为相比LinkedList,在ArrayList里面用Listlterator的系统开销比较高。
+     *    LinkedList:对顺序访问进行了优化。在List中间插入和删除元素的代价也不高。随机访问的速度相对较慢。此外它还有addFirst(), addLast(), getFirst()、 getLast(),removeFirst)和removeLast()等方法,在实际应用中,根据方法的具体实现,可以把LinkedList当成栈(stack) 、队列(queue)或双向队列(deque)来用。
+*    两个抽象的List实现类: AbstractList和AbstractSequentialList
+     *    像AbstractSet类一样,它们覆盖了equals()和hashCode()方法以确保两个相等的集合返回相同的散列码。若两个集大小相等且包含顺序相同的相同元素,则这两个集相等。这里的hashCode()实现,在List接口定义中指定,而在抽象类中实现。除了equals()和hashCode()实现, AbstractList和AbstractSequentialList实现了其余List方法的一部分。因为数据源随机访问和顺序访问是分别实现的,使得具体列表实现的创建更为容易。
 
 ```java
 List list=new ArrayList();			// ArrayList
@@ -1322,6 +1359,12 @@ while (pos.hasNext()) {
 
 >    List集合中的元素是有序的、可重复的，而Set集合中的元素是无序的、不能重复的。List集合强调的是有序，Set集合强调的是不重复。当不考虑顺序，且没有重复元素时，Set集合和List集合可以互相替换的。
 
+*    Set接口继承Collection接口,而且它不允许集合中存在重复项
+*    所有原始方法都是现成的,没有引入新方法。具体的Set实现类依赖添加的对象的equals()方法来检查等同性
+*    Set接口有两个具体的实现类,分别为HashSet和TreeSet
+*    HashSet是为优化查询速度而设计的Set,添加到HashSet的对象需要采用恰当分配散列码的方式来实现hashCode()方法。虽然大多数系统类覆盖了Object中默认的hashCode()实现,但当编程中需要创建自己的要添加到HashSet的类时,需要覆盖hashCode()
+*    TreeSet是一个有序的Set,其底层是一棵树,添加到TreeSet的元素也必须是可排序的,这样在使用时就能从Set里面提取一个有序序列了。一般来说,先把元素添加到HashSet,再把集合转换为TreeSet来进行有序遍历会更快。HashSet和TreeSet都实现了Cloneable接口
+*    AbstractSet类覆盖了equals()和hashCode()方法,以确保两个相等的集返回相同的散列码。若两个集大小相等且包含相同元素,则这两个集相等。按定义,集散列码是集中元素散列码的总和。因此,不论集的内部顺序如何,两个相等的集会返回相同的散列码
 *    Set接口也继承自Collection接口，Set接口中大部分都是继承自Collection接口。
 *    Set接口直接实现类主要是HashSet，HashSet是基于散列表数据结构的实现。
 
@@ -3947,7 +3990,88 @@ public derivedGen<T> extends Gen{
 
 由于在JVM中,泛型类的对象总是一个特定的类型,此时,它不再是泛型。所以,所有的类型查询都只会产生原始类型,无论是getClass()方法,还是instanceof操作符。
 
+## 擦拭
 
+### 擦拭的概念及原理
+
+Java在JDK 1.5以前的版本中是没有泛型的。为了保证对以前版本的兼容, Java采用了与C++的模板完全不同的方式来处理泛型。也可以说, Java的泛型是伪泛型。因为,在编译期间,所有的泛型信息都会被擦除掉。正确理解泛型概念的首要前提是理解类型擦除,即type erasure.
+
+Java中的泛型基本上都是在编译器这个层次来实现的。在生成的Java字节码中是不包含泛型中的类型信息的。使用泛型的时候加上的类型参数会在编译器编译的时候去掉。这个过程被称为类型擦除。
+
+类型擦除的关键在于从泛型的类型中清除类型参数的相关信息,并且在必要的时候添加类型检查和类型转换的方法。类型擦除可以简单地理解为将泛型Java代码转换为普通Java代码。从编译器的层次来理解,就是将泛型Java代码直接转换成普通的Java字节码。
+
+>    javap是由系统提供的一个反编译命令,可以获取class文件中的信息或者是反汇编代码。
+
+所有被T占据的位置都被java.lang.Object所取代
+
+```java
+public class Gen<T>{   
+    // TODO
+}
+```
+
+```java
+public class Gen extends java.lang.Object{
+    // TODO
+}
+```
+
+如果类型参数指定了上界,那么就会用上界类型来代替它
+
+在使用泛型对象时,实际上所有的类型信息也都会被擦拭,编译器自动插入强制类型转换。
+
+### 擦拭带来的错误
+
+擦拭是一种很巧妙的办法,但它有时候会带来一些意想不到的错误:两个看上去并不相同的泛型类或是泛型方法,由于擦拭的作用,最后会得到相同的类和方法。这种错误,也被称为冲突。
+
+#### 静态成员共享问题
+
+在泛型类中可以有静态的属性或者方法。前面已经介绍过,静态方法不能使用类型参数。静态成员不能使用类型参数或者是本泛型类的对象
+
+#### 重载冲突问题
+
+```java
+void conflict (T o){ } 
+void conflict (Object o){ }
+```
+
+#### 接口实现问题
+
+由于接口也可以是泛型接口,而一个类又可以实现多个泛型接口,所以也可能会引发冲突。
+
+```java
+class foo implements Comparable<Integer>, Comparable<Long>
+```
+
+## 泛型的局限
+
+### 不能使用基本类型
+
+泛型中使用的所有类型参数都是类类型,不能使用基本类型。比如,可以用Generic\<Integer>,而不能用Generiecint。原因很简单,基本类型无法用Object来替换。
+
+### 不能使用泛型类异常
+
+Java中不能抛出也不能捕获泛型类的异常。事实上,泛型类继承Throwable及其子类都不合法
+
+```java
+class MyException<t> extends Exception{...}
+```
+
+### 不能使用泛型数组
+
+```java
+Generic<Integer> arr[] = new Generic<Ingeger> [10];
+```
+
+### 不能实例化参数类型对象
+
+不能直接使用参数类型来构造一个对象。
+
+```java
+public class foos T >{
+    Tob=new T(); //错误
+}
+```
 
 ## 使用泛型
 

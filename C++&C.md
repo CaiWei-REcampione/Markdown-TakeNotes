@@ -18,7 +18,7 @@ cout << "The run time is: "<< (double)clock()/ CLOCKS_PER_SEC << "s"<< std::endl
 
 ## 命名
 
-C++标识符，是系统预菌的用于描述系统使用的元素的名称，由大小写的26个英文字母、0～9之间的10个数字以及下划线组成，并且第一个元素必须是字母（大写或小写都、可以）或者下划线。
+C++标识符，是系统预留的用于描述系统使用的元素的名称，由大小写的26个英文字母、0～9之间的10个数字以及下划线组成，并且第一个元素必须是字母（大写或小写都、可以）或者下划线。
 
 标识符是区别大小写的。
 
@@ -1933,20 +1933,6 @@ while(){
 ### return
 
 返回
-
-# valarray class
-
-valarray类是由头文件valarray支持的，用于处理数值，支持诸如将数组中所有元素的值相加以及在数组中找出最大和最小的值等操作
-
-valarray定义为模板类
-
-```c++
-operator//访问各个元素
-size()//返回包含的元素数
-sum()//返回所有的元素总和
-max()//返回最大的元素
-min()//返回最小的元素
-```
 
 # template 类模板
 
@@ -4507,7 +4493,7 @@ namespace std {
 
 | 表达式                      | 效果                                                         |
 | --------------------------- | ------------------------------------------------------------ |
-| strings                     | 生成一个空字符串                                             |
+| string s                    | 缺省构造函数，生成一个空字符串                               |
 | string s(str)               | copy构造函数，生成字符串str的一个复制品                      |
 | string s(str,stridx)        | 将字符串str内“始于位置stridx”的部分，当做字符串s的初值       |
 | string s(str,stridx,strlen) | 将字符串str内“始于位置stridx且长度顶多strlen”的部分，当做字符串s的初值 |
@@ -4517,6 +4503,55 @@ namespace std {
 | string s(beg,end)           | 以区间[beg;end]内的字符作为字符串s的初值                     |
 | s.~string()                 | 销毁所有字符，释放内存                                       |
 
+##### string::string()
+
+*    default(缺省)构造函数
+*    产生一个空字符串
+
+##### string::string(const string& str)
+
+*    copy(拷贝)构造函数
+*    产生一个新字符串，是str的副本
+
+##### string::string(const string&str,size_type str_idx)
+
+##### string::string(const string& str,size_type str_idx,size_type str_num)
+
+*    产生一个新字符串，其初值为“str内，从索引sr_idx开始的最多str_num个字符”
+*    如果没有指定str_num，则取用“从str_idx开始到str尾部”的所有字符
+*    如果str_idx>str.size()，抛出out_of_range异常
+
+##### string::string(const char* cstr)
+
+*    产生一个字符串,并以C-string cstr作为初值
+*    初值为cstr内以'\0'为结束符号(但不包括'\0')的所有字符
+*    cstr不可为NULL指标
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### string::string(const char* chars,size_type chars_len)
+
+*    产生一个字符串,以字符数组chars内的chars_len个字符为初值
+*    chars必须至少包含chars_len个字符。这些字符可以为任意值, '\0'无特殊意义
+*    如果chars_len等于string::npos,抛出length_error异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### string::string(size_type num,char c)
+
+*    产生一个字符串，其内容初值为num个字符c
+*    如果num等于string::npos,抛出length_error异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### string::string(InputIterator beg,InputIterator end)
+
+*    产生一个字符串,以区间[beg;end]内的字符为初值
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### string::~string()
+
+*    析构函数
+*    销毁所有字符并释放内存
+*    大部分构造函数都可以接受配置器作为附加参数传入
+
 #### Strings和C-Strings
 
 有三个函数可以将字符串内容转换为字符数组或C-String:
@@ -4525,30 +4560,80 @@ namespace std {
 *    c_str() 以C-string形式返回字符串内容,也就是在尾端添加'\0'字符。
 *    copy () 将字符串内容复制到“调用者提供的字符数组”中。不添加'\0'字符。
 
+##### 产生C-string和字符数组(Character Arrays)
+
+###### const char* string::c_str () const
+
+*    将string的内容以C-string (一个字符数组,尾部添加'0')形式返回
+*    返回值隶属于该string，所以调用者不能修改、释放或删除该返回值
+*    唯有当string存在,并且用来处理该返回值的函数是个“常数型函数”时,这个返回值才保持有效
+
+###### const char* string::data () const
+
+*    将string的内容以字符数组的形式返问
+*    返回值内含string的所有字符,完全未加修改或扩充,更明确地说,并没有附加null字符。因此这个返回值往往不是有效的C-string
+*    返回值隶属于该string，所以调用者不能修改、释放或删除该返回值
+*    唯有当string存在,并且用来处理该返回值的函数是个“常数型函数”时,这个返回值才保持有效
+
+###### size_type string::copy (char* buf, size_type buf_size) const
+
+###### size_type string::copy (char* buf, size_type buf_size, size_type idx) const
+
+*    以上两种形式都将字符串*this (从索引idx开始)内最多buf_size个字符复制到字符数组buf中
+*    返回被复制的字符数
+*    不添加null字符。因此函数执行后的buf内容可能不是有效的C-string
+*    调用者必须确保buf有足够的内存;否则会导致未定义行为
+*    如果idx > size(),抛出out_of_range异常
+
 #### 大小、容量
 
-##### size()和lengtht
+##### size_type string::size()
 
-返回string中现有的字符个数。
+##### const size_type string::length() const
 
-成员函数empty ()用来检验字符数是否为0,亦即字符串是否为空。
+*    两个函数都返回现有字符的个数
+*    二者等价(equivalent)
+*    如果想要检查字符串是否为空,应采用速度更快的empty ()
 
-##### max_size()
+##### bool string::empty() const
 
-此函数返回一个string最多能够包含的字符数。一个string通常包含一块单独内存区块内的所有字符,所以可能跟PC机器本身的限制有关系。返回值一般而言,是索引型别的最大值减1。之所以“减1”有两个原因: (a)最大值本身是npos;(b)具体实作中,可因此轻易在内部缓冲区之后添加一个'\0',以便将这个string当做C-string使用。一旦某个操作函数使用一个长度大于max_size ()的string, length_error异常就会被抛出来。
+*    判断字符串是否为空,亦即是否未包含任何字符
+*    等价于string::size ()==0,但可能更快
 
-##### capacity ()
+##### size_type string::max_size() const
 
-重新分配内存之前, string所能包含的最大字符数。
+*    返回字符串可含的最大字符数目
+*    任何操作一旦产生长度大于max_size()的字符串,就抛出length_error异常
 
-*    重新分配会造成所有指向string的references、pointers和iterators失效。
-*    重新分配(reallocation)很耗时间。
+##### size_type string::capacity() const
+
+*    返回重分配之前字符串所能包含的最多字符个数
 
 >    容量概念应用于string和应用于vector是相同的，但有一个显著差异:面对string你可以调月reserve ()来缩减实际容量,而vector的renerve()却没有这项功能。
 >
 >    拿一个“小于现有容量”的参数来调用reserve(实际上就是一种*非强制性缩减请求*(nonbinding shrink request)如果参数小于现有字符数,则这项请求被视为*非强制性适度缩减请求*(nonbinding shrink-to-fitrequest) 。
 >
 >    也就是说你可能想要缩减容量至某个目标,但不保证你一定可以如愿。String的reserve()参数默认值为0,所以调用reserve()并且不给参数,就是一种“非强制性适度缩减请求”
+
+##### void string::reserve () void string::reserve (size_type num)
+
+*    第二种形式用以保留“至少能容纳nun个字符”的内存
+*    如果num小于目前实际容量,调用这个函数相当于“非强制性容量缩减请求”
+*    如果nun小于目前字符量,调用这个函数相当于“非强制性适度缩减(shink-to-fit)请求”。其意义是请求将容量缩小至实际字符数的大小
+*    如果没有传递参数(上述第一形式) ,调用该函数相当于一个“非强制性适度缩减（shink-o-fi)请求"
+*    容量永远不能小于实际字符数
+*    每次重分配都会造成所有references, pointers和iterators失效,并耗费一定时间。因此可事先调用reserve ()来加快速度,并因此保持references, pointers和iterators的有效性
+
+##### 改变大小
+
+###### void string::resize (size_type num)
+
+###### void string::resize (size_type num, char c)
+
+*    两种形式都将*this的字符数改为num。也就是说如果num不等于目前的size(),则函数将在尾都添加或删除足够字符,使字符数量等于新的大小num
+*    如果字符数增加,则以c作为初值。如果未指定c,则使用“字符型别"的default构造函数来为新字符设初值(对string而言将是'\0')
+*    如果num等于string::npos，两者都抛出length_error异常
+*    如果所得结果超出最大字符数,两者都抛出length_error异常
 
 #### 元素存取(Element Access)
 
@@ -4572,13 +4657,228 @@ Strings支持常见的比较(compartson)操作符,操作数可以是strings或C-
 string1 比较符 string2
 ```
 
+##### bool comparison (const string& str1, const string& str2)
+
+##### bool comparison (const string& str, const char cstr)
+
+##### bool comparison (const char*cstr, const string& str)
+
+*    第一种形式返回两个strings的比较结果
+*    后两种形式返回string和C-string的比较结果
+*    camparieon指的是以下任何一种动作
+     *    operator ==
+     *    operator != 
+     *    operator <
+     *    operator >
+     *    operator <=
+     *    opevator >=
+*    按字典次序(lexicographically)进行比较
+
+##### int string::compare(size_type idx,size_type len,const string& str) const
+
+*    把*this拿来和str进行比较。*
+*    *返回值:*
+     *    0,表示两端字符串相等
+     *    <0,表示* this小于str(按字典次序)
+     *    \>0,表示* this大于str (按字典次序)
+*    以traits::compare()为比较准则
+
+##### int string::compare(size_type idx,size_type len,const string& str)const
+
+*    将*this之内“从idx开始的最多1en个字符”拿来和str比较
+*    如果idx > size(),抛出out_of_range异常
+*    比较动作和前述的compare(str)相同。
+
+##### int string::compare(size_type idx,size_type len,const string& str,size_type str_idx,size_type str_len)const
+
+*    将*this之内“从idx开始的最多1en个字符"拿来和str之内“从str_idx开始的最多str_1en个字符”相较
+*    如果idx > size(),抛出out_of_range异常
+*    如果str_idx >str.size(),抛出out_of_range异常
+*    比较动作和前述的compare(str)相同
+
+##### int string::compare (const char* cstr) const
+
+*    将*this的字符和C-string cstr的字特进行比较
+*    比较动作和前述的compare(str)相同
+
+##### int string::compare (size_type idx,size_type len,const char* cstr) const
+
+*    将*this之内“从idx开始的最多len个字符”拿来和C-string cscr的所有字符比较。
+*    比较动作和前述的compare(str)相同
+*    cstr绝不可为nul1指针
+
+##### int string::compare (size_type idx,size_type len,const char* chars,size_type chars_len)const
+
+*    将*this之内“从idx开始的最多1en个字符”拿来和字符数组chars内的chars_Ien个字符相较
+*    比较动作和前述的compare(str)相同
+*    chars必须至少包含chars_len个字符(可为任意值)
+*    '\0'没有特殊意义
+*    如果chars_len等于string::npos,抛出length_error异常
+
+#### 字符存取
+
+##### char& string::operator[] (size_type idx) 
+
+##### char string::operator[] (size_type idx)const
+
+*    两种形式都返回索引idx所指示的字符(首字符的索引为0)
+*    常量字符串的length ()是一个有效索引,上述函数会因此返回一个“由字符型别的缺省构造函数所产生”的值(对string而言为'\0')
+*    非常量(non-const)字符串的length()是一个无效索引
+*    无效索引会导致未定义的行为
+*    非常量(non-const)字符串返回的reference会因为字符串的修改或重分配而失效
+*    如果调用者无法确定索引有效,就应该采用at()
+
+##### char& string::at(size_type idx)
+
+*    两种形式都返回索引idx所指示的字符(首字符的索引为0)
+*    对于所有strings, length()均为非法(无效)索引
+*    传递无效索引(小于0或大于等于size())会导致out_of_range异常
+*    非常量(non-const)字符串返回的reference会因为字符串的修改或重分配而失效
+*    如果调用者确定索引是有效的,可采用操作符[],速度更快
+
+#### 添加字符
+
+##### string& string::operator+= (const string& str)
+
+##### string& string::append (const string& str)
+
+*    两种形式都将str的字符添加到*this尾部
+*    都返回*this
+*    如果所得结果超出最大字符数,两者都抛出length_error异常
+
+##### string& string::append (const string& str, size_type str_idx,size_type str_num)
+
+*    将str之内“从str_idx开始最长str_num个字符”添加到*this尾部
+*    返回*this
+*    如果str_idx > str.size(),抛出out_of_range异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### string& string::oparptor+= (const char* cstr)
+
+##### string& string::append (const char* cstr)
+
+*    都将C-sring内的字符添加到*this尾部
+*    都返回*this
+*    cstr不能为null指标
+*    如果所得结果超出最大字符数,两者都抛出length_error异常
+
+##### string& string::append (const char* chars, size_type chars_1en)
+
+*    将字符数组chars之内的chars_len个字符添加到*this尾部
+*    返回*this
+*    chars必须包含至少chars_len个字符,字符可为任意值, '0'无特殊含义
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### string& string::append (size_type num, char c)
+
+*    将num个字符c添加到*this尾部
+*    返问*this
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### string& string::operator += (char c)
+
+##### void string::puah_back (char c)
+
+*    将字符c添加到*this尾部
+*    operator+=返回*this
+*    如果所得结果超出最大字符数,两者都抛出length_error异常
+
+##### string& string::append (InputIterator beg, InputIterator end)
+
+*    将区间[beg;end)内所有字符添加到*this尾部
+*    返回*this
+*    如果所得结果超出最大字符数,抛出length_error异常
+
 #### 更改内容(Modifiers)
 
 如果需要多个参数来描述新值,可采用成员函数assign()。
 
+##### string& string::operator = (const string& str) 
+
+##### string& string::assign (const string& str)
+
+*    以上两种形式都将str的值赋给*this
+*    都返回*this
+
+##### string& string::assign (const string& str, size_type str_idx,size_type str_num)
+
+*    将字符串str之内“从索引str_idx开始最多str_num个字符”赋值给*this
+*    返回*this
+*    如果str_idx > str.size(),抛出out-of_range异常
+
+##### string& string::operator (char c)
+
+*    将字符c赋值给*this
+*    返回*this
+*    调用后, *this只含这一个字符。
+
 #### 交换(Swapping Values)
 
 和许多“非寻常的(nontrivial) "型别一样, string型别提供了一个特殊的swap()函数,用来交换两字符申内容。保证常数复杂度,所以如果赋值之后不再需要旧值,你应该利用它进行交换,从而达成赋新值的目的。
+
+##### void string::swap (string& str)
+
+##### void swap (string& str1, string& str2)
+
+*    两种形式都用来交换两个strings:
+     *    成员函数版本用来交换*this和str的内容
+     *    全局函数版本用来交换str1和str2的内容
+*    你应该尽可能采用这些函数取代赋值操作(assignment) ,因为它们更快。它们具有常数复杂度。
+
+#### 替换
+
+##### string& string::replace (size_type idx, size_type len, const string& str）
+
+##### string& string::replace (iterator beg, iterator end, const string& str)
+
+*    第一种形式将*this之内“从idx开始,最长为len”的字符替换为str内的所有字符
+*    第二种形式将[beg;end)区间内的字符替换为str的所有字符
+*    返回*this
+*    如果idx > size(),抛出out_of_range异常
+*    如果所得结果超出最大字符数,两者都抛出length_error异常
+
+##### string& string::replace (size_type idx, size_type len, const string& str, size_type str_idx, size_type str_num)
+
+*    将*this之内“从idx开始,最长为len"的字符替换为str之内"从str_idx开始,最长为str_num"的所有字符
+*    返回*this
+*    如果idx > size(),抛出out_of_range异常
+*    如果str_idx > str.size(),抛出out_of_range异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### string& string::replace (size_type idx, size_type len, const char* cstr)
+
+##### string& string::replace (iterator beg, iterator end, const char* cstr)
+
+*    两种形式分别将*this之中“以idx开始,最长为len"的字符,或[begin; end)区间内的字符替换为C-string cstr中的所有字符
+*    都返回*this
+*    cstr不得为null指标
+*    如果idx >size(),两者都抛出out_of_range异常
+*    如果所得结果超出最大字符数,两者都抛出length_error异常
+
+##### string& string::replace (size_type idx, size_type len, const char* chars, size_type chars_len) 
+
+##### string& string::replace (iterator beg, iterator end.congt char* chars, size_type charg_len)
+
+*    两种形式分别将* this之中“以idx开始,最长为len"的字符或[begin; end)区间内的字符,替换为字符数组chars的chars_len个字符
+*    都返回*this
+*    chars必须包含至少chars_len个字符,字符可为任意值, '\0'无特殊含义
+*    如果idx > size(),两种形式都抛出out_of_range异常
+*    如果所得结果超出最大字符数,两者都抛出length_error异常
+
+##### string& string::replace (size_type idx, size_type len, size_type num, char c)
+
+##### string& string::replace (iterator beg, iterator end, size_type rum, char c)
+
+*    两种形式分别将* this之内“从idx开始,最长为len"的字符,或区间[begin;end)内的字符,替换为num个字符c
+*    都返回*this
+*    如果idx >size(),两种形式都抛出out_of_range异常
+*    如果结果大小超出最大字符数,则两种形式都抛出length_error
+
+##### string& string::replace (iterator beg, iterator end, InputIterator newBeg,  InputIterator newEnd)
+
+*    以区间[newBeg; newEnd)内的所有字符替换区间[beg;end)内的所有字符
+*    返回*this
+*    如果所得结果超出最大字符数,抛出length_error异常
 
 #### 令Strings成空
 
@@ -4592,9 +4892,118 @@ str.erase();
 
 Strings提供许多成员函数用于安插(insert)、移除(remove)、替换(replace)擦除(erase)字符。另有operator+, append()和push_back()可添加字符。
 
+##### 安插
+
+###### string& string::insert (size_type idx, const string& str)
+
+*    将str插入*this之内,新增字符从索引idx处开始安插
+*    返回*this
+*    如果idx > size(),抛出out_of_range异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+###### string& string::insert (size_type idx, const string& str, size_type str_idx, size_type str_num)
+
+*    将str之内“从str_idx开始最多str_num个字符”插入*this,新增字符从索引idx处开始安插
+*    返回*this
+*    如果idx > size(),抛出out_of_range异常
+*    如果str_idx>str.size()，抛出out_of_range异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+###### string& string::insert (size_type idx, const char* cstr)
+
+*    将C-string cstr插入*this,新增字符从索引idx处开始安插
+*    返回*this
+*    cstr不得为null指标
+*    如果idx >size(),抛出out_of_range异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+###### string& string::insert (size_type idx, const char* chara, size_type chars_len)
+
+*    将字符数组chars之内的chars_len个字符插入*this,新增字符从索引idx处开始安插
+*    返回*this
+*    chars必须包含至少chars_1en个字符,字符可为任意值,'\0'无特殊含义
+*    如果idx > size(),扼出out_of_range异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+###### string& string::insert (size_type idx, size_type num, char c)
+
+###### void string::insert (literator pos, size_type num, char c)
+
+*    两种形式分别在idx或pos指定的位置上安插num个字符c
+*    第一形式将新字符插入str,新增字符从索引idx处开始
+*    第二形式在迭代器pos所指字符之前方插入新字符
+*    这两个函数构成重载(overloaded)形式,可能导致模棱两可。如果你以0为第一参数,由于0可被视为索引(通常被转换为unsigned) ,也可被视为迭代器(通常被转换为char* ) ,因而导致模棱两可。这种情况下你应该明确告知参数是个“索引”。
+*    两种形式都返回*this
+*    如果idx >size(),两种形式都抛出out_of_range异常
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+###### iterator string::insert (iterator pos, char c)
+
+*    在迭代器pos所指字符之前插入字符c的副本
+*    返回新被插入的字符的位置
+*    如果所得结果超出最大字符数，抛出length_error异常
+
+###### void string::insert (iterator pos, InputIterator beg, InputIterator end)
+
+*    在迭代器pos所指字符之前插入区间[beg;end)的所有字符
+*    如果所得结果超出最大字符数,抛出length_error异常
+
+##### 擦除
+
+###### void string::clear ()
+
+###### string& string::erase ()
+
+*    两个函数都会删除(delete)字符串的所有字符,因此调用后字符串成空
+*    erase()返回*this
+
+###### string& string::erase (size_type idx)
+
+###### string& string::erase (size_type idx, size_type len)
+
+*    两种形式都删除*this之内从索引idx开始的最多len个字符
+*    都返回*this
+*    如果未指定len,则删除idx之后的所有字符
+*    如果idx>size()，两种形式都抛出out_of_range异常
+
+###### string& string::erase (iterator pos)
+
+###### string& string::erase (iterator beg, iterator end)
+
+*    两种形式分别删除pos所指的单一学符或[beg;end)区间内的所有字符
+*    两者都返回最后一个被删除字符的下一个字符(因此第二形式返回end)
+
 #### 子串和字符串接合(concatenation)
 
 使用成员函数substr()从string身上提取出子字符串。
+
+##### string string::substr () const
+
+##### string string::substr (size_type idx) const
+
+##### string string:;aubetr (size_type idx, size_type len) const
+
+*    这几种形式都返回*this之内“从索引idx开始的最多len个字符"所组成的子字符串
+*    如果没有len,则将“余下的所有字符”当做子字符串返回
+*    如果没有idx和len,则返回字符串副本
+*    如果idx > size()，则抛出out_of_range异常
+
+##### string operator+ (const string& str1, const string& str2)
+
+##### string operator+ (const string& str, const char* cstr)
+
+##### string operator+ (const char* cstr, const string& str)
+
+##### string operator+ (const string& str, char c)
+
+##### string operator+(char c, const stringk str)
+
+*    所有形式都可以接合两个操作数内的所有字符,并返回接合后的字符串
+*    操作数可以是下列任意一种:
+     *    一个string
+     *    一个C-string
+     *    单一字符
+*    如果接合结果超出最大字符数,则所有形式都抛出length_error异常
 
 #### I/O操作符
 
@@ -4612,6 +5021,37 @@ Strings定义了常用的IO操作符
 *    下个字符为空格符(whitespace)
 *    stream不再处于good状态(例如遇到end-of-file)
 *    stream widch() 设为0
+
+##### ostream& operator << (ostream& strm, const string& str)
+
+*    将str内的字符写入stream strm
+*    如果strm.width()大于0,则至少写入width()个字符,然后width()被设置为0
+*    ostream的型别是basic_ostream<char\>,具体型别取决于字符型别
+
+##### istream& operator >> (istream& strm, string& str)
+
+*    从strm读取下一个单字(字符串)的所有字符,放到str中
+*    如果strm的skipws标志被设立,则前导空格将忽略不计
+*    字符读取动作遇到下面情形之一即结束:
+     *    strm.width()大于0,且已存入width()个字符
+     *    strm.good()为false (可能导致相应的异常)
+     *    对下一个字符c, isspace (c, strm.getloc () )为true
+     *    已存入str.max_size()个字符
+*    视情况重新分配字符
+*    istream的型别为basic_istream<char\>，具体型别取决于字符型别
+
+##### istream& getline (istream& strm, string&  str)
+
+##### istream& getline (istream& strm, string& str,char delim)
+
+*    从strm读取下一整行的所有字符到字符串str内
+*    读取所有字符(包括前导空格)直到下列情形之一发生:
+     *    strm. good ()为false (可能导致相应的异常)
+     *    读到delim或strm.widen('\n')
+     *    已读入str.max_size ()个字符
+*    行分隔符(line delimiter)乃是从参数中获取
+*    视情况重新分配内存
+*    istream的型别是basic_istream<char\>,具体型别取决于字符型别
 
 #### 搜索和查找(Searching and Finding)
 
@@ -4642,6 +5082,149 @@ Strings定义了常用的IO操作符
 | const char* value,size_type  idx,size_type value_len | 从*this的idr索引位置开始,搜索walue (一个C-string)内的前value_len个字符所组成的字符区间。value内的null字符('\0')将不复特殊意义。 |
 | const char value                                     | 搜寻value (一个字符).                                        |
 | const char value,size_type idx                       | 从*this的id索引位置开始,搜寻value (一个字符) 。              |
+
+##### 搜寻单一字符
+
+###### size_type string::find (char c) const
+
+###### size_type string::find (char c. size_type idx) const
+
+###### size_type string::rfind (char c) const
+
+###### size_type string::rfind (char c, size_type idx) const
+
+*    这些函数都从索引idx开始搜索第一个或最后一个字符c
+*    函数find()正向(forward)搜寻,并返回第一个搜寻结果
+*    函数rfind()逆向(backward)搜索,并返回最后一个搜寻结果
+*    如果这些函数成功,就返回字特索引;否则返回string::npos
+
+##### 搜寻子字符串
+
+###### size_type string::find (const string& str) const
+
+###### size_type string::find (const string& str, size_type idx) const
+
+###### size_type string::rfind (const string& str] const
+
+###### size_type string::rfind (const string& str, size_type idx) const
+
+*    这些函数都从索引idx开始搜寻第一个或最后一个子字符串str
+*    函数find()正向(forward)搜寻，并返回第一个子字符串
+*    函数rfind()逆向(backward)搜索，并返回最后一个子字符串
+*    如果这些函数成功,就返回子字符串的第一字符索引;否则返回string::npos
+
+###### size_type string::find (const char* cstr) const
+
+###### size_type string::flnd (const char* cstr,size_type idx) const
+
+###### size_type string::rfind (const char* cstr) const
+
+###### size_type string::rfind (const char* cstr, size_type idx) const
+
+*    这些函数都从案引idx开始搜寻“与C-string cstr内容相同”的第一个或最后一个子字符串
+*    函数find()正向(forward)搜寻,并返问第一个子字符串
+*    函数rfind()逆向(backward)搜索,并返回最后一个子字符串
+*    如果这些函数成功,就返回子字符串的第一字符索引;否则返回string::npos
+*    cstr不得为null指标。
+
+###### size_type string::find (const char* chars, size_type idx, size_type chars_len) const
+
+###### size_type string::rfind (const char* chare, size_type idx, size_type chars_len) const
+
+*    这些函数都从索引idx开始搜寻“与字符数组chars内的chars_Len个字符内容相司”的第一个或最后一个子字符串
+*    函数rind()正向(forward)搜寻,并返回第一个子字符串
+*    函数rfind()逆向(backward)搜索,并返回最后一个子字符串
+*    如果这些函数成功，就返回子字符串的第一字符索引;否则返回string::npos
+*    chars必须包含至少chars_len个字符,字符可为任意值, '\0'无特殊含义
+
+##### 搜寻第一个匹配字符
+
+###### size_type string::find_first_of (const string& str) const
+
+###### size_type string::find_firet_of (const string& str, size_type idx) const
+
+###### size_type string::flnd_first_not.of (const string& str) const
+
+###### size_type string::find_first_not_of (const string& str, size_type idx) const
+
+*    这些函数从索引idx处开始搜寻*this之中属于(或不属于) str的第一个字符
+*    如果函数成功,就返回子字符串或字符索引;否则返回string::npos
+
+###### size_type string::find_first_of (const char* cstr) const
+
+###### size_type string::flnd_flrst_of (const char* cstr, size_type idx) const
+
+###### size_type string::find_first_not_of (const char* cstr) const
+
+###### size_type string::find_first_not_of (const char* cstr, size_type idx) const
+
+*    这些函数从索引idx处开始搜寻*this之中属于(或不属于) C-string cstr的第一个字符
+*    如果函数成功,就返回字符索引:否则返回string::npos
+*    cstr不得为null指针
+
+###### size_type string::find_flrst_of (const char* chars, size_type idx, size_type chars_len) const
+
+###### size_type string::find_flrst_not_of (const char* chars, size_type idx, size_type chars_len) const
+
+*    这些函数从索引idx处开始搜寻*this之中“属于(或不属于)字符数组chars内的前chars_len个字符”的第一个字符
+*    如果函数成功,就返回字符索引:否则返回string::npose
+*    chars必须包含至少chars_len个字符,字符可为任意值
+*    '0'无特殊含义
+
+###### size_type string::find_first_of (char s) const
+
+###### size_type string::flnd_last_of (char c, size_type idx) const
+
+###### size_type string::find first_not_of (char c) const
+
+###### size_type string::find_firet_not_of (char c, size_type idx) const
+
+*    这些函数从索引idx处开始搜寻*this之中等于(或不等于)字符c的第一个字符
+*    如果函数成功,就返回字符索引;否则返回string::npos
+
+##### 搜寻最后一个匹配字符
+
+###### size_type string::find_Iast_of (const string& str) const
+
+###### size_type string::find_last_of (const string& str, size_type idx) const
+
+###### size_type string::find_last_not_of (const string& str) const
+
+###### size_type string::find_last_not_of (const string& str, size_type idx) const
+
+*    这些函数从索引idx处开始搜寻*this之中属于(或不属于) str的最后一个字符
+*    如果函数成功,就返回子字符串或字符索引,否则返回string::npos
+
+###### size_type string::find_last_of (const char* cstr) const
+
+###### size_type string::flnd_last_of (const char* cstr, size_type idx) const
+
+###### size_type string::find_last_not_of (const char* cstr) const
+
+###### size_type string::find_last_not_of (const char* cstr, size_type idx) const
+
+*    这些函数从索引idx处开始搜寻*this之中属于(或不属于) C-string cstr的最后一个字符
+*    如果函数成功,就返回字符索引:否则返回string::npos
+*    cstr不得为null指标
+
+###### size_type string::flnd_last_of (const char* chars, size_type idx, size_type chars_len} const
+
+###### size_type string::flnd_last_not_of (const char chars, size_type idx, size_type chars_len) const
+
+*    这些函数从索引idx处开始搜寻*this之中“属于(或不属于)字符数组chars内的前chars-len个字符”的最后一个字符
+*    如果函数成功,就返回字符索引:否则返回string::npos
+*    chars必须包含至少chars_len个字符,字符可为任意值, '\0'无特殊含义
+
+###### size_type string:;find_last_of (char c) const
+
+###### size_type string::find_last_of (char c, size_type idx) const
+
+###### size_type string::find_last_not_of (char c) const
+
+###### size_type string::find_last_not_of (char c, size_type idx) const
+
+*    这些函数从索引idx处开始搜寻*this之中等于(或不等于)字符c的最后一个字符
+*    如果函数成功,就返回字符索引;否则返回string::npos
 
 ##### string::npos
 
@@ -4676,6 +5259,132 @@ String迭代器是randcom access (随机存取)迭代器。也就是说它支持
 | replace(beg,end,cstr,len)      | 以字符数组str的前1en个字符替代[beg;end]区间内的所有字符      |
 | replace(beg,end,num,c)         | 以num个字符c替代[beg;end]区间内的所有字符                    |
 | replace(beg,end,newBeg,newEnd) | 以[newBeg;newEnd)区间内的所有字符替代[beg;end)区间内的所有字符 |
+
+##### iterator string::begin ()
+
+##### const_iterator string::begin () const
+
+*    两种形式都返回一个random access (随机存取)迭代器,指向字符串头部(首字符位置)
+*    如果字符串为空,以上调用等价于end()
+
+##### iterator string::end ()
+
+##### const_iterator string::end () const
+
+*    两种形式都返回一个random access (随机存取)迭代器,指向字符串尾部(最后字符的下一个位置)
+*    end处并未定义字符,所以*s.end ()会导致未定义行为
+*    如果字符串为空,以上调用等价于begin()
+
+##### reverse_iterator string::rbegin ()
+
+##### const_reverse_iterator string: :rbegin () const
+
+*    两种形式都返回一个reverse random access (逆向随机存取)迭代器,指向倒数第一个字符(亦即最后一个字符位置)
+*    如果字符串为空,以上调用等价于rend()
+
+##### reverse_iterator string::rend ()
+
+##### const_reverse_iterator string::read () const
+
+*    两种形式都返回一个reverse random acces (逆向随机存取)迭代器,指向倒数最后一个元素的下一个位置(亦即第一个字符的前一个位置)
+*    rend处并未定义字符,所以*s.rend()会导致未定义行为
+*    如果字符串为空，以上调用等价于rhegin()
+
+##### 对配置器(allocator)的支持
+
+##### string::allocator_type
+
+*    这是配置器型别
+*    同时也是basic_string<>的第三个template参数
+*    对string型别而言,等价于allocator<char\>
+
+##### allocator_type string::get_allocator () const
+
+*    返回字符串的内存模型(memory model) 
+
+#### 效率(Performance)
+
+如果你希望速度更快,请确认你所使用的string classes采用了类似reference counting (引用计数)概念。这种手法可以加速string的复制和赋值(赋值) ,因为在实作之中不再是对字符串内容进行操作,而仅仅是复制和赋值字符串的reference。通过reference counting，你甚至不必透过const reference来传递字符申;不过基于灵活性和可移植性的考虑,一般还是应该采用const reference来传递参数。
+
+#### Strings和Vectors
+
+Strings和vectors很相似,这也不奇怪,因为它们都是一种动态数组。因此,可以把strings视为一种“以字符作为元素”的特定vectors.
+
+实用上可把string当做STL容器使用。但由于string和vectors之间有许多本质上的不同,所以把string当做特殊的vectors还是存在一定的危险。最重要的差异在于两者的主要目标:
+
+*    vectors首要目标是处理和操作容器内的元素,而非容器整体。因此实作时通常会为“容器元素的操作行为”进行优化。
+*    strings主要是把整个容器视为整体,进行处理和操作,因此实作时通常会为“整个容器的赋值和传递”进行优化。
+
+#### 内部的型别定义和静态值
+
+##### string::traits_type
+
+*    字符特征(character traits)的型别
+*    basic_string<>的第二个template参数
+*    对型别string而言，此值等价于char_traits<char\>
+
+##### string::value_type
+
+*    字符型别
+*    等价于traits_type::char_type
+*    对型别string而言,此值等价于char
+
+##### string::size_type
+
+*    未带正负号的整数型别,用来指定大小值和索引
+*    等价于allocator_type::size_type
+*    对型别string而言,此值等价于size_t
+
+##### string::difference_type
+
+*    带正负号的整数型别,用来指定差值(距离)
+*    等价于allocator_type::difference_type
+*    对型别string而言,此值等价于ptrdiff_t
+
+##### string::reference
+
+*    字符的references型别
+*    等价于allocator_type::reference
+*    对型别string而言,此值等价于char&
+
+##### string::const_reference
+
+*    常数型的字符references型别
+*    等价于allocator_type::const_reference
+*    对型别string而言,此值等价于const char&
+
+##### string::pointer
+
+*    字符的pointers型别
+*    等价于allocator_type::pointer
+*    对型别string而言,此值等价于char*
+
+##### string::iterator
+
+*    迭代器型别
+*    确切型别由实作作品负责定义
+*    对型别string而言通常为char*
+
+##### string::reverse_iterator
+
+*    常数型迭代器型别
+*    确切型别由实作作品负责定义
+*    对型别string而言通常为const char*
+
+##### string::const_reverse_iterator
+
+*    常数型逆向送代器(constant reverse iterators)型别
+*    等价于reverse_iterator<const_iterator>
+
+##### static const size_type string::npos
+
+*    这是一个特殊值,表示下列情形:
+     *    “未找到”
+     *    “所有剩余字符”
+*    初始值为-1(一个无正负号整数值)
+*    使用npos时要十分小心
+
+
 
 ### 各种容器的的使用时机
 
@@ -7282,7 +7991,674 @@ struct fopow:public std::binary_function<T1,T2,T1>
 
 此处elem1和elem2分别作为唯一参数传给两个不同的一元判断式g()和h(),两个结果共同被二元判断式f()处理。某种程度上这种形式系在两个参数身上分布(distributes)一个组合函数。整个表达式的操作类似一个二元判断式。
 
-# c++输入和输出
+# 数值
+
+## 复数(Complex Numbers)
+
+C++标准程序库提供了一个template class complex<>,用于操作复数。所谓复数就是由实部(real)和虚部(imaginary)组成的数值。虚部的特点是“其平方值为负数”。换言之复数虚部带着i,其中i是-1的平方根。
+
+Class complex定义于头文件<complex\>
+
+```cpp
+namespace std{
+    template <class T>
+    class complex;
+}
+```
+
+### Class complex<>的构造函数和赋值操作
+
+| 表达式             | 效果                                                         |
+| ------------------ | ------------------------------------------------------------ |
+| complex c          | 产生一个复数,实部和虚部都为零: (0 +0i)                       |
+| complex c(1.3)     | 产生一个复数,实部为1.3,虚部为0: (1.3 + 0i)                   |
+| complex c(1.3,4.2) | 产生一个复数,实部为1.3,虚部为4.2: (1.3+4.2i)                 |
+| complex c1(c2)     | 产生一个复数,是c2的一个副本                                  |
+| polar(4.2)         | 产生一个极坐标表示法的临时复数,模(magnitude)为4.2,相位角(phase angle)为0 |
+| polar(4.2,0.75)    | 产生一个极坐标表示法的临时复数,模(magnitude)为4.2,相位角(phase angle)为0.75 |
+| conj(c)            | 产生一个临时复数,是c的共轭复数(实部相同而虚部相反)           |
+| c1 = c2            | 将c2的值赋值给c1                                             |
+| c1 += c2           | 将c2的值加入c1                                               |
+| c1 -= c2           | 将c1的值减去c2                                               |
+| c1 *= c2           | 将c1的值乘以c2                                               |
+| c1 /= c2           | 将c1的值除以c2                                               |
+
+### class complex<>的各种属性的存取操作
+
+| 表达式   | 效果                                                         |
+| -------- | ------------------------------------------------------------ |
+| c.real() | 返问实部值(这是一个成员函数)                                 |
+| real()   | 返回实部值(这是 个全局函数)                                  |
+| c.imag() | 返回虚部值(这是一个成员函数)                                 |
+| imag()   | 返回虚部值(这是一个全局函数)                                 |
+| abs(c)   | 返回c的绝对值$\sqrt{c.real ()^2+ c.imag ()^2}$               |
+| norm(c)  | 返回c绝对值的平方$c.real()^2+c.imag()^2$                     |
+| arg(c)   | 返回c的极坐标相位角($\varphi$,相当于atan2(c.imag() .c.real()) |
+
+### class complex<>定义比较操作
+
+| 表达式   | 效果                |
+| -------- | ------------------- |
+| c1 == c2 | 判断是否c1等于c2    |
+| c == 1.7 | 判断是否c1等于1.7   |
+| 1.7 == c | 判断是否c1等于1.7   |
+| c1 != c2 | 判断是否c1和c2不同  |
+| c != 1.7 | 判断是否c1不等于1.7 |
+| 1.7 != c | 判断是否c1不等于1.7 |
+
+### class complex<> 算术运算
+
+| 表达式   | 效果                       |
+| -------- | -------------------------- |
+| c1 + c2  | 返回c1与c2的和             |
+| c + 1.7  | 返回c1与1.7的和            |
+| 1.7 + c  | 返回1.7与c1的和            |
+| c1 - c2  | 返回c1与c2的差             |
+| c - 1.7  | 返回c1与1.7的差            |
+| c1 * c2  | 返回c1与c2的乘积           |
+| c * 1.7  | 返回c1与1.7的乘积          |
+| 1.7 * c  | 返回c1与1.7的乘积          |
+| c1/c2    | 返回c1与c2的商             |
+| c/1.7    | 返回c1与1.7的商            |
+| 1.7/c    | 返回1.7与c1的商            |
+| -c       | 返回c的反相(negated value) |
+| +c       | 返回c本身                  |
+| c1 += c2 | 等同于c1=c1 +c2            |
+| c1 -= c2 | 等同于c1=c1 - c2           |
+| c1 *= c2 | 等同于c1=c1 *c2            |
+| c1 /= c2 | 等同于c1=c1／c2            |
+
+### class complex<>的I/O操作
+
+| 表达式    | 效果                      |
+| --------- | ------------------------- |
+| strm << c | 将复数c写入ostream strm中 |
+| strm >> c | 从istream strm中读取复数c |
+
+### complex的超越函数
+
+| 表达式     | 效果                                  |
+| ---------- | ------------------------------------- |
+| pow(c,3)   | 计算幂次方数$c^3$                     |
+| pow(c,1.7) | 计算幂次方数$c^{1.7}$                 |
+| pow(c1,c2) | 计算幂次方数${c1}^{c2}$               |
+| pow(1.7,c) | 计算幂次方数${1.7}^c$                 |
+| exp(c)     | 计算以e为底, c为指数的幂次方数($e^0$) |
+| sqrt(c)    | 计算c的平方根($\sqrt{c}$)             |
+| log(c)     | 计算c的自然对数(ln c)                 |
+| log10(c)   | 计算以10为底的c的对数(1g c)           |
+| sin(c)     | 计算c的正弦值(sin c)                  |
+| cos(c)     | 计算c的余弦值(cos c)                  |
+| tan(c)     | 计算 的正切值(tan c)                  |
+| sinh(c)    | 计算c的双曲正弦值(sinh c)             |
+| cosh(c)    | 计算c的双曲余弦值(cosh c)             |
+| tanh(c)    | 计算c的双曲正切值tanhc                |
+
+### 型别定义
+
+#### complex::value_type
+
+*    实部和虚部的标量型别
+
+### 构造、赋值、复制
+
+#### complex::complex()
+
+*    缺省构造函数
+*    构造一个复数,其中实部和虚部的初值系透过调用实部和虚部的缺省构造函数设定。所以如果是基本型别,实部和虚部的初值为0
+
+#### complex::complex (const T& re)
+
+*    构造一个复数,实部为re,虚部则透过调用其缺省构造函数设定(基本型别的初值为0) 
+*    此构造函数同时定义了一个从T到complex的隐式型别转换
+
+#### complex::complex (const T& re, const T& im)
+
+*    构造一个复数,实部初值为re,虚部初值为im
+
+#### complex polar (const T& rho)
+
+#### complex polar (const T& rho, const T& theta)
+
+*    以上两种形式都产生并返回一个复数,其初值以极坐标形式来设定
+*    rho是大小(magnitude )
+*    theta是以弧度(radians)为单位的相位角(缺省为0)
+
+#### complex conj (const complex& cmplx)
+
+*    产生并返回一个复数:以复数cmplx的共轭复数为初值。所谓共轭复数是指虚部与原复数的虚部互为反相。
+
+#### complex::complex (const complex& cmplx)
+
+*    copy构造函数
+*    产生一个新的复数,成为cmplx的复本
+*    复制实部和虚部
+*    此函数通常同时供应non-template和template两种形式。因此具备对元素型别的自动转型能力
+*    然而, float, double, long double等复数特化版本,对于copy构造函数有所限制,所以不安全的转换就必须显式进行,并且不允许有其它的“元素转型"行为
+
+#### complex& complex::operator = (const complex& cmplx)
+
+*    将复数cmplx赋值给*this
+*    返回*this
+*    此函数通常同时供应non-template和template两种形式。因此具备对元素型别的自动型别转换能力
+
+#### complex& complex::operator += (const complex& cmplx)
+
+#### complex& complex::operator -= (const complex& cmplx)
+
+#### complex& complex::operator *= (const complex& cmplx)
+
+#### complex& complex::operator /= (const complex& cmplx)
+
+*    上述操作分别对* this和complx进行加、减、乘、除运算,并将结果存入* this
+*    返回* this此函数通常同时供应non-template和template两种形式。因此具备对元素型别的自动型别转换能力。(对于C++标准程序库提供的特化版本,这一点也成立)
+
+### 元素存取
+
+#### T complex::real () const
+
+#### T real (const complex& cmplx)
+
+#### T complex::imag () const
+
+#### T imag (const complex& cmplx)
+
+*    上述函数分别返回实部和虚部
+*    注意,返回值并不是一个reference,所以你不能运用这些函数来改变复数的实部和虚部。若要单独改变实部或虚部,必须赋予一个新的复数值
+
+#### T abs (const complex& cmplx)
+
+*    返回cmplx的绝对值(模, magnitude)
+*    绝对值计算公式: $\sqrt{cmplx.real ()^2 + cmpix imag ()^2}$
+
+#### T norm (const complex& cmplx)
+
+*    返回cmplx绝对值的平方
+*    计算公式: $cmplx.real()^2 + cmplx.imag()^2$
+
+#### T arg (const conplex& cmplx)
+
+*    返回以弧度(radians)为单位的极坐标相位角($\varphi$)
+*    相位角计算方法: atan2 (cmplx.imag() ,cmplx.real())
+
+### I/O操作
+
+#### ostrean& operator << (ostream& strm, const complex& cmplx)
+
+*    将cmplx的值以(realpart, imagpart)的格式写入stream
+*    返回strm
+
+#### istream& operator >> (istream& strm, complex& cmplx)
+
+*    从strm中将一个新值读至cmplx
+*    合法的输入格式是：
+     *    (realpart,imagpart)
+     *    (realpart)
+     *    realpart
+*    返回strm
+
+### 操作符(Operators)
+
+#### complex operator + (const complex& cmplx)
+
+*    正号
+*    返回cmplx
+
+#### complex operator - (const complex& cmplx)
+
+*    负号
+*    将复数cmplx的实部和虚部都取反相(negated)
+
+#### complex binary-op (const complex& cmplex1, const complex& cmplx2)
+
+#### complex binary-op (const complex& cmplex, const T& value)
+
+#### complex binary-op (const T& value, const complex& cmplx)
+
+*    上述各项操作返回binary-op计算所得的复数
+*    这里的binary-op可以是以下四种运算之一:
+     *    operator +
+     *    operator -
+     *    operator *
+     *    operator /
+*    如果传入一个元素型别的标量值(scalar value) ,它会被视为一个复数的实部，虚部则由其标量型别的缺省初值决定(如果是基本型别,初值为0)
+
+#### bool comparison (const complex& cmplx1, const complex& cmplx2)
+
+#### bool comparison (const complex& cmplx, const T& value)
+
+#### bool comparison (const T& value, const complex& cmplx)
+
+*    返回两个复数的比较结果,或是一个复数与一个标量(scalar value)的比较结果
+*    这里的comparlson可以是下面两种运算之一:
+     *    operator ==
+     *    operator !=
+*    如果传入一个元素型别的标量值(scalar value) ,它会被视为一个复数的实部,虚部则由其型别的缺省初值决定(如果是基本型别,初值为0)
+*    注意,并没有定义<,<=, >,>=等等操作符
+
+### 超越函数(Transcendental Functions)
+
+#### complex pow (const complex& base, int exp)
+
+#### complex pow (const complex& base, const T& exp)
+
+#### complex pow (const complex& base, const complex& exp)
+
+#### complex pow (const T& base, const complex& exp)
+
+*    上述所有形式都是计算“以base为基底, exp为指数”的幂次方数,定义为exp (exp*log (base) )
+*    branch cuts沿着负实数轴进行
+*    pow(0, 0)的结果由实作版本(implementations)自行定义
+
+#### complex exp (const complex& cmplx)
+
+*    返回“以e为基底, cmplx为指数”的幕次方结果
+
+#### complex sqrt (const complex& cmplx)
+
+*    返回位于右半象限的cmplx平方根
+*    如果参数是负实数,则运算结果位于正虚敷轴上
+*    branch cuts沿着负实数轴进行
+
+#### complex log (const complex& cmplx)
+
+*    返回cmplx的自然对数(亦即以e为底的对数)
+*    当cmplx是负实数时，imag(log (cmplx) )的值为π (pi)
+*    branch cuts系沿着负实数轴进行
+
+#### complex log10 (const complex& cmplx)
+
+*    返回cmplx的(以10为基底的)对数
+*    相当于log(cmplx)/1og(10)
+*    branch cuts系沿着负实数轴进行
+
+#### complex sin (const complex& cmplx)
+
+#### complex cos (const complex& cmplx)
+
+#### complex tan (const complex& cmplx)
+
+#### complex sinh (const complex& cmplx)
+
+#### complex cosh (const complex& cmplx)
+
+#### complex tanh (const complex& cmplx)
+
+*    以上各操作函数分别对cmplx进行复数三角运算(trigonometric operations)
+
+## valarray class
+
+valarray类是由头文件valarray支持的，用于处理数值，支持诸如将数组中所有元素的值相加以及在数组中找出最大和最小的值等操作
+
+valarray定义为模板类
+
+### 头文件
+
+```cpp
+#include <valarray>
+```
+
+### 声明
+
+```cpp
+namespace std{
+    template<class T> class valarray;		// numeric array of type T
+    
+    class slice;							// slice out of a valarray
+    template<class T> class slice_array;
+    
+    class gslice;							// a generalized slice
+    template<class T> class gslice_array;
+    
+    template<class T> class mask array;		// a masked valarray
+    template<class T> class indirect_array;	// an indirected valarray
+}
+```
+
+*    valarray是核心类别,管理一个数值数组
+*    slice和gslice用来为valarray提供类似BLAS的切割(slice)和子集(subset)操作
+*    slice_array, gslice_array, mask_array, indirect_array是内部辅助类别,用来存放临时的数值或数据。你不能在应用程序中直接使用它们,它们由valarray的某些操作过程间接产生。
+
+### Valarray的子集(Subsets)
+
+定义valarrays子集的方法有四种
+
+*    Slices (切割)
+*    General slices (一般化切割)
+*    Masked subsets (屏蔽式子集)
+*    Indirect subsets (间接式子集)
+
+#### Slices (切割)
+
+*    一次切割动作(一个slice)定义出一个索引集,其中具备三个属性:
+     *    起始索引
+     *    元素数量(size,大小)
+     *    元素间距(stride,步幅)
+
+#### General Slices (一般化切割)
+
+*    General slices,或称 gslices,是slices的一般形式。
+*    与slices相似,它也提供“在一维中进行多维运算”的能力。大体上gslices跟slices有以下相同属性
+     *    起始索引
+     *    元素数量(size，大小)
+     *    元素间距(stride，步幅)
+*    和slices不同之处在于，gslices的元素数量和间距也是一个数组，其中的元素个数和其维度相同
+
+#### Masked Subsets (屏蔽式子集)
+
+*    在valarray中定义子集的另一种方法就是Mask arrays.你可以用一个布尔表达式来屏蔽(mask)相应元素
+*    若要定义某valarray的一个具体子集(concrete subset) ,你可以将布尔型的valarray作为参数传给valarray的subscript (下标)操作符
+*    如果valarray是常量,则子集表达式将导致一个新的valarray
+*    如果valarray不是常量,则子集表达式将导致一个mask_array,后者以reference语意来表现valarray的相应元素
+*    mask_array提供赋值操作符和复合赋值操作符来修改子集中的元素
+*    通过型别转换,你可以将mask aray与其它valarrays和valarays子集组合起来
+
+#### Indirect Subsets (间接式子集)
+
+定义valarray子集的第四个(也是最后一个)方法,是运用indirect arrays.只需传递一个索引数组,就可以定义出valaray的一个子集。注意,用来指定子集的索引无需排序,并且可以重复出现。
+
+indirect arrays跟所有valarray子集都一样
+
+*    若要定义某个valarray的一个具体子集(concrete subset ) ,可以将“元素型别为size_t"的valarray作为参数传给valarray的subscipt (下标)操作符
+*    如果valarray是常量,则子集表达式将导致一个新的valarray
+*    如果valarray不是常量,则子集表达式将导致一个indirect_array,后者以refererence语意来表现valarray的相应元素
+*    indirect_array提供赋值操作符和赋值复合操作符来修改子集中的元素
+*    通过型别转换，可以将indirect array和其他valarrays以及valarrays子集组合起来
+
+### 构造
+
+#### valarray: :valarray ()
+
+*    缺省构造函数
+*    产生出一个空的valarray
+*    此构造函数只是产生一个valarrays数组,下一步需以成员函数resize()设定正确大小
+
+#### explicit valarray::valarray (size_t num)
+
+*    产生一个包含num个元素的valarray
+*    各元素以其缺省构造函敷完成初始化动作(基本型别的初值为0) 
+
+#### valarray::valarray (const T& value, size_t num)
+
+*    产生一个包含num个元素的valarray
+*    各元素以value初始化
+*    注意,参数的次序很特别。其它所有C++标准程序库的接口都是num在前而value在后
+
+#### valarray::valarray (const T* array, size_t num)
+
+*    产生一个包含num个元素的valarray
+*    各元素以array中的对应元素为初值
+*    调用者必须确保array内含num个元素,否则会引发未定义行为
+
+#### valarray::valarray (const valarray& va)
+
+*    copy构造函数
+*    产生valarray ve的一个复制品
+
+#### valarray::valarray (const valarray& va)
+
+*    copy构造函数
+*    产生valarray va的一个复制品
+
+#### valarray::~valarray()
+
+*    析构函数
+*    销毁所有元素,释放内存
+
+### 赋值
+
+#### valarray& valarray::operator= (const valarray& va)
+
+*    将valarray va的元素赋值给*this
+*    如果va的大小和*this不同,则行为未可预期
+*    任何valarray赋值运算的左侧元素都不可取决于其右侧的元素。换句话说,如果,一个赋值操作覆盖了其右侧值,结果未可预期。这意味表达式右侧所含的任何元素都不可以出现在表达式左侧。之所以如此,因为valarray的评估(evaluation)次序没有明确定义
+
+#### valarray& valarrayr::operator= (const &T value)
+
+*    将value赋值给此一valaray的所有元素
+*    valarray大小不变。指向元素的所有pointer和reference也都继续有效
+
+### 成员函数
+
+#### size_t valarray::size () const
+
+*    返回当前的元素数量
+
+#### void valarray::resize (size_t num)
+
+#### void valarray::resize (size_t num. T value)
+
+*    两种形式都可将valarray的大小改为num
+*    如果大小增长,则新的元素分别以缺省构造函数初始化,或以value为初值
+*    两种形式都会使指向元素的各个pointers或references失效
+*    这些函数仅用来帮助产生valarrays数组。缺省构造函数产生出数组之后,你应该调用这些函数来设定正确大小
+
+#### T valarray::min () const
+
+#### T valarray::max () const
+
+*    第一形式返回最小元素值
+*    第二形式返回最大元素值
+*    元素以opearator<或operator>进行比较,所以元素型别必须支持这两个操作符
+*    如果valaray无元素,返回值没有定义
+
+#### T valarray::sum () const
+
+*    返回所有元素的和
+*    元素以operator+=处理,所以元素型别必须支持operator+=操作符
+*    如果valarray无元素,返回值未有定义
+
+#### valarray valarray::shift (int num) const
+
+*    返回一个新的valarray,其中的元素是*this内的元素移动num个位置后得到的结果
+*    返回的valarray拥有相同元素个数
+*    被移空的元素位置,以缺省构造函数设初值(新值) 
+*    移动方向由num的正负号决定
+     *    如果num为正,就向左(前)移动,各元素对应的案引减小
+     *    如果num为正,就向右(后)移动,各元素对应的索引增大
+
+#### valarray valarray::cshift (int num) const
+
+*    返回一个新的valarray,其中的元素是*this中的元素循环移动num个位置后得到的结果
+*    返回的valarray拥有相同元素个数
+*    移动的方向由num的正负号决定
+     *    如果num为正,就向左(前)移动,各元素对应的索引减小,或被安插于后
+     *    如果num为负,就向右(后)移动,各元素对应的索引增大,或被安插于前
+
+#### valarray valarray::apply (T op(T)) const
+
+#### valarray valarray::apply (T op(const T&)) const
+
+*    两种形式都返回新的valarray,其内容为原valarray的所有元素以op()处理后的结果
+
+*    返回的valarray拥有相同元素个数
+
+*    针对*this的每一个元素调用op(elem)
+
+     并将结果作为新的valarray的对应元素的初值,然后将新的valarray返回
+
+### 元素存取
+
+#### T& valarray::operator [] (size_t idx)
+
+#### T valarray::operator [] (size_t idx) const
+
+*    两种形式都返回valarray之中索引为idx的元素(注意,第一元素的累引为0)
+*    Non-const版本返回一个reference.因此你可以运用这个操作符的回返值更改相应元素。只要valarray存在,而且没有调用“可改变valarray大小”的函数,那么返回的reference保证有效
+
+#### valarray valarray::unary-op () const
+
+*    返回一个新的valarray,其中元素是*this的相应元素经过unary-op处理后的·结果
+*    unary-op可以是下列之一
+     *    operator + 
+     *    operator -
+     *    operator -
+     *    operator !
+*    operator!的返回值型别是valarray<bool\>
+
+#### valarray binary-op (const valarray& val, const valarray& va2)
+
+#### valarray binary-op (const valarray& va, const T& value)
+
+#### valarray binary-op (const T& value, const valarray& va)
+
+*    返回一个新的valarray,其元素个数与va, va1或va2相同。新的valarray包含每一组(两个)值经过binary-op处理后的结果
+*    如果操作数是个单值value,它将和va中的每一个值组合运算。
+*    binary-op可以是下列之一
+     *    operator +
+     *    operator -
+     *    operator *
+     *    operator / 
+     *    operator %
+     *    operator ^
+     *    operator &
+     *    operator |
+     *    operator <<
+     *    operator >>
+*    如果va1和va2的元素数量不同,则结果未可预期
+
+#### valarray<bool\> logical-op (const valarray& val, const valarray& va2)
+
+#### valarray<bool\> Iogical-op (const valarray& va, const T& value)
+
+#### valarray\<bool> Iogical-op (const & value, const valarray& va)
+
+*    返回一个新的valarray,其元素个数和va, va1或va2相同。新的valarray包含每一组(两个)值经过logical-op处理后的结果
+*    如果操作数是个单值value,它将与va中的每一个值组合运算
+*    logical-op可以是下面其中之一:
+     *    operator ==
+     *    operator !=
+     *    operator <
+     *    operator <=
+     *    operator >
+     *    operator >=
+     *    operator &&
+     *    operator ||
+*    如果va1和va2元素数量不同,则结果未可预期
+
+#### valarray& valarray::assign-op (const valarray& va)
+
+#### valarray& valarray::assign-op (const T& value)
+
+*    这两种形式都针对*this中的每一个元素调用assign-op,并以va中的对应元素或单值value作为第二个操作数
+*    返回一个reference,指向改变后的valarray
+*    assign-op可以是下列其中之一:
+     *    operator +=
+     *    operator -=
+     *    operator *=
+     *    operator /=
+     *    operator %=
+     *    operator ^=
+     *    operator &=
+     *    operator l=
+     *    operator <<=
+     *    operator >>=
+*    如果*this和va2元素数量不同,则结果未可预期
+*    只要valarray存在,而且我们并未调用“可改变valarray大小”的函数,则任何指向“改变后之valarray"的reference和pointer,都保证持续有效
+
+#### valarray abs (const valarray& va)
+
+#### valarray pow (const valarray& va1, const valarray& va2)
+
+#### valarray pow (const valarray& va, const T& value)
+
+#### valarray pow (const T& value, const valarray& va)
+
+#### valarray exp (const valarrays& va)
+
+#### valarray sqrt (const valarray& va)
+
+#### valarray log (const valarray& va)
+
+#### valarray log10 (const valarray& va)
+
+#### valarray sin (const valarray& va)
+
+#### valarray cos (const valarray& va)
+
+#### valarray tan (const valarray& va) 
+
+#### valarray sinh (const valarray& va) 
+
+#### valarray cosh (const valarray& va)
+
+#### valarray tanh (const valarray& va)
+
+#### valarray atan (const valarray& va)
+
+#### valarray acos (const valarray& va)
+
+#### valarray tan (const valarrays& va) 
+
+#### valarray atan2 (const valarray& val, const valarray& va2)
+
+#### valarray atan2 (const valarray& va, const T& value)
+
+#### valarray atan2 (const T& value, const valarray& va)
+
+*    上述每个函数都返回一个新的valaray,其元素个数和va, va1或va2相同。新的valarray内含的元素是每一个(或一对)元素被施行相应某种运算后的结果
+*    如果va1和va2元素数量不同,则结果未可预期
+
+## 全局性的数值函数
+
+### cmath
+
+| 函数    | 效果                                   |
+| ------- | -------------------------------------- |
+| pow()   | 求幂函数                               |
+| exp()   | 指数函数                               |
+| sqrt()  | 平方根                                 |
+| log()   | 自然对数                               |
+| log10() | 以10为底的对数                         |
+| sin()   | 正弦函数                               |
+| cos()   | 余弦函数                               |
+| tan()   | 正切函数                               |
+| sinh()  | 双曲正弦函数                           |
+| cosh()  | 双曲余弦函数                           |
+| tanh()  | 双曲正切函数                           |
+| asin()  | 反正弦函数                             |
+| acos()  | 反余弦函数                             |
+| atan()  | 反正切函数                             |
+| atan2() | 商的反正弦函数                         |
+| ceil()  | 大于某个浮点数的最小整数               |
+| floor() | 小于某个浮点数的最大整数               |
+| fabs()  | 浮点数的绝对值                         |
+| fmod()  | 浮点数相除的余数                       |
+| frexp() | 讲一个浮点数转换成小数部分和整数部分   |
+| ldexp() | 将某个浮点数乘以2的某个整数幂次方      |
+| modf()  | 将浮点数分离为带正负号的整数和一个分数 |
+
+### cstdlib
+
+| 函数    | 效果                               |
+| ------- | ---------------------------------- |
+| abs()   | 求某个int的绝对值                  |
+| labs()  | 求某个long的绝对值                 |
+| div()   | 求int相除的商和余数                |
+| ldiv()  | 求long相除的商和余数               |
+| srand() | 随机数产生器（种下新的随机数种子） |
+| rand()  | 随机数产生器（取得一个随机数）     |
+
+
+
+# c++ I/O
+
+```mermaid
+graph TD
+a[basic_ios<>]
+b[ios_base]
+c[basic_istream<>]
+d[basic_ostream<>]
+e[basic_iostream<>]
+f[basic_streambuf<>]
+e-->c
+e-->d
+c-->a
+d-->a
+a-->b
+```
+
+
 
 | 类                 | 说明                                               |
 | ------------------ | -------------------------------------------------- |
@@ -7400,10 +8776,10 @@ write()方法并不会在遇到空字符时自动停止打印字符，而只是�
 
 如果实现不能在所希望时刷新输出，可以使用两个控制符中的一个来强制进行刷新。
 
-| 控制符 |             含义             |     使用     |
-| :----: | :--------------------------: | :----------: |
-| flush  |          刷新缓冲区          | cout<<flush; |
-|  endl  | 刷新缓冲区，并插入一个换行符 | cout<<endl;  |
+| 控制符 |               含义               |     使用     |
+| :----: | :------------------------------: | :----------: |
+| flush  |            刷新缓冲区            | cout<<flush; |
+|  endl  | 刷新缓冲区，并插入一个换行符('') | cout<<endl;  |
 
 控制符也是函数
 
@@ -7416,6 +8792,15 @@ ostream类对<<插入运算符进行了重载，使得下述表达式将被替�
 ```c++
 cout<<flush;
 ```
+
+## 操控器
+
+| 操控器 | 类别    | 意义                         |
+| ------ | ------- | ---------------------------- |
+| endl   | ostream | 输出'\n'，并刷新output缓冲区 |
+| ends   | ostream | 输出'\0'                     |
+| flush  | ostream | 刷新output缓冲区             |
+| ws     | ostream | 读入并忽略空格               |
 
 ## 用cout进行格式化
 
@@ -7447,6 +8832,21 @@ hex(cout);
 dex(cout);
 oct(cout);
 ```
+
+## 全局性的stream对象
+
+| 类型     | 名称  | 用途                                |
+| -------- | ----- | ----------------------------------- |
+| istream  | cin   | 从标准input通道读入数据             |
+| ostream  | cout  | 将一般数据写至标准output通道        |
+| ostream  | cerr  | 将错误信息写至标准error通道         |
+| ostream  | clog  | 将日志信息写至标准logging通道       |
+| wistream | wcin  | 从标准Input通道读入宽字符数据       |
+| wostream | wcout | 将宽字符一般数据写至标准output通道  |
+| wostream | wcerr | 将宽字符错误信息写至标准error通道   |
+| wostream | w     | 将宽字符日志信息写至标准logging通道 |
+
+
 
 ## 调整字段宽度
 
