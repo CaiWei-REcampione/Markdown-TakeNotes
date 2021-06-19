@@ -826,6 +826,17 @@ public:
 };
 ```
 
+## inline
+
+用于指定内联函数,告诉编译器使用函数体的代码代替函数调用部分.此种替换方式也就是"内联展开",也称为内联
+
+内联展开通过增加代码大小来减轻函数调用的开销
+
+inline关键字告诉编译器优先进行内联展开
+
+* 显式指定内联函数:在类的成员函数定义前面加上inline关键字
+* 隐式指定内联函数:在类的成员函数的声明中,直接加上函数体的内容
+
 # 操作符
 
 | 操作符           | 名称           | 方向     |
@@ -1429,7 +1440,8 @@ for (int i = 0; i < length; ++i)
 ## 宏定义
 
 ```cpp
-#define 宏名称 宏内容
+#define 宏名称 宏内容// 定义宏
+#undef 宏名称// 关闭宏
 ```
 
 ## 文件包含
@@ -9829,7 +9841,8 @@ int rename(const char *old_filename, const char *new_filename)
 ### 打开文件
 
 ```cpp
-FILE *fopen(const char *filename, const char *mode);
+FILE *fopen(const char *filename, const char *mode);// C样式
+fstream fopen(const string filename, ios_mode);// C++样式
 ```
 
 | mode | 含义                                                         |
