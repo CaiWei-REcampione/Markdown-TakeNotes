@@ -10481,6 +10481,19 @@ archive->qt->qt版本
 * Qt Console Application,控制台应用程序,无GUI界面,一般用于学习C/C++语言,只需要简单的输入输出操作时可创建此类项目
 * Qt Quick Application,创建可部署的Qt Quick应用程序
 * Qt Canvas 3D Application,创建Qt Canvas 3D QML项目,也是基于QML语言的界面设计,支持3D画布
+* QMainWindow是主窗口类,主窗口具有主菜单栏/工具栏和状态栏,类似于一般的应用程序的主窗口
+* QWidget是所有具有可视化界面类的基类,选择QWidget创建的界面对各种界面组件都可以支持
+* QDialog是对话框类,可建立一个基于对话框的界面
+
+## UI文件设计和运行机制
+
+### 项目设置文件
+
+后缀为“.pro”的文件是项目的管理文件,文件名就是项目的名称
+
+Qt类库以模块的形式组织各种功能的类,根据项目设计的功能需求,在项目中添加适当的类库模块支持
+
+“Qt += core gui”表示项目中加入core gui模块.core gui是Qt用于GUI设计的类库模块,如果创建的是控制台(Console)应用程序,就不需要添加core gui
 
 # 多线程
 
