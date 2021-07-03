@@ -10552,6 +10552,38 @@ B-->数据分析工具
 B-->数据挖掘工具
 ```
 
+## 环境配置
+
+1. 下载MySQL Community Server
+   1. Windows (x86, 64-bit), ZIP Archive
+   2. 选择 "No thanks, just start my download"
+2. 安装MySQL
+   1. 解压
+   2. 添加环境变量PATH-"D:\MySQL\mysql-8.0.25-winx64\bin"
+3. 安装数据库
+   1. 管理员身份运行cmd
+   2. 输入"mysqld --initialize --console" 
+   3. 2021-07-03T04:20:27.416797Z 6 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: mIufXrjuc0+c,密码为mIufXrjuc0+c
+   4. 输入"mysqld -install"
+   5. "Service successfully installed."
+   6. 输入"net start mysql"
+   7. MySQL 服务正在启动 .
+      MySQL 服务已经启动成功。
+   8. (关闭服务输入"net stop mysql")
+   9. (卸载服务输入"sc delete mysql")
+   10. (删除MySQL)
+       1. 删除MySQL文件
+       2. 删除环境变量PATH
+   11. 登录MySQL
+       1. 输入"mysql -uroot -p"
+       2. 输入密码"mIufXrjuc0+c"
+       3. 初次修改密码
+          1. 输入"alter user root@localhost identified by '1607575130';"
+   12. 退出
+       1. 输入"exit"
+4. 安装可视化管理工具
+   1. 安装SQLyog或者Navicat MySQL
+
 ## 数据库常见概念
 
 * 数据(Data)是对现实世界事物的抽象.人们将现实世界中的事物进行抽象,定义成数据,并通过数据进行沟通.数据库处理的对象就是数据
@@ -10752,6 +10784,10 @@ K[ADO和RDO]-->L[使用ADO和RDO控件]-->M
 * 灵活性:VC根据数据源的不同,微数据访问提供了多种接口,用户可以根据自己的需要选择合适的接口
 * 速度快
 * 可拓展:VC提供的这些数据访问接口,大部分是独立于不同数据源的,因此用户可以抛开底层数据源的限制,编写统一的数据库应用程序,即使当数据源发生变化时,也不需要改动应用程序
+
+## Visual C++中SQL Server访问技术
+
+
 
 # 多线程
 
